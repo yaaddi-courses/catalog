@@ -1,0 +1,25 @@
+id,title,description,min_level,section,image,section_image
+1,"Environment, Variables & Primitive Data Types","Running Python, print(), the core types, variable assignment, and dynamic typing.",1,Foundations & Control Flow,deck1.1.jpg,course-cover.jpg
+2,Operators & Expressions,"Arithmetic, comparison, and logical operators.",1,Foundations & Control Flow,deck1.2.jpg,
+3,String Manipulation,"Indexing, slicing, f-strings, and core string methods.",1,Foundations & Control Flow,deck1.3.jpg,
+4,Conditional Logic,"if/elif/else, truthy/falsy values, and the ternary expression.",1,Foundations & Control Flow,deck1.4.jpg,
+5,Loops & Iteration,"for, while, range(), break/continue, and the loop else clause.",1,Foundations & Control Flow,deck1.5.jpg,
+6,Lists,"Creation, indexing, slicing, mutability, and core list operations.",1,Core Data Structures,deck2.1.jpg,deck2.1.jpg
+7,Tuples & Sets,"Immutability, tuple unpacking, and set uniqueness/operations.",1,Core Data Structures,deck2.2.jpg,
+8,Dictionaries,"Key-value mapping, lookup, iteration, and common dict methods.",1,Core Data Structures,deck2.3.jpg,
+9,Comprehensions,"List, dict, and set comprehension syntax with conditional filtering.",1,Core Data Structures,deck2.4.jpg,
+10,Function Essentials,"def, parameters, positional vs. keyword arguments, defaults, and return.",1,Functions & Code Organization,deck3.1.jpg,deck3.1.jpg
+11,Advanced Function Arguments & Lambdas,"*args, **kwargs, returning multiple values, and lambda functions.",1,Functions & Code Organization,deck3.2.jpg,
+12,Variable Scope,"Local vs. global scope, the LEGB rule, and the global keyword.",1,Functions & Code Organization,deck3.3.jpg,
+13,Modules & Packages,"import, from...import, aliases, and __name__ == '__main__'.",1,Functions & Code Organization,deck3.4.jpg,
+14,User Input & Basic Type Conversion,"input(), casting strings to numbers, and handling bad input safely.",1,Input/Output & Error Handling,deck4.1.jpg,deck4.1.jpg
+15,Exception Handling,"try/except/else/finally, catching specific exceptions, and raise.",1,Input/Output & Error Handling,deck4.2.jpg,
+16,File I/O Basics,"open(), read/write modes, file methods, and the with statement.",1,Input/Output & Error Handling,deck4.3.jpg,
+17,Classes & Objects,"class syntax, instantiation, attributes, methods, and self.",1,Object-Oriented Programming (OOP) Essentials,deck5.1.jpg,deck5.1.jpg
+18,Constructors & Instance vs. Class State,"__init__(), instance attributes vs. class attributes.",1,Object-Oriented Programming (OOP) Essentials,deck5.2.jpg,
+19,Inheritance & Polymorphism,"Single inheritance, method overriding, super(), and polymorphism.",1,Object-Oriented Programming (OOP) Essentials,deck5.3.jpg,
+20,Encapsulation & Pythonic Access Control,"Public vs. non-public conventions, name mangling, and @property.",1,Object-Oriented Programming (OOP) Essentials,deck5.4.jpg,
+21,High-Order Built-in Functions,"map(), filter(), zip(), enumerate(), any(), and all().",1,Functional & Built-in Utilities,deck6.1.jpg,deck6.1.jpg
+22,Sorting & Custom Keys,"sort() vs. sorted(), the reverse flag, and the key= parameter.",1,Functional & Built-in Utilities,deck6.2.jpg,
+23,Virtual Environments & Package Management,"venv, pip, and requirements.txt.",1,Modern Fundamentals & Code Quality,deck7.1.jpg,deck7.1.jpg
+24,Type Hints & Code Style,"Type annotations, PEP 8, and docstrings.",1,Modern Fundamentals & Code Quality,deck7.2.jpg,

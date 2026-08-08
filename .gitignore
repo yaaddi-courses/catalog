@@ -1,0 +1,13 @@
+.internal/
+
+# No built course archives in the repo — delivery mechanism undecided,
+# see .internal/INSTRUCTIONS.md's Phase 4. Also guards against
+# accidentally re-adding one by hand.
+*.zip
+
+# Raw/unorganized authoring material belongs under .internal/, never here.
+draft/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db

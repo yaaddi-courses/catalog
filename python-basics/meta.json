@@ -1,0 +1,14 @@
+{
+  "title": "Python Basics",
+  "description": "A complete beginner-to-solid-fundamentals path through Python — syntax, data structures, functions, files, and OOP essentials.",
+  "image": "cover.jpg",
+  "file": "python-basics.zip",
+  "version": "1.0.2",
+  "tags": ["python", "programming", "beginner"],
+  "changelog": [
+    { "version": "1.0.0", "date": "2026-08-07", "notes": "Initial release — 24 decks across 7 sections, foundations through OOP essentials." },
+    { "version": "1.0.1", "date": "2026-08-08", "notes": "Added an explanation to every card, shown when an answer is wrong." },
+    { "version": "1.0.2", "date": "2026-08-08", "notes": "Now published as a GitHub Release asset instead of an in-repo file. Fixed a set-union card whose \"|\" answer couldn't be typed in this CSV format." }
+  ],
+  "toc": ["Environment, Variables & Primitive Data Types", "Operators & Expressions", "String Manipulation", "Conditional Logic", "Loops & Iteration", "Lists", "Tuples & Sets", "Dictionaries", "Comprehensions", "Function Essentials", "Advanced Function Arguments & Lambdas", "Variable Scope", "Modules & Packages", "User Input & Basic Type Conversion", "Exception Handling", "File I/O Basics", "Classes & Objects", "Constructors & Instance vs. Class State", "Inheritance & Polymorphism", "Encapsulation & Pythonic Access Control", "High-Order Built-in Functions", "Sorting & Custom Keys", "Virtual Environments & Package Management", "Type Hints & Code Style"]
+}

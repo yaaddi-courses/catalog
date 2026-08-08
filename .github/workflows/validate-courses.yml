@@ -1,0 +1,44 @@
+name: Validate courses
+
+# Runs the same check contributors are asked to run locally before opening a
+# PR (README.md's "Adding a new course" checklist, step 6) — this just
+# enforces it automatically instead of trusting it happened. See
+# validate_course.py's own doc comment for what it checks.
+on:
+  pull_request:
+    paths:
+      - "*/meta.json"
+      - "*/source/**"
+      - "validate_course.py"
+  push:
+    branches: [main]
+    paths:
+      - "*/meta.json"
+      - "*/source/**"
+      - "validate_course.py"
+  workflow_dispatch: {}
+
+# A new push to the same PR/branch supersedes the previous run's result —
+# no need to keep an outdated run going once a newer one has started.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate every course
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # validate_course.py is stdlib-only by design (see its own doc
+      # comment) — no dependency installation step needed.
+      - name: Run validator
+        run: python validate_course.py --all --source

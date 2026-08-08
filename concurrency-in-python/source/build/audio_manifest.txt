@@ -1,0 +1,127 @@
+concurrency.wav	Concurrency
+parallelism.wav	Parallelism
+iobound.wav	I O bound
+cpubound.wav	C P U bound
+gil.wav	G I L, the Global Interpreter Lock
+bytecode.wav	Bytecode
+gilblocking.wav	G I L blocking
+freethreaded.wav	Free threaded Python
+thread.wav	Thread
+join.wav	Join
+daemonthread.wav	Daemon thread
+currentthread.wav	Current thread
+threadreturn.wav	Thread return value
+gilswitch.wav	G I L switch interval
+bypassgil.wav	Bypassing the G I L
+isalive.wav	Is alive
+fanout.wav	Fan out, fan in
+mainthread.wav	Main thread
+activecount.wav	Active count
+threadexception.wav	Thread exception
+racecondition.wav	Race condition
+criticalsection.wav	Critical section
+lock.wav	Lock
+lockcontextmanager.wav	Lock context manager
+rlock.wav	R Lock, reentrant lock
+deadlock.wav	Deadlock
+lockordering.wav	Lock ordering
+atomic.wav	Atomic operation
+event.wav	Event
+condition.wav	Condition
+semaphore.wav	Semaphore
+boundedsemaphore.wav	Bounded semaphore
+timer.wav	Timer
+threadlocal.wav	Thread local storage
+asyncio.wav	Asyncio
+readmodifywrite.wav	Read, modify, write
+notifyvsnotifyall.wav	Notify versus notify all
+process.wav	Process
+processjoin.wav	Process join
+memoryisolation.wav	Memory isolation
+copyonwrite.wav	Copy on write
+fork.wav	Fork
+forkserver.wav	Fork server
+mainguard.wav	Main guard
+exitcode.wav	Exit code
+processexception.wav	Process exception
+mpqueue.wav	Multiprocessing queue
+queueblocking.wav	Queue blocking
+pipe.wav	Pipe
+duplexsimplex.wav	Duplex and simplex
+mpvalue.wav	Multiprocessing value
+mparray.wav	Multiprocessing array
+sharedmemory.wav	Shared memory
+resourcetracker.wav	Resource tracker
+manager.wav	Manager
+managergotcha.wav	Manager gotcha
+mplock.wav	Multiprocessing lock
+lockinheritance.wav	Lock inheritance
+mprlock.wav	Multiprocessing R lock
+mpevent.wav	Multiprocessing event
+mpsemaphore.wav	Multiprocessing semaphore
+barrier.wav	Barrier
+poisonpill.wav	Poison pill
+gracefulshutdown.wav	Graceful shutdown
+threadpoolexecutor.wav	Thread pool executor
+processpoolexecutor.wav	Process pool executor
+submit.wav	Submit
+executormap.wav	Executor map
+executorcontext.wav	Executor context manager
+maxworkers.wav	Max workers
+workerscaling.wav	Worker scaling
+backpressure.wav	Backpressure
+future.wav	Future
+futureresult.wav	Future result
+futuretimeout.wav	Future timeout
+donecallback.wav	Done callback
+ascompleted.wav	As completed
+futureswait.wav	Futures wait
+futurecancel.wav	Future cancel
+asyncdef.wav	Async def
+await.wav	Await
+cooperativemultitasking.wav	Cooperative multitasking
+asynciorun.wav	Asyncio run
+asynciosleep.wav	Asyncio sleep
+loopstarvation.wav	Event loop starvation
+coroutinevsfunction.wav	Coroutine versus function
+createtask.wav	Create task
+coroutinetaskfuture.wav	Coroutine, task, and future
+asynciogather.wav	Asyncio gather
+asynciocompleted.wav	Asyncio as completed
+taskcancel.wav	Task cancel
+asynciotimeout.wav	Asyncio timeout
+asynciowaitfor.wav	Asyncio wait for
+taskgroup.wav	Task group
+exceptiongroup.wav	Exception group
+asynciowait.wav	Asyncio wait
+asyncioshield.wav	Asyncio shield
+asynciolock.wav	Asyncio lock
+asynciosemaphore.wav	Asyncio semaphore
+asyncioevent.wav	Asyncio event
+asynciocondition.wav	Asyncio condition
+asyncioqueue.wav	Asyncio queue
+lifopriorityqueue.wav	Lifo queue and priority queue
+synclockasyncerror.wav	Synchronous lock in async code
+asyncioopenconnection.wav	Asyncio open connection
+asynciostartserver.wav	Asyncio start server
+streamreaderwriter.wav	Stream reader and stream writer
+transportsprotocols.wav	Transports and protocols
+createsubprocessexec.wav	Create subprocess exec
+asynchttpclient.wav	Asynchronous H T T P client
+runinexecutor.wav	Run in executor
+asynciotothread.wav	Asyncio to thread
+dedicatedeventloopthread.wav	Dedicated event loop thread
+synctoasyncbridge.wav	Synchronous to asynchronous bridge
+runcoroutinethreadsafe.wav	Run coroutine thread safe
+producerconsumerpattern.wav	Producer consumer pattern
+queueimplementationselection.wav	Queue implementation selection
+taskdonejoin.wav	Task done and join
+poisonpillsentinel.wav	Poison pill sentinel
+boundedqueuebackpressure.wav	Bounded queue backpressure
+deadlockvsrace.wav	Deadlock versus race condition
+starvationmemoryleak.wav	Starvation and memory leak
+profilingconcurrentcode.wav	Profiling concurrent code
+asynciodebugmode.wav	Asyncio debug mode
+signalhandling.wav	Signal handling
+asynciosignalhandler.wav	Asyncio signal handler
+concurrencydecisiontree.wav	Concurrency decision tree
