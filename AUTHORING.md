@@ -28,19 +28,28 @@ that the material sticks — not a quick quiz.
   card just to keep the deck's card count low.
 - **Each main card gets 5–10 practice (exercise) cards.** These reinforce that one
   concept from a few different angles — not just a single follow-up question.
-- **Keep cards atomic and bite-sized.** One fact or concept per card — never two claims
-  bundled into one prompt, even if they're related. **Target under 180 characters** for
-  a prompt (`validate_course.py`, see "Before you publish" below, warns above that); if you're
-  writing "and" to join two things a learner needs to know separately, that's usually a
-  sign the card should split into two.
+- **Keep cards atomic and bite-sized — hard limits, not a suggestion.** One fact or
+  concept per card — never two claims bundled into one prompt, even if they're
+  related. **A prompt must be under 10 words**, and **each option on a
+  multiple-choice-style card (`multiple_choice`, `multi_select`, `image_choice`,
+  `select_blank`) must be under 3 words** (`validate_course.py`, see "Before you
+  publish" below, rejects a card over either limit). The one exception: if the
+  prompt and all its options together add up to 10 words or fewer, that also
+  passes, even if one option alone runs to 3+ words — a short prompt can "spend"
+  its budget on the options. If a card genuinely can't fit a fact into that shape,
+  **don't cram it in** — split it into more cards (another main card, or more
+  practice cards) instead. If you're writing "and" to join two things a learner
+  needs to know separately, that's usually a sign the card should split into two.
 
-  *Before (two concepts, one card):*
+  *Before (two concepts, one over-long card):*
   > "A daemon thread is automatically killed when the main program exits, and a
   > non-daemon thread will keep the program alive until it finishes on its own."
 
-  *After (split into two atomic cards):*
-  > Card A: "What happens to a daemon thread when the main program exits?"
-  > Card B: "Does a non-daemon thread keep the program alive until it finishes?"
+  *After (split into two atomic, short cards):*
+  > Card A — prompt: "What happens to a daemon thread at exit?" — options:
+  > "Killed automatically" / "Keeps running" / "Throws error"
+  > Card B — prompt: "Does a non-daemon thread keep the program alive?" — options:
+  > "Yes" / "No" / "Only sometimes"
 
   The more granular the cards, the more precisely a learner's actual gaps show up, and
   the more efficiently spaced repetition can schedule reviews around them.
@@ -53,7 +62,13 @@ that the material sticks — not a quick quiz.
   **use `code_fill`** — it's built specifically for that and is easy to under-use if you
   default to safer multiple-choice-style cards out of habit. `validate_course.py`
   warns if a whole main card's practice cards are all one type, or if a course only
-  uses a handful of the 13 available types overall.
+  uses a handful of the 14 available types overall.
+- **Keep typing rare — under 10% of a course's cards.** `type_answer`, `code_fill`,
+  `numeric_answer`, `command_output`, and `short_answer` all require typing on a
+  keyboard, which is slower and more error-prone than tapping. `validate_course.py`
+  warns when a course crosses that 10% line — treat it as a real signal to convert
+  some of those cards to a tap-based type (`select_blank`, `multiple_choice`) where the
+  question still works without typing.
 - **Write like a person who wants you to learn this, not a spec sheet.** Descriptions
   and prompts should read naturally — the way you'd actually explain something to a
   friend — not "This course provides comprehensive coverage of...". Real examples and
@@ -61,9 +76,32 @@ that the material sticks — not a quick quiz.
   something you'd actually enjoy than to homework, without sacrificing clarity for a
   joke.
 
+## Preview cards
+
+A third role, `preview`, sits in front of a main card's very first attempt — a
+one-time "here's the concept" beat before the graded version appears. It's a
+teaching step, not a test: there's a single button, tapping it always counts
+as correct, and it never re-appears once that main card has been learned (a
+later review of it skips straight to the graded card, no preview). Link it to
+its main card exactly like an exercise, via `related_main_id`:
+
+```
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+12,3,preview_card,preview,10,"A daemon thread is killed automatically when the main program exits.","Got it",,,,
+```
+
+Keep a preview to exactly the one atomic idea its main card is about to test —
+if you find yourself explaining two things, that's two main cards (and two
+previews), not one long preview. Previews are excluded from spaced repetition
+and from a deck's completion percentage — they're a one-time on-ramp, not
+graded content, so a course doesn't strictly need one for every main card. That
+said, when retrofitting or authoring a course, pairing every main card with
+its own preview is the recommended default — it's simpler and more consistent
+than deciding case-by-case which concepts "need" one.
+
 ## Card types reference
 
-Thirteen card types are available. Each row below is a `cards.csv` line — see the "CSV
+Fifteen card types are available. Each row below is a `cards.csv` line — see the "CSV
 format" section further down for the full column list.
 
 | type | what the learner sees | how to encode it in `cards.csv` |
@@ -81,6 +119,8 @@ format" section further down for the full column list.
 | `image_occlusion` | A diagram with one region masked, type what's hidden there ("Hide One, Guess One" — the rest of the diagram stays visible for context) | `image` = the diagram (**required**); each `options` entry is `"x,y,w,h:label"` (coordinates as **fractions of the image, 0-1**, not pixels); `correct_index` = which region *this row* asks about. All rows for one diagram share the same `options`/`image` — one row per region, same shape as a main card's practice-card siblings. Great for anatomy, circuit diagrams, architecture/network diagrams — anything with real spatial structure |
 | `numeric_answer` | A question, type a number on the numeric keyboard | `options[0]` = correct value; `options[1]` = tolerance (default 0, exact match); `options[2]` = optional unit shown next to the input (not graded). Use for measurements/calculations where `type_answer`'s exact-string match is too strict |
 | `command_output` | A command/snippet (syntax-highlighted), type what it prints | `options[0]` = the command; `options[1]` = its expected output (may contain newlines — quote the field). **Case-sensitive**, unlike `type_answer`. Different skill from `code_fill` — this is "run it, predict the result," not "fill in the blank" |
+| `short_answer` | A question, type a short answer (a flag, command name, or keyword) | `options` = accepted answer, or pipe-delimited if more than one spelling is acceptable; **case-sensitive**, like `code_fill`. Each accepted answer must be **24 characters or fewer** — this type is for a keystroke or two, not a phrase; use `type_answer` if the real answer is longer |
+| `preview_card` | A one-time "here's the concept" intro shown right before a main card's first attempt — plain teaching text, tap the single button to continue | `prompt` = the concept, stated plainly (not as a question); `options[0]` = the button label (e.g. `"Got it"`). Only valid with `role` = `preview` — see "Preview cards" below |
 
 Every type also accepts an optional `explanation` column, shown when the answer is
 wrong, and an optional `image` column (a filename, becomes a picture shown above the
@@ -108,11 +148,13 @@ First, run `python validate_course.py <your-course-folder> --source` (from the r
 root) — it catches structural mistakes automatically: dangling `unit_id`/
 `related_main_id` references, an `image`/`audio` filename that isn't actually present
 in `source/images/`/`source/media/`, an unknown card type, a duplicate card, a deck
-with no cards at all, a main card with too few practice cards, a prompt over 180
-characters, a main card whose practice cards are all the same single type, a whole
-course leaning on fewer than 5 of the 13 available card types, low explanation
-coverage across the course, and a course with zero `media_card` cards at all (meaning
-nothing in it is narrated for a learner who prefers listening). Zero dependencies.
+with no cards at all, a main card with too few practice cards, a prompt of 10+ words
+(or a choice-list option of 3+ words) that doesn't fit within a 10-word prompt+options
+total, a main card whose practice cards are all the same single type, a whole
+course leaning on fewer than 5 of the 15 available card types, more than 10% of the
+course's cards requiring typing, low explanation coverage across the course, and a
+course with zero `media_card` cards at all (meaning nothing in it is narrated for a
+learner who prefers listening). Zero dependencies.
 
 Then read through the finished course as if you were a complete beginner encountering
 the material for the first time — this is the part no script can do for you:
@@ -167,9 +209,9 @@ Columns: `id,unit_id,type,role,related_main_id,prompt,options,correct_index,imag
 |---|---|---|
 | `id` | yes | integer, unique within this file |
 | `unit_id` | yes | matches an `id` in `units.csv` |
-| `type` | no | one of the 13 types above; defaults to `multiple_choice` |
-| `role` | yes | `main` or `exercise` |
-| `related_main_id` | exercise cards only | the main card's `id` this drills — leave empty on main cards |
+| `type` | no | one of the 15 types above; defaults to `multiple_choice` |
+| `role` | yes | `main`, `exercise`, or `preview` |
+| `related_main_id` | exercise/preview cards only | the main card's `id` this drills (exercise) or introduces (preview) — leave empty on main cards |
 | `prompt` | yes | the question text (may contain commas — CSV-quote the field if so) |
 | `options` | depends on `type` | see the card-types table above |
 | `correct_index` | depends on `type` | see the card-types table above |

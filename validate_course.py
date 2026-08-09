@@ -5,9 +5,10 @@ document, and that Yaaddi's own importer enforces — catches the mistakes a
 CSV file can't catch on its own: dangling references, missing media, an
 exercise with no main card, a too-long prompt, a duplicate card, an
 orphaned deck with no cards, low explanation coverage, a main card whose
-practice cards are all one type, a course leaning on too few of the 13
-card types, and a course with no narrated (media_card) cards at all —
-before you open a PR or import into the app.
+practice cards are all one type, a course leaning on too few of the 14
+card types, a course with too much typing overall, and a course with no
+narrated (media_card) cards at all — before you open a PR or import into
+the app.
 
 No dependencies beyond the standard library.
 
@@ -23,10 +24,11 @@ A course folder is expected to look like:
       source/               (the actual course content — units.csv, cards.csv,
                               meta.csv, images/, media/ — checked via --source)
 
-meta.json's "file" field (the app's own expected packaged-course filename) is
-allowed to point at something that doesn't exist yet — this repo doesn't
-currently commit a built archive, see README.md — that's reported as a
-warning, not an error.
+meta.json's "file" field must point at a real, committed zip in the course's
+own folder (see README.md's "Delivery mechanism" note) — a missing file is
+a hard error, not a warning: the app fetches it directly from
+raw.githubusercontent.com, so a course whose zip isn't actually there is
+not installable, full stop.
 
 Exit code is non-zero if any check fails.
 """
@@ -42,15 +44,42 @@ import zipfile
 KNOWN_TYPES = {
     "multiple_choice", "true_false", "order", "select_blank", "multi_select",
     "match_pairs", "image_choice", "type_answer", "code_fill", "media_card",
-    "image_occlusion", "numeric_answer", "command_output",
+    "image_occlusion", "numeric_answer", "command_output", "short_answer",
+    "preview_card",
 }
 
-# Cards should be bite-sized and atomic — one fact per card. 180 was chosen
-# from the two real bundled courses' own content: their single longest
-# existing prompt (208 chars) already reads as borderline-too-long, so this
-# sets the bar at "you should trim this," not "reject content that already
-# ships" (docs/TASKS.md T50.x).
-MAX_PROMPT_LENGTH = 180
+# Typing is slower and more error-prone than tapping, so courses are
+# expected to keep it rare — must match `requiresTyping` in the app's own
+# src/cardTypes/*.tsx definitions (see src/domain/cardTypeMix.ts).
+TYPING_TYPES = {"type_answer", "numeric_answer", "code_fill", "command_output", "short_answer"}
+MAX_TYPING_CARD_RATIO = 0.1
+
+# Cards must be short enough to read at a glance: a prompt under 10 words,
+# and — for choice-list card types, where "options" are genuinely parallel
+# short answer choices — each option under 3 words. A card that can't fit a
+# real fact into that shape should be split into more cards (a main plus
+# more practice cards), not padded past the limit. The one escape hatch:
+# a card whose prompt+options TOTAL is at or under 10 words passes even if
+# an individual option runs to 3+ words, since a short prompt can "spend"
+# its budget on the options instead (e.g. a one-word prompt with a
+# two-and-a-half-word option). This replaces the older, softer
+# character-length heuristic (docs/TASKS.md T50.x) with a hard rule.
+MAX_PROMPT_WORDS = 10
+MAX_OPTION_WORDS = 3
+MAX_TOTAL_WORDS = 10
+
+# Only these types hold genuinely parallel, human-read "pick one/some of
+# these" choices in `options` — the per-option word check only makes sense
+# for them. Other types repurpose the `options` column for structurally
+# different data (match_pairs' `term=definition` pairs, order's ordered
+# steps, code_fill/command_output's code-or-output text, numeric_answer's
+# `value|tolerance|unit`, short_answer/type_answer's single accepted
+# answer) where a "3 words per option" rule doesn't apply.
+CHOICE_LIST_TYPES = {"multiple_choice", "multi_select", "image_choice", "select_blank"}
+
+
+def _word_count(text):
+    return len((text or "").split())
 
 
 class Report:
@@ -107,21 +136,29 @@ def validate_meta_json(course_dir, report):
     # present but null.
     if not (meta.get("title") or "").strip():
         report.error('meta.json "title" is required and must be non-empty')
+
+    # A course's stable identity — distinct from the folder it currently
+    # lives in. Without it, renaming this folder later silently breaks
+    # "check for updates" for everyone who already installed it (the app
+    # has no other way to recognize this is the same course under a new
+    # name). Warn, not error, so older un-migrated courses still validate —
+    # run `python ensure_course_ids.py` to auto-assign one.
+    course_id = (meta.get("id") or "").strip()
+    if not course_id:
+        report.warn(
+            'meta.json has no "id" — course identity currently falls back to this folder\'s '
+            'name, which breaks "check for updates" for existing installs if the folder is ever '
+            "renamed. Run `python ensure_course_ids.py` to assign one."
+        )
     file_name = meta.get("file") or ""
     if not file_name.strip():
         report.error('meta.json "file" is required')
     else:
         file_path = os.path.join(course_dir, file_name)
         if not os.path.isfile(file_path):
-            # A warning, not an error: this repo doesn't commit a built
-            # course archive (delivery mechanism is still undecided — see
-            # .internal/INSTRUCTIONS.md's Phase 4), so "the file meta.json
-            # points to isn't here yet" is an expected, honest state for
-            # every course right now, not a broken submission. Source-level
-            # checks (--source) still run and still catch real content bugs.
-            report.warn(
-                f'meta.json "file" points to "{file_name}", which doesn\'t exist here yet — '
-                "this course isn't packaged/importable via the Course Library yet"
+            report.error(
+                f'meta.json "file" points to "{file_name}", which doesn\'t exist — '
+                "run build_course_zip.py and commit the result before publishing"
             )
 
     image = meta.get("image")
@@ -147,6 +184,7 @@ def validate_cards(units, cards, report, media_files=None):
     card_ids = set()
     mains_by_id = {}
     exercises = []
+    previews = []
     units_with_cards = set()
     prompt_seen_at = {}  # normalized prompt -> first card id that used it
     cards_with_explanation = 0
@@ -164,8 +202,8 @@ def validate_cards(units, cards, report, media_files=None):
             report.error(f'card {cid}: unknown type "{ctype}"')
 
         role = c.get("role")
-        if role not in ("main", "exercise"):
-            report.error(f'card {cid}: role must be "main" or "exercise", got "{role}"')
+        if role not in ("main", "exercise", "preview"):
+            report.error(f'card {cid}: role must be "main", "exercise", or "preview", got "{role}"')
 
         uid = c.get("unit_id")
         if uid not in unit_ids:
@@ -174,12 +212,50 @@ def validate_cards(units, cards, report, media_files=None):
         prompt = (c.get("prompt") or "").strip()
         if not prompt:
             report.error(f"card {cid}: empty prompt")
+        elif ctype == "preview_card":
+            # preview_card's "prompt" column holds teaching prose (the
+            # `concept`), not a quiz question — the atomicity word-count
+            # rule below is aimed at prompts a learner must parse under
+            # time pressure and doesn't apply here.
+            pass
         else:
-            if len(prompt) > MAX_PROMPT_LENGTH:
-                report.warn(
-                    f'card {cid}: prompt is {len(prompt)} characters — '
-                    f"consider trimming, cards work best under {MAX_PROMPT_LENGTH}"
-                )
+            options_raw = (c.get("options") or "").strip()
+            option_list = [o for o in options_raw.split("|")] if options_raw else []
+            prompt_words = _word_count(prompt)
+            option_word_counts = [_word_count(o) for o in option_list]
+            total_words = prompt_words + sum(option_word_counts)
+
+            prompt_ok = prompt_words < MAX_PROMPT_WORDS
+            if ctype in CHOICE_LIST_TYPES:
+                options_ok = all(w < MAX_OPTION_WORDS for w in option_word_counts)
+            else:
+                options_ok = True
+            fits_total = total_words <= MAX_TOTAL_WORDS
+
+            if not (prompt_ok and options_ok) and not fits_total:
+                if not prompt_ok and ctype in CHOICE_LIST_TYPES and not options_ok:
+                    report.error(
+                        f"card {cid}: prompt is {prompt_words} words (limit {MAX_PROMPT_WORDS}) "
+                        f"and has an option over {MAX_OPTION_WORDS} words — split into more "
+                        "cards, or shorten so prompt+options together are "
+                        f"{MAX_TOTAL_WORDS} words or fewer"
+                    )
+                elif not prompt_ok:
+                    report.error(
+                        f"card {cid}: prompt is {prompt_words} words — limit is "
+                        f"{MAX_PROMPT_WORDS - 1}, or {MAX_TOTAL_WORDS} words total "
+                        "including options. Split into more cards instead of padding one."
+                    )
+                else:
+                    long_options = [
+                        o for o, w in zip(option_list, option_word_counts) if w >= MAX_OPTION_WORDS
+                    ]
+                    report.error(
+                        f"card {cid}: option(s) over {MAX_OPTION_WORDS - 1} words: "
+                        f"{', '.join(long_options)} — limit is {MAX_OPTION_WORDS - 1} words "
+                        f"per option, or {MAX_TOTAL_WORDS} words total including the prompt"
+                    )
+
             # A soft, deliberately imprecise heuristic for "this prompt is
             # probably testing more than one fact" — true atomicity can't be
             # mechanically verified, so this nudges rather than blocks.
@@ -219,6 +295,10 @@ def validate_cards(units, cards, report, media_files=None):
             if not (c.get("related_main_id") or "").strip():
                 report.error(f"card {cid}: exercise card has no related_main_id")
             exercises.append(c)
+        elif role == "preview":
+            if not (c.get("related_main_id") or "").strip():
+                report.error(f"card {cid}: preview card has no related_main_id")
+            previews.append(c)
 
         if media_files is not None:
             for col in ("image", "audio"):
@@ -239,6 +319,13 @@ def validate_cards(units, cards, report, media_files=None):
             exercise_count_by_main[rid] = exercise_count_by_main.get(rid, 0) + 1
             exercise_types_by_main.setdefault(rid, set()).add(e.get("type") or "multiple_choice")
 
+    for p in previews:
+        rid = p.get("related_main_id")
+        if rid and rid not in mains_by_id:
+            report.error(
+                f'card {p.get("id")}: related_main_id "{rid}" does not point to a main card'
+            )
+
     for mid in mains_by_id:
         n = exercise_count_by_main.get(mid, 0)
         if n == 0:
@@ -257,15 +344,28 @@ def validate_cards(units, cards, report, media_files=None):
             )
 
     # Course-wide type variety: catches a whole course leaning on 1-2 types
-    # out of the 13 available, which the per-deck check above can miss if
+    # out of the 14 available, which the per-deck check above can miss if
     # each individual deck looks varied but the course as a whole doesn't.
     all_types_used = {c.get("type") or "multiple_choice" for c in cards}
     if len(cards) >= 20 and len(all_types_used) < 5:
         report.warn(
             f"this course only uses {len(all_types_used)} card type(s) "
             f"({', '.join(sorted(all_types_used))}) across {len(cards)} cards — "
-            "13 types are available; consider mixing in more for variety"
+            "14 types are available; consider mixing in more for variety"
         )
+
+    # Typing (type_answer, numeric_answer, code_fill, command_output,
+    # short_answer) is slower and more error-prone to grade than tapping —
+    # capped at 10% of a course's cards so review stays quick (see
+    # AUTHORING.md's "typing budget" section).
+    if cards:
+        typing_count = sum(1 for c in cards if (c.get("type") or "multiple_choice") in TYPING_TYPES)
+        typing_ratio = typing_count / len(cards)
+        if typing_ratio > MAX_TYPING_CARD_RATIO:
+            report.warn(
+                f"{typing_count}/{len(cards)} cards ({round(100 * typing_ratio)}%) require typing — "
+                f"consider trimming below {round(100 * MAX_TYPING_CARD_RATIO)}% so review stays quick to tap through"
+            )
 
     # Audio only ever lives on media_card (see AUTHORING.md's "Audio"
     # section) — a course introducing real terminology with zero media_card
@@ -308,15 +408,15 @@ def validate_cards(units, cards, report, media_files=None):
 
 
 def validate_zip(course_dir, meta, report):
-    # Currently a no-op for every course in this repo, since none commits a
-    # built archive (see README.md) — kept working rather than removed so it
-    # picks back up automatically once this repo's delivery mechanism lands
-    # on something that puts a real .zip next to meta.json again.
+    # Validates the actual committed <slug>.zip every course ships (see
+    # README.md's "Delivery mechanism" note) — this is the real artifact
+    # the app downloads and imports, so it gets the same card/media checks
+    # as --source, not just a file-exists check.
     if not meta or not meta.get("file"):
         return
     zip_path = os.path.join(course_dir, meta["file"])
     if not zip_path.endswith(".zip") or not os.path.isfile(zip_path):
-        return  # a .json course file, or already-reported missing — nothing more to check here
+        return  # already reported missing by validate_meta_json — nothing more to check here
 
     try:
         with zipfile.ZipFile(zip_path) as zf:
@@ -387,7 +487,24 @@ def validate_course_folder(course_dir, check_source=False):
     validate_zip(course_dir, meta, report)
     if check_source:
         validate_source(course_dir, report, meta=meta)
-    return report
+    return report, meta
+
+
+def check_id_uniqueness(reports_and_metas):
+    """Cross-course check, only meaningful with --all: two courses sharing
+    an "id" would make lib/courseUpdates.ts's rename-fallback lookup
+    ambiguous (which course does the id actually belong to?) — this is a
+    hard error, not a warning, since it silently breaks update-checking for
+    both courses in a way an author is unlikely to notice on their own."""
+    seen = {}
+    for report, meta in reports_and_metas:
+        course_id = ((meta or {}).get("id") or "").strip()
+        if not course_id:
+            continue
+        if course_id in seen:
+            report.error(f'meta.json "id" ("{course_id}") is also used by "{seen[course_id]}" — ids must be unique across the repo')
+        else:
+            seen[course_id] = report.label
 
 
 def main():
@@ -398,19 +515,21 @@ def main():
     args = parser.parse_args()
 
     repo_root = os.path.dirname(os.path.abspath(__file__))
-    reports = []
+    results = []
 
     if args.all:
         for entry in sorted(os.listdir(repo_root)):
             full = os.path.join(repo_root, entry)
             if os.path.isdir(full) and os.path.isfile(os.path.join(full, "meta.json")):
-                reports.append(validate_course_folder(full, check_source=args.source))
+                results.append(validate_course_folder(full, check_source=args.source))
+        check_id_uniqueness(results)
     elif args.course:
-        reports.append(validate_course_folder(args.course, check_source=args.source))
+        results.append(validate_course_folder(args.course, check_source=args.source))
     else:
         parser.print_help()
         sys.exit(1)
 
+    reports = [r for r, _meta in results]
     for r in reports:
         r.print()
 

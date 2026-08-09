@@ -1,12 +1,12 @@
 .internal/
 
-# No built course archives in the repo — delivery mechanism undecided,
-# see .internal/INSTRUCTIONS.md's Phase 4. Also guards against
-# accidentally re-adding one by hand.
-*.zip
-
 # Raw/unorganized authoring material belongs under .internal/, never here.
 draft/
+
+# Per-course build tooling (the scripts/manifests that originally generated
+# a course's cards.csv or its narration audio) — dev-only, never read by the
+# app or validate_course.py at runtime. Keep locally, don't publish.
+*/source/build/
 
 # OS/editor cruft
 .DS_Store

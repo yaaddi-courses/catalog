@@ -1,19 +1,31 @@
 #!/usr/bin/env python3
 """
 Zips one course's source/{meta,units,cards}.csv (+ any referenced images/
-audio) into <slug>.zip at the course folder's own root, ready to attach to
-a GitHub Release — see README.md's "Delivery mechanism" note for why the
-built file is a Release asset, never something committed to the repo tree.
+audio) into <slug>.zip at the course folder's own root — this IS the file
+the app downloads, so it gets committed to the repo tree alongside
+meta.json, not left as a build artifact.
+
+Why committed, not a GitHub Release asset: a GitHub Release asset would
+avoid the git-history cost of a multi-MB binary, but Release assets
+(objects.githubusercontent.com / release-assets.githubusercontent.com,
+whichever the download redirect lands on) don't send
+Access-Control-Allow-Origin — a browser fetch() from the Yaaddi web app
+fails there with a CORS error every time (confirmed against the real repo,
+not just docs). raw.githubusercontent.com — what a co-located, committed
+file is served from — does support CORS. There's no backend to route
+around that gap, so the committed file is the only option that works on
+every platform (web included) without standing up server infrastructure.
 
 No dependencies beyond the standard library (same convention as
 validate_course.py) — this repo works standalone, without the Yaaddi app
 repo cloned alongside.
 
 Usage:
-    python build_release_zip.py <course-folder>
+    python build_course_zip.py <course-folder>
 
-Prints "slug=<slug> version=<version>" on success, for the calling CI step
-to name/tag the Release with — see .github/workflows/release-courses.yml.
+Run this after any change to a course's source/, then `git add
+<course-folder>/<slug>.zip` before committing — see README.md's
+"Adding a new course" / "Updating an existing course" sections.
 """
 
 import csv

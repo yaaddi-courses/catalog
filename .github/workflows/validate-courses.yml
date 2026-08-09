@@ -8,14 +8,18 @@ on:
   pull_request:
     paths:
       - "*/meta.json"
+      - "*/*.zip"
       - "*/source/**"
       - "validate_course.py"
+      - "build_course_zip.py"
   push:
     branches: [main]
     paths:
       - "*/meta.json"
+      - "*/*.zip"
       - "*/source/**"
       - "validate_course.py"
+      - "build_course_zip.py"
   workflow_dispatch: {}
 
 # A new push to the same PR/branch supersedes the previous run's result —
@@ -25,7 +29,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -33,12 +37,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # A default checkout leaves HEAD detached, which git-auto-commit
+          # can't push from — need the actual PR/push branch checked out.
+          ref: ${{ github.head_ref || github.ref }}
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
+      # A course with no meta.json "id" falls back to identifying itself
+      # by its GitHub folder name — fine until that folder is ever renamed,
+      # at which point "check for updates" silently breaks for everyone
+      # who already installed it (see ensure_course_ids.py's own doc
+      # comment, and docs/ARCHITECTURE.md in the Yaaddi app repo). Assigns
+      # one automatically rather than only warning about it, since this is
+      # a mechanical, always-safe default (the folder name itself) with no
+      # judgment call for the author to make.
+      - name: Auto-assign missing course ids
+        run: python ensure_course_ids.py
+
+      # Only actually pushes if ensure_course_ids.py changed something —
+      # a no-op run leaves the working tree clean and this step no-ops too.
+      # On a pull_request from a fork, GITHUB_TOKEN is read-only by GitHub's
+      # own default security policy, so this step fails to push there —
+      # expected: a fork PR just keeps its "no id assigned" warning until
+      # the author runs the script locally and commits it themselves,
+      # exactly like before this automation existed.
+      - name: Commit auto-assigned ids, if any
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-assign missing course id(s)"
+          file_pattern: "*/meta.json"
+
       # validate_course.py is stdlib-only by design (see its own doc
-      # comment) — no dependency installation step needed.
+      # comment) — no dependency installation step needed. Runs after the
+      # auto-assign step above, against whatever's now on disk (freshly
+      # assigned ids included), so a PR that only needed an id doesn't
+      # fail the check it was just auto-fixed for.
       - name: Run validator
         run: python validate_course.py --all --source

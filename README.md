@@ -8,8 +8,7 @@ software. This repo doesn't depend on the app's own repository being cloned
 alongside — everything you need to author, validate, and publish a course lives here.
 
 There's no server, no account to run. A course is a folder; publishing it is a git push
-— CI builds and attaches the installable file automatically (see "Delivery mechanism"
-below), nothing to build or upload by hand.
+(after building its `.zip` locally — see "Delivery mechanism" below).
 
 ## Available courses
 
@@ -25,15 +24,20 @@ in Software Engineering each have a finalized deck list but aren't written yet �
 out of the repo tree entirely (not even a stub folder) until they're actually done.
 
 > **Delivery mechanism:** each course ships as a `<slug>.zip` (meta/units/cards.csv
-> plus every referenced image/audio file) attached as a **GitHub Release asset**,
-> tagged `<slug>-v<version>` — never committed to the repo tree. A multi-MB binary
-> living in git history forever, re-diffed on every clone, isn't what git is for; a
-> Release asset is exactly the GitHub-native way to publish a versioned binary without
-> that cost, and it's what `.github/workflows/release-courses.yml` builds and uploads
-> automatically on every push that changes a course's `source/` — only the course(s)
-> that actually changed, not the whole catalog. `meta.json`'s `file`/`version` fields
-> tell the app which asset to fetch (`src/lib/githubMarketplace.ts` in the app repo
-> resolves them into the Release download URL).
+> plus every referenced image/audio file), **committed to the repo tree** right next
+> to `meta.json`. Build it with `python build_course_zip.py <name>` after any change
+> to `source/`, then commit the resulting `<name>/<slug>.zip` along with your other
+> changes.
+>
+> A GitHub Release asset was tried first instead (avoids the git-history cost of a
+> multi-MB binary) and reverted — Release assets don't send
+> `Access-Control-Allow-Origin`, so the app's web build gets a CORS error on every
+> download attempt (confirmed against this exact repo, not just docs).
+> `raw.githubusercontent.com` — what a committed, co-located file is served from —
+> does support CORS. There's no backend to route around that gap without standing up
+> server infrastructure this project otherwise avoids, so a committed file is the only
+> option that works on every platform (web included). `concurrency-in-python.zip`
+> currently runs ~10MB; that's an accepted trade-off, not an oversight.
 
 ## Repo layout
 
@@ -41,12 +45,12 @@ out of the repo tree entirely (not even a stub folder) until they're actually do
 <repo-root>/
 ├── README.md                     (this file)
 ├── AUTHORING.md                  (how to write a course — content rules, card variety, etc.)
-├── build_release_zip.py          (builds <slug>.zip from source/ — stdlib-only, same as validate_course.py)
+├── build_course_zip.py           (builds <slug>.zip from source/ — stdlib-only, same as validate_course.py)
 ├── .github/workflows/
-│   ├── validate-courses.yml      (runs validate_course.py on every PR/push)
-│   └── release-courses.yml       (builds + publishes a Release for every changed course)
+│   └── validate-courses.yml      (runs validate_course.py on every PR/push)
 ├── python-basics/
 │   ├── meta.json                 ← what the Course Library reads
+│   ├── python-basics.zip         ← built + committed — what Install actually downloads
 │   ├── cover.jpg                 ← the course's cover image
 │   └── source/                   ← the actual course content, human-editable
 │       ├── meta.csv
@@ -55,23 +59,27 @@ out of the repo tree entirely (not even a stub folder) until they're actually do
 │       └── images/
 └── concurrency-in-python/
     ├── meta.json
+    ├── concurrency-in-python.zip
     ├── cover.png
     └── source/
         └── ...
 ```
 
-(`<slug>.zip` isn't shown above — it's a CI-built artifact attached to a GitHub
-Release, gitignored locally, never sitting in the repo tree.)
+Some courses also have a local, **gitignored** `source/build/` — the script(s) that originally generated that course's `cards.csv` or its narration audio. Never part of the delivery pipeline (nothing reads it at import or validate time) and never committed, matching `.internal/`'s "raw authoring tooling doesn't belong in the public tree" rule. Not every course has one; skip it if you're authoring `source/*.csv` by hand.
 
 **One top-level folder per course, and only finished courses live at the repo root.**
-The folder name is that course's stable id. A course that's still being written lives
-under `.internal/wip-courses/<name>/` instead — gitignored, so it never appears in the
-public repo tree — and only gets moved to the repo root once it's actually done.
+A course that's still being written lives under `.internal/wip-courses/<name>/` instead
+— gitignored, so it never appears in the public repo tree — and only gets moved to the
+repo root once it's actually done.
+
+The folder name is **not** the course's real identity, just where its files currently
+live — see `meta.json`'s `id` field below.
 
 ### `meta.json`
 
 ```json
 {
+  "id": "python-basics",
   "title": "Python",
   "description": "Learn modern Python from the ground up.",
   "image": "cover.png",
@@ -88,11 +96,12 @@ public repo tree — and only gets moved to the repo root once it's actually don
 
 | Field | Required | Meaning |
 |---|---|---|
+| `id` | strongly recommended | This course's **stable identity** — never changed once published. Without it, the app falls back to using this course's *folder name* as its identity, which breaks "check for updates" for everyone who already installed it the moment this folder is ever renamed. `python validate_course.py` warns if it's missing; `python ensure_course_ids.py` assigns one automatically (defaulting to the current folder name — a safe, zero-breakage default), and the `validate-courses` GitHub Action runs that for you and commits the result on every PR, so you rarely need to set this by hand. Once assigned, **never change it** for an existing course — a changed id looks like a brand-new course to anyone who already installed the old one. |
 | `title` | yes | Course title, shown in the Course Library list |
 | `description` | no (defaults to empty) | Shown under the title |
 | `image` | no | Filename of the cover image, **relative to this course's own folder** |
-| `file` | yes | Filename of the built `.zip` — the asset name in the GitHub Release tagged `<slug>-v<version>` (see "Delivery mechanism" above), **not** a path in this repo |
-| `version` | **yes** | Mirrors `meta.csv`'s own `version` — required now (not just for update-checks): it's also half of the Release tag CI builds/publishes to (`<slug>-v<version>`), so the app can locate the asset. Keep it in sync by hand whenever you bump `meta.csv`'s version. |
+| `file` | yes | Filename of the built `.zip`, **committed in this course's own folder** (see "Delivery mechanism" above) |
+| `version` | no | Mirrors `meta.csv`'s own `version` — lets a learner's app detect an update without downloading the whole course. Keep it in sync by hand whenever you bump `meta.csv`'s version. |
 | `toc` | no | Deck/unit titles, in order — shown as a preview **before** a learner downloads the course. Without it, title/description/cover is the whole preview. Just copy the `title` column of your `source/units.csv`, in row order. |
 | `tags` | no | Free-form labels (e.g. `"python"`, `"beginner"`) — used to filter the Course Library list. Not a curated/fixed set, use whatever's genuinely descriptive. |
 | `changelog` | no | Array of `{ version, date?, notes }` — one entry per published version. When a learner's app detects an update, the entry whose `version` matches the new `version` is shown as "What's new." Add one new entry each time you bump `version`; never edit or remove a past entry. |
@@ -105,21 +114,24 @@ error) — so a plain README, a `LICENSE`, or a `.github/` folder at the root is
 Three CSVs (`meta.csv`, `units.csv`, `cards.csv`) plus an `images/`/`media/` folder for
 anything they reference — this is the same shape Yaaddi's in-app **Export** produces
 and **Import** accepts, just not built into a package here. **Full column-by-column
-reference, including the exact encoding each of the 13 card types expects for its
+reference, including the exact encoding each of the 14 card types expects for its
 options/answers: [`AUTHORING.md`](AUTHORING.md).**
 
 ## Adding a new course
 
-1. Pick a folder name (becomes the course's id) and create `<name>/source/` with
-   `meta.csv`, `units.csv`, `cards.csv`, and any images/audio they reference. While
-   it's incomplete, this lives under `.internal/wip-courses/<name>/`, not the repo
-   root.
+1. Pick a folder name and create `<name>/source/` with `meta.csv`, `units.csv`,
+   `cards.csv`, and any images/audio they reference. While it's incomplete, this lives
+   under `.internal/wip-courses/<name>/`, not the repo root. (The folder name is just
+   where the files live, not the course's real identity — see `meta.json`'s `id` field
+   below; you don't need to get the folder name "right" up front.)
 2. Read [`AUTHORING.md`](AUTHORING.md) for the content guidelines this project follows
    (deck structure, card-type variety, how many practice cards per concept, audio
    conventions, etc.) — courses accepted here should read like they were written by
    someone who actually wants you to learn the topic, not a content mill.
 3. Pick or generate a cover image, save it as `<name>/cover.png` (or `.jpg`).
-4. Write `<name>/meta.json` (see the table above).
+4. Write `<name>/meta.json` (see the table above). You can leave out `id` — the
+   `validate-courses` GitHub Action assigns one automatically once you open a PR; or
+   run `python ensure_course_ids.py <name>` yourself to set it locally first.
 5. **Run the validator**: `python validate_course.py <name> --source` (or
    `--all --source` to check every course at the repo root) — catches dangling
    references (a card pointing at a `unit_id` that doesn't exist, an exercise with no
@@ -127,20 +139,16 @@ options/answers: [`AUTHORING.md`](AUTHORING.md).**
    card types, duplicate cards, decks with no cards, main cards with too few practice
    cards, and more — see [`AUTHORING.md`](AUTHORING.md#before-you-publish) for the full
    list. Zero dependencies beyond Python's standard library.
-6. Set `meta.json`'s `file` to `<slug>.zip` and `version` to match `meta.csv`'s
-   `version` (both required now — see the field table above).
-7. Once the course is genuinely done, move its folder from `.internal/wip-courses/` to
-   the repo root and open a PR.
+6. **Build the zip**: `python build_course_zip.py <name>` — reads `source/`, writes
+   `<name>/<slug>.zip`. Set `meta.json`'s `file` to that filename.
+7. `git add <name>/` (the zip included — it's not gitignored) and once the course is
+   genuinely done, move its folder from `.internal/wip-courses/` to the repo root and
+   open a PR.
 
-**Two workflows run automatically, no manual build step:**
-- `.github/workflows/validate-courses.yml` runs on every PR — step 5 above just lets
-  you catch the same problems locally before pushing, rather than waiting on CI.
-- `.github/workflows/release-courses.yml` runs on every push to `main` that changes a
-  course's `source/` — builds `<slug>.zip` (`build_release_zip.py`, stdlib-only, same
-  convention as the validator) and publishes it as a GitHub Release tagged
-  `<slug>-v<version>`, **only for the course(s) that actually changed**, not the whole
-  catalog. To build+check one locally before pushing: `python build_release_zip.py
-  <name>`.
+**`.github/workflows/validate-courses.yml` runs automatically on every PR** — step 5
+above just lets you catch the same problems locally before pushing, rather than
+waiting on CI. There's no build-automation workflow — the zip is a normal committed
+file you build and `git add` yourself, same as any other change.
 
 ## Updating an existing course
 
@@ -150,10 +158,9 @@ course someone already has installed updates its content (new/changed/removed ca
 while keeping their spaced-repetition history for anything that didn't change. That
 means you can freely fix typos, add decks, or expand a course later — just bump the
 `version` in `meta.csv` (and `meta.json`'s own `version`, plus one new `changelog`
-entry describing what changed) with the same internal slug and push. CI builds and
-publishes the new Release automatically (`release-courses.yml`) — nothing to build or
-upload by hand — and everyone who already has the course gets the update the next
-time they check.
+entry describing what changed), **rebuild the zip** (`python build_course_zip.py
+<name>`), and push. Everyone who already has the course gets the update the next time
+they check.
 
 ## License
 
