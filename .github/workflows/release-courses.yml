@@ -45,20 +45,36 @@ jobs:
           fi
 
           BEFORE="${{ github.event.before }}"
+          HAS_DIFF_BASE=1
           if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
-            # First push to this branch, or the diff base doesn't exist locally
-            # (e.g. a force-push) — fall back to just the tip commit's own changes.
-            RANGE="${{ github.sha }}~1..${{ github.sha }}"
+            # workflow_dispatch (no "before" at all), or the very first push
+            # to this branch — try the tip commit's own parent instead.
+            if git rev-parse --verify --quiet "${{ github.sha }}~1" > /dev/null; then
+              RANGE="${{ github.sha }}~1..${{ github.sha }}"
+            else
+              HAS_DIFF_BASE=0
+            fi
           else
             RANGE="$BEFORE..${{ github.sha }}"
           fi
 
-          # Only top-level folders that both changed AND currently have a
-          # meta.json (skips repo-root files like README.md that the path
-          # filter above wouldn't match anyway, plus any folder mid-removal).
-          CHANGED=$(git diff --name-only $RANGE -- '*/meta.json' '*/source/**' \
-            | cut -d/ -f1 | sort -u \
-            | while read -r dir; do [ -f "$dir/meta.json" ] && echo "$dir"; done)
+          if [ "$HAS_DIFF_BASE" = "1" ]; then
+            # Only top-level folders that both changed AND currently have a
+            # meta.json (skips repo-root files like README.md that the path
+            # filter above wouldn't match anyway, plus any folder mid-removal).
+            CHANGED=$(git diff --name-only $RANGE -- '*/meta.json' '*/source/**' \
+              | cut -d/ -f1 | sort -u \
+              | while read -r dir; do [ -f "$dir/meta.json" ] && echo "$dir"; done)
+          else
+            # No usable diff base at all (repo's first-ever commit has no
+            # parent, and this isn't a follow-up push) — release every
+            # course that currently exists rather than crash on a missing
+            # HEAD~1. Only reachable in this one edge case, not the steady
+            # state, so it doesn't undermine the "only changed courses"
+            # efficiency goal in normal operation.
+            echo "No diff base available (first-ever commit) — releasing every course."
+            CHANGED=$(for dir in */; do d="${dir%/}"; [ -f "$d/meta.json" ] && echo "$d"; done)
+          fi
 
           echo "Changed course folders: $CHANGED"
           echo "courses<<EOF" >> "$GITHUB_OUTPUT"
