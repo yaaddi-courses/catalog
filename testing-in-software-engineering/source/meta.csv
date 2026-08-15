@@ -1,0 +1,2 @@
+slug,title,description,version,author,color,icon,image
+testing-in-software-engineering,Testing in Software Engineering,"What actually makes a test worth writing — the testing pyramid, good unit-test habits, and the practices that keep a codebase honest.",1.0.0,Yaaddi,#10B981,checkmark-done-outline,course-cover.png

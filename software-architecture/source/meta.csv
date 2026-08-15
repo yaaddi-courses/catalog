@@ -1,0 +1,2 @@
+slug,title,description,version,author,color,icon,image
+software-architecture,Software Architecture,"The styles, principles, and trade-offs behind how real systems are structured, from a single monolith to distributed microservices.",1.0.0,Yaaddi,#4C6EF5,sitemap-outline,course-cover.png

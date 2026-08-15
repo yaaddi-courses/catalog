@@ -1,0 +1,62 @@
+{
+  "id": "558d49ba4cfe",
+  "title": "Git",
+  "description": "The version control system behind almost every modern codebase — how to actually understand what it's doing, not just memorize commands.",
+  "image": "cover.png",
+  "file": "git.zip",
+  "version": "1.0.0",
+  "tags": [
+    "git",
+    "version-control",
+    "programming",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 39 decks, 291 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What Version Control Actually Solves",
+    "Installing and Setting Up Git",
+    "Starting a Repository",
+    "The Three Areas: Working, Staged, Committed",
+    "Tracking and Staging Changes",
+    "Committing Snapshots",
+    "Reading Your History",
+    "Comparing Changes",
+    "Unstaging and Discarding Changes",
+    "Fixing Your Last Commit",
+    "Reverting a Commit Safely",
+    "Resetting to an Earlier Point",
+    "What a Branch Really Is",
+    "Creating and Switching Branches",
+    "Merging Branches Together",
+    "Resolving a Merge Conflict",
+    "Rebasing Instead of Merging",
+    "Cleaning Up History With Interactive Rebase",
+    "Understanding Remotes",
+    "Pushing and Pulling",
+    "Fetch vs. Pull",
+    "Tracking Branches",
+    "Forks and Pull Requests",
+    "Writing Reviewable Commits",
+    "Common Team Branching Strategies",
+    ".gitignore and What Not to Track",
+    "Removing Untracked Files",
+    "Searching Commit History",
+    "Blaming a Line, Fairly",
+    "Binary-Searching for a Bug",
+    "Tagging a Release",
+    "Stashing Work in Progress",
+    "Cherry-Picking a Single Commit",
+    "Rewriting History Without Breaking Everyone",
+    "Recovering \"Lost\" Commits",
+    "Common Git Mistakes and Their Fixes",
+    "Submodules, Briefly",
+    "Handling Large Files With Git LFS",
+    "How Git Actually Stores Your Data"
+  ]
+}

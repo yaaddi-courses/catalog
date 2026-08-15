@@ -1,0 +1,2 @@
+slug,title,description,version,author,color,icon,image
+kubernetes-fundamentals,Kubernetes Fundamentals,"How Kubernetes actually runs your containers at scale — the architecture, the core objects, and the concepts that make the rest of it click.",1.0.0,Yaaddi,#326CE5,boat-outline,course-cover.png

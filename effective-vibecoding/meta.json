@@ -1,0 +1,50 @@
+{
+  "id": "241d8884a6f3",
+  "title": "Effective Vibecoding",
+  "description": "How to direct an AI coding agent well: scoping tasks, prompting clearly, reviewing what it writes, and staying safely in control the whole time.",
+  "image": "cover.png",
+  "file": "effective-vibecoding.zip",
+  "version": "1.0.0",
+  "tags": [
+    "ai",
+    "programming",
+    "productivity",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 27 decks, 194 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What \"Vibecoding\" Actually Means",
+    "A Different Job: Director, Not Typist",
+    "What Agents Are Genuinely Good At",
+    "Where Agents Still Fall Short",
+    "Project Context Files",
+    "Scoping a Task Before You Ask",
+    "Breaking Big Asks Into Small Steps",
+    "Being Specific Without Over-Specifying",
+    "Showing an Example Instead of a Rule",
+    "Asking for a Plan First",
+    "Correcting an Agent Mid-Task",
+    "Never Trust, Always Verify",
+    "Reading a Diff Like a Reviewer",
+    "Running and Testing the Result Yourself",
+    "Spotting a Confident Hallucination",
+    "Reversible vs. Irreversible Actions",
+    "Sandboxing and Permissions",
+    "Committing in Small Steps While Vibecoding",
+    "Knowing When to Take Back the Wheel",
+    "Pair-Programming With an Agent",
+    "Using an Agent for Code Review",
+    "Delegating Research vs. Delegating Implementation",
+    "Losing the Thread in a Long Session",
+    "Over-Trusting a Confident Tone",
+    "Letting Scope Creep In",
+    "Building Reusable Prompts and Playbooks",
+    "Knowing When Not to Vibecode"
+  ]
+}

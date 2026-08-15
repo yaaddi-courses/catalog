@@ -77,3 +77,12 @@ jobs:
       # fail the check it was just auto-fixed for.
       - name: Run validator
         run: python validate_course.py --all --source
+
+      # PR-time smoke test for the GitHub Pages site build (tools/build_site.py).
+      # pages.yml only runs on push to main, after merge — without this step, a
+      # course change that crashes the site build (e.g. malformed meta.json)
+      # would pass PR validation clean and only surface as a broken live site
+      # after merge, with no warning beforehand. This builds to a throwaway
+      # /tmp dir and never deploys anything.
+      - name: Smoke-test the course catalog site build
+        run: python tools/build_site.py --out /tmp/site_smoke_test

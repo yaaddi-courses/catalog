@@ -10,18 +10,26 @@ alongside — everything you need to author, validate, and publish a course live
 There's no server, no account to run. A course is a folder; publishing it is a git push
 (after building its `.zip` locally — see "Delivery mechanism" below).
 
+**Browse online:** https://mohammad-reza-mahdiani.github.io/yaaddi/ — a searchable,
+filterable catalog with cover images, deck lists, and example cards for every course
+below, rebuilt automatically by `.github/workflows/pages.yml` any time course content
+changes (see "Course catalog site" further down).
+
 ## Available courses
 
 | Course | Topic | Decks | Cards |
 |---|---|---|---|
-| [`python-basics/`](python-basics/) | Python fundamentals | 24 | 160 |
-| [`concurrency-in-python/`](concurrency-in-python/) | Threading, multiprocessing, asyncio | 85 | 783 |
-
-### Work in progress
-
-Git, Docker and Containers, Kubernetes Fundamentals, Effective Vibecoding, and Testing
-in Software Engineering each have a finalized deck list but aren't written yet — kept
-out of the repo tree entirely (not even a stub folder) until they're actually done.
+| [`git/`](git/) | Version control | 39 | 236 |
+| [`docker-and-containers/`](docker-and-containers/) | Containers, Dockerfiles, Compose | 44 | 180 |
+| [`kubernetes-fundamentals/`](kubernetes-fundamentals/) | Clusters, pods, networking, storage | 41 | 244 |
+| [`concurrency-in-python/`](concurrency-in-python/) | Threading, multiprocessing, asyncio | 85 | 787 |
+| [`python-basics/`](python-basics/) | Python fundamentals | 24 | 196 |
+| [`effective-vibecoding/`](effective-vibecoding/) | Directing an AI coding agent well | 27 | 167 |
+| [`testing-in-software-engineering/`](testing-in-software-engineering/) | Test types, TDD, coverage, CI | 32 | 194 |
+| [`software-architecture/`](software-architecture/) | Architecture styles and trade-offs | 40 | 177 |
+| [`sdlc/`](sdlc/) | The software development lifecycle | 34 | 143 |
+| [`managing-software-projects/`](managing-software-projects/) | Running a real software project | 35 | 147 |
+| [`emotional-intelligence/`](emotional-intelligence/) | Self-awareness and interpersonal skills | 40 | 172 |
 
 > **Delivery mechanism:** each course ships as a `<slug>.zip` (meta/units/cards.csv
 > plus every referenced image/audio file), **committed to the repo tree** right next
@@ -161,6 +169,40 @@ means you can freely fix typos, add decks, or expand a course later — just bum
 entry describing what changed), **rebuild the zip** (`python build_course_zip.py
 <name>`), and push. Everyone who already has the course gets the update the next time
 they check.
+
+## Course catalog site
+
+`tools/build_site.py` renders a static browsable catalog — an index page (cover
+images, descriptions, tag filter, search) plus one dedicated page per course (full
+deck list, card-type mix, image coverage, a couple of real example cards). It's pure
+Python stdlib, reads only `meta.json` + `source/units.csv` + `source/cards.csv` (never
+the app itself, never a live API), and writes plain static HTML/CSS/JS — no build
+tooling, no framework, nothing to install beyond `python3`.
+
+**It rebuilds and redeploys automatically.** `.github/workflows/pages.yml` runs the
+generator and publishes the result via GitHub Pages any time a push to `main` touches
+a course's `meta.json`, `source/cards.csv`, `source/units.csv`, cover image, or the
+site tooling itself — the generated HTML is never committed to the repo, it's a
+throwaway CI artifact rebuilt fresh every time. **Nothing needs updating by hand when
+a course changes** — write the content, bump the version, push; the site catches up on
+its own.
+
+To preview locally before pushing:
+
+```bash
+python tools/build_site.py --out _site
+python -m http.server -d _site 8000   # then open http://localhost:8000
+```
+
+One manual one-time setup step (can't be done from a workflow file): in the repo's
+GitHub Settings → Pages, set **Source: GitHub Actions**.
+
+This is deliberately a separate, read-only mechanism from the app's own in-app Course
+Library (which fetches `meta.json`/the `.zip` directly from this repo via the GitHub
+API at install time) — the site never touches or reformats those files, so it can't
+break that flow. If a future in-app "browse without installing" feature wants a single
+cached catalog index instead of live API calls, `tools/build_site.py`'s course-data
+extraction is the natural thing to reuse or share a format with; that's not built yet.
 
 ## License
 

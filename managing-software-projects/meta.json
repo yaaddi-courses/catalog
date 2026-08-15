@@ -1,0 +1,58 @@
+{
+  "id": "e3ae11104967",
+  "title": "Managing Software Projects",
+  "description": "Running a real software project: methodologies, planning, tracking, risk, and the people skills that hold a team together.",
+  "image": "cover.png",
+  "file": "managing-software-projects.zip",
+  "version": "1.0.0",
+  "tags": [
+    "project-management",
+    "agile",
+    "software-engineering",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 35 decks, 182 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What a Software Project Manager Does",
+    "Project vs Product vs Program",
+    "The Iron Triangle: Scope, Time, Cost",
+    "Mapping Your Stakeholders",
+    "Writing a Project Charter",
+    "Waterfall: When It Still Makes Sense",
+    "Agile Values and Principles",
+    "Scrum Roles and Ceremonies",
+    "Sprint Planning Basics",
+    "Kanban Fundamentals",
+    "Scrumban: Mixing Scrum and Kanban",
+    "Choosing a Methodology for Your Team",
+    "Work Breakdown Structures",
+    "Story Points vs Time Estimates",
+    "Planning Poker",
+    "The Critical Path Method",
+    "Buffering for Uncertainty",
+    "Burndown and Burnup Charts",
+    "Tracking Team Velocity",
+    "Managing Scope Creep",
+    "Running a Good Daily Standup",
+    "Backlog Grooming",
+    "Identifying and Mitigating Risk",
+    "Technical Debt as a Project Risk",
+    "Writing a Definition of Done",
+    "Setting Quality Gates",
+    "Leading Without Authority",
+    "Running Effective Retrospectives",
+    "Managing Remote and Distributed Teams",
+    "Resolving Conflict on a Project Team",
+    "Reporting Status to Executives",
+    "Project Management Tools Overview",
+    "Managing Change Requests",
+    "Project Closure and Postmortems",
+    "Common Project Failure Patterns"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id": "d29883f5a134",
+  "title": "Emotional Intelligence",
+  "description": "Understanding and managing your own emotions, and reading and responding well to other people's, at home and at work.",
+  "image": "cover.png",
+  "file": "emotional-intelligence.zip",
+  "version": "1.0.0",
+  "tags": [
+    "emotional-intelligence",
+    "self-improvement",
+    "communication",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 40 decks, 212 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What Emotional Intelligence Actually Is",
+    "The Four EQ Domains",
+    "EQ vs IQ: What Each Predicts",
+    "The Brain's Role in Emotion",
+    "Why EQ Can Be Trained",
+    "Naming Your Emotions Precisely",
+    "Recognizing Physical Signals of Emotion",
+    "Identifying Your Emotional Triggers",
+    "Strengths, Weaknesses, and Blind Spots",
+    "Journaling as a Self-Awareness Tool",
+    "The Pause Between Trigger and Reaction",
+    "Reframing Negative Thoughts",
+    "Managing Anger Constructively",
+    "Handling In-the-Moment Anxiety",
+    "Building Emotional Resilience",
+    "Delaying Gratification",
+    "Intrinsic vs Extrinsic Motivation",
+    "Setting Meaningful Goals",
+    "Staying Optimistic Under Setbacks",
+    "Commitment and Follow-Through",
+    "Cognitive vs Emotional Empathy",
+    "Active Listening Techniques",
+    "Reading Nonverbal Cues",
+    "Perspective-Taking",
+    "Empathy Fatigue",
+    "Building Rapport Quickly",
+    "Giving Constructive Feedback",
+    "Receiving Criticism Gracefully",
+    "Resolving Conflict Without Escalating",
+    "Ethical Persuasion and Influence",
+    "Reading the Room in Groups",
+    "Emotional Intelligence in Leadership",
+    "Reading Your Manager's Emotional State",
+    "Team Emotional Climate",
+    "Difficult Conversations at Work",
+    "Staying Composed Under Deadline Pressure",
+    "Emotional Contagion",
+    "Cultural Differences in Emotional Expression",
+    "Common EQ Myths, Debunked",
+    "Tracking Your Own EQ Growth"
+  ]
+}

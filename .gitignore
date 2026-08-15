@@ -11,3 +11,8 @@ draft/
 # OS/editor cruft
 .DS_Store
 Thumbs.db
+__pycache__/
+
+# GitHub Pages site build output (tools/build_site.py) — generated fresh by
+# .github/workflows/pages.yml on every push, never committed.
+_site/

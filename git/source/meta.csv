@@ -1,0 +1,2 @@
+slug,title,description,version,author,color,icon,image
+git,Git,"The version control system behind almost every modern codebase — how to actually understand what it's doing, not just memorize commands.",1.0.0,Yaaddi,#F05033,git-branch-outline,course-cover.png

@@ -1,2 +1,2 @@
 slug,title,description,version,author,color,icon,image
-concurrency-in-python,Concurrency in Python,"Threading, multiprocessing, and asyncio — from the GIL to structured concurrency, start to finish.",1.3.0,Yaaddi,#FFD43B,git-network-outline,course-cover.png
+concurrency-in-python,Concurrency in Python,"Threading, multiprocessing, and asyncio — from the GIL to structured concurrency, start to finish.",1.0.0,Yaaddi,#FFD43B,git-network-outline,course-cover.png

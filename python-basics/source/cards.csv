@@ -1,5 +1,5 @@
 id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
-1,1,short_answer,main,,What function prints text to the console in Python?,print,,,,print() is one of the very first functions every Python programmer learns.
+1,1,short_answer,main,,What function prints text to the console in Python?,print|print(),,,,"print() is one of the very first functions every Python programmer learns. A single = assigns a value to a variable without declaring a type — e.g. x = 5 — and that variable's type (int, float, str, bool, ...) is just whatever value it currently holds, which can change over time."
 2,1,select_blank,exercise,1,"Complete the line to print the text hello:
 ___('hello')",print|input|write|return,0,,,print() takes whatever you pass it and writes it to the console.
 3,1,true_false,exercise,1,Python variables don't need a declared type.,,true,,,"You never write the type when creating a variable — Python figures it out from the value, and it can even change later."
@@ -7,25 +7,25 @@ ___('hello')",print|input|write|return,0,,,print() takes whatever you pass it an
 5,1,multiple_choice,exercise,1,What is the type of True?,int|str|bool|float,2,,,True and False are the two values of the bool type.
 6,1,multiple_choice,exercise,1,Which assignment sets x to 5?,x=5|x==5|5=x|int x=5,0,,,A single = assigns a value to a name — no declaration keyword needed.
 7,1,multiple_choice,exercise,1,"What does this print?
-x=5;x='five';print(type(x))",<class 'str'>|<class 'int'>|str|five,0,,,Reassigning x to a string changes its type — the same variable can hold any type at different times.
-8,2,multiple_choice,main,,Which operator performs floor (integer) division in Python?,//|/|%|**,0,,,"// divides and rounds down to the nearest whole number, discarding any remainder."
+x=5;x='five';print(type(x))",<class 'str'>|<class 'int'>|str|five,0,cards/card_7.png,,Reassigning x to a string changes its type — the same variable can hold any type at different times.
+8,2,multiple_choice,main,,Which operator performs floor (integer) division in Python?,//|/|%|**,0,,,"// divides and rounds down to the nearest whole number, discarding any remainder. Related operators: % (modulo) gives the remainder instead, ** raises to a power, == checks equality (returning True/False, even comparing an int to an equal float), and and/or combine boolean conditions — and needs both sides true, or needs just one."
 9,2,command_output,exercise,8,What does this print?,print(7 // 2)|3,,,,"7 divided by 2 is 3.5, and // rounds that down to 3."
 10,2,multiple_choice,exercise,8,"What does this print?
 print(7 % 2)",1|0|3.5|2,0,,,% gives the remainder after division — 7 divided by 2 leaves a remainder of 1.
 11,2,true_false,exercise,8,"In Python, == compares values while = assigns a value.",,true,,,"Mixing these up is one of the most common beginner typos — = sets a value, == checks equality."
-12,2,multiple_choice,exercise,8,Which operator raises a number to a power?,^|**|pow|%%,1,,,"** is Python's exponentiation operator — 2 ** 3 is 8. ^ is actually bitwise XOR in Python, not power."
-13,2,select_blank,exercise,8,"Complete the truthy check.
+12,2,multiple_choice,exercise,8,Which operator raises a number to a power?,^|**|pow|%%,1,cards/card_12.png,,"** is Python's exponentiation operator — 2 ** 3 is 8. ^ is actually bitwise XOR in Python, not power."
+13,2,select_blank,exercise,8,"Complete: both must be truthy.
 if a ___ b:",and|or|not|is,0,,,and requires both sides to be truthy for the whole condition to be true.
 14,2,true_false,exercise,8,"This prints True:
 print(3 == 3.0)",,true,,,"Python compares numeric values, not types — an int and a float with the same value are equal."
 15,3,select_blank,main,,"Complete the f-string embedding name:
-f'Hello, ___!'",{name}|(name)|[name]|<name>,0,,,An f-string lets you drop a variable straight into a string using curly braces.
+f'Hello, ___!'",{name}|(name)|[name]|<name>,0,,,"An f-string lets you drop a variable straight into a string using curly braces. Strings are also indexable (s[0], s[-1]) and sliceable (s[1:4]), and come with methods like lower() (lowercase copy), split() (break into a list), and strip() (trim whitespace)."
 16,3,true_false,exercise,15,"This code prints 'P':
 s = 'Python'
 print(s[0])",,true,,,"String indexing starts at 0, so s[0] is the first character."
 17,3,multiple_choice,exercise,15,"What does this print?
 s = 'Python'
-print(s[-1])",n|P|-1|Python,0,,,Negative indices count from the end — -1 is always the last character.
+print(s[-1])",n|P|-1|Python,0,cards/card_17.png,,Negative indices count from the end — -1 is always the last character.
 18,3,multiple_choice,exercise,15,"What does this print?
 s = 'Python'
 print(s[1:4])",yth|Pyt|ytho|Python,0,,,Slicing s[1:4] takes characters from index 1 up to (not including) index 4.
@@ -35,7 +35,7 @@ s = 'a,b,c'
 print(s.split(','))","['a','b','c']|('a','b','c')|'a,b,c'|{'a','b','c'}",0,,,split() breaks a string into a list wherever the separator appears.
 21,3,true_false,exercise,15,"This code prints 'hi':
 print('  hi  '.strip())",,true,,,"strip() removes leading and trailing whitespace, but leaves whitespace in the middle alone."
-22,4,order,main,,Order if/elif/else as they appear.,if|elif|else,,,,"A conditional chain always starts with if, can have any number of elif branches, and optionally ends with else."
+22,4,order,main,,Order if/elif/else as they appear.,if|elif|else,,,,"A conditional chain always starts with if, can have any number of elif branches, and optionally ends with else. Falsy values (0, '', [], None) make a condition false; truthy values (basically everything else, including any non-empty string) make it true. Python also has a one-line ternary form: x if condition else y."
 23,4,multiple_choice,exercise,22,"What does this print?
 x=0
 if x:print('truthy')
@@ -48,10 +48,10 @@ x=5
 if x>10:print('big')
 elif x>3:print('medium')
 else:print('small')",medium|big|small|Error,0,,,"x is 5, which fails the first check (>10) but passes the second (>3)."
-27,4,multiple_choice,exercise,22,Which value is truthy?,0|''|None|'False',3,,,"'False' is a non-empty string — even though it reads like the word ""false"", any non-empty string is truthy."
+27,4,multiple_choice,exercise,22,Which value is truthy?,0|''|None|'False',3,cards/card_27.png,,"'False' is a non-empty string — even though it reads like the word ""false"", any non-empty string is truthy."
 28,4,multiple_choice,exercise,22,What comes right after value in a ternary?,if|then|when|where,0,,,The keyword if sits right after the value that's used when the condition is true.
 29,5,select_blank,main,,"Complete: loop 0 through 4.
-for i in ___(5):",range|len|iter|enumerate,0,,,"range(5) produces 0, 1, 2, 3, 4 — five numbers starting at 0, stopping before 5."
+for i in ___(5):",range|len|iter|enumerate,0,,,"range(5) produces 0, 1, 2, 3, 4 — five numbers starting at 0, stopping before 5. While loops (while condition:) keep running until the condition goes false. break exits a loop immediately; continue skips the rest of the current iteration. A for loop's else clause runs only if the loop completes normally, without hitting a break."
 30,5,multiple_choice,exercise,29,"What does this print?
 for i in range(3):
     print(i)","0,1,2|1,2,3|0,1,2,3|3",0,,,"range(3) counts 0, 1, 2 — three values, stopping before 3."
@@ -64,31 +64,31 @@ if i==2:___",break|continue|pass|return,0,,,"break stops the loop immediately, e
 for i in range(3):print(i)
 else:print('done')","0,1,2,done|0,1,2|done|Error",0,,,A for loop's else block runs automatically once the loop finishes normally (no break).
 35,5,true_false,exercise,29,break skips a for loop's else block.,,true,,,The else only runs when the loop completes all its iterations — break skips it entirely.
-36,6,true_false,main,,Lists are mutable — you can change them.,,true,,,"You can add, remove, or change items in a list without creating a new one — unlike a tuple or string."
+36,6,select_blank,main,,Lists are ___ — you can change them.,mutable|immutable|constant|frozen,0,,,"You can add, remove, or change items in a list without creating a new one — unlike a tuple or string. That mutation happens through methods like append() (add to end), sort() (rearrange in place), and pop() (remove and return the last item), plus len() to count items and slicing (nums[1:]) to grab a range."
 37,6,multiple_choice,exercise,36,Which method adds one item to a list's end?,append()|add()|push()|insert(),0,,,"append() adds exactly one item to the end — for adding several items at once, extend() is what you want instead."
 38,6,multiple_choice,exercise,36,"What does this print?
 nums=[3,1,2];nums.sort();print(nums)","[1,2,3]|[3,1,2]|[3,2,1]|None",0,,,"sort() rearranges the list in place, from smallest to largest by default."
 39,6,multiple_choice,exercise,36,"What does this print?
-nums=[1,2,3];nums.pop();print(nums)","[1,2]|[2,3]|[1,2,3]|3",0,,,pop() with no argument removes and returns the last item.
+nums=[1,2,3];nums.pop();print(nums)","[1,2]|[2,3]|[1,2,3]|3",0,cards/card_39.png,,pop() with no argument removes and returns the last item.
 40,6,multiple_choice,exercise,36,"What does this print?
 nums=[1,2,3,4];print(len(nums))",4|3|5|Error,0,,,len() counts how many items are in the list.
 41,6,multiple_choice,exercise,36,"What does this print?
 nums=[1,2,3];print(nums[1:])","[2,3]|[1,2]|[1,2,3]|[3]",0,,,"Leaving off the end of a slice means ""go all the way to the end""."
 42,6,select_blank,exercise,36,"Complete: add 'x' to the list's end.
 items.___('x')",append|add|push|insert,0,,,append() is the standard way to grow a list one item at a time.
-43,7,true_false,main,,Tuples are immutable — their contents can't change.,,true,,,"Tuples are written with parentheses, e.g. (1, 2), and are useful exactly because they can't be accidentally modified."
+43,7,select_blank,main,,Tuples are ___ — their contents can't change.,immutable|mutable|dynamic|editable,0,,,"Tuples are written with parentheses, e.g. (1, 2), and are useful exactly because they can't be accidentally modified."
 44,7,select_blank,exercise,43,"Complete the tuple-unpacking assignment.
-x,y=___","(1,2)|[1,2]|{1,2}|1,2,3",0,,,"Unpacking assigns each element of a tuple to a variable in order — x gets 1, y gets 2."
-45,7,multiple_choice,exercise,43,"What does this print?
+x,y=___","(1,2)|[1,2]|{1,2}|1,2,3",0,cards/card_44.png,,"Unpacking assigns each element of a tuple to a variable in order — x gets 1, y gets 2."
+45,7,multiple_choice,exercise,46,"What does this print?
 s={1,2,2,3};print(len(s))",3|4|2|1,0,,,"A set automatically drops duplicates, so the repeated 2 only counts once."
-46,7,true_false,exercise,43,A Python set automatically removes duplicate values.,,true,,,Sets are built specifically to guarantee every element is unique.
-47,7,multiple_choice,exercise,43,"What does this print?
+46,7,select_blank,main,,A Python ___ automatically removes duplicate values.,set|list|tuple|dict,0,,,Sets are built specifically to guarantee every element is unique. They also support | (union — combine both sets) and & (intersection — only elements in both).
+47,7,multiple_choice,exercise,46,"What does this print?
 a={1,2,3};b={2,3,4};print(a&b)","{2,3}|{1,2,3,4}|{1}|{4}",0,,,& is set intersection — it returns only the elements present in both sets.
-48,7,multiple_choice,exercise,43,Which symbol computes the union of two sets?,| (union)|& (intersection)|- (difference)|^ (symdiff),0,,,"| combines both sets into one, keeping every unique element from each. (Changed from type_answer — a literal ""|"" can't be a type_answer accepted-answer in this CSV format, since | is the format's own multi-value delimiter.)"
-49,7,multiple_choice,exercise,43,"What does this print?
+48,7,multiple_choice,exercise,46,Which symbol computes the union of two sets?,| (union)|& (intersection)|- (difference)|^ (symdiff),0,,,"| combines both sets into one, keeping every unique element from each."
+49,7,multiple_choice,exercise,46,"What does this print?
 a={1,2};b={2,3};print(a|b)","{1,2,3}|{2}|{1,3}|{1,2,2,3}",0,,,"The union keeps every element from both sets, with 2 (shared by both) only appearing once."
 50,8,select_blank,main,,"Complete the dict mapping 'name' to 'Ada'.
-person={'name':___}",'Ada'|Ada|['Ada']|{'Ada'},0,,,A dictionary maps keys to values using key: value pairs inside curly braces.
+person={'name':___}",'Ada'|Ada|['Ada']|{'Ada'},0,,,"A dictionary maps keys to values using key: value pairs inside curly braces. You look values up with square brackets (d['key']) or safely with d.get('key', default), which never raises an error for a missing key. keys() and items() let you iterate over a dict's contents, and only hashable (immutable) values like strings, numbers, or tuples can be used as keys — not lists."
 51,8,multiple_choice,exercise,50,"What does this print?
 d={'a':1,'b':2};print(d['a'])",1|2|'a'|KeyError,0,,,Square brackets look up a value by its key.
 52,8,multiple_choice,exercise,50,Which dict method avoids a KeyError?,get()|fetch()|find()|lookup(),0,,,"d.get('key', default) is a safe lookup — it never raises an error for a missing key."
@@ -96,12 +96,12 @@ d={'a':1,'b':2};print(d['a'])",1|2|'a'|KeyError,0,,,Square brackets look up a va
 d={'a':1};print(d.get('b',0))",0|None|KeyError|1,0,,,"'b' isn't in the dict, so get() falls back to the default value provided: 0."
 54,8,multiple_choice,exercise,50,"What does this print?
 d={'a':1,'b':2};print(list(d.keys()))","['a','b']|[1,2]|('a','b')|{'a','b'}",0,,,"keys() gives you every key in the dictionary, in insertion order."
-55,8,true_false,exercise,50,A list cannot be used as a dict key.,,true,,,"Lists are mutable, and mutable objects can't be hashed — tuples work fine as keys since they're immutable."
+55,8,true_false,exercise,50,A list cannot be used as a dict key.,,true,cards/card_55.png,,"Lists are mutable, and mutable objects can't be hashed — tuples work fine as keys since they're immutable."
 56,8,multiple_choice,exercise,50,"What does this print?
 d={'a':1,'b':2}
 for k,v in d.items():print(k,v)","a:1,b:2|1:a,2:b|('a',1),('b',2)|a,b",0,,,items() gives you both the key and value together on each loop iteration.
 57,9,select_blank,main,,"Complete the comprehension.
-squares=[n ___ for n in nums]",** 2|* 2|+ 2|^ 2,0,,,A comprehension packs a loop and a transformation into one line: [expression for item in iterable].
+squares=[n ___ for n in nums]",** 2|* 2|+ 2|^ 2,0,,,"A comprehension packs a loop and a transformation into one line: [expression for item in iterable], optionally with an if clause to filter. The same pattern works for dicts ({k:v for ...}) and sets ({expr for ...}) — just no tuple comprehension; parentheses around one actually creates a generator."
 58,9,multiple_choice,exercise,57,"What does this print?
 print([x*2 for x in [1,2,3]])","[2,4,6]|[1,2,3]|[2,4,6,8]|6",0,,,Each item is doubled and collected into a new list.
 59,9,multiple_choice,exercise,57,"What prints?
@@ -111,9 +111,9 @@ print([x for x in range(5) if x%2==0])","[0,2,4]|[1,3]|[0,1,2,3,4]|[2,4]",0,,,Th
 61,9,true_false,exercise,57,"Set comprehensions use curly braces, like dicts.",,true,,,"Python tells them apart by content: a single expression makes a set, a key:value pair makes a dict."
 62,9,multiple_choice,exercise,57,"What does this print?
 print({x for x in [1,1,2,2,3]})","{1,2,3}|{1,1,2,2,3}|[1,2,3]|3",0,,,"A set comprehension drops duplicates automatically, same as a regular set."
-63,9,multi_select,exercise,57,Which of these are valid comprehension types in Python?,list comprehension|dict comprehension|set comprehension|tuple comprehension,0|1|2,,,There's no tuple comprehension — parentheses around a comprehension actually create a generator instead.
+63,9,multi_select,exercise,57,Which of these are valid comprehension types in Python?,list comprehension|dict comprehension|set comprehension|tuple comprehension,0|1|2,cards/card_63.png,,There's no tuple comprehension — parentheses around a comprehension actually create a generator instead.
 64,10,code_fill,main,,Complete the function definition for a function named greet.,"___ greet(name):
-    return f'Hello, {name}'|def",,,,"def starts every function definition, followed by the name and its parameters."
+    return f'Hello, {name}'|def",,,,"def starts every function definition, followed by the name and its parameters. A parameter can have a default value, used automatically when the caller omits that argument. Arguments can be passed by position or by keyword (name=value); once you switch to keyword arguments in a call, everything after must also be keyword-based."
 65,10,multiple_choice,exercise,64,"What does this print?
 def add(a,b):return a+b
 print(add(2,3))",5|23|None|Error,0,,,"The function returns a + b, which is passed straight to print()."
@@ -128,24 +128,24 @@ print(add(5))",15|5|10|Error,0,,,"Only a is provided, so b falls back to its def
 add(2, ___=3)",b|a|kwarg|key,0,,,Writing the parameter name before = passes that argument by keyword instead of position.
 70,10,true_false,exercise,64,Positional args must come before keyword args.,,true,,,"Once you switch to keyword arguments in a call, every argument after it must also be keyword-based."
 71,11,select_blank,main,,"Complete: collect extra positional args.
-def total(___args):",*|**|...|&,0,,,*args collects any number of extra positional arguments into a tuple named args.
-72,11,select_blank,exercise,71,"Complete: collect extra keyword args.
-def show(___kwargs):",**|*|...|&&,0,,,**kwargs collects any number of extra keyword arguments into a dictionary named kwargs.
+def total(___args):",*|**|...|&,0,,,"*args collects any number of extra positional arguments into a tuple named args. Returning several values separated by commas — return a, b — packs them into a tuple the same way, which you can unpack straight into two variables."
+72,11,select_blank,main,,"Complete: collect extra keyword args.
+def show(___kwargs):",**|*|...|&&,0,,,"**kwargs collects any number of extra keyword arguments into a dictionary named kwargs. Python also has lambda — a small, unnamed, single-expression function, like lambda x: x*2."
 73,11,multiple_choice,exercise,71,"What does this print?
 def total(*args):return sum(args)
 print(total(1,2,3))","6|(1,2,3)|3|Error",0,,,"args becomes the tuple (1, 2, 3), and sum() adds them all together."
-74,11,short_answer,exercise,71,"Which keyword defines a small, anonymous, single-expression function?",lambda,,,,"A lambda is a function with no name, limited to a single expression — handy for short, throwaway logic."
-75,11,multiple_choice,exercise,71,"What does this print?
+74,11,short_answer,exercise,72,"Which keyword defines a small, anonymous, single-expression function?",lambda,,,,"A lambda is a function with no name, limited to a single expression — handy for short, throwaway logic."
+75,11,multiple_choice,exercise,72,"What does this print?
 square=lambda x:x**2
 print(square(4))",16|8|4|Error,0,,,"The lambda takes x and returns x ** 2, so square(4) is 16."
 76,11,multiple_choice,exercise,71,"What does this print?
 def minmax(n):return min(n),max(n)
-print(minmax([3,1,2]))","(1,3)|(3,1)|[1,3]|1,3",0,,,Returning two values separated by a comma automatically packs them into a tuple.
-77,12,multiple_choice,main,,"Name the scope order: Local, Enclosing, Global, Built-in.",LEGB|GEBL|BLEG|LGEB,0,,,"Python checks each scope in that exact order until it finds the name — Local first, Built-in last."
+print(minmax([3,1,2]))","(1,3)|(3,1)|[1,3]|1,3",0,cards/card_76.png,,Returning two values separated by a comma automatically packs them into a tuple.
+77,12,multiple_choice,main,,"Name the scope order: Local, Enclosing, Global, Built-in.",LEGB|GEBL|BLEG|LGEB,0,,,"Python checks each scope in that exact order until it finds the name — Local first, Built-in last. Assigning to a name inside a function makes it local by default; writing global x first tells Python that x refers to the outer, module-level variable instead."
 78,12,multiple_choice,exercise,77,"What does this print?
 x=1
 def f():x=2;print(x)
-f();print(x)","2,1|2,2|1,1|1,2",0,,,The x inside f() is a separate local variable — it doesn't affect the global x at all.
+f();print(x)","2,1|2,2|1,1|1,2",0,cards/card_78.png,,The x inside f() is a separate local variable — it doesn't affect the global x at all.
 79,12,true_false,exercise,77,A variable set inside a function is local by default.,,true,,,"Assigning to a name inside a function makes Python treat it as local, unless you say otherwise with global."
 80,12,select_blank,exercise,77,"Complete: let f() modify module-level x.
 def f():___ x;x=2",global|nonlocal|import|static,0,,,"global tells Python that x inside this function refers to the module-level variable, not a new local one."
@@ -156,17 +156,17 @@ f();print(x)",2|1|None|Error,0,,,"global lets the function actually reassign the
 82,12,multiple_choice,exercise,77,"In the LEGB rule, which scope is checked first?",Built-in|Global|Enclosing|Local,3,,,Local is checked first — Python looks in the innermost scope before working its way outward.
 83,12,true_false,exercise,77,Reading a global var needs no global keyword.,,true,,,global is only needed when you want to assign to the outer variable — just reading it works without any keyword.
 84,13,select_blank,main,,"Complete: import sqrt from math.
-___ math import sqrt",from|import|using|with,0,,,"from ... import lets you pull in just the specific names you need, instead of the whole module."
+___ math import sqrt",from|import|using|with,0,,,"from ... import lets you pull in just the specific names you need, instead of the whole module. as lets you alias a module (import numpy as np). __name__ equals '__main__' only when a file is run directly, which is why if __name__ == '__main__': guards code from running on import — and Python only runs a module's top-level code once, reusing it on later imports."
 85,13,select_blank,exercise,84,"Complete: alias numpy as np.
 import numpy ___ np",as|to|alias|->,0,,,"as lets you reference a module under a shorter, more convenient name."
 86,13,multiple_choice,exercise,84,"What does this print?
 import math
 print(math.floor(3.7))",3|4|3.7|Error,0,,,math.floor() rounds down to the nearest whole number.
-87,13,multiple_choice,exercise,84,What variable equals '__main__' when run directly?,__name__|__main__|__file__|__module__,0,,,__name__ is '__main__' only when the file is run directly — it's the module's own name when it's imported elsewhere.
+87,13,multiple_choice,exercise,84,What variable equals '__main__' when run directly?,__name__|__main__|__file__|__module__,0,cards/card_87.png,,__name__ is '__main__' only when the file is run directly — it's the module's own name when it's imported elsewhere.
 88,13,true_false,exercise,84,A module only runs once; later imports reuse it.,,true,,,"Python caches imported modules, so importing the same one twice doesn't re-run its top-level code."
 89,13,select_blank,exercise,84,"Complete the direct-run guard.
 if __name__==___:main()",'__main__'|__main__|'main'|'__init__',0,,,This guard is standard practice — it stops your script's main logic from running when the file is only imported.
-90,14,multiple_choice,main,,Which function reads a typed line from the user?,input()|read()|scan()|get_input(),0,,,"input() pauses the program, waits for the user to type something and press Enter, then returns it as a string."
+90,14,multiple_choice,main,,Which function reads a typed line from the user?,input()|read()|scan()|get_input(),0,,,"input() pauses the program, waits for the user to type something and press Enter, then returns it as a string. int(input()) or float(input()) converts that text to a number — though text that isn't a valid number, like '3.5' passed to int(), raises a ValueError, which except ValueError: can catch."
 91,14,true_false,exercise,90,input() always returns a string.,,true,,,Whatever the user types comes back as text — you need int() or float() to use it as a number.
 92,14,select_blank,exercise,90,"Complete: convert age to an integer.
 age=___(input())",int|str|float|num,0,,,Wrapping input() in int() converts the typed text straight into a whole number.
@@ -176,31 +176,31 @@ print(float('3.5') + 1)",4.5|3.5|'3.5'+1|Error,0,,,float('3.5') converts the str
 95,14,true_false,exercise,90,int('3.5') raises a ValueError.,,true,,,"You'd need float('3.5') first, then int(...) to truncate it, if you actually wanted a whole number."
 96,14,select_blank,exercise,90,"Complete: catch a bad int() conversion.
 except ___:n=0",ValueError|TypeError|KeyError|IndexError,0,,,int() raises a ValueError specifically when the text can't be parsed as a number.
-97,15,order,main,,"Order try, except, else, finally.",try|except|else|finally,,,,"try comes first, then any except blocks, then an optional else, then an optional finally."
+97,15,order,main,,"Order try, except, else, finally.",try|except|else|finally,,,,"try comes first, then any except blocks, then an optional else, then an optional finally. raise lets you trigger an exception yourself, the same way a built-in error would be — and naming the exact exception type in except means unrelated errors still propagate instead of being silently caught."
 98,15,multiple_choice,exercise,97,"What does this print?
 try:1/0
 except ZeroDivisionError:print('caught')",caught|Error|0|None,0,,,"Dividing by zero raises a ZeroDivisionError, which the except block catches."
 99,15,true_false,exercise,97,"finally always runs, error or not.",,true,,,finally is the right place for cleanup code that absolutely must run no matter what happened.
 100,15,select_blank,exercise,97,"Complete: raise a new exception.
-___ ValueError('bad input')",raise|throw|except|error,0,,,"raise triggers an exception yourself, the same way a built-in error would be triggered."
+___ ValueError('bad input')",raise|throw|except|error,0,cards/card_100.png,,"raise triggers an exception yourself, the same way a built-in error would be triggered."
 101,15,multiple_choice,exercise,97,"What does this print?
 try:x=1
 except ZeroDivisionError:print('a')
 else:print('b')","b|a|a,b|Nothing",0,,,"No exception was raised, so the else block runs — else only fires when the try block succeeds cleanly."
-102,15,true_false,exercise,97,You can catch one exception type only.,,true,,,Naming the exact exception type means unrelated errors still propagate normally instead of being silently caught.
+102,15,true_false,exercise,97,You can catch one exception type only.,,false,cards/card_102.png,,"False — a single except can catch several types at once with a tuple: except (TypeError, ValueError):. Naming exact types (rather than a bare except:) is still what keeps unrelated errors propagating instead of being silently caught."
 103,15,multiple_choice,exercise,97,Which block runs only if try raised nothing?,except|else|finally|raise,1,,,else runs exactly when nothing went wrong in the try block.
 104,16,select_blank,main,,"Complete: open for reading.
-___ open('data.txt') as f:",with|using|open|try,0,,,"with automatically closes the file for you when the block ends, even if an error happens inside it."
-105,16,multiple_choice,exercise,104,"Which mode opens a file, erasing old content?",'w'|'r'|'a'|'x',0,,,'w' mode starts the file empty — any existing content is erased. Use 'a' if you want to keep it.
+___ open('data.txt') as f:",with|using|open|try,0,,,"with automatically closes the file for you when the block ends, even if an error happens inside it. The mode you pass to open() matters: 'w' erases existing content, 'a' appends to it. read() pulls in the whole file as one string, while readlines() splits it into a list of lines."
+105,16,multiple_choice,exercise,104,"Which mode opens a file, erasing old content?",'w'|'r'|'a'|'x',0,cards/card_105.png,,'w' mode starts the file empty — any existing content is erased. Use 'a' if you want to keep it.
 106,16,multiple_choice,exercise,104,Which mode appends to a file's end?,'a'|'w'|'r'|'+',0,,,"'a' mode writes new content after whatever's already in the file, without erasing it."
 107,16,true_false,exercise,104,with closes a file even if an error occurs.,,true,,,This is the main reason to prefer with over a plain open()/close() pair.
 108,16,select_blank,exercise,104,"Complete: read the whole file as one string.
 f.___()",read|readline|readlines|load,0,,,read() pulls in the entire file's contents as a single string.
 109,16,select_blank,exercise,104,"Complete: read file as list of lines.
 f.___()",readlines|read|readline|split,0,,,"readlines() splits the file into a list, one string per line."
-110,16,true_false,exercise,104,Forgetting close() without with can leak a handle.,,true,,,"This is exactly the kind of bug with prevents — the file gets closed automatically, so there's nothing to forget."
+110,16,true_false,exercise,104,Forgetting close() without with can leak a handle.,,true,cards/card_110.png,,"This is exactly the kind of bug with prevents — the file gets closed automatically, so there's nothing to forget."
 111,17,code_fill,main,,Complete the class definition for a class named Dog.,"___ Dog:
-    pass|class",,,,"class starts every class definition, followed by its name."
+    pass|class",,,,"class starts every class definition, followed by its name. Calling Dog() creates a new instance; methods are called on that instance (d.bark()), with self referring to it automatically, and each instance keeps its own independent attributes."
 112,17,short_answer,exercise,111,Name the conventional first parameter of an instance method.,self,,,,self is just a convention (not a keyword) — Python automatically passes the instance as the first argument.
 113,17,multiple_choice,exercise,111,"What prints?
 class Dog:
@@ -210,7 +210,7 @@ print(Dog().bark())",Woof|bark|None|Error,0,,,Calling d.bark() runs the method w
 115,17,select_blank,exercise,111,"Complete: call bark() on instance d.
 d.___()",bark|bark(self)|self.bark|Dog.bark,0,,,"You call an instance method on the object itself, without passing self manually."
 116,17,true_false,exercise,111,One instance's attribute doesn't affect other instances.,,true,,,"Each instance has its own independent set of attributes, separate from every other instance."
-117,18,short_answer,main,,"Name Python's constructor, run when an instance is made.",__init__,,,,"__init__ runs automatically right after a new instance is created, typically to set up its initial attributes."
+117,18,short_answer,main,,"Name Python's constructor, run when an instance is made.",__init__|__init__(),,,,"__init__ runs automatically right after a new instance is created, typically to set up its initial attributes via self.attr = value. A class attribute lives on the class itself, so every instance sees the same value — until one instance is given its own, which only overrides it for that one instance."
 118,18,select_blank,exercise,117,"Complete: store name as an instance attribute.
 self.name=___",name|self.name|Name|'name',0,,,Assigning to self.name stores the value on this specific instance.
 119,18,multiple_choice,exercise,117,"What does this print?
@@ -221,42 +221,42 @@ print(Dog('Rex').name)",Rex|name|None|Error,0,,,'Rex' was passed into __init__ a
 121,18,multiple_choice,exercise,117,"What does this print?
 class C:count=0
 a=C();b=C();a.count=5
-print(b.count)",0|5|Error|None,0,,,Setting a.count = 5 creates a new instance attribute on a alone — it doesn't touch the shared class attribute b still sees.
+print(b.count)",0|5|Error|None,0,cards/card_121.png,,Setting a.count = 5 creates a new instance attribute on a alone — it doesn't touch the shared class attribute b still sees.
 122,18,true_false,exercise,117,Instance attributes are usually set inside __init__.,,true,,,"This is the standard, expected place to initialize an instance's own data."
 123,19,select_blank,main,,"Complete: make Cat inherit from Animal.
-class Cat(___):",Animal|Cat|object|super,0,,,Putting the parent class name in parentheses makes Cat inherit all of Animal's attributes and methods.
+class Cat(___):",Animal|Cat|object|super,0,,,Putting the parent class name in parentheses makes Cat inherit all of Animal's attributes and methods. Cat can override any of them by redefining a method with the same name — and super().method() still reaches Animal's original version from inside that override. Different subclasses answering the same method call differently is polymorphism.
 124,19,short_answer,exercise,123,Which function calls a parent class's method?,super()|super,,,,"super() gives you access to the parent class's version of a method, even after you've overridden it."
 125,19,true_false,exercise,123,A subclass instance uses its own override.,,true,,,"Dog overrides speak(), so calling it on a Dog instance uses Dog's version, not Animal's."
 126,19,true_false,exercise,123,Overriding means a subclass redefines a parent method.,,true,,,The subclass's version replaces the parent's when called on an instance of the subclass.
-127,19,true_false,exercise,123,super() calls the parent's version of a method.,,true,,,"super().speak() calls Animal's original version first, then Dog's override adds ' -> Woof' to it."
+127,19,true_false,exercise,123,super() calls the parent's version of a method.,,true,cards/card_127.png,,"super().speak() calls Animal's original version first, then Dog's override adds ' -> Woof' to it."
 128,19,true_false,exercise,123,Polymorphism lets classes answer one call differently.,,true,,,"Calling .speak() works the same way regardless of the exact class, but each class can answer differently."
-129,20,multiple_choice,main,,Which prefix marks an attribute as non-public by convention?,_name|$name|ALL_CAPS|name_,0,,,"A single leading underscore is a hint to other developers: ""treat this as internal,"" nothing more."
+129,20,multiple_choice,main,,Which prefix marks an attribute as non-public by convention?,_name|$name|ALL_CAPS|name_,0,,,"A single leading underscore is a hint to other developers: ""treat this as internal,"" nothing more — nothing stops code outside the class from actually accessing it. A double leading underscore goes a step further, triggering name mangling that makes the attribute harder to reach by accident."
 130,20,true_false,exercise,129,"A single underscore is convention, not enforced privacy.",,true,,,"Nothing stops code outside the class from accessing a _underscored attribute — it's a social contract, not a lock."
 131,20,select_blank,exercise,129,"Complete: trigger name-mangling on balance.
 self.___balance=0",__|_|___|$$,0,,,"A double leading underscore triggers name mangling, making the attribute harder (not impossible) to access from outside."
-132,20,multiple_choice,exercise,129,Which decorator makes a method act like an attribute?,@property|@staticmethod|@classmethod|@getter,0,,,"@property lets you call a method without parentheses, as if it were a plain attribute."
-133,20,multiple_choice,exercise,129,"Prints?
+132,20,multiple_choice,main,,Which decorator makes a method act like an attribute?,@property|@staticmethod|@classmethod|@getter,0,,,"@property lets you call a method without parentheses, as if it were a plain attribute."
+133,20,multiple_choice,exercise,132,"Prints?
 class C:
  def __init__(s,r):s._r=r
  @property
  def area(s):return(3.14*s._r**2)
 print(C(2).area)",12.56|6.28|4|Error,0,,,area is accessed like an attribute (no parentheses) even though it's actually computed by a method.
-134,20,true_false,exercise,129,A @property getter is read without parentheses.,,true,,,That's the whole point of @property — it hides the fact that a value is actually computed by a method.
+134,20,true_false,exercise,132,A @property getter is read without parentheses.,,true,,,That's the whole point of @property — it hides the fact that a value is actually computed by a method.
 135,21,select_blank,main,,"Complete: apply a function to every item.
-list(___(f,nums))",map|filter|apply|reduce,0,,,map() applies a function to every item in an iterable and returns an iterator of the results.
+list(___(f,nums))",map|filter|apply|reduce,0,,,"map() applies a function to every item in an iterable and returns an iterator of the results — one of Python's higher-order functions, alongside filter() (keeps matching items), zip() (pairs iterables together by position), enumerate() (adds indices), and any()/all() (check truthiness across a collection)."
 136,21,multiple_choice,exercise,135,"What does this print?
 print(list(map(lambda x:x*2,[1,2,3])))","[2,4,6]|[1,2,3]|[1,4,9]|6",0,,,map() doubles each number; wrapping it in list() turns the result into a visible list.
 137,21,multiple_choice,exercise,135,"What does this print?
 print(list(filter(lambda x:x>1,[1,2,3])))","[2,3]|[1,2,3]|[1]|[3]",0,,,filter() keeps only the items where the function returns a truthy result.
 138,21,multiple_choice,exercise,135,"What does this print?
-print(list(zip([1,2],['a','b'])))","[(1,'a'),(2,'b')]|[(1,2),('a','b')]|[1,2,'a','b']|{(1,'a'),(2,'b')}",0,,,zip() pairs up items from each iterable by position.
+print(list(zip([1,2],['a','b'])))","[(1,'a'),(2,'b')]|[(1,2),('a','b')]|[1,2,'a','b']|{(1,'a'),(2,'b')}",0,cards/card_138.png,,zip() pairs up items from each iterable by position.
 139,21,multiple_choice,exercise,135,"What does this print?
 for i,v in enumerate(['a','b']):print(i,v)","0:a,1:b|a:0,b:1|0:1,a:b|1:a,2:b",0,,,enumerate() gives you both the index and the value on each loop iteration.
 140,21,true_false,exercise,135,"This prints True:
 print(any([False, False, True]))",,true,,,any() returns True as soon as at least one item in the iterable is truthy.
 141,21,true_false,exercise,135,"This prints True:
 print(all([True, True, False]))",,false,,,all() returns True only if every single item is truthy — one False is enough to fail it.
-142,22,true_false,main,,sorted() copies; list.sort() sorts in place.,,true,,,Use sorted() when you need to keep the original order too; use .sort() when you don't need the original anymore.
+142,22,select_blank,main,,___() copies; list.sort() sorts in place.,sorted|reversed|sort|len,0,,,"Use sorted() when you need to keep the original order too; use .sort() when you don't need the original anymore. Both also accept reverse=True for descending order, and a key= function applied to each item to decide the sort order (e.g. key=len sorts by length instead of alphabetically)."
 143,22,multiple_choice,exercise,142,"What does this print?
 nums=[3,1,2];print(sorted(nums))","[1,2,3]|[3,1,2]|[3,2,1]|None",0,,,sorted() returns a brand-new list in ascending order by default.
 144,22,multiple_choice,exercise,142,"What does this print?
@@ -270,65 +270,92 @@ print(sorted(w,key=len))","['a','bb','ccc']|['ccc','bb','a']|['a','ccc','bb']|['
 148,22,multiple_choice,exercise,142,"Which module has itemgetter, an alternative sort key?",operator|functools|itertools|collections,0,,,operator.itemgetter and operator.attrgetter are often faster and more readable than an equivalent lambda.
 149,23,short_answer,main,,Which built-in Python module creates an isolated virtual environment?,venv,,,,python -m venv myenv creates a self-contained environment with its own package installs.
 150,23,true_false,exercise,149,A venv isolates a project's packages from others.,,true,,,This means two projects can depend on different versions of the same package without conflicting.
-151,23,short_answer,exercise,149,Which command-line tool is used to install Python packages?,pip,,,,pip install <package> is how you add third-party packages to your environment.
-152,23,multiple_choice,exercise,149,What file conventionally lists a project's dependencies?,requirements.txt|dependencies.txt|packages.json|pipfile.txt,0,,,Sharing this file lets anyone recreate the exact same set of installed packages.
-153,23,select_blank,exercise,149,"Complete: install packages from requirements.txt.
+151,23,short_answer,main,,Which command-line tool is used to install Python packages?,pip,,,,pip install <package> is how you add third-party packages to your environment.
+152,23,multiple_choice,exercise,151,What file conventionally lists a project's dependencies?,requirements.txt|dependencies.txt|packages.json|pipfile.txt,0,,,Sharing this file lets anyone recreate the exact same set of installed packages.
+153,23,select_blank,exercise,151,"Complete: install packages from requirements.txt.
 pip install -r ___",requirements.txt|packages.txt|-e .|setup.py,0,,,-r tells pip to read package names from a file instead of the command line.
 154,23,true_false,exercise,149,"Without a venv, pip installs affect your whole system.",,true,,,This is exactly the problem virtual environments solve — keeping each project's dependencies separate.
-155,24,select_blank,main,,"Complete: return type when age is int.
+155,24,select_blank,main,,"Complete: greet returns a greeting string.
 def greet(age:int)->___:",str|int|None|Any,0,,,"The -> arrow annotates a function's return type, after the parameter annotations."
 156,24,true_false,exercise,155,Type hints aren't enforced by Python at runtime.,,true,,,"Nothing stops you from passing the wrong type at runtime — hints are checked by tools like mypy, not by Python itself."
 157,24,select_blank,exercise,155,"Complete: a list of integers.
 scores:list[___]=[]",int|str|list|Integer,0,,,list[int] documents that every item in the list is expected to be an int.
-158,24,short_answer,exercise,155,Name Python's official naming/style guide.,PEP 8,,,,PEP 8 is the community-standard style guide most Python code follows.
-159,24,true_false,exercise,155,"A docstring documents a function, class, or module.",,true,,,"Docstrings are readable via help() and by most editors' tooltips, making them the standard way to document code."
+158,24,short_answer,main,,Name Python's official naming/style guide.,PEP 8|PEP8|pep8|pep 8,,,,PEP 8 is the community-standard style guide most Python code follows.
+159,24,true_false,exercise,158,"A docstring documents a function, class, or module.",,true,,,"Docstrings are readable via help() and by most editors' tooltips, making them the standard way to document code."
 160,24,select_blank,exercise,155,"Complete: an int, or None.
-count:___[int]=None",Optional|Maybe|Nullable|Union,0,,,"Optional[int] is shorthand for ""either an int, or None""."
+count:___[int]=None",Optional|Maybe|Nullable|Union,0,cards/card_160.png,,"Optional[int] is shorthand for ""either an int, or None""."
 161,1,media_card,exercise,1,Listen: What is a variable in Python?,"A name that refers to a stored value, which can change over the program's lifetime|A fixed value that never changes|A type of loop|A function's return value",0,,variable.wav,"Pronunciation and definition check for ""variable""."
-162,2,media_card,exercise,8,Listen: What does the modulo operator do?,Divides and rounds up|Multiplies two numbers|Compares two values for equality|Returns the remainder of a division,1,,modulo.wav,"Pronunciation and definition check for ""modulo""."
+162,2,media_card,exercise,8,Listen: What does the modulo operator do?,Divides and rounds up|Multiplies two numbers|Compares two values for equality|Returns the remainder of a division,3,,modulo.wav,"Pronunciation and definition check for ""modulo""."
 163,3,media_card,exercise,15,Listen: What is a string in Python?,A collection of key-value pairs|A single true/false value|A sequence of characters used for text|A whole number,2,,string.wav,"Pronunciation and definition check for ""string""."
-164,4,media_card,exercise,22,Listen: What is a boolean value?,A collection of unique items|A value that is either True or False|A whole number|A sequence of characters,3,,boolean.wav,"Pronunciation and definition check for ""boolean""."
+164,4,media_card,exercise,22,Listen: What is a boolean value?,A collection of unique items|A value that is either True or False|A whole number|A sequence of characters,1,,boolean.wav,"Pronunciation and definition check for ""boolean""."
 165,5,media_card,exercise,29,Listen: What does iteration mean?,Repeating a block of code once per item in a sequence|Running code exactly once|Storing a value permanently|Converting one type to another,0,,iteration.wav,"Pronunciation and definition check for ""iteration""."
-166,6,media_card,exercise,36,Listen: What is a list in Python?,"An unordered, immutable collection of unique items|A mapping from keys to values|A single character|An ordered, mutable collection of items",1,,list.wav,"Pronunciation and definition check for ""list""."
+166,6,media_card,exercise,36,Listen: What is a list in Python?,"An unordered, immutable collection of unique items|A mapping from keys to values|A single character|An ordered, mutable collection of items",3,,list.wav,"Pronunciation and definition check for ""list""."
 167,7,media_card,exercise,43,Listen: What is a tuple?,"An unordered collection with no duplicates|A single boolean value|An ordered, immutable collection of items|An ordered, mutable collection of items",2,,tuple.wav,"Pronunciation and definition check for ""tuple""."
-168,8,media_card,exercise,50,Listen: What is a dictionary in Python?,A block of reusable code|A collection that maps keys to values|An ordered list of items|A single number,3,,dictionary.wav,"Pronunciation and definition check for ""dictionary""."
+168,8,media_card,exercise,50,Listen: What is a dictionary in Python?,A block of reusable code|A collection that maps keys to values|An ordered list of items|A single number,1,,dictionary.wav,"Pronunciation and definition check for ""dictionary""."
 169,9,media_card,exercise,57,Listen: What is a list comprehension?,A compact syntax for building a collection from a loop and expression|A way to read user input|A type of exception|A file-reading method,0,,comprehension.wav,"Pronunciation and definition check for ""comprehension""."
-170,10,media_card,exercise,64,Listen: What is a function?,"A variable that stores text|A type of loop|A file on disk|A reusable, named block of code that can take inputs and return a value",1,,function.wav,"Pronunciation and definition check for ""function""."
+170,10,media_card,exercise,64,Listen: What is a function?,"A variable that stores text|A type of loop|A file on disk|A reusable, named block of code that can take inputs and return a value",3,,function.wav,"Pronunciation and definition check for ""function""."
 171,11,media_card,exercise,71,Listen: What is a lambda in Python?,"A type of loop|A class method|A small, anonymous, single-expression function|A named function with multiple statements",2,,lambda.wav,"Pronunciation and definition check for ""lambda""."
-172,12,media_card,exercise,77,Listen: What does variable scope mean?,A file's location on disk|The region of code where a variable name is visible and usable|The type of a variable|The result of a function call,3,,scope.wav,"Pronunciation and definition check for ""scope""."
+172,12,media_card,exercise,77,Listen: What does variable scope mean?,A file's location on disk|The region of code where a variable name is visible and usable|The type of a variable|The result of a function call,1,,scope.wav,"Pronunciation and definition check for ""scope""."
 173,13,media_card,exercise,84,Listen: What is a module in Python?,A file of Python code that can be imported and reused|A single variable|A type of loop|A built-in data type,0,,module.wav,"Pronunciation and definition check for ""module""."
-174,14,media_card,exercise,90,Listen: What is type conversion?,Comparing two values for equality|Repeating a block of code|Defining a new class|Converting a value from one data type to another,1,,typeconversion.wav,"Pronunciation and definition check for ""type conversion""."
+174,14,media_card,exercise,90,Listen: What is type conversion?,Comparing two values for equality|Repeating a block of code|Defining a new class|Converting a value from one data type to another,3,,typeconversion.wav,"Pronunciation and definition check for ""type conversion""."
 175,15,media_card,exercise,97,Listen: What is an exception in Python?,"A type of loop|A stored variable|An error that occurs during a program's execution, which can be caught and handled|A comment in the code",2,,exception.wav,"Pronunciation and definition check for ""exception""."
-176,16,media_card,exercise,104,Listen: What does file I/O mean?,Defining a class|Reading data from or writing data to a file|Sending data over a network|Converting a string to a number,3,,fileio.wav,"Pronunciation and definition check for ""file I/O""."
+176,16,media_card,exercise,104,Listen: What does file I/O mean?,Defining a class|Reading data from or writing data to a file|Sending data over a network|Converting a string to a number,1,,fileio.wav,"Pronunciation and definition check for ""file I/O""."
 177,17,media_card,exercise,111,Listen: What is a class in Python?,A blueprint for creating objects that share attributes and behavior|A single stored value|A type of loop|A built-in function,0,,class.wav,"Pronunciation and definition check for ""class""."
-178,18,media_card,exercise,117,Listen: What is a constructor?,A method that deletes an object|A type of loop|A module-level function|A special method that runs automatically to set up a new object,1,,constructor.wav,"Pronunciation and definition check for ""constructor""."
+178,18,media_card,exercise,117,Listen: What is a constructor?,A method that deletes an object|A type of loop|A module-level function|A special method that runs automatically to set up a new object,3,,constructor.wav,"Pronunciation and definition check for ""constructor""."
 179,19,media_card,exercise,123,Listen: What is inheritance?,Converting between data types|Catching an exception|A mechanism where one class reuses and extends another class's behavior|Copying a variable's value,2,,inheritance.wav,"Pronunciation and definition check for ""inheritance""."
-180,20,media_card,exercise,129,Listen: What is encapsulation?,"Sorting a list|Bundling data and the methods that operate on it inside a class, hiding internal details|Splitting a program into separate files|Repeating a block of code",3,,encapsulation.wav,"Pronunciation and definition check for ""encapsulation""."
+180,20,media_card,exercise,129,Listen: What is encapsulation?,"Sorting a list|Bundling data and the methods that operate on it inside a class, hiding internal details|Splitting a program into separate files|Repeating a block of code",1,,encapsulation.wav,"Pronunciation and definition check for ""encapsulation""."
 181,21,media_card,exercise,135,Listen: What is a higher-order function?,A function that takes another function as an argument or returns one|A function with no parameters|A function that can only return numbers|A function defined inside a loop,0,,higherorderfunction.wav,"Pronunciation and definition check for ""higher-order function""."
-182,22,media_card,exercise,142,Listen: What does a sort key do?,The first item in a sorted list|A boolean flag for ascending order|A unique identifier for a dictionary|A function applied to each item to decide the sort order,1,,sortkey.wav,"Pronunciation and definition check for ""sort key""."
+182,22,media_card,exercise,142,Listen: What does a sort key do?,The first item in a sorted list|A boolean flag for ascending order|A unique identifier for a dictionary|A function applied to each item to decide the sort order,3,,sortkey.wav,"Pronunciation and definition check for ""sort key""."
 183,23,media_card,exercise,149,Listen: What is a virtual environment?,A sandboxed version of the operating system|A type of virtual machine for graphics|An isolated Python environment with its own installed packages|A cloud server that runs Python,2,,virtualenvironment.wav,"Pronunciation and definition check for ""virtual environment""."
-184,24,media_card,exercise,155,Listen: What is a type hint?,A default value for a parameter|An optional annotation documenting a variable or function's expected type|A runtime type check that stops the program|A comment explaining what a function does,3,,typehint.wav,"Pronunciation and definition check for ""type hint""."
-185,1,preview_card,preview,1,print() writes text to the console — it's the most basic way to see output from your code.,Got it,,,,
-186,2,preview_card,preview,8,// performs floor division in Python — it divides and rounds the result down to the nearest whole number.,Got it,,,,
-187,3,preview_card,preview,15,"An f-string lets you embed a variable directly inside a string by wrapping it in curly braces, like f'Hello, {name}!'.",Got it,,,,
-188,4,preview_card,preview,22,Python checks if/elif branches top to bottom and runs the first one that's true — else only runs if none of them were.,Got it,,,,
-189,5,preview_card,preview,29,"range(5) produces the numbers 0 through 4 — five values, starting at zero, not including 5.",Got it,,,,
-190,6,preview_card,preview,36,"A list is mutable — you can change its contents in place after creating it, unlike a tuple.",Got it,,,,
+184,24,media_card,exercise,155,Listen: What is a type hint?,A default value for a parameter|An optional annotation documenting a variable or function's expected type|A runtime type check that stops the program|A comment explaining what a function does,1,,typehint.wav,"Pronunciation and definition check for ""type hint""."
+185,1,preview_card,preview,1,"print() writes text to the console — it's the most basic way to see output from your code. You assign a value to a name with a single = (no type declared up front, e.g. x = 5), and Python's core types include int, float, str, and bool — the same variable can even hold a different type later.",Got it,,cards/card_185.png,,
+186,2,preview_card,preview,8,"// performs floor division in Python — it divides and rounds the result down to the nearest whole number. Its siblings: % (modulo) returns the remainder, and ** raises to a power. == compares two values for equality (don't confuse it with = which assigns), and the logical operators and/or combine conditions — and needs both sides true, or needs just one.",Got it,,,,
+187,3,preview_card,preview,15,"An f-string lets you embed a variable directly inside a string by wrapping it in curly braces, like f'Hello, {name}!'. Strings also support indexing (s[0] is the first character, s[-1] the last), slicing (s[1:4] grabs a range), and methods like lower(), split(), and strip().",Got it,,cards/card_187.png,,
+188,4,preview_card,preview,22,"Python checks if/elif branches top to bottom and runs the first one that's true — else only runs if none of them were. Falsy values include 0, '', [], and None; almost everything else is truthy. A ternary packs an if/else into one line: value_if_true if condition else value_if_false.",Got it,,cards/card_188.png,,
+189,5,preview_card,preview,29,"range(5) produces the numbers 0 through 4 — five values, starting at zero, not including 5. A while loop keeps running its body as long as its condition stays true. break exits a loop immediately; continue skips straight to the next iteration. A for loop's else block runs automatically once the loop finishes without a break.",Got it,,cards/card_189.png,,
+190,6,preview_card,preview,36,"A list is mutable — you can change its contents in place after creating it, unlike a tuple. append() adds one item to the end, sort() rearranges it in place, and pop() removes and returns the last item. len() counts a list's items, and slicing (nums[1:]) grabs a range of them.",Got it,,cards/card_190.png,,
 191,7,preview_card,preview,43,"A tuple is immutable — once created, you can't change, add, or remove its elements.",Got it,,,,
-192,8,preview_card,preview,50,"A dictionary maps keys to values with curly braces, like {'name': 'Ada'} — 'name' is the key, 'Ada' is the value.",Got it,,,,
-193,9,preview_card,preview,57,A list comprehension builds a new list in one line: [n**2 for n in nums] squares every item in nums.,Got it,,,,
-194,10,preview_card,preview,64,def starts a function definition — def greet(): creates a function named greet that you can call later.,Got it,,,,
-195,11,preview_card,preview,71,*args collects any number of extra positional arguments into a tuple inside the function.,Got it,,,,
-196,12,preview_card,preview,77,"Python looks up a name in this order: Local, Enclosing, Global, then Built-in — the first match wins.",Got it,,,,
-197,13,preview_card,preview,84,"from math import sqrt pulls just the sqrt function out of the math module, so you can call it directly.",Got it,,,,
-198,14,preview_card,preview,90,"input() pauses your program and reads a line of text the user types, always returning it as a string.",Got it,,,,
-199,15,preview_card,preview,97,"Python runs try first; if it raises an error, except catches it; else runs only if no error occurred; finally always runs last.",Got it,,,,
-200,16,preview_card,preview,104,with open('data.txt') as f: opens a file and automatically closes it for you when the block ends.,Got it,,,,
-201,17,preview_card,preview,111,class Dog: defines a new class named Dog — a blueprint you can create individual dog objects from.,Got it,,,,
-202,18,preview_card,preview,117,__init__() is Python's constructor — it runs automatically every time you create a new instance of a class.,Got it,,,,
-203,19,preview_card,preview,123,class Cat(Animal): makes Cat inherit everything Animal defines — Cat is now a more specific kind of Animal.,Got it,,,,
-204,20,preview_card,preview,129,"A leading underscore, like _balance, is Python's convention for marking an attribute as non-public — by agreement, not enforcement.",Got it,,,,
-205,21,preview_card,preview,135,"map(f, nums) applies the function f to every item in nums and returns an iterator of the results.",Got it,,,,
-206,22,preview_card,preview,142,sorted(list) returns a new sorted list and leaves the original untouched; list.sort() sorts the list in place instead.,Got it,,,,
-207,23,preview_card,preview,149,"The built-in venv module creates an isolated Python environment, so a project's dependencies don't clash with any other project's.",Got it,,,,
-208,24,preview_card,preview,155,def greet(age: int) -> str: means greet takes an int and its return type hint says it returns a str.,Got it,,,,
+192,8,preview_card,preview,50,"A dictionary maps keys to values with curly braces, like {'name': 'Ada'} — 'name' is the key, 'Ada' is the value. Look a value up with d['key'], or safely with d.get('key', default), which never raises an error for a missing key. keys() lists every key and items() gives key-value pairs together, but a mutable object like a list can't be used as a key.",Got it,,cards/card_192.png,,
+193,9,preview_card,preview,57,"A list comprehension builds a new list in one line: [n**2 for n in nums] squares every item in nums — add an if clause to filter, like [n for n in nums if n>0]. The same pattern works for dicts ({k:v for ...}) and sets ({expr for ...}); there's no tuple comprehension — parentheses around one actually creates a generator instead.",Got it,,cards/card_193.png,,
+194,10,preview_card,preview,64,"def greet(name): return f'Hello, {name}' defines a function named greet — def starts every function definition, followed by its name and parameters. A parameter can have a default value (def greet(name='World')), used automatically when no argument is passed. Arguments can be passed positionally or by keyword (name=value) — once you use a keyword, everything after it must be keyword too.",Got it,,cards/card_194.png,,
+195,11,preview_card,preview,71,"def total(*args): collects any number of extra positional arguments into the tuple args. You can also return multiple values separated by commas — Python packs them into a tuple automatically, e.g. return a, b, which you can unpack straight into two variables.",Got it,,cards/card_195.png,,
+196,12,preview_card,preview,77,"Python looks up a name in this order: Local, Enclosing, Global, then Built-in — the first match wins. Inside a function, the global keyword lets you assign to a module-level variable instead of accidentally creating a new local one.",Got it,,cards/card_196.png,,
+197,13,preview_card,preview,84,"from math import sqrt pulls just the sqrt function out of the math module, so you can call it directly. import numpy as np lets you alias a module under a shorter name. if __name__ == '__main__': guards code so it only runs when the file is executed directly, not when it's imported — and Python only runs a module's top-level code once, reusing it on later imports.",Got it,,cards/card_197.png,,
+198,14,preview_card,preview,90,"input() pauses your program and reads a line of text the user types, always returning it as a string. Wrap it in int() or float() to convert to a number — but unparseable text, like int('3.5'), raises a ValueError, which except ValueError: can catch.",Got it,,cards/card_198.png,,
+199,15,preview_card,preview,97,"Python runs try first; if it raises an error, except catches it; else runs only if no error occurred; finally always runs last. You can trigger your own exception with raise ValueError('message'), and naming a specific exception type in except means only that type gets caught — unrelated errors still propagate.",Got it,,cards/card_199.png,,
+200,16,preview_card,preview,104,"with open('data.txt') as f: opens a file and automatically closes it for you when the block ends. The mode you pass to open() matters: 'w' opens for writing and erases existing content, 'a' appends without erasing. f.read() returns the whole file as one string; f.readlines() returns it as a list, one string per line.",Got it,,cards/card_200.png,,
+201,17,preview_card,preview,111,"class Dog: defines a new class named Dog — a blueprint you use to create individual dog objects (instances) from. Calling Dog() creates a new instance; methods are called on that instance (d.bark()), with self referring to it automatically, and each instance keeps its own independent attributes.",Got it,,cards/card_201.png,,
+202,18,preview_card,preview,117,"__init__() is Python's constructor — it runs automatically every time you create a new instance of a class, typically to set up instance attributes via self.attr = value. A class attribute (set on the class itself) is shared by every instance, until one instance is given its own copy, which only overrides it for that one instance.",Got it,,cards/card_202.png,,
+203,19,preview_card,preview,123,"class Cat(Animal): makes Cat inherit everything Animal defines — Cat is now a more specific kind of Animal. A subclass can override a parent's method by redefining it with the same name; super() lets that override still reach the parent's original version. Because each class can answer the same call (like .speak()) in its own way, this is called polymorphism.",Got it,,cards/card_203.png,,
+204,20,preview_card,preview,129,"A leading underscore, like _balance, is Python's convention for marking an attribute as non-public — by agreement, not enforcement. A double leading underscore, like __balance, triggers name mangling, making it harder (not impossible) to access from outside the class.",Got it,,cards/card_204.png,,
+205,21,preview_card,preview,135,"map(f, nums) applies the function f to every item in nums and returns an iterator of the results. Its siblings: filter() keeps only the items a function approves, zip() pairs up items from multiple iterables by position, enumerate() adds an index to each item, and any()/all() check whether at least one, or every, item is truthy.",Got it,,cards/card_205.png,,
+206,22,preview_card,preview,142,"sorted(list) returns a new sorted list and leaves the original untouched; list.sort() sorts the list in place instead. Both accept reverse=True to sort descending, and key=func to sort by something other than the raw items — like key=len to sort by length.",Got it,,cards/card_206.png,,
+207,23,preview_card,preview,149,"The built-in venv module creates an isolated Python environment, so a project's dependencies don't clash with any other project's.",Got it,,cards/card_207.png,,
+208,24,preview_card,preview,155,def greet(age: int) -> str: means greet takes an int and its return type hint says it returns a str.,Got it,,cards/card_208.png,,
+209,7,true_false,exercise,43,You can change a tuple's item after creation.,,false,,,Tuples can't be modified after creation -- trying to reassign an item raises a TypeError.
+210,7,preview_card,preview,46,A set is an unordered collection that automatically removes duplicate values. Sets also support algebra-style operators: | for union (combine both sets) and & for intersection (only the elements shared by both).,Got it,,cards/card_210.png,,
+300,11,preview_card,preview,72,"**kwargs collects extra keyword arguments into a dict — show(a=1, b=2) makes kwargs equal {'a': 1, 'b': 2}. Python also supports lambda, a compact anonymous function: lambda x: x*2 behaves like a tiny one-line def.",Got it,,,,
+301,20,preview_card,preview,132,"@property turns a method into something you read like a plain attribute — no parentheses needed, even though it's computed by code every time you access it.",Got it,,cards/card_301.png,,
+302,23,preview_card,preview,151,pip installs third-party packages with pip install <package>. Listing them in requirements.txt lets anyone recreate the exact same setup with pip install -r requirements.txt.,Got it,,cards/card_302.png,,
+303,24,preview_card,preview,158,"PEP 8 is Python's official style guide — e.g. lower_snake_case names for functions and variables. A docstring, a quoted string right after a def/class line, documents what that function, class, or module does.",Got it,,,,
+304,11,multiple_choice,exercise,72,"What does this print?
+def f(**kw):return len(kw)
+print(f(a=1,b=2))",2|1|0|Error,0,,,"kwargs collected 2 keyword arguments, a and b."
+305,20,multiple_choice,exercise,132,"Prints?
+class C:
+ @property
+ def x(s):return 5
+print(C().x)",5|<method>|Error|None,0,,,"x is read like an attribute, without calling it as x()."
+306,23,select_blank,exercise,151,"Complete: install the requests package.
+pip ___ requests",install|get|add|fetch,0,,,pip install <package> is the standard way to add a package.
+307,24,multiple_choice,exercise,158,Which is a PEP 8 naming convention for functions?,lower_snake_case|UpperCamelCase|ALLCAPS|mixedCase,0,,,PEP 8 recommends lower_snake_case for function and variable names.
+308,24,true_false,exercise,158,A docstring sits right after a def or class line.,,true,,,"A docstring is the first statement in a function/class/module body, right after the signature, before any code."
+309,11,multiple_choice,exercise,71,"What does this print?
+def f(*a):return len(a)
+print(f(1,2,3,4))",4|3|1|Error,0,,,"*args collects every positional argument into a tuple — here, 4 of them."
+310,20,true_false,exercise,129,A double leading underscore triggers name mangling.,,true,,,"Python renames __balance internally, making it harder (not impossible) to access from outside the class."
+311,23,select_blank,exercise,149,"Complete: create venv named env.
+python -m venv ___",env|env.py|new|-env,0,,,"python -m venv env creates a new, isolated environment in a folder called env."
+312,9,order,exercise,57,Order a comprehension's parts as written.,expression|for clause|if clause,,,,"A comprehension reads expression first, then the for clause that iterates, then an optional if clause that filters — e.g. [n**2 for n in nums if n>0]."
+313,2,order,exercise,8,"Order these by precedence, highest first.",parentheses|exponent **|multiplication *|addition +,,cards/card_313.png,,"Parentheses are evaluated first, then exponentiation, then multiplication/division, then addition/subtraction — the same order taught in arithmetic."
+314,10,order,exercise,64,Order how a call fills a function's parameters.,positional arguments bind first|keyword arguments bind by name|defaults fill anything still missing,,cards/card_314.png,,"Python binds positional arguments to parameters by position first, then keyword arguments by name, and only falls back to a parameter's default if nothing else filled it."

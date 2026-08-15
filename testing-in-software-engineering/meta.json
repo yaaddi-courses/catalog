@@ -1,0 +1,55 @@
+{
+  "id": "eba617a0e3bf",
+  "title": "Testing in Software Engineering",
+  "description": "Why tests actually pay off, the different kinds worth writing, and the habits — TDD, coverage, flaky-test fixes, CI — that keep a suite trustworthy.",
+  "image": "cover.png",
+  "file": "testing-in-software-engineering.zip",
+  "version": "1.0.0",
+  "tags": [
+    "testing",
+    "software-engineering",
+    "quality",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 32 decks, 226 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What Testing Actually Buys You",
+    "The Real Cost of Not Testing",
+    "Unit Tests",
+    "Integration Tests",
+    "End-to-End Tests",
+    "Balancing the Pyramid",
+    "Arrange, Act, Assert",
+    "What Makes a Test \"Good\"",
+    "Naming Tests So They Explain Themselves",
+    "Choosing the Right Assertion",
+    "Mocks, Stubs, Fakes, and Spies",
+    "When Mocking Helps, and When It Hurts",
+    "What Code Coverage Really Measures",
+    "Testing Edge Cases and Boundaries",
+    "Testing Failure Paths, Not Just Success",
+    "Red, Green, Refactor",
+    "What TDD Is Actually Good and Bad At",
+    "Testing Against a Real Database",
+    "Testing HTTP APIs",
+    "Contract Testing Between Services",
+    "Browser-Driven End-to-End Tests",
+    "Flaky Tests: Causes and Fixes",
+    "Performance and Load Testing",
+    "Basic Security Testing",
+    "Basic Accessibility Testing",
+    "Regression Testing",
+    "Running Tests in CI/CD",
+    "Managing Test Data",
+    "Writing a Test With Every Bug Fix",
+    "Property-Based Testing",
+    "Mutation Testing",
+    "When Not to Write a Test"
+  ]
+}

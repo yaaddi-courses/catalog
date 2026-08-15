@@ -1,0 +1,63 @@
+{
+  "id": "bf45793f1b9c",
+  "title": "Software Architecture",
+  "description": "The styles, principles, and trade-offs behind how real systems are structured, from a single monolith to distributed microservices.",
+  "image": "cover.png",
+  "file": "software-architecture.zip",
+  "version": "1.0.0",
+  "tags": [
+    "software-architecture",
+    "system-design",
+    "engineering",
+    "intermediate"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 40 decks, 217 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What Software Architecture Actually Is",
+    "Architecture vs Design vs Code",
+    "Quality Attributes (the \"-ilities\")",
+    "Architectural Decision Records",
+    "Identifying Architecture Stakeholders",
+    "Monolithic Architecture",
+    "Layered (N-Tier) Architecture",
+    "Microservices Architecture",
+    "Event-Driven Architecture",
+    "Service-Oriented Architecture",
+    "Serverless Architecture",
+    "Modular Monolith",
+    "Hexagonal (Ports & Adapters) Architecture",
+    "Clean Architecture",
+    "Pipe-and-Filter Architecture",
+    "Separation of Concerns",
+    "Coupling and Cohesion",
+    "SOLID Principles Overview",
+    "Domain-Driven Design Basics",
+    "Bounded Contexts",
+    "CQRS",
+    "Event Sourcing",
+    "Synchronous vs Asynchronous Communication",
+    "REST API Design Basics",
+    "Message Queues and Brokers",
+    "API Gateways",
+    "Service Discovery",
+    "Database per Service vs Shared Database",
+    "Consistency Models: Strong vs Eventual",
+    "Caching Strategies",
+    "The CAP Theorem",
+    "Horizontal vs Vertical Scaling",
+    "Load Balancing Basics",
+    "The Circuit Breaker Pattern",
+    "Retry and Backoff Strategies",
+    "Rate Limiting",
+    "Observability: Logs, Metrics, Traces",
+    "Security in Architecture",
+    "Documenting Architecture (the C4 Model)",
+    "Making Architecture Trade-offs"
+  ]
+}

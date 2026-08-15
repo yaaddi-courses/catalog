@@ -1,0 +1,53 @@
+name: Build and deploy course site
+
+# Rebuilds the GitHub Pages catalog (tools/build_site.py) any time course
+# content actually changes, and deploys it via GitHub's official Pages
+# actions — no generated HTML is ever committed to the repo tree, the build
+# output is a throwaway CI artifact. One-time manual step required: repo
+# Settings -> Pages -> Source = "GitHub Actions" (can't be set from a
+# workflow file).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/meta.json"
+      - "**/source/cards.csv"
+      - "**/source/units.csv"
+      - "**/cover.*"
+      - "tools/build_site.py"
+      - "tools/site_assets/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Build site
+        run: python tools/build_site.py --out _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

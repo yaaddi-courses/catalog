@@ -1,0 +1,195 @@
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+1,1,preview_card,preview,2,"Vibecoding means building software by directing an AI coding agent in natural language, describing what you want instead of typing every line yourself.",Got it,,,,
+2,1,multiple_choice,main,,What does vibecoding mean?,Directs agent|Types faster|Skips tests,0,cards/card_2.png,,"You direct the agent in natural language, describing what you want, instead of typing every line yourself."
+3,1,true_false,exercise,2,Vibecoding replaces typing code with directing an agent.,,true,,,
+4,1,select_blank,exercise,2,Vibecoding directs an agent using ___ language.,natural|binary|assembly,0,,,
+5,1,multiple_choice,exercise,2,What does vibecoding replace line-by-line typing with?,Describing outcomes|Copy-pasting|Guessing,0,,,
+136,1,multiple_choice,exercise,2,Who do you direct?,AI agent|Compiler|Linter,0,,,
+137,1,true_false,exercise,2,Vibecoding means describing what you want.,,true,,,
+6,2,preview_card,preview,7,"Vibecoding shifts your job from writing every line to describing outcomes and reviewing results — you direct, the agent types.",Got it,,,,
+7,2,multiple_choice,main,,What is your new job when vibecoding?,Director|Typist|Spectator,0,cards/card_7.png,,As director you describe outcomes and review results — the agent does the actual typing.
+8,2,true_false,exercise,7,A director describes outcomes and reviews results.,,true,,,
+9,2,select_blank,exercise,7,Your job shifts from typist to ___.,director|spectator|debugger,0,,,
+10,2,multiple_choice,exercise,7,What does a director still need to do?,Review results|Type lines|Nothing,0,,,
+138,2,multiple_choice,exercise,7,Who does the typing?,The agent|You|No one,0,,,
+139,2,true_false,exercise,7,Your job shifts to describing outcomes.,,true,,,
+11,3,preview_card,preview,12,"Agents genuinely save you time on boilerplate, mechanical refactors, unfamiliar APIs, and other grunt work — the tedious, well-specified parts of coding.",Got it,,,,
+12,3,multi_select,main,,Pick tasks agents are genuinely good at.,Boilerplate|Refactors|Guessing intent|Unfamiliar APIs,0|1|3,cards/card_12.png,,"This is grunt work: tedious, well-specified tasks agents handle well."
+13,3,true_false,exercise,12,Agents save real time on boilerplate code.,,true,,,
+14,3,select_blank,exercise,12,Agents are strong at mechanical ___ work.,refactor|guessing|planning,0,,,
+15,3,multiple_choice,exercise,12,What kind of work is grunt work?,Tedious|Exciting|Rare,0,,,
+140,3,select_blank,exercise,12,Agents shine on ___ tasks.,well-specified|ambiguous|undocumented,0,,,
+141,3,true_false,exercise,12,Grunt work is one place agents save time.,,true,,,
+16,4,preview_card,preview,17,"Agents still struggle with ambiguous requirements, deep system-specific context they can't see, and confident-sounding guesses that are actually wrong.",Got it,,,,
+17,4,multi_select,main,,Pick weaknesses agents still have.,Ambiguous asks|Hidden context|Confident guesses|Fast typing,0|1|2,cards/card_17.png,,"Ambiguous asks make it guess, and it can't see context you never wrote down or showed it."
+18,4,true_false,exercise,17,An agent can see context you never wrote down.,,false,,,It only knows what you show it or what's in the repo — unwritten context stays invisible.
+19,4,select_blank,exercise,17,An agent may sound confident while being ___.,wrong|silent|slow,0,cards/card_19.png,,
+20,4,multiple_choice,exercise,17,What causes an agent to guess wrong?,Ambiguous asks|Too detailed|Slow typing,0,,,
+142,4,multiple_choice,exercise,17,What kind of ask trips up an agent?,Ambiguous|Clear|Documented,0,,,
+143,4,true_false,exercise,17,Unwritten context stays invisible to an agent.,,true,,,
+21,5,preview_card,preview,22,"A CLAUDE.md or AGENTS.md file documents your project's conventions once, so every agent session starts already knowing them instead of guessing.",Got it,,,,
+22,5,multiple_choice,main,,What does a project context file do?,Documents conventions|Runs tests|Deploys code,0,cards/card_22.png,,"This file is usually called CLAUDE.md or AGENTS.md, written once, upfront — not rewritten every session."
+23,5,true_false,exercise,22,A context file lets an agent skip guessing conventions.,,true,,,
+24,5,select_blank,exercise,22,A common name for this file is ___.md.,CLAUDE|README|LICENSE,0,,,
+25,5,multiple_choice,exercise,22,When should a context file be written?,"Once, upfront|Never|Every task",0,,,
+144,5,multiple_choice,exercise,22,A context file saves an agent from what?,Guessing|Testing|Deploying,0,,,
+145,5,true_false,exercise,22,A context file must be rewritten every session.,,false,,,
+26,6,preview_card,preview,27,"Decide what ""done"" looks like in your own head before you ask an agent for anything, so you can actually tell whether it got there.",Got it,,,,
+27,6,multiple_choice,main,,"Why decide ""done"" before asking?",Judge results|Type faster|Skip review,0,cards/card_27.png,,"Without a clear target, there's nothing to compare the result against."
+28,6,true_false,exercise,27,Scoping happens after the agent finishes the task.,,false,,,"Scoping happens before you ask, so you have a target to check the result against."
+29,6,select_blank,exercise,27,Decide what ___ looks like before you ask.,done|fast|fun,0,,,
+30,6,multiple_choice,exercise,27,What happens without a clear scope?,Judging harder|Fast typing|Better guesses,0,cards/card_30.png,,
+146,6,multiple_choice,exercise,27,What does scoping let you do after?,Judge results|Type faster|Skip testing,0,,,
+147,6,true_false,exercise,27,"You decide ""done"" before you ask.",,true,,,
+31,7,preview_card,preview,32,"One huge request produces worse results than a sequence of small, checkable ones — each small step is easy to verify before the next begins.",Got it,,,,
+32,7,multiple_choice,main,,Why break a big ask into small steps?,Easy check|Impressive look|Runs faster,0,cards/card_32.png,,Verify each step before you move on to the next one.
+33,7,true_false,exercise,32,One huge request usually produces worse results.,,true,,,
+34,7,select_blank,exercise,32,Small steps are easy to ___.,check|skip|guess,0,,,
+35,7,multiple_choice,exercise,32,"What is a small, checkable step?",One change|Whole project|Vague idea,0,,,
+148,7,multiple_choice,exercise,32,When should you verify a step?,Before next|After all|Never,0,,,
+149,7,true_false,exercise,32,Small steps beat one huge request.,,true,,,
+36,8,preview_card,preview,37,"Give enough detail that the agent isn't guessing at your intent, but not so much that you're basically writing the code yourself in prose.",Got it,,,,
+37,8,multiple_choice,main,,What is the goal of a well-specified request?,No guessing|Maximum detail|Minimum words,0,cards/card_37.png,,Too little detail makes it guess; too much and you're basically writing the code yourself in prose.
+38,8,true_false,exercise,37,Over-specifying means writing the code yourself in prose.,,true,,,
+39,8,select_blank,exercise,37,Too little detail forces the agent to ___.,guess|refuse|wait,0,,,
+40,8,multiple_choice,exercise,37,What's the downside of over-specifying?,Prose coding|Fast results|Less risk,0,,,
+150,8,true_false,exercise,37,Too little detail forces guessing.,,true,,,
+151,8,multiple_choice,exercise,37,What is the right amount of detail?,Enough|Too much|Too little,0,,,
+41,9,preview_card,preview,42,One good example often communicates a pattern to an agent faster and more accurately than a paragraph trying to describe it in the abstract.,Got it,,,,
+42,9,multiple_choice,main,,What often communicates a pattern faster than a rule?,An example|A rule|Silence,0,cards/card_42.png,,
+43,9,true_false,exercise,42,A good example can beat a written rule.,,true,,,
+44,9,select_blank,exercise,42,One good ___ can replace a paragraph of rules.,example|apology|guess,0,,,
+45,9,multiple_choice,exercise,42,Why do examples work well for agents?,Shows pattern|Takes longer|Adds ambiguity,0,,,
+152,9,multiple_choice,exercise,42,An example beats a paragraph at what?,Speed|Length|Nothing,0,,,
+153,9,true_false,exercise,42,A paragraph always beats an example.,,false,,,
+46,10,preview_card,preview,47,"Ask an agent to lay out its approach before writing any code, so a wrong assumption gets caught and corrected while it's still cheap to fix.",Got it,,,,
+47,10,multiple_choice,main,,Why ask for a plan before code?,Catches mistakes|Save typing|Skip review,0,cards/card_47.png,,Catching a wrong assumption in the plan is far cheaper than catching it after the code is written.
+48,10,true_false,exercise,47,A wrong plan is cheaper to fix than wrong code.,,true,,,
+49,10,select_blank,exercise,47,Asking for a ___ first catches mistakes early.,plan|apology|retry,0,,,
+50,10,multiple_choice,exercise,47,When is a wrong assumption cheapest to catch?,Before coding|After shipping|Never,0,,,
+154,10,multiple_choice,exercise,47,What can a plan catch early?,Wrong assumption|A typo|Slow server,0,,,
+155,10,true_false,exercise,47,A plan comes before any code.,,true,,,
+51,11,preview_card,preview,52,"When an agent drifts off course, correct it directly in the same conversation instead of starting over, steering it back with specific feedback.",Got it,,,,
+52,11,multiple_choice,main,,Best way to fix a drifting agent?,Correct directly|Restart fully|Ignore it,0,cards/card_52.png,,"Give specific feedback in the same conversation, instead of restarting from scratch."
+53,11,true_false,exercise,52,Starting over is the only fix.,,false,,,Specific feedback in the same conversation usually steers it back faster.
+54,11,select_blank,exercise,52,"Steer with ___ feedback, not vague complaints.",specific|vague|no,0,,,
+55,11,multiple_choice,exercise,52,When should you correct an agent mid-task?,It drifts|The end|Never,0,,,
+156,11,multiple_choice,exercise,52,Where should you give feedback?,Same chat|New chat|Nowhere,0,,,
+157,11,true_false,exercise,52,Steering an agent avoids starting over.,,true,,,
+56,12,preview_card,preview,57,"Treat everything an agent generates as a strong first draft, not a finished answer, and always verify it before trusting it.",Got it,,,,
+57,12,multiple_choice,main,,How should you treat generated code?,Strong draft|Final answer|Untouchable,0,cards/card_57.png,,"Skipping verification risks shipping bugs, so always check before you trust it."
+58,12,true_false,exercise,57,Generated code should always be verified before trusting it.,,true,,,
+59,12,select_blank,exercise,57,"Generated code is a draft, not a ___ answer.",finished|helpful|typed,0,,,
+60,12,multiple_choice,exercise,57,What is the risk of skipping verification?,Bugs ship|Faster delivery|Cleaner code,0,cards/card_60.png,,
+158,12,true_false,exercise,57,Generated code should be trusted untested.,,false,,,
+159,12,select_blank,exercise,57,Treat generated code as a ___ draft.,first|final|fake,0,,,
+61,13,preview_card,preview,62,"Read an agent changeset the way you would review a teammate pull request, checking what actually changed, not just that something did.",Got it,,,,
+62,13,multiple_choice,main,,How should you read an agent diff?,As reviewer|Skim only|Not ever,0,cards/card_62.png,,"A reviewer checks exactly what changed, not just that something did — ‘looks fine’ isn't enough."
+63,13,true_false,exercise,62,Reviewing a diff means checking what actually changed.,,true,,,
+64,13,select_blank,exercise,62,Read a diff like a ___.,reviewer|typist|bystander,0,,,
+65,13,multiple_choice,exercise,62,What is a weak reason to approve a diff?,Looks fine|Was tested|Was scoped,0,cards/card_65.png,,
+160,13,multiple_choice,exercise,62,What should you check in a diff?,What changed|It exists|File count,0,,,
+161,13,true_false,exercise,62,"Something changed is enough, no need to check what.",,false,,,
+66,14,preview_card,preview,67,"Looking right is not the same as working correctly, so always run and test the result yourself before trusting it.",Got it,,,,
+67,14,select_blank,main,,Looking right and actually ___ are different things.,working|compiling|typing|running,0,cards/card_67.png,,"Looking right and actually working are different things, only running it proves it works."
+68,14,select_blank,exercise,67,Looks right is not the same as ___.,works|typed|fast,0,,,
+69,14,multiple_choice,exercise,67,What proves code actually works?,Running it|Reading it|Trusting it,0,,,
+70,14,true_false,exercise,67,Testing yourself is optional if the code looks clean.,,false,,,"Clean-looking code can still fail at runtime, so testing stays necessary."
+162,14,multiple_choice,exercise,67,What proves code trustworthy?,Running it|Reading it|Assuming it,0,,,
+163,14,true_false,exercise,67,Running code confirms it works.,,true,,,
+71,15,preview_card,preview,72,"An agent can invent APIs, flags, or facts that do not exist while sounding just as confident as when it is correct, so learn to spot plausible-sounding nonsense.",Got it,,,,
+72,15,multiple_choice,main,,What is a hallucination in this context?,Invented fact|A typo|Slow reply,0,cards/card_72.png,,"It's a made-up, plausible-sounding fact — and it can sound just as confident as a correct answer, so tone alone won't tip you off."
+73,15,true_false,exercise,72,A hallucination always sounds unsure or hesitant.,,false,,,"It usually sounds just as confident as a correct answer, which is what makes it dangerous."
+74,15,select_blank,exercise,72,"A hallucination is a made-up, plausible-sounding ___.",answer|typo|delay,0,,,
+75,15,multiple_choice,exercise,72,What is an example of a hallucinated detail?,Fake flag|Real function|Correct number,0,cards/card_75.png,,
+164,15,multiple_choice,exercise,72,What might an agent invent?,Fake API|Real bug|Slower runtime,0,,,
+165,15,true_false,exercise,72,A hallucination can sound confident.,,true,,,
+76,16,preview_card,preview,77,"Editing a file is reversible with version control, but deleting a branch, dropping data, or force-pushing can be permanent, so treat those actions with more caution.",Got it,,,,
+77,16,multiple_choice,main,,Which action deserves more caution?,Deleting branch|Editing file|Renaming file,0,cards/card_77.png,,"So can dropping data or force-pushing — those are permanent, unlike an edit you can always undo."
+78,16,true_false,exercise,77,All actions carry the same level of risk.,,false,,,An easily reversible edit and a permanent deletion carry very different risk levels.
+79,16,select_blank,exercise,77,An edit tracked by version control is usually ___.,reversible|permanent|risky,0,,,
+80,16,multiple_choice,exercise,77,What makes an action irreversible?,No return|Slow undo|Big diff,0,,,
+166,16,multiple_choice,exercise,77,What is usually reversible?,Editing a file|Dropping data|Force-push,0,,,
+167,16,true_false,exercise,77,Force-pushing can overwrite history.,,true,,,
+81,17,preview_card,preview,82,"Give an agent enough access to be genuinely useful, and no more, so a mistake stays contained instead of touching things it never needed to.",Got it,,,,
+82,17,multiple_choice,main,,How much access should an agent get?,Just enough|Full access|Nothing,0,cards/card_82.png,,"That way, if it makes a mistake, the damage stays contained instead of spreading."
+83,17,true_false,exercise,82,Limiting access contains the damage of a mistake.,,true,,,
+84,17,select_blank,exercise,82,"Give an agent just ___ access, not more.",enough|full|no,0,,,
+85,17,multiple_choice,exercise,82,Why avoid giving unlimited access?,Contains mistakes|Runs faster|Looks trusting,0,,,
+168,17,multiple_choice,exercise,82,Too much access does what?,Spreads mistakes|Nothing|Works faster,0,,,
+169,17,true_false,exercise,82,An agent gets only needed access.,,true,,,
+86,18,preview_card,preview,87,"Commit often during a vibecoding session, using version control as an undo button for the whole session, not just for a single file.",Got it,,,,
+87,18,multiple_choice,main,,What does frequent committing give you?,Undo button|Faster typing|Fewer reviews,0,cards/card_87.png,,"Commit in small steps, not one giant one, so you can undo the whole session, not just one file."
+88,18,true_false,exercise,87,Committing often lets you undo a session.,,true,,,
+89,18,select_blank,exercise,87,Commit in ___ steps while vibecoding.,small|huge|zero,0,,,
+90,18,multiple_choice,exercise,87,Why commit small steps instead of one big one?,Easier undo|Faster write|Looks tidier,0,,,
+170,18,multiple_choice,exercise,87,Version control acts as what?,Undo button|A compiler|Test runner,0,,,
+171,18,true_false,exercise,87,Frequent commits protect one file only.,,false,,,
+91,19,preview_card,preview,92,"Recognize the moment a task genuinely needs your hands on the keyboard instead of another round of prompting, and take back the wheel then.",Got it,,,,
+92,19,multiple_choice,main,,When should you take back the wheel?,It stalls|The start|Never,0,cards/card_92.png,,That means putting your own hands on the keyboard instead of prompting again — more prompting doesn't always work.
+93,19,true_false,exercise,92,More prompting always eventually solves a stuck task.,,false,,,Sometimes the fastest path is to step in yourself instead of prompting again.
+94,19,select_blank,exercise,92,Take back the ___ when the agent stalls.,wheel|blame|log,0,,,
+95,19,multiple_choice,exercise,92,What is a sign you should take over?,Repeated fails|Quick fix|Tiny task,0,cards/card_95.png,,
+172,19,multiple_choice,exercise,92,Taking back the wheel means what?,Coding yourself|Asking again|Giving up,0,,,
+173,19,true_false,exercise,92,Some tasks need your hands on keys.,,true,,,
+96,20,preview_card,preview,97,"Treat an agent like a fast, literal-minded pair partner who does exactly what you say, not like an oracle who always knows what you meant.",Got it,,,,
+97,20,multiple_choice,main,,How should you think of an agent while pairing?,Literal partner|All-knowing oracle|Silent tool,0,cards/card_97.png,,"It's fast and does exactly what you say, not a mind-reading oracle who knows what you meant."
+98,20,true_false,exercise,97,An agent always knows exactly what you meant.,,false,,,"It follows what you actually said, so unstated intent can easily be missed."
+99,20,select_blank,exercise,97,An agent is fast but very ___.,literal|wise|slow,0,,,
+100,20,multiple_choice,exercise,97,What trait makes an agent a good pair partner?,Speed|Mind-reading|Silence,0,,,
+174,20,multiple_choice,exercise,97,How literal is an agent partner?,Very literal|Very intuitive|Never literal,0,,,
+175,20,true_false,exercise,97,"An agent does what you say, not what you meant.",,true,,,
+101,21,preview_card,preview,102,"An agent can give a diff a fast first pass before a human reviewer sees it, catching obvious issues early without replacing the human review.",Got it,,,,
+102,21,multiple_choice,main,,What is an agent code review good for?,First pass|Final approval|Skip review,0,cards/card_102.png,,"It won't replace a human review, but catching obvious issues before one saves time."
+103,21,true_false,exercise,102,An agent review replaces human review entirely.,,false,,,"It catches obvious issues early, but a human reviewer still checks the diff."
+104,21,select_blank,exercise,102,An agent review happens ___ human review.,before|instead of|never before,0,,,
+105,21,multiple_choice,exercise,102,What can an agent catch early in a diff?,Obvious issues|Team priorities|Business goals,0,,,
+176,21,multiple_choice,exercise,102,When does an agent review happen?,Before humans|Never|After shipping,0,,,
+177,21,true_false,exercise,102,An agent review is a fast first pass.,,true,,,
+106,22,preview_card,preview,107,"Research (exploring options, summarizing tradeoffs) and implementation (writing the actual code) are two very different jobs, so be clear which one you are asking for.",Got it,,,,
+107,22,multiple_choice,main,,What should you be clear about when delegating?,Which job|File name|The deadline,0,cards/card_107.png,,Research explores options and tradeoffs; implementation writes the actual code — very different jobs.
+108,22,true_false,exercise,107,Research and implementation are the same kind of task.,,false,,,"Research explores options, implementation writes the actual code, quite different jobs."
+109,22,select_blank,exercise,107,___ explores options; implementation writes code.,Research|Testing|Deploying,0,,,
+110,22,multiple_choice,exercise,107,Why does the distinction matter?,Right ask|Faster typing|Skip planning,0,,,
+178,22,multiple_choice,exercise,107,Implementation means what here?,Writing code|Exploring options|Summarizing tradeoffs,0,,,
+179,22,true_false,exercise,107,Research means exploring options.,,true,,,
+111,23,preview_card,preview,112,"Context can quietly drift over a long conversation, with an agent forgetting earlier constraints, so watch for signs it has lost the thread.",Got it,,,,
+112,23,multiple_choice,main,,What can happen over a long session?,Context drifts|Speed increases|Bugs vanish,0,cards/card_112.png,,This is often called losing the thread — it may start ignoring rules you set earlier in the chat.
+113,23,true_false,exercise,112,An agent can forget earlier constraints in a long session.,,true,,,
+114,23,select_blank,exercise,112,Watch for signs the agent lost the ___.,thread|password|file,0,,,
+115,23,multiple_choice,exercise,112,What is a sign of context drift?,Ignores rules|Faster replies|Shorter answers,0,cards/card_115.png,,
+180,23,multiple_choice,exercise,112,A long session can cause what?,Context drift|Faster answers|Fewer bugs,0,,,
+181,23,true_false,exercise,112,Lost context only matters in short chats.,,false,,,
+116,24,preview_card,preview,117,"An agent sounds equally sure whether it is right or completely wrong, so tone tells you nothing about correctness — check the actual result instead.",Got it,,,,
+117,24,select_blank,main,,A confident ___ does not prove an answer correct.,tone|format|length|font,0,cards/card_117.png,,"An agent sounds equally confident whether it is right or wrong, so tone proves nothing — check the actual result instead."
+118,24,select_blank,exercise,117,Tone tells you nothing about ___.,correctness|speed|cost,0,,,
+119,24,multiple_choice,exercise,117,What should you check instead of tone?,Actual result|Reply length|The wording,0,,,
+120,24,true_false,exercise,117,A wrong answer can sound confident too.,,true,,,
+182,24,multiple_choice,exercise,117,Tone alone tells you what?,Nothing|Everything|Mostly,0,,,
+183,24,true_false,exercise,117,Right and wrong answers can sound equally confident.,,true,,,
+121,25,preview_card,preview,122,"An eager agent may quietly do more than you asked, touching extra files or features, which makes the diff harder to review and trust.",Got it,,,,
+122,25,multiple_choice,main,,What is scope creep in this context?,Extra work|Less work|Faster work,0,cards/card_122.png,,"That's touching extra files or features you didn't ask for, which makes a diff harder to trust."
+123,25,true_false,exercise,122,Scope creep makes a diff easier to review.,,false,,,Extra unrequested changes make a diff harder to review and trust.
+124,25,select_blank,exercise,122,Scope creep means doing more than you ___.,asked|typed|paid,0,,,
+125,25,multiple_choice,exercise,122,Why is scope creep risky?,Harder review|Faster delivery|Cleaner diff,0,,,
+184,25,multiple_choice,exercise,122,Scope creep touches what?,Extra files|Nothing extra|The ask,0,,,
+185,25,true_false,exercise,122,Scope creep makes a diff harder to trust.,,true,,,
+126,26,preview_card,preview,127,"When a prompt works well, save it as a reusable template so the next similar task starts from something proven instead of from scratch.",Got it,,,,
+127,26,multiple_choice,main,,What to do with a working prompt?,Save template|Forget it|Keep secret,0,cards/card_127.png,,"That way your next similar task starts from something proven, not from scratch."
+128,26,true_false,exercise,127,A reusable playbook saves time on similar future tasks.,,true,,,
+129,26,select_blank,exercise,127,Turn a working prompt into a ___ playbook.,reusable|one-time|hidden,0,,,
+130,26,multiple_choice,exercise,127,Why build reusable prompts?,Skip restart|More code|Slower work,0,,,
+186,26,multiple_choice,exercise,127,A prompt that worked well should be?,Saved|Deleted|Kept secret,0,,,
+187,26,true_false,exercise,127,A playbook means starting from scratch.,,false,,,
+131,27,preview_card,preview,132,"Some problems are faster, safer, or clearer to just solve yourself — a tiny one-line fix or a task needing deep tacit knowledge may not need an agent at all.",Got it,,,,
+132,27,multiple_choice,main,,When might you skip vibecoding entirely?,Quick fix|Big feature|Unfamiliar API,0,cards/card_132.png,,"Sometimes it's just faster, safer, or clearer to solve it yourself — like a one-line fix."
+133,27,true_false,exercise,132,Vibecoding is always the fastest choice.,,false,,,"Sometimes solving it yourself is faster, safer, or clearer than delegating it."
+134,27,select_blank,exercise,132,Some tasks are simply faster to solve ___.,yourself|later|never,0,,,
+135,27,multiple_choice,exercise,132,What kind of task may not need an agent?,One-line fix|Big refactor|New module,0,,,
+188,27,multiple_choice,exercise,132,What might you just solve yourself?,One-line fix|Big feature|Unfamiliar API,0,,,
+189,27,true_false,exercise,132,Some problems are clearer to solve yourself.,,true,,,
+190,6,order,exercise,27,Order the scoping workflow.,Decide what done looks like|Ask the agent to do it|Compare the result to your target,,cards/card_190.png,,"Scope first so you have a target, then delegate, then check the result against it."
+191,7,order,exercise,32,Order the small-steps loop.,Make one small change|Verify it works|Move to the next change,,cards/card_191.png,,Each small change gets checked before the next one begins.
+192,10,order,exercise,47,Order asking for a plan first.,Ask the agent for a plan|Review the plan for mistakes|Let the agent write the code,,cards/card_192.png,,Catching a wrong assumption in the plan is cheaper than catching it in the code.
+193,18,order,exercise,87,Order the review-and-commit loop.,Review the diff|Run and test it yourself|Commit the change,,cards/card_193.png,,"Review, then test, then commit — each step checked before it's locked in."
+194,26,order,exercise,127,Order building a reusable prompt.,Write a prompt that works|Save it as a template|Reuse it on a similar task,,cards/card_194.png,,"A prompt that worked once becomes a starting point for next time, not a one-off."

@@ -1,15 +1,23 @@
 {
-  "id": "concurrency-in-python",
+  "id": "bc6e15fab0b0",
   "title": "Concurrency in Python",
   "description": "Threading, multiprocessing, and asyncio — from the GIL to structured concurrency, start to finish.",
   "image": "cover.png",
   "file": "concurrency-in-python.zip",
-  "version": "1.3.0",
-  "tags": ["python", "concurrency", "asyncio", "threading", "intermediate"],
+  "version": "1.0.0",
+  "tags": [
+    "python",
+    "concurrency",
+    "asyncio",
+    "threading",
+    "intermediate"
+  ],
   "changelog": [
-    { "version": "1.3.0", "date": "2026-08-10", "notes": "Shortened every prompt to under 10 words. For the many cards whose options were full descriptive sentences, replaced them with short labels and moved the full wording into each card's explanation, shown after answering — no content lost, just relocated to the feedback step. 701 of 783 cards touched. No fact changes." },
-    { "version": "1.2.0", "notes": "Cut the typing budget from 17.5% to ~7% by converting 80 type_answer concept-recall cards to multiple_choice (and one yes/no card to true_false), keeping type_answer only for cards testing exact API/syntax recall." },
-    { "version": "1.0.0", "notes": "Initial release." }
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 85 decks, 914 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
   ],
   "toc": [
     "Concurrency Models Comparison",

@@ -1,0 +1,218 @@
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+1,1,preview_card,preview,2,Software architecture is the high-level structure of a system and the decisions that are expensive or hard to change later.,Got it,,cards/card_1.png,,
+2,1,multiple_choice,main,,What makes a decision architectural?,Costly change|Cheap change|Never changes,0,,,Architecture is the high-level structure of a system — decisions are architectural when they're costly to change later.
+3,1,true_false,exercise,2,Architecture focuses on the high-level structure.,,true,,,
+4,1,select_blank,exercise,2,Architecture decisions are ___ to change later.,costly|free|instant,0,,,
+5,1,multiple_choice,exercise,2,What is not typically an architecture decision?,Variable name|Database choice|Service boundary,0,,,
+6,2,preview_card,preview,7,"Architecture is the broadest zoom level, design is the mid-level structure of a module, and code is the actual lines that implement it.",Got it,,cards/card_6.png,,
+7,2,multiple_choice,main,,Which is the broadest zoom level?,Architecture|Code|A variable,0,,,"Design is the middle zoom level, and code is the most zoomed-in — the actual implementation."
+8,2,true_false,exercise,7,Code is the most zoomed-in of the three levels.,,true,,,
+9,2,select_blank,exercise,7,Design sits at the ___ zoom level.,middle|broadest|smallest,0,,,
+10,2,multiple_choice,exercise,7,What is code in this model?,Implementation|Broadest view|A stakeholder,0,,,
+11,3,preview_card,preview,12,"Quality attributes like scalability, reliability, and maintainability are the non-functional goals that architecture actually exists to serve.",Got it,,cards/card_11.png,,
+12,3,multi_select,main,,Pick examples of quality attributes.,Scalability|Reliability|Button color,0|1,cards/card_12.png,,"Quality attributes like scalability, reliability, and maintainability are the non-functional goals architecture serves."
+13,3,true_false,exercise,12,Quality attributes are non-functional goals.,,true,,,
+14,3,select_blank,exercise,12,Architecture exists to serve quality ___.,attributes|colors|fonts,0,,,
+15,3,multiple_choice,exercise,12,What kind of goal is maintainability?,Non-functional|A feature|A button,0,,,
+16,4,preview_card,preview,17,"An ADR is a short document that records why a major architectural decision was made, so future team members understand the reasoning.",Got it,,cards/card_16.png,,
+17,4,multiple_choice,main,,What does an ADR record?,Why decided|Whole codebase|A meeting,0,cards/card_17.png,,"ADRs matter most for major decisions, helping future team members understand the reasoning later."
+18,4,true_false,exercise,17,An ADR helps future team members understand past reasoning.,,true,,,
+19,4,select_blank,exercise,17,ADR stands for architectural decision ___.,record|report|review,0,,,
+20,4,multiple_choice,exercise,17,When is an ADR most useful?,Major decisions|Typos|Never,0,,,
+21,5,preview_card,preview,22,"Developers, operators, security, and business leaders all have different concerns an architecture has to satisfy at the same time.",Got it,,cards/card_21.png,,
+22,5,multi_select,main,,Pick likely architecture stakeholders.,Developers|Security team|A logo|A font,0|1,,,"Concerns differ by stakeholder — developers, operators, security, and business leaders all care about different things at once."
+23,5,true_false,exercise,22,Different stakeholders can have different concerns at once.,,true,,,
+24,5,select_blank,exercise,22,Architecture must satisfy multiple ___ at once.,stakeholders|fonts|logos,0,,,
+25,5,multiple_choice,exercise,22,Give an example architecture stakeholder.,An operator|A font|A logo,0,,,
+26,6,preview_card,preview,27,"A monolith packages the whole application as one deployable unit, which is simple to start but can get harder to change as it grows.",Got it,,cards/card_26.png,,
+27,6,multiple_choice,main,,What is a monolith deployed as?,One unit|Many units|No unit,0,cards/card_27.png,,"Monoliths are simple to start with, but get harder to change as they grow."
+28,6,true_false,exercise,27,A monolith is simple to start with.,,true,,,
+29,6,select_blank,exercise,27,A monolith gets harder to change over time.,grows|shrinks|deploys,0,,,
+30,6,multiple_choice,exercise,27,What is one downside of a large monolith?,Harder changes|Simpler deploys|Fewer services,0,,,
+31,7,preview_card,preview,32,"A layered architecture organizes code into horizontal layers, like presentation, business logic, and data, each only talking to the layer next to it.",Got it,,cards/card_31.png,,
+32,7,multiple_choice,main,,How are layers typically organized?,Horizontally|In a circle|Randomly,0,,,"Layers like presentation, business logic, and data each only talk to their neighboring layer."
+33,7,true_false,exercise,32,A layer talks to its neighbor layer.,,true,,,
+34,7,select_blank,exercise,32,Data access is typically its own ___.,layer|button|font,0,,,
+35,7,multiple_choice,exercise,32,Name a typical layer in this style.,Business logic|Font size|A logo,0,,,
+36,8,preview_card,preview,37,"Microservices split a system into small, independently deployable services, trading simplicity for the ability to scale and deploy parts separately.",Got it,,cards/card_36.png,,
+37,8,multiple_choice,main,,What can microservices deploy independently?,Each service|The app|Nothing,0,cards/card_37.png,,"Microservices are small, independently deployable services — trading some simplicity for the ability to scale each one separately."
+38,8,true_false,exercise,37,Microservices trade away some simplicity for flexibility.,,true,,,
+39,8,select_blank,exercise,37,Microservices are ___ deployable units.,"small, independent|one giant|zero",0,,,
+40,8,multiple_choice,exercise,37,What can microservices scale independently?,Individual services|The app|Nothing,0,,,
+41,9,preview_card,preview,42,"In event-driven architecture, services react to events instead of calling each other directly, which loosens how tightly they depend on one another.",Got it,,cards/card_41.png,,
+42,9,multiple_choice,main,,What do services react to here?,Events|Direct calls|Nothing,0,,,Reacting to events instead of calling directly loosens how tightly services depend on each other.
+43,9,true_false,exercise,42,Event-driven services can avoid calling each other directly.,,true,,,
+44,9,select_blank,exercise,42,Events ___ how tightly services depend on each other.,loosen|tighten|remove,0,,,
+45,9,multiple_choice,exercise,42,What replaces a direct call in this style?,An event|A meeting|A logo,0,,,
+46,10,preview_card,preview,47,"Service-oriented architecture is an earlier style of building systems from reusable, well-defined services, often through a shared enterprise bus.",Got it,,cards/card_46.png,,
+47,10,multiple_choice,main,,What does SOA build systems from?,Reusable services|Random files|Giant class,0,,,"SOA is an earlier style than microservices, built from well-defined services often connected through a shared enterprise bus."
+48,10,true_false,exercise,47,SOA is an earlier style than modern microservices.,,true,,,
+49,10,select_blank,exercise,47,SOA services are meant to be ___-defined.,well|poorly|never,0,,,
+50,10,multiple_choice,exercise,47,What often connects services in classic SOA?,Enterprise bus|Font file|A logo,0,,,
+51,11,preview_card,preview,52,"Serverless runs your code as short-lived functions triggered by events, without you managing or provisioning any servers yourself.",Got it,,cards/card_51.png,,
+52,11,multiple_choice,main,,What do you not manage in serverless?,Servers|Your code|Your logic,0,,,Serverless functions are short-lived and triggered by events — the platform runs them for you.
+53,11,true_false,exercise,52,Serverless functions are typically short-lived.,,true,,,
+54,11,select_blank,exercise,52,A serverless function is triggered by an ___.,event|editor|logo,0,,,
+55,11,multiple_choice,exercise,52,What runs your code in serverless?,A platform|You directly|No one,0,,,
+56,12,preview_card,preview,57,"A modular monolith is one deployable app with strict internal boundaries between its modules, keeping the simplicity of a monolith with cleaner structure.",Got it,,cards/card_56.png,,
+57,12,multiple_choice,main,,What does a modular monolith keep from a monolith?,Simple deploys|Nothing|More servers,0,,,"A modular monolith deploys as one simple unit, like a monolith, but keeps strict boundaries between its modules."
+58,12,true_false,exercise,57,A modular monolith has strict internal boundaries.,,true,,,
+59,12,select_blank,exercise,57,Modules stay strictly ___ from each other.,bounded|merged|deleted,0,,,
+60,12,multiple_choice,exercise,57,How many units is a modular monolith deployed as?,One|Many|Zero,0,,,
+61,13,preview_card,preview,62,"Hexagonal architecture keeps your core business logic isolated from the outside world, talking to it only through defined ports and adapters, so outside pieces like a database can be swapped easily.",Got it,,cards/card_61.png,,
+62,13,multiple_choice,main,,What does hexagonal architecture isolate?,Core logic|The database|UI only,0,cards/card_62.png,,"It isolates that core logic by talking to the outside world only through defined ports and adapters, so pieces like the database can be swapped easily."
+63,13,true_false,exercise,62,Ports and adapters connect core logic to the outside world.,,true,,,
+64,13,select_blank,exercise,62,Core logic talks out only through ___.,ports|the UI|the database,0,,,
+65,13,multiple_choice,exercise,62,Why isolate core logic like this?,Easier swaps|Faster typing|More servers,0,,,
+66,14,preview_card,preview,67,"Clean Architecture arranges code in concentric layers, where every dependency points inward toward the core business rules, never outward.",Got it,,cards/card_66.png,,
+67,14,multiple_choice,main,,Which direction do dependencies point?,Inward|Outward|Sideways,0,,,"These concentric layers put business rules at the very center, with every dependency pointing inward toward them."
+68,14,true_false,exercise,67,Business rules sit at the center of Clean Architecture.,,true,,,
+69,14,select_blank,exercise,67,Layers are arranged as ___ circles.,concentric|random|flat,0,,,
+70,14,multiple_choice,exercise,67,What sits at the very center?,Business rules|The database|The UI,0,,,
+71,15,preview_card,preview,72,"In pipe-and-filter, data flows through a chain of independent processing steps, each filter doing one job before passing data along.",Got it,,cards/card_71.png,,
+72,15,multiple_choice,main,,What does each filter do?,One job|Every job|No job,0,,,"Data flows through a chain of independent filters connected by pipes, each doing one job before passing data along."
+73,15,true_false,exercise,72,Data flows through a chain of steps here.,,true,,,
+74,15,select_blank,exercise,72,Filters are connected by ___.,pipes|walls|logos,0,,,
+75,15,multiple_choice,exercise,72,Are filters typically independent of each other?,Yes|No|Never,0,,,
+76,16,preview_card,preview,77,"Separation of concerns means keeping distinct responsibilities in distinct, independent parts of a system, instead of tangled together in one place.",Got it,,cards/card_76.png,,
+77,16,multiple_choice,main,,What does separation of concerns keep apart?,Responsibilities|Only files|Only fonts,0,,,"Separation of concerns means each responsibility lives in its own independent part, instead of being tangled together with unrelated ones in the same place."
+78,16,true_false,exercise,77,Tangling responsibilities together follows this principle.,,false,,,"The principle is about keeping responsibilities separate, not tangling them together."
+79,16,select_blank,exercise,77,Each part should have one clear ___.,responsibility|font|logo,0,,,
+80,16,multiple_choice,exercise,77,What is the goal of this principle?,Clear boundaries|More tangling|Fewer files,0,,,
+81,17,preview_card,preview,82,"Coupling measures how tangled parts are with each other; cohesion measures how focused a single part is on its own job. Good design wants low coupling, high cohesion.",Got it,,cards/card_81.png,,
+82,17,multiple_choice,main,,What should good design aim for?,Low coupling|High coupling|No cohesion,0,,,High cohesion means a part stays focused on one job; high coupling usually causes tangled changes across parts.
+83,17,true_false,exercise,82,High cohesion means focused on one job.,,true,,,
+84,17,select_blank,exercise,82,"Good design wants low coupling, high ___.",cohesion|latency|coupling,0,,,
+85,17,multiple_choice,exercise,82,What does high coupling usually cause?,Tangled changes|Cleaner code|Faster tests,0,,,
+86,18,preview_card,preview,87,"SOLID is five widely referenced object-oriented design guidelines, aimed at code that is easier to extend and maintain over time.",Got it,,cards/card_86.png,,
+87,18,multiple_choice,main,,How many guidelines make up SOLID?,Five|Two|Ten,0,,,SOLID's five guidelines for object-oriented design aim to make code easier to extend and maintain.
+88,18,true_false,exercise,87,SOLID aims for code that is easier to maintain.,,true,,,
+89,18,select_blank,exercise,87,SOLID guidelines target object-oriented ___.,design|fonts|logos,0,,,
+90,18,multiple_choice,exercise,87,What outcome does SOLID aim for?,Easier extension|Faster CPUs|Bigger images,0,,,
+91,19,preview_card,preview,92,"Domain-driven design models software around the real business domain and its own language, keeping code vocabulary close to how experts actually talk.",Got it,,cards/card_91.png,,
+92,19,multiple_choice,main,,What does DDD model software around?,The domain|Database only|UI colors,0,,,DDD keeps code vocabulary close to how domain experts actually talk about the business.
+93,19,true_false,exercise,92,DDD tries to keep code vocabulary close to experts' language.,,true,,,
+94,19,select_blank,exercise,92,DDD centers on the real business ___.,domain|font|logo,0,,,
+95,19,multiple_choice,exercise,92,Whose language does DDD try to reflect?,Domain experts|Only developers|No one,0,,,
+96,20,preview_card,preview,97,"A bounded context draws a clear boundary around where a specific model and its terms apply, since the same word can mean different things elsewhere.",Got it,,cards/card_96.png,,
+97,20,multiple_choice,main,,What does a bounded context define?,Model scope|DB schema|A font,0,,,"Because the same word can mean different things in different bounded contexts, each one has clear boundaries around where its model applies."
+98,20,true_false,exercise,97,The same word can mean different things across contexts.,,true,,,
+99,20,select_blank,exercise,97,A bounded context has clear ___.,boundaries|colors|fonts,0,,,
+100,20,multiple_choice,exercise,97,"Why might the word ""order"" mean two things?",Different contexts|Same context|A typo,0,,,
+101,21,preview_card,preview,102,"CQRS splits the model used to read data from the model used to change it, letting each side be optimized for its own job.",Got it,,cards/card_101.png,,
+102,21,multiple_choice,main,,What does CQRS split apart?,"Reads, writes|Two DBs|Two servers",0,cards/card_102.png,,Splitting reads from writes lets each side be optimized separately for its own job.
+103,21,true_false,exercise,102,Each side of CQRS can be optimized separately.,,true,,,
+104,21,select_blank,exercise,102,CQRS separates the read model from the ___ model.,write|font|color,0,,,
+105,21,multiple_choice,exercise,102,What does CQRS separate?,"Reads, writes|Logs, metrics|Front, back",0,,,
+106,22,preview_card,preview,107,"Event sourcing stores every change as an event instead of just the current state, so you can always replay history to see how you got here.",Got it,,cards/card_106.png,,
+107,22,multiple_choice,main,,What does event sourcing store?,Every change|Current state|Nothing,0,,,"Storing every change as an event, instead of just the current state, means you can always replay the full history."
+108,22,true_false,exercise,107,Event sourcing lets you replay history.,,true,,,
+109,22,select_blank,exercise,107,Each change is stored as an ___.,event|image|font,0,,,
+110,22,multiple_choice,exercise,107,What does event sourcing let you always see?,Full history|Only today|Nothing,0,,,
+111,23,preview_card,preview,112,Synchronous communication waits for an immediate reply; asynchronous communication fires something off and moves on without waiting.,Got it,,cards/card_111.png,,
+112,23,multiple_choice,main,,What does synchronous communication wait for?,Immediate reply|Nothing|Random delay,0,,,"Asynchronous communication fires something off and moves on without waiting, unlike synchronous communication."
+113,23,true_false,exercise,112,Asynchronous communication moves on without waiting.,,true,,,
+114,23,select_blank,exercise,112,___ communication needs an immediate reply.,Synchronous|Asynchronous|Neither,0,,,
+115,23,multiple_choice,exercise,112,What does async communication avoid?,Waiting|Sending data|Logic,0,,,
+116,24,preview_card,preview,117,"A REST API organizes endpoints around resources, uses HTTP verbs like GET and POST for actions, and returns a status code describing the outcome.",Got it,,cards/card_116.png,,
+117,24,multiple_choice,main,,What does REST organize endpoints around?,Resources|Colors|Fonts,0,,,"REST also uses HTTP verbs like GET and POST for actions, and every response includes a status code."
+118,24,true_false,exercise,117,A REST response includes a status code.,,true,,,
+119,24,select_blank,exercise,117,REST uses HTTP ___ for actions.,verbs|fonts|colors,0,,,
+120,24,multiple_choice,exercise,117,Give an example HTTP verb used in REST.,GET|LOAD|SAVE,0,,,
+121,25,preview_card,preview,122,"A message queue passes messages between services through a durable middleman, so a sender does not need the receiver to be online right now.",Got it,,cards/card_121.png,,
+122,25,multiple_choice,main,,What does a message queue sit between?,"Sender, receiver|Two databases|Two fonts",0,,,"As a durable middleman between sender and receiver, a queue means the sender doesn't need the receiver online right now."
+123,25,true_false,exercise,122,A queue avoids needing the receiver online.,,true,,,
+124,25,select_blank,exercise,122,A queue acts as a durable ___.,middleman|font|logo,0,,,
+125,25,multiple_choice,exercise,122,What does a queue decouple?,"Sender, receiver|Two fonts|Two colors",0,,,
+126,26,preview_card,preview,127,"An API gateway is one front door that routes, and often protects, incoming requests to many different backend services.",Got it,,cards/card_126.png,,
+127,26,multiple_choice,main,,What does an API gateway act as?,Front door|A database|A font,0,,,"As a front door, a gateway routes requests to many backend services, and often protects them too."
+128,26,true_false,exercise,127,An API gateway can protect backend services.,,true,,,
+129,26,select_blank,exercise,127,A gateway routes requests to many ___ services.,backend|frontend only|no,0,,,
+130,26,multiple_choice,exercise,127,How many services can a gateway route to?,Many|Exactly one|None,0,,,
+131,27,preview_card,preview,132,"Service discovery lets one service automatically find the current network address of another, even as instances start and stop.",Got it,,cards/card_131.png,,
+132,27,multiple_choice,main,,What does service discovery find?,Network address|A font|A logo,0,,,"Discovery happens automatically, without manual lookup, even as instances start and stop."
+133,27,true_false,exercise,132,Service discovery works even as instances change.,,true,,,
+134,27,select_blank,exercise,132,"Discovery happens ___, without manual lookup.",automatically|never|manually,0,,,
+135,27,multiple_choice,exercise,132,Why is discovery needed in dynamic systems?,Addresses change|Addresses fixed|No services,0,,,
+136,28,preview_card,preview,137,Database per service keeps each service's data private and independent; a shared database is simpler at first but tightly couples services together.,Got it,,cards/card_136.png,,
+137,28,multiple_choice,main,,What does a shared database cause?,Tight coupling|Full independence|No coupling,0,,,A shared database is simpler at first but causes that coupling; database-per-service keeps each service's data independent instead.
+138,28,true_false,exercise,137,Database per service keeps data independent.,,true,,,
+139,28,select_blank,exercise,137,A shared database is simpler ___.,at first|forever|never,0,,,
+140,28,multiple_choice,exercise,137,What does database per service protect?,Data independence|Shared schemas|Nothing,0,,,
+141,29,preview_card,preview,142,"Strong consistency means every reader sees the latest write right away; eventual consistency means they will see it eventually, just not instantly.",Got it,,cards/card_141.png,,
+142,29,multiple_choice,main,,What does strong consistency guarantee?,Immediate view|A delay|No guarantee,0,,,"Strong consistency shows every reader the latest write immediately; eventual consistency catches up later, not instantly."
+143,29,true_false,exercise,142,Eventual consistency guarantees the latest write instantly.,,false,,,"It only guarantees readers will catch up eventually, not right away."
+144,29,select_blank,exercise,142,"Eventual consistency catches up ___, not instantly.",eventually|never|instantly,0,,,
+145,29,multiple_choice,exercise,142,Which model reads the latest write immediately?,Strong|Eventual|Neither,0,,,
+146,30,preview_card,preview,147,"A cache stores a copy of data somewhere faster to reach than its original source, trading a small risk of staleness for real speed.",Got it,,cards/card_146.png,,
+147,30,multiple_choice,main,,What does a cache trade for speed?,Staleness risk|Nothing|Storage cost,0,,,A cache stores a copy of data somewhere faster to reach than the original source — trading a small staleness risk for that speed.
+148,30,true_false,exercise,147,A cache should be faster than the source.,,true,,,
+149,30,select_blank,exercise,147,A cache stores a ___ of the original data.,copy|font|logo,0,,,
+150,30,multiple_choice,exercise,147,What is a risk of caching?,Stale data|Faster reads|Lower cost,0,,,
+151,31,preview_card,preview,152,"During a network split, a distributed system can only pick two of consistency, availability, and partition tolerance at once, per the CAP theorem.",Got it,,cards/card_151.png,,
+152,31,multiple_choice,main,,When does the CAP tradeoff apply?,A split|Always|Only offline,0,cards/card_152.png,,"During a network split, a distributed system can only guarantee two of consistency, availability, and partition tolerance at once."
+153,31,true_false,exercise,152,CAP allows only two of three at once.,,true,,,
+154,31,select_blank,exercise,152,CAP applies during a network ___.,split|upgrade|login,0,,,
+155,31,multiple_choice,exercise,152,Name one of the three CAP properties.,Consistency|Font size|Logo color,0,,,
+156,32,preview_card,preview,157,Horizontal scaling adds more machines to handle load; vertical scaling makes one existing machine bigger and more powerful.,Got it,,cards/card_156.png,,
+157,32,multiple_choice,main,,What does horizontal scaling add?,A bigger|More machines|Nothing,0,,,Vertical scaling makes one existing machine bigger instead of adding more machines.
+158,32,true_false,exercise,157,Vertical scaling makes one machine bigger.,,true,,,
+159,32,select_blank,exercise,157,Horizontal scaling adds more ___.,machines|memory only|nothing,0,,,
+160,32,multiple_choice,exercise,157,What does vertical scaling change?,Machine size|Machine count|Nothing,0,,,
+161,33,preview_card,preview,162,"A load balancer spreads incoming traffic across multiple servers, so no single server gets overwhelmed while others sit idle.",Got it,,cards/card_161.png,,
+162,33,multiple_choice,main,,What does a load balancer spread?,Traffic|A logo|A font,0,,,"That traffic spreads across multiple servers, so no single one gets overwhelmed while others sit idle."
+163,33,true_false,exercise,162,Load balancing helps prevent one server overload.,,true,,,
+164,33,select_blank,exercise,162,Traffic spreads across multiple ___.,servers|fonts|colors,0,,,
+165,33,multiple_choice,exercise,162,What happens without load balancing?,One overloads|Even spread|No change,0,,,
+166,34,preview_card,preview,167,"A circuit breaker stops calls to a failing service temporarily, instead of piling up more failing requests and making things worse.",Got it,,cards/card_166.png,,
+167,34,multiple_choice,main,,What does a circuit breaker stop temporarily?,Calls only|All forever|Nothing,0,cards/card_167.png,,"It stops calls to a failing service after repeated failures, instead of letting them pile up."
+168,34,true_false,exercise,167,A circuit breaker helps avoid piling up failures.,,true,,,
+169,34,select_blank,exercise,167,It stops calls to a ___ service.,failing|healthy|new,0,,,
+170,34,multiple_choice,exercise,167,When does a circuit breaker trigger?,Repeated fails|Quick success|Logo change,0,,,
+171,35,preview_card,preview,172,Retrying a failed request with growing delays between attempts avoids hammering a struggling service with rapid repeated calls.,Got it,,cards/card_171.png,,
+172,35,multiple_choice,main,,What grows between retry attempts?,The delay|The traffic|The logo,0,,,This growing delay is called backoff — it avoids hammering a struggling service with rapid repeated retries.
+173,35,true_false,exercise,172,Backoff avoids hammering a service rapidly.,,true,,,
+174,35,select_blank,exercise,172,A growing delay is called ___.,backoff|frontend|a font,0,,,
+175,35,multiple_choice,exercise,172,What does retrying without backoff risk?,Overloading it|Fixing faster|Nothing,0,,,
+176,36,preview_card,preview,177,"Rate limiting caps how many requests a client can make in a given window of time, protecting a service from being overwhelmed.",Got it,,cards/card_176.png,,
+177,36,multiple_choice,main,,What does rate limiting cap?,Request count|Font size|Logo size,0,,,"Rate limiting caps how many requests one client can make within a time window, protecting the service from overload."
+178,36,true_false,exercise,177,Rate limiting protects a service from overload.,,true,,,
+179,36,select_blank,exercise,177,Rate limits apply within a time ___.,window|logo|font,0,,,
+180,36,multiple_choice,exercise,177,Who does rate limiting typically restrict?,One client|Every client|No one,0,,,
+181,37,preview_card,preview,182,"Logs record discrete events, metrics track numbers over time, and traces follow one request across many services, together giving you real observability.",Got it,,cards/card_181.png,,
+182,37,multi_select,main,,Pick the three observability signals.,Logs|Metrics|Traces|Fonts,0|1|2,,,"Logs record discrete events, metrics track numbers over time, and traces follow one request across services."
+183,37,true_false,exercise,182,A trace follows one request across services.,,true,,,
+184,37,select_blank,exercise,182,___ track numbers over time.,Metrics|Logos|Fonts,0,,,
+185,37,multiple_choice,exercise,182,What do logs typically record?,Discrete events|Font size|Logo color,0,,,
+186,38,preview_card,preview,187,"Designing access, boundaries, and trust into a system from the start is far cheaper than bolting security on after everything is already built.",Got it,,cards/card_186.png,,
+187,38,multiple_choice,main,,When should security be designed in?,From start|Very late|Never,0,,,"Designing access, boundaries, and trust in from the start is far cheaper than bolting security on after the fact."
+188,38,true_false,exercise,187,Bolting security on later is usually cheaper.,,false,,,Designing it in from the start is generally far cheaper than retrofitting it.
+189,38,select_blank,exercise,187,Design access and ___ into the system early.,trust|logos|fonts,0,,,
+190,38,multiple_choice,exercise,187,What is expensive to bolt on after the fact?,Security|A font|A logo,0,,,
+191,39,preview_card,preview,192,"The C4 model diagrams a system at four zoom levels: context, container, component, and code, each level zooming in further.",Got it,,cards/card_191.png,,
+192,39,multiple_choice,main,,How many zoom levels does C4 use?,Four|Two|Ten,0,cards/card_192.png,,"The four levels — context, container, component, code — each zoom in further, from broadest to most detailed."
+193,39,true_false,exercise,192,Each C4 level zooms in further than the last.,,true,,,
+194,39,select_blank,exercise,192,The broadest C4 level is called ___.,context|code|component,0,,,
+195,39,multiple_choice,exercise,192,What is the most zoomed-in C4 level?,Code|Context|Container,0,,,
+196,40,preview_card,preview,197,"Every architectural choice gains something and gives something up, so naming that trade-off honestly matters more than finding a perfect option.",Got it,,cards/card_196.png,,
+197,40,select_blank,main,,Every real architecture choice involves a ___.,trade-off|guarantee|shortcut|formula,0,,,Every real choice gains something and gives something up — naming that trade-off honestly matters more than chasing a perfect option.
+198,40,select_blank,exercise,197,Naming a trade-off ___ matters most.,honestly|never|randomly,0,,,
+199,40,multiple_choice,exercise,197,What does every architecture choice do?,Trades something|Fixes everything|Costs nothing,0,,,
+200,40,true_false,exercise,197,Being honest about trade-offs is valuable.,,true,,,
+201,2,order,exercise,7,"Put these zoom levels in order, broadest first.",Architecture|Design|Code,,,,"Architecture is the broadest view, design is the mid-level structure of a module, and code is the most zoomed-in — the actual lines."
+202,7,order,exercise,32,Put a request's path through the layers in order.,Presentation|Business logic|Data,,,,"A request enters through the presentation layer, is handled by business logic, and finally reaches the data layer — each layer only talks to its neighbor."
+203,34,order,exercise,167,Put the circuit breaker's states in order.,Closed|Open|Half-open,,,,"Closed lets calls through normally. Repeated failures trip it to open, which blocks calls to the failing service. After a cooldown it goes half-open, letting one trial call through to test if the service has recovered."
+204,35,order,exercise,172,Put these retry delays in order.,1 second|2 seconds|4 seconds|8 seconds,,,,Backoff grows the delay between retries — often by doubling it each time — so retries space out instead of hammering a struggling service.
+205,39,order,exercise,192,"Put the C4 model's levels in order, broadest first.",Context|Container|Component|Code,,,,"Context is the broadest view of the system, container zooms into its deployable pieces, component zooms into a container's internal parts, and code is the most detailed level."
+206,15,match_pairs,exercise,72,Match each style to its defining trait.,Monolith↔Deployed as one unit|Microservices↔Independently deployable services|Serverless↔No servers for you to manage|Event-driven↔Services react to events|Hexagonal↔Core logic isolated behind ports,,,,A quick review of the styles covered so far: each one is defined by how it structures and deploys the system.
+207,31,match_pairs,exercise,152,Match each consistency term to its meaning.,"Strong consistency↔Every reader sees the latest write immediately|Eventual consistency↔Readers catch up to the latest write eventually|CAP theorem↔Only two of consistency, availability, partition tolerance at once",,,,"Strong consistency is immediate, eventual consistency catches up later, and the CAP theorem describes the tradeoff a distributed system faces during a network split."
+208,27,match_pairs,exercise,132,Match each concept to what it does.,REST API↔Organizes endpoints around resources|Message queue↔Durable middleman between sender and receiver|API gateway↔Front door that routes requests to services|Service discovery↔Finds a service's current address automatically,,,,Each of these solves a different part of getting requests from one service to another reliably.
+209,22,match_pairs,exercise,107,Match each principle to what it's about.,Separation of concerns↔Keeping responsibilities apart|Coupling↔How tangled parts are with each other|Cohesion↔How focused one part is on its own job|Bounded context↔Where a specific model's terms apply,,,,These principles all aim at the same goal from different angles: code that's easy to change because responsibilities are clear and isolated.
+210,4,short_answer,exercise,17,What 3-letter acronym names a decision record?,ADR|adr,,,,ADR stands for architectural decision record.
+211,19,short_answer,exercise,92,What 3-letter acronym stands for domain-driven design?,DDD|ddd,,,,DDD stands for domain-driven design.
+212,21,short_answer,exercise,102,What acronym names splitting reads from writes?,CQRS|cqrs,,,,CQRS stands for Command Query Responsibility Segregation — splitting reads from writes.
+213,31,short_answer,exercise,152,Name the acronym for this tradeoff theorem.,CAP|cap,,,,"CAP stands for Consistency, Availability, and Partition tolerance."
+214,39,short_answer,exercise,192,What is this four-level architecture model called?,C4|c4,,,,The C4 model gets its name from its four zoom levels.
+215,30,multi_select,exercise,147,Pick true things about caching.,Faster reads|Possibly stale|Always exact,0|1,,,A cache is fast to read but trades a small risk of staleness for that speed — it never guarantees perfectly exact freshness.
+216,33,multi_select,exercise,162,Pick benefits of load balancing.,Spreads traffic|Prevents overload|Deletes data,0|1,,,Load balancing spreads traffic so no single server gets overwhelmed while others sit idle — it has nothing to do with deleting data.
+217,9,multi_select,exercise,42,Pick true things about event-driven systems.,Loose coupling|Tight coupling|Event triggers,0|2,,,Reacting to events instead of always calling directly is what loosens coupling between services — the opposite of tight coupling.

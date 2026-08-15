@@ -5,10 +5,11 @@ document, and that Yaaddi's own importer enforces — catches the mistakes a
 CSV file can't catch on its own: dangling references, missing media, an
 exercise with no main card, a too-long prompt, a duplicate card, an
 orphaned deck with no cards, low explanation coverage, a main card whose
-practice cards are all one type, a course leaning on too few of the 14
-card types, a course with too much typing overall, and a course with no
-narrated (media_card) cards at all — before you open a PR or import into
-the app.
+practice cards are all one type or itself true_false, a course leaning on
+too few of the available card types (see KNOWN_TYPES), a course with too
+much typing overall, a course under the image-coverage floor, a missing or
+duplicate course id, and a course with no narrated (media_card) cards at
+all — before you open a PR or import into the app.
 
 No dependencies beyond the standard library.
 
@@ -45,7 +46,7 @@ KNOWN_TYPES = {
     "multiple_choice", "true_false", "order", "select_blank", "multi_select",
     "match_pairs", "image_choice", "type_answer", "code_fill", "media_card",
     "image_occlusion", "numeric_answer", "command_output", "short_answer",
-    "preview_card",
+    "preview_card", "categorize", "spot_error",
 }
 
 # Typing is slower and more error-prone than tapping, so courses are
@@ -80,6 +81,33 @@ CHOICE_LIST_TYPES = {"multiple_choice", "multi_select", "image_choice", "select_
 
 def _word_count(text):
     return len((text or "").split())
+
+
+def _slugify(text):
+    """Same normalization the app's own lib/slugify.ts uses: lowercase,
+    non-alphanumerics collapsed to single hyphens, trimmed."""
+    out = []
+    prev_hyphen = False
+    for ch in (text or "").lower():
+        if ch.isalnum():
+            out.append(ch)
+            prev_hyphen = False
+        elif not prev_hyphen:
+            out.append("-")
+            prev_hyphen = True
+    return "".join(out).strip("-")
+
+
+def _looks_like_slug(course_id, reference_text):
+    """True if course_id reads as a slugified version of reference_text (a
+    title or folder name) — the heuristic behind the id-neutrality warning.
+    An opaque id (UUID fragment, timestamp token) won't match; a
+    slugified-title id will, since slugifying it again reproduces course_id."""
+    reference_slug = _slugify(reference_text)
+    if not reference_slug:
+        return False
+    normalized_id = course_id.strip().lower()
+    return normalized_id == reference_slug or normalized_id == reference_slug.replace("-", "")
 
 
 class Report:
@@ -141,14 +169,26 @@ def validate_meta_json(course_dir, report):
     # lives in. Without it, renaming this folder later silently breaks
     # "check for updates" for everyone who already installed it (the app
     # has no other way to recognize this is the same course under a new
-    # name). Warn, not error, so older un-migrated courses still validate —
-    # run `python ensure_course_ids.py` to auto-assign one.
+    # name). Hard error: every course in this repo has had one assigned
+    # since T#154, so a missing id from here on is a real authoring mistake,
+    # not a legacy gap to tolerate. Run `python ensure_course_ids.py` to
+    # assign one. Uniqueness across courses is checked separately, in
+    # `check_id_uniqueness` (only meaningful with --all).
     course_id = (meta.get("id") or "").strip()
     if not course_id:
-        report.warn(
+        report.error(
             'meta.json has no "id" — course identity currently falls back to this folder\'s '
             'name, which breaks "check for updates" for existing installs if the folder is ever '
             "renamed. Run `python ensure_course_ids.py` to assign one."
+        )
+    elif _looks_like_slug(course_id, meta.get("title") or "") or _looks_like_slug(
+        course_id, os.path.basename(course_dir)
+    ):
+        report.warn(
+            f'meta.json "id" ("{course_id}") looks derived from the current title/folder name — '
+            "ids must stay neutral and stable even after a retitle or rename, or \"check for "
+            'updates\" silently breaks for existing installs. Prefer an opaque token (e.g. a UUID '
+            "fragment) instead of a slugified name."
         )
     file_name = meta.get("file") or ""
     if not file_name.strip():
@@ -290,6 +330,17 @@ def validate_cards(units, cards, report, media_files=None):
             report.error(f'card {cid}: "audio" is set but type is "{ctype}" — audio only works on media_card')
 
         if role == "main":
+            # A main card is the one graded encounter that actually schedules
+            # spaced repetition — true_false is a 50/50 guess, which lets a
+            # learner "pass" it without knowing the material. Reserve
+            # true_false for practice/exercise cards, where a guessable
+            # answer is lower-stakes reinforcement, not the real test.
+            if ctype == "true_false":
+                report.error(
+                    f'main card {cid}: type is "true_false" — a main card must not be '
+                    "true_false (a 50/50 guess undermines grading it); use a different type "
+                    "and reserve true_false for practice cards"
+                )
             mains_by_id[cid] = c
         elif role == "exercise":
             if not (c.get("related_main_id") or "").strip():
@@ -319,24 +370,35 @@ def validate_cards(units, cards, report, media_files=None):
             exercise_count_by_main[rid] = exercise_count_by_main.get(rid, 0) + 1
             exercise_types_by_main.setdefault(rid, set()).add(e.get("type") or "multiple_choice")
 
+    previews_by_main = {}
     for p in previews:
         rid = p.get("related_main_id")
         if rid and rid not in mains_by_id:
             report.error(
                 f'card {p.get("id")}: related_main_id "{rid}" does not point to a main card'
             )
+        elif rid:
+            previews_by_main.setdefault(rid, []).append(p.get("id"))
 
     for mid in mains_by_id:
         n = exercise_count_by_main.get(mid, 0)
-        if n == 0:
-            report.warn(f"main card {mid} has zero practice cards")
-        elif n < 5:
-            report.warn(f"main card {mid} has only {n} practice card(s) — this project's guideline is 5-10")
+        # Strict per-pack rule: every main card needs a paired preview card
+        # and at least 5 practice cards (see the "pack" requirements in
+        # docs/CARD_AUTHORING.md) — this is a hard error, not a guideline.
+        if mid not in previews_by_main:
+            report.error(f"main card {mid} has no preview card — every pack needs exactly one")
+        elif len(previews_by_main[mid]) > 1:
+            report.error(
+                f"main card {mid} has {len(previews_by_main[mid])} preview cards "
+                f"({', '.join(previews_by_main[mid])}) — a pack needs exactly one"
+            )
+        if n < 3:
+            report.error(f"main card {mid} has only {n} practice card(s) — a pack needs at least 3")
         # A soft variety nudge, not an error — 5+ practice cards all sharing
         # one type usually means a card type was picked out of habit rather
         # than fit; occasionally a topic genuinely only fits one type well,
         # so this warns rather than blocks.
-        elif n >= 5 and len(exercise_types_by_main.get(mid, set())) == 1:
+        if n >= 5 and len(exercise_types_by_main.get(mid, set())) == 1:
             only_type = next(iter(exercise_types_by_main[mid]))
             report.warn(
                 f'main card {mid}: all {n} practice cards are "{only_type}" — '
@@ -344,15 +406,57 @@ def validate_cards(units, cards, report, media_files=None):
             )
 
     # Course-wide type variety: catches a whole course leaning on 1-2 types
-    # out of the 14 available, which the per-deck check above can miss if
+    # out of the 16 available, which the per-deck check above can miss if
     # each individual deck looks varied but the course as a whole doesn't.
     all_types_used = {c.get("type") or "multiple_choice" for c in cards}
     if len(cards) >= 20 and len(all_types_used) < 5:
         report.warn(
             f"this course only uses {len(all_types_used)} card type(s) "
             f"({', '.join(sorted(all_types_used))}) across {len(cards)} cards — "
-            "14 types are available; consider mixing in more for variety"
+            f"{len(KNOWN_TYPES)} types are available; consider mixing in more for variety"
         )
+
+    # Type BALANCE, distinct from type COUNT above: a course can use 8 of
+    # the 16 types and still have 80% of its cards be multiple_choice — the
+    # check above wouldn't catch that. preview_card is excluded here since
+    # its count is structurally fixed (one per pack, not a stylistic
+    # choice), which would otherwise mechanically distort the "share"
+    # figure for every course. Threshold is deliberately loose (55%, not an
+    # even 1/N split) — some skew toward the most learner-friendly types
+    # (multiple_choice, true_false) is normal and fine; this only flags a
+    # genuine over-reliance on one format.
+    MAX_SINGLE_TYPE_SHARE = 0.55
+    gradeable_cards = [c for c in cards if (c.get("type") or "multiple_choice") != "preview_card"]
+    if len(gradeable_cards) >= 20:
+        type_counts = {}
+        for c in gradeable_cards:
+            t = c.get("type") or "multiple_choice"
+            type_counts[t] = type_counts.get(t, 0) + 1
+        dominant_type, dominant_count = max(type_counts.items(), key=lambda kv: kv[1])
+        dominant_share = dominant_count / len(gradeable_cards)
+        if dominant_share > MAX_SINGLE_TYPE_SHARE:
+            report.warn(
+                f'"{dominant_type}" makes up {dominant_count}/{len(gradeable_cards)} '
+                f"({round(100 * dominant_share)}%) of this course's gradeable cards — "
+                f"consider rebalancing so no single type is over {round(100 * MAX_SINGLE_TYPE_SHARE)}%"
+            )
+
+    # Image coverage: a picture genuinely helps some concepts (diagrams,
+    # spatial relationships, analogies) and this project's authoring
+    # convention is to aim for a meaningful minority of cards carrying one
+    # — not every card (most plain vocabulary/syntax drills don't need
+    # one), but a course with almost none is a course that skipped this
+    # entirely. 20% is a floor, not a target.
+    MIN_IMAGE_COVERAGE = 0.2
+    if len(cards) >= 20:
+        image_count = sum(1 for c in cards if (c.get("image") or "").strip())
+        image_ratio = image_count / len(cards)
+        if image_ratio < MIN_IMAGE_COVERAGE:
+            report.warn(
+                f"only {image_count}/{len(cards)} cards ({round(100 * image_ratio)}%) have an "
+                f"image — aim for at least {round(100 * MIN_IMAGE_COVERAGE)}% where a picture "
+                "would genuinely help (diagrams, analogies), not just decoration"
+            )
 
     # Typing (type_answer, numeric_answer, code_fill, command_output,
     # short_answer) is slower and more error-prone to grade than tapping —
@@ -386,6 +490,8 @@ def validate_cards(units, cards, report, media_files=None):
         uid = u.get("id")
         if uid not in units_with_cards:
             report.warn(f'unit {uid} ("{u.get("title")}"): has no cards at all')
+        if not (u.get("image") or "").strip():
+            report.error(f'unit {uid} ("{u.get("title")}"): has no "image" set — every deck needs one')
 
     # Explanations are optional per-card, but a course where almost none of
     # its cards have one is a course that never uses the one place a wrong
@@ -421,7 +527,12 @@ def validate_zip(course_dir, meta, report):
     try:
         with zipfile.ZipFile(zip_path) as zf:
             names = zf.namelist()
-            media_files = {os.path.basename(n) for n in names}
+            # Both the bare basename (flat files like "unit1.png") and the
+            # full in-zip path (subfolder-qualified refs like
+            # "cards/card_12.png", matching the raw CSV value exactly, per
+            # csvZipImport.ts's own root-then-images/-then-media/ lookup)
+            # need to be recognized as "in the archive".
+            media_files = {os.path.basename(n) for n in names} | set(names)
 
             def read(fn):
                 candidates = [n for n in names if os.path.basename(n) == fn]
@@ -461,8 +572,19 @@ def validate_source(course_dir, report, meta=None):
     media_dir = os.path.join(source_dir, "media")
     available = set()
     for d in (images_dir, media_dir):
-        if os.path.isdir(d):
-            available.update(os.listdir(d))
+        if not os.path.isdir(d):
+            continue
+        for root, _dirs, files in os.walk(d):
+            rel_root = os.path.relpath(root, d)
+            for fn in files:
+                available.add(fn)
+                if rel_root != ".":
+                    # e.g. "cards/card_12.png" for a file organized in a
+                    # subfolder (card-level images live under images/cards/
+                    # to stay separate from deck-level images/unit*.png) —
+                    # a bare os.listdir() only saw the top-level "cards"
+                    # directory name, never the files inside it.
+                    available.add((rel_root + "/" + fn).replace(os.sep, "/"))
 
     validate_cards(units, cards, report, media_files=available)
 

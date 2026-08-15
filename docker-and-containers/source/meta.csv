@@ -1,0 +1,2 @@
+slug,title,description,version,author,color,icon,image
+docker-and-containers,Docker and Containers,"Everything you need to package, run, and ship software in containers — from your first `docker run` to a clean, production-ready image.",1.0.0,Yaaddi,#2496ED,cube-outline,course-cover.png

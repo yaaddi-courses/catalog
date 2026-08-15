@@ -1,0 +1,57 @@
+{
+  "id": "530976d2fe64",
+  "title": "The Software Development Lifecycle (SDLC)",
+  "description": "The software development lifecycle end to end: requirements, design, building, testing, shipping, and keeping a system alive afterward.",
+  "image": "cover.png",
+  "file": "sdlc.zip",
+  "version": "1.0.0",
+  "tags": [
+    "sdlc",
+    "software-engineering",
+    "process",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-15",
+      "notes": "Initial release — 34 decks, 177 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What SDLC Actually Means",
+    "Why Structured Process Beats Ad-Hoc Coding",
+    "The Core SDLC Phases, Overview",
+    "Gathering Requirements",
+    "Functional vs Non-Functional Requirements",
+    "User Stories and Acceptance Criteria",
+    "Feasibility Analysis",
+    "High-Level Design vs Low-Level Design",
+    "Writing a Design Document",
+    "Prototyping",
+    "Coding Standards and Style Guides",
+    "Version Control in the SDLC",
+    "Code Reviews",
+    "Pair Programming",
+    "Where Testing Fits in the SDLC",
+    "Test Levels: Unit, Integration, System, Acceptance",
+    "Test-Driven Development Basics",
+    "Deployment Strategies: Blue-Green and Canary",
+    "Continuous Integration Basics",
+    "Continuous Delivery vs Continuous Deployment",
+    "Release Management",
+    "Types of Maintenance",
+    "Monitoring Systems in Production",
+    "Handling a Production Incident",
+    "Deprecating and Sunsetting Features",
+    "The Waterfall Model",
+    "The V-Model",
+    "The Iterative Model",
+    "The Spiral Model",
+    "The Agile Model",
+    "DevOps as an SDLC Evolution",
+    "Documentation Throughout the SDLC",
+    "Compliance and Audit Trails",
+    "Choosing the Right SDLC Model"
+  ]
+}
