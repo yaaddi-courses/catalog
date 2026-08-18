@@ -1,0 +1,2 @@
+slug,title,description,version,author,color,icon,image
+opentelemetry,OpenTelemetry,"The vendor-neutral standard for traces, metrics, and logs — from a single span to a full Collector pipeline in production.",1.0.0,Yaaddi,#425CC7,git-network-outline,course-cover.png

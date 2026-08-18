@@ -80,15 +80,33 @@ that the material sticks — not a quick quiz.
 
 A third role, `preview`, sits in front of a main card's very first attempt — a
 one-time "here's the concept" beat before the graded version appears. It's a
-teaching step, not a test: there's a single button, tapping it always counts
-as correct, and it never re-appears once that main card has been learned (a
-later review of it skips straight to the graded card, no preview). Link it to
-its main card exactly like an exercise, via `related_main_id`:
+teaching step, not a test — tapping the right answer always "succeeds" and it
+never re-appears once that main card has been learned (a later review of it
+skips straight to the graded card, no preview). Link it to its main card
+exactly like an exercise, via `related_main_id`.
+
+A preview doesn't have to be the plain "concept text + one 'Got it' button"
+shape (`type=preview_card`). It can instead be formatted like a real
+interactive card — `multiple_choice`, `true_false`, or `select_blank` are the
+usual fits — as long as the correct answer is **self-evident**: one clearly-
+right option, or every other option obviously false. This is still a teaching
+moment, not a quiz, so keep it gentle and unambiguous; it's not the place for
+genuine distractors. Either shape is fine, pick whichever presents the concept
+more naturally:
 
 ```
 id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
 12,3,preview_card,preview,10,"A daemon thread is killed automatically when the main program exits.","Got it",,,,
+13,4,true_false,preview,11,"A daemon thread dies when the main program exits.",,true,,,
 ```
+
+When a preview is authored as `multiple_choice`/`true_false`/`select_blank`,
+it must obey the same rules as any other card of that type — the `<10`-word
+prompt / `<3`-word option limits from "Card-writing rules" apply, and
+`validate_course.py` enforces them. A plain `preview_card` row is exempt from
+that word-count check (its `prompt` is teaching prose, not a quiz question),
+which is why that shape is still the simpler default for a concept too dense
+to compress into a 10-word question.
 
 Keep a preview to exactly the one atomic idea its main card is about to test —
 if you find yourself explaining two things, that's two main cards (and two

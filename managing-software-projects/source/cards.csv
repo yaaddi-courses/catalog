@@ -1,178 +1,178 @@
 id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
-1,1,preview_card,preview,2,"A software project manager keeps scope, time, people, and risk aligned so the team can actually ship the work.",Got it,,,,
+1,1,true_false,preview,2,"A project manager aligns scope, time, and risk.",,true,,,
 2,1,multiple_choice,main,,What does a project manager keep aligned?,"Scope, time|Only code|Only design",0,cards/card_2.png,,"It also means keeping people and risk aligned, not just scope and time — all so the team can actually ship."
 3,1,true_false,exercise,2,A project manager helps a team actually ship work.,,true,,,
 4,1,select_blank,exercise,2,"A PM manages ___, not just code.",people|fonts|logos,0,,,
 5,1,multiple_choice,exercise,2,What is a core PM responsibility?,Managing risk|All code|Logos,0,,,
-6,2,preview_card,preview,7,A project has a defined end; a product keeps evolving indefinitely; a program is a group of related projects managed together.,Got it,,cards/card_6.png,,
+6,2,true_false,preview,7,A project has a defined end.,,true,cards/card_6.png,,
 7,2,multiple_choice,main,,What ends when a project finishes?,Defined end|Users|Code,0,,,"A product keeps evolving indefinitely, and a program is a group of related projects managed together."
 8,2,true_false,exercise,7,A program is a group of related projects.,,true,,,
 9,2,select_blank,exercise,7,A product keeps ___ indefinitely.,evolving|ending|shrinking,0,,,
 10,2,multiple_choice,exercise,7,Which term covers multiple related projects?,Program|Product|Task,0,,,
-11,3,preview_card,preview,12,"Scope, time, and cost are tightly linked, so you can rarely fix all three at once without something else having to give.",Got it,,cards/card_11.png,,
+11,3,select_blank,preview,12,"Scope, time, and cost are tightly ___.",linked|separate|random,0,cards/card_11.png,,
 12,3,multi_select,main,,Pick the three iron triangle constraints.,Scope|Time|Cost|Font,0|1|2,,,Tightening one usually forces a tradeoff on one of the other two.
 13,3,true_false,exercise,12,You can usually fix all three constraints at once freely.,,false,,,Tightening one usually forces a tradeoff on one of the other two.
 14,3,select_blank,exercise,12,Fixing one side usually forces a ___ elsewhere.,tradeoff|bonus|shortcut,0,,,
 15,3,multiple_choice,exercise,12,Name one iron triangle constraint.,Cost|Font size|Logo color,0,,,
-16,4,preview_card,preview,17,Stakeholder mapping means identifying everyone with a real stake in a project's outcome before you plan around them.,Got it,,cards/card_16.png,,
+16,4,multiple_choice,preview,17,What does stakeholder mapping identify?,Key stakeholders|Team salaries|Office location,0,cards/card_16.png,,
 17,4,multiple_choice,main,,What does stakeholder mapping identify?,Everyone|The CEO|Developers,0,,,Do this before you start planning — every stakeholder has a real stake in the outcome.
 18,4,true_false,exercise,17,Stakeholder mapping should happen before planning.,,true,,,
 19,4,select_blank,exercise,17,A stakeholder has a real ___ in the outcome.,stake|font|logo,0,,,
 20,4,multiple_choice,exercise,17,What do you do after mapping stakeholders?,Plan around|Ignore it|Delete it,0,,,
-21,5,preview_card,preview,22,"A project charter is a short document stating a project's purpose, goals, and boundaries before real work begins.",Got it,,,,
+21,5,true_false,preview,22,A project charter states purpose and goals.,,true,,,
 22,5,multiple_choice,main,,What does a charter state?,"Purpose, goals|The budget|The deadline",0,cards/card_22.png,,"Written before real work begins, and kept short — it also states the project's boundaries."
 23,5,true_false,exercise,22,A charter is written before real work begins.,,true,,,
 24,5,select_blank,exercise,22,A charter states a project's ___.,boundaries|font|logo,0,,,
 25,5,multiple_choice,exercise,22,What length is a charter typically?,Short|Full book|One word,0,,,
-26,6,preview_card,preview,27,"Waterfall moves through fixed phases in sequence, and it can still make sense when requirements are truly stable and well understood upfront. It struggles once requirements start changing late.",Got it,,,,
+26,6,true_false,preview,27,Waterfall moves through fixed phases in sequence.,,true,,,
 27,6,multiple_choice,main,,When does Waterfall still make sense?,Stable requirements|Constant change|Unknown scope,0,,,"It moves through fixed phases in sequence, and struggles once requirements start changing late."
 28,6,true_false,exercise,27,Waterfall moves through phases in sequence.,,true,,,
 29,6,select_blank,exercise,27,Waterfall fits requirements that are truly ___.,stable|changing|unknown,0,,,
 30,6,multiple_choice,exercise,27,What does Waterfall struggle with?,Late changes|Fixed scope|Clear phases,0,,,
-31,7,preview_card,preview,32,"Agile values responding to change over following a rigid plan, and working software over exhaustive documentation. It's a mindset, a set of values sitting above any specific framework.",Got it,,,,
+31,7,multiple_choice,preview,32,What does Agile value most?,Change|Fixed plans|Heavy docs,0,,,
 32,7,multiple_choice,main,,What does Agile value over a rigid plan?,Change response|More docs|Fixed scope,0,cards/card_32.png,,It also values working software over heavy documentation — and it's a mindset that sits above any single framework.
 33,7,true_false,exercise,32,Agile values working software over heavy documentation.,,true,,,
 34,7,select_blank,exercise,32,"Agile is a ___, not one fixed process.",mindset|font|logo,0,,,
 35,7,multiple_choice,exercise,32,What sits above any specific Agile framework?,Its values|A font|A logo,0,,,
-36,8,preview_card,preview,37,"Scrum defines roles like Product Owner and Scrum Master, plus recurring ceremonies like sprint planning and the daily standup. The Product Owner owns the backlog.",Got it,,cards/card_36.png,,
+36,8,true_false,preview,37,The Product Owner owns the backlog.,,true,cards/card_36.png,,
 37,8,multiple_choice,main,,Name a defined Scrum role.,Product Owner|A font|A logo,0,,,"Scrum also has recurring ceremonies, like sprint planning and the daily standup — and the Product Owner owns the backlog."
 38,8,true_false,exercise,37,Scrum includes recurring ceremonies.,,true,,,
 39,8,select_blank,exercise,37,The daily standup is a Scrum ___.,ceremony|logo|font,0,,,
 40,8,multiple_choice,exercise,37,Who typically owns the product backlog?,Product Owner|Scrum Master|Any developer,0,,,
-41,9,preview_card,preview,42,"Sprint planning is where a team decides what work it will commit to for the upcoming sprint, based on priority and capacity.",Got it,,cards/card_41.png,,
+41,9,select_blank,preview,42,Sprint planning decides what work to ___.,commit|delete|ignore,0,cards/card_41.png,,
 42,9,multiple_choice,main,,What does sprint planning decide?,Commitment|Company logo|Font choice,0,,,"It happens before each sprint begins, informed by priority and the team's capacity."
 43,9,true_false,exercise,42,Sprint planning considers team capacity.,,true,,,
 44,9,select_blank,exercise,42,Sprint planning happens ___ each sprint.,before|after|never before,0,,,
 45,9,multiple_choice,exercise,42,What informs what a team commits to?,Priority|Random choice|Coin flip,0,,,
-46,10,preview_card,preview,47,"Kanban visualizes work as it flows through columns, and limits how much work can be in progress at once.",Got it,,cards/card_46.png,,
+46,10,true_false,preview,47,Kanban limits how much work is in progress.,,true,cards/card_46.png,,
 47,10,multiple_choice,main,,What does Kanban limit?,WIP|Team size|Meeting length,0,,,It visualizes that work flowing through columns on a board.
 48,10,true_false,exercise,47,Kanban visualizes work moving through columns.,,true,,,
 49,10,select_blank,exercise,47,Kanban limits work in ___ at once.,progress|the backlog|meetings,0,,,
 50,10,multiple_choice,exercise,47,What does Kanban use to visualize flow?,Columns|Fonts|Logos,0,,,
-51,11,preview_card,preview,52,"Scrumban borrows Scrum's structure and Kanban's continuous flow, blending timeboxed planning with a flexible, limited-WIP board.",Got it,,cards/card_51.png,,
+51,11,true_false,preview,52,Scrumban blends Scrum and Kanban.,,true,cards/card_51.png,,
 52,11,multiple_choice,main,,What does Scrumban combine?,"Scrum, Kanban|Waterfall, Agile|Two logos",0,,,"It borrows Scrum's structure and Kanban's continuous flow, using a flexible, limited-WIP board."
 53,11,true_false,exercise,52,Scrumban can use a limited-WIP board.,,true,,,
 54,11,select_blank,exercise,52,Scrumban blends structure with continuous ___.,flow|logos|fonts,0,,,
 55,11,multiple_choice,exercise,52,What does Scrumban borrow from Scrum?,Structure|A logo|A font,0,,,
-56,12,preview_card,preview,57,"The right methodology depends on your team's actual size, pace, and product, not on which one is currently trendy.",Got it,,cards/card_56.png,,
+56,12,true_false,preview,57,The best methodology depends on your team.,,true,cards/card_56.png,,
 57,12,multiple_choice,main,,What should drive a methodology choice?,Team reality|Trend|A guess,0,,,"That means fitting the team's actual size, pace, and product — not what's trendy."
 58,12,true_false,exercise,57,Every team should use the same methodology.,,false,,,"The right fit depends on the specific team and product, not one universal answer."
 59,12,select_blank,exercise,57,Fit the methodology to the team's actual ___.,pace|logo|font,0,,,
 60,12,multiple_choice,exercise,57,What is a poor reason to pick a methodology?,Its trendy|Team fit|Product needs,0,,,
-61,13,preview_card,preview,62,"A work breakdown structure splits a big project into smaller, more manageable pieces of work you can actually plan around.",Got it,,,,
+61,13,select_blank,preview,62,A work breakdown structure splits work into ___.,pieces|nothing|budgets,0,,,
 62,13,multiple_choice,main,,What does a WBS split apart?,Big project|One task|A meeting,0,cards/card_62.png,,"Splitting it into smaller, more manageable pieces makes it easier to plan around."
 63,13,true_false,exercise,62,A WBS makes work more manageable to plan.,,true,,,
 64,13,select_blank,exercise,62,A WBS breaks work into smaller ___.,pieces|logos|fonts,0,,,
 65,13,multiple_choice,exercise,62,Why use a WBS?,Easier planning|Fewer meetings|More logos,0,,,
-66,14,preview_card,preview,67,Story points size relative effort and complexity; time estimates size how many hours or days a task will actually take.,Got it,,cards/card_66.png,,
+66,14,multiple_choice,preview,67,What do story points measure?,Relative effort|Exact hours|Team salary,0,cards/card_66.png,,
 67,14,multiple_choice,main,,What do story points measure?,Relative effort|Exact hours|A budget,0,,,"A time estimate, by contrast, sizes exact hours or days directly — story points don't."
 68,14,true_false,exercise,67,A time estimate measures hours or days directly.,,true,,,
 69,14,select_blank,exercise,67,"Story points size ___ effort, not exact time.",relative|zero|fixed,0,,,
 70,14,multiple_choice,exercise,67,Which one is usually more precise about hours?,Time estimates|Story points|Neither,0,,,
-71,15,preview_card,preview,72,"Planning poker is a quick, structured way for a team to agree on a story point estimate together, revealing everyone's guess at once so no one's guess anchors the others.",Got it,,,,
+71,15,true_false,preview,72,Planning poker reveals everyone's guess at once.,,true,,,
 72,15,multiple_choice,main,,What does planning poker help a team do?,Agree fast|Pick logo|Choose font,0,,,"Everyone reveals their story-point guess at the same time, so no one's guess anchors the others."
 73,15,true_false,exercise,72,Everyone reveals their guess at the same time.,,true,,,
 74,15,select_blank,exercise,72,Planning poker estimates ___ points.,story|font|logo,0,,,
 75,15,multiple_choice,exercise,72,Why reveal guesses at the same time?,Avoid anchoring|Save paper|Look formal,0,,,
-76,16,preview_card,preview,77,"The critical path is the longest chain of dependent tasks in a project, and it sets the minimum possible timeline — so if any task on that path slips, the whole project slips too.",Got it,,cards/card_76.png,,
+76,16,true_false,preview,77,The critical path is the longest task chain.,,true,cards/card_76.png,,
 77,16,multiple_choice,main,,What does the critical path set?,Min timeline|The budget|Team size,0,,,"It's the longest chain of dependent tasks — if any task on it slips, the whole project slips too."
 78,16,true_false,exercise,77,The critical path is the shortest chain of tasks.,,false,,,"It is the longest chain of dependent tasks, not the shortest."
 79,16,select_blank,exercise,77,The critical path is the ___ dependent chain.,longest|shortest|shortest ever,0,,,
 80,16,multiple_choice,exercise,77,What happens if a critical path task slips?,Project slips|No change|Speeds up,0,,,
-81,17,preview_card,preview,82,"Building slack into a schedule on purpose acknowledges that estimates are never perfectly right, and gives a project room to absorb surprises.",Got it,,cards/card_81.png,,
+81,17,select_blank,preview,82,Slack in a schedule absorbs ___.,surprises|nothing|deadlines,0,cards/card_81.png,,
 82,17,multiple_choice,main,,What does a buffer give a schedule?,Extra room|Zero slack|A guarantee,0,,,"Because estimates are never perfectly accurate, that extra room helps absorb surprises."
 83,17,true_false,exercise,82,Estimates are always perfectly accurate.,,false,,,"Estimates carry real uncertainty, which is exactly why buffers help."
 84,17,select_blank,exercise,82,A buffer is added to a schedule on ___.,purpose|accident|Fridays,0,,,
 85,17,multiple_choice,exercise,82,Why include a buffer at all?,Absorb surprises|Look impressive|Save money,0,,,
-86,18,preview_card,preview,87,"A burndown chart shows how much work remains; a burnup chart shows how much work has been completed, including scope added along the way.",Got it,,cards/card_86.png,,
+86,18,multiple_choice,preview,87,What does a burndown chart show?,Work remaining|Work completed|Team headcount,0,cards/card_86.png,,
 87,18,multiple_choice,main,,What does a burndown chart show?,Work remaining|A logo|A font,0,,,"A burnup chart, by contrast, shows work completed, including any scope added along the way."
 88,18,true_false,exercise,87,A burnup chart can show added scope.,,true,,,
 89,18,select_blank,exercise,87,A burnup chart shows work ___.,completed|deleted|hidden,0,,,
 90,18,multiple_choice,exercise,87,Which chart tracks remaining work directly?,Burndown|Burnup|Neither,0,,,
-91,19,preview_card,preview,92,"Velocity measures how much work a team reliably completes per sprint over time, useful for forecasting, not for comparing teams to each other.",Got it,,cards/card_91.png,,
+91,19,true_false,preview,92,Velocity should not compare different teams.,,true,cards/card_91.png,,
 92,19,multiple_choice,main,,What does velocity measure?,Sprint output|Headcount|Meeting count,0,,,"It's meant for one team's own forecasting, not for comparing different teams against each other."
 93,19,true_false,exercise,92,Velocity is meant to compare different teams fairly.,,false,,,"It is meant for one team's own forecasting, not for comparing across teams."
 94,19,select_blank,exercise,92,Velocity is mainly used for ___.,forecasting|hiring|marketing,0,,,
 95,19,multiple_choice,exercise,92,What is a misuse of velocity?,Cross-team compare|One forecast|Trend view,0,,,
-96,20,preview_card,preview,97,"Scope creep is small, unapproved additions quietly growing a project past its original plan, so catching them early matters.",Got it,,cards/card_96.png,,
+96,20,multiple_choice,preview,97,What is scope creep?,Scope growth|Budget cuts|Finished project,0,cards/card_96.png,,
 97,20,multiple_choice,main,,What is scope creep?,Unapproved growth|Approved growth|No growth,0,,,"It tends to happen quietly, in small pieces — catch it early, before it grows further."
 98,20,true_false,exercise,97,"Scope creep tends to happen quietly, in small pieces.",,true,,,
 99,20,select_blank,exercise,97,"Catch scope creep ___, not after it grows.",early|never|late,0,,,
 100,20,multiple_choice,exercise,97,What makes an addition scope creep?,Not approved|Was approved|Its tiny,0,,,
-101,21,preview_card,preview,102,"A good daily standup stays short and focuses on progress and blockers, not a detailed status report delivered to a boss.",Got it,,cards/card_101.png,,
+101,21,true_false,preview,102,A daily standup should stay short.,,true,cards/card_101.png,,
 102,21,multiple_choice,main,,What should a standup focus on?,Progress|Full report|Approvals,0,,,"It should stay short, and covering blockers is normal — it's for the team, not a status report to a boss."
 103,21,true_false,exercise,102,A standup is meant to stay short.,,true,,,
 104,21,select_blank,exercise,102,"A standup is for the team, not a ___.",boss report|blocker|update,0,,,
 105,21,multiple_choice,exercise,102,What is a common standup topic?,A blocker|A logo|A font,0,,,
-106,22,preview_card,preview,107,Backlog grooming regularly refines and reorders the backlog so it always stays ready to plan from.,Got it,,,,
+106,22,select_blank,preview,107,Backlog grooming keeps the backlog ready to ___.,plan|delete|ignore,0,,,
 107,22,multiple_choice,main,,What does grooming keep the backlog?,Plan ready|Frozen|Empty,0,cards/card_107.png,,"It's refined and reordered regularly, not just once, so it's always ready."
 108,22,true_false,exercise,107,Grooming reorders backlog items.,,true,,,
 109,22,select_blank,exercise,107,"Grooming happens ___, not just once.",regularly|never|once,0,,,
 110,22,multiple_choice,exercise,107,Why groom a backlog regularly?,Stay ready|Grows forever|Freezes it,0,,,
-111,23,preview_card,preview,112,"Identifying and mitigating risk means spotting what could go wrong early enough, then actually acting on it before it derails the project.",Got it,,cards/card_111.png,,
+111,23,true_false,preview,112,Risk management means acting on problems early.,,true,cards/card_111.png,,
 112,23,multiple_choice,main,,Why identify risk early?,Time acts|Looks nice|Fills form,0,,,"Mitigating a risk means acting on it once it's spotted — caught too late, you're left with far fewer options."
 113,23,true_false,exercise,112,Mitigation means acting on a spotted risk.,,true,,,
 114,23,select_blank,exercise,112,"Risk should be spotted ___, not too late.",early|never|too late,0,,,
 115,23,multiple_choice,exercise,112,What happens if risk is caught too late?,Little options|Easy fix|No impact,0,,,
-116,24,preview_card,preview,117,"Treating technical debt as a real, trackable risk instead of just an engineering complaint helps a project manager plan around it.",Got it,,cards/card_116.png,,
+116,24,true_false,preview,117,Technical debt should be tracked as risk.,,true,cards/card_116.png,,
 117,24,multiple_choice,main,,How should technical debt be treated?,Real risk|A complaint|Ignore it,0,,,"It's a tracked risk that's the whole team's concern, not just engineering's, and it can genuinely affect the plan."
 118,24,true_false,exercise,117,Technical debt can affect a project's plan.,,true,,,
 119,24,select_blank,exercise,117,Technical debt should be a ___ risk item.,tracked|hidden|ignored,0,,,
 120,24,multiple_choice,exercise,117,Who should care about technical debt?,Whole team|Engineers only|No one,0,,,
-121,25,preview_card,preview,122,"A definition of done is a shared, explicit checklist for when a piece of work truly counts as finished, not just started.",Got it,,cards/card_121.png,,
+121,25,multiple_choice,preview,122,What is a definition of done?,Finish checklist|Start checklist|Budget report,0,cards/card_121.png,,
 122,25,multiple_choice,main,,What is a definition of done?,Shared checklist|Private note|A guess,0,,,"It's explicit, not just shared informally, and the whole team agrees on it — for when work truly counts as finished."
 123,25,true_false,exercise,122,A definition of done should be explicit and shared.,,true,,,
 124,25,select_blank,exercise,122,A DoD defines when work is truly ___.,finished|started|planned,0,,,
 125,25,multiple_choice,exercise,122,Who should agree on the definition of done?,Whole team|One person|No one,0,,,
-126,26,preview_card,preview,127,"A quality gate is a checkpoint a piece of work must pass before it is allowed to move forward in the process, such as passing its tests.",Got it,,cards/card_126.png,,
+126,26,true_false,preview,127,A quality gate is a checkpoint work must pass.,,true,cards/card_126.png,,
 127,26,multiple_choice,main,,What is a quality gate?,A checkpoint|A logo|A font,0,,,Work must pass it — like passing its tests — before moving forward.
 128,26,true_false,exercise,127,Work must pass a quality gate to move forward.,,true,,,
 129,26,select_blank,exercise,127,A quality gate blocks work from ___ forward.,moving|starting|hiding,0,,,
 130,26,multiple_choice,exercise,127,Give an example quality gate check.,Passing tests|Font pick|Logo pick,0,,,
-131,27,preview_card,preview,132,"Leading without authority means getting a team to follow your lead through trust and clarity, not through formal power over them.",Got it,,cards/card_131.png,,
-132,27,multiple_choice,main,,What does this kind of leadership rely on?,"Trust, clarity|Formal power|A title",0,,,A PM in this position usually has no formal authority over the team at all.
+131,27,true_false,preview,132,Leading without authority relies on trust.,,true,cards/card_131.png,,
+132,27,multiple_choice,main,,What does leading without formal authority rely on?,"Trust, clarity|Formal power|A title",0,,,A PM in this position usually has no formal authority over the team at all.
 133,27,true_false,exercise,132,A PM often lacks formal authority over the team.,,true,,,
 134,27,select_blank,exercise,132,Leading without authority means earning ___.,trust|a title|a raise,0,,,
-135,27,multiple_choice,exercise,132,What is not required for this kind of leading?,Formal power|Clear goals|Trust,0,,,
-136,28,preview_card,preview,137,A retrospective is a regular meeting where a team honestly reflects on what to keep and what to change going forward.,Got it,,cards/card_136.png,,
+135,27,multiple_choice,exercise,132,What is not required for leading without formal authority?,Formal power|Clear goals|Trust,0,,,
+136,28,select_blank,preview,137,A retrospective is a meeting to ___.,reflect|argue|ignore,0,cards/card_136.png,,
 137,28,multiple_choice,main,,What does a retrospective reflect on?,"Keep, change|A logo|A font",0,,,"Held regularly, it should be honest, not just positive — the goal is real improvement, not blame."
 138,28,true_false,exercise,137,"A retrospective should be honest, not just positive.",,true,,,
 139,28,select_blank,exercise,137,"Retrospectives happen ___, not just once.",regularly|never|once,0,,,
 140,28,multiple_choice,exercise,137,What is the goal of a retrospective?,Improvement|Blame|Quick nap,0,,,
-141,29,preview_card,preview,142,"Managing a remote team means keeping people aligned and connected across different locations and time zones on purpose, leaning on async habits, not just meetings.",Got it,,cards/card_141.png,,
+141,29,true_false,preview,142,Remote teams need deliberate async habits.,,true,cards/card_141.png,,
 142,29,multiple_choice,main,,What must remote management keep aligned?,"People, zones|Only logos|Only fonts",0,,,"It usually takes extra, deliberate effort — leaning on async habits helps bridge the time zones."
 143,29,true_false,exercise,142,Time zone differences are a real challenge on remote teams.,,true,,,
 144,29,select_blank,exercise,142,Remote alignment usually needs ___ effort.,extra|zero|less,0,,,
 145,29,multiple_choice,exercise,142,What can help a distributed team stay connected?,Async habits|Total silence|Random meetings,0,,,
-146,30,preview_card,preview,147,"Addressing disagreement on a team directly, before it quietly festers, keeps small friction from becoming a bigger problem later.",Got it,,cards/card_146.png,,
+146,30,true_false,preview,147,Team disagreement should be addressed directly.,,true,cards/card_146.png,,
 147,30,multiple_choice,main,,When should conflict be addressed?,"Directly, early|Never|Only publicly",0,,,"Left unaddressed, friction quietly festers and grows worse over time."
 148,30,true_false,exercise,147,Ignored conflict can quietly grow bigger.,,true,,,
 149,30,select_blank,exercise,147,Unaddressed friction can quietly ___ over time.,fester|vanish|shrink,0,,,
 150,30,multiple_choice,exercise,147,What tends to make conflict worse?,Avoiding it|Naming it|Talking it,0,,,
-151,31,preview_card,preview,152,"Executives usually need the headline and the risk, not every detail, so a status report should be short and lead with what matters most.",Got it,,cards/card_151.png,,
+151,31,multiple_choice,preview,152,What should a status report lead with?,Headline risk|Small detail|Meeting agenda,0,cards/card_151.png,,
 152,31,multiple_choice,main,,What do executives usually need?,The headline|Every detail|Nothing,0,,,"Keep it short, and lead with what matters most — not every detail."
 153,31,true_false,exercise,152,A status report to executives should be short.,,true,,,
 154,31,select_blank,exercise,152,Lead a report with what ___ most.,matters|hides|delays,0,,,
 155,31,multiple_choice,exercise,152,What should a status report avoid drowning in?,Too detailed|Clear risk|A summary,0,,,
-156,32,preview_card,preview,157,"Project management tools help a team plan, track, and manage work, but the tool never replaces good team communication.",Got it,,,,
+156,32,true_false,preview,157,A tool never replaces team communication.,,true,,,
 157,32,multiple_choice,main,,What do PM tools help a team do?,"Plan, track|Replace talking|Skip plans",0,cards/card_157.png,,The tool never replaces real team communication — that still matters more than any tool.
 158,32,true_false,exercise,157,A tool can fully replace team communication.,,false,,,"Tools support the work, but they do not replace real team communication."
 159,32,select_blank,exercise,157,"A tool supports work, it does not ___ it.",replace|track|plan,0,,,
 160,32,multiple_choice,exercise,157,What still matters more than the tool itself?,Team communication|The logo|The font,0,,,
-161,33,preview_card,preview,162,"A change request handles asking to modify scope after a project is already underway, weighed formally instead of just quietly folded in.",Got it,,cards/card_161.png,,
+161,33,select_blank,preview,162,A change request formally asks to modify ___.,scope|nothing|teams,0,cards/card_161.png,,
 162,33,multiple_choice,main,,When does a change request happen?,Mid-project|Before start|Never,0,,,"It's about modifying scope, and should be weighed formally — quietly folding it in instead is exactly how scope creep happens."
 163,33,true_false,exercise,162,A change request should be weighed formally.,,true,,,
 164,33,select_blank,exercise,162,A change request modifies project ___.,scope|logos|fonts,0,,,
 165,33,multiple_choice,exercise,162,What is the risk of skipping this process?,Scope creep|Faster ship|Clear plans,0,,,
-166,34,preview_card,preview,167,"Closing a project formally, and honestly reviewing how it actually went in a postmortem, helps the next project go better.",Got it,,,,
+166,34,true_false,preview,167,A postmortem reviews how a project went.,,true,,,
 167,34,multiple_choice,main,,What does a postmortem review?,The outcome|The logo|The font,0,cards/card_167.png,,"It should be honest, even about failures — a formal close plus this honest review helps the next project go better."
 168,34,true_false,exercise,167,"A postmortem should be honest, even about failures.",,true,,,
 169,34,select_blank,exercise,167,Closure helps the ___ project go better.,next|first|logo,0,,,
 170,34,multiple_choice,exercise,167,What should a project have at the end?,Formal close|No review|Just party,0,,,
-171,35,preview_card,preview,172,"Unclear goals, silent scope creep, and no real risk tracking are patterns that sink software projects again and again.",Got it,,cards/card_171.png,,
+171,35,multiple_choice,preview,172,Which is a common project failure pattern?,Unclear goals|Clear goals|Good tracking,0,cards/card_171.png,,
 172,35,multi_select,main,,Pick common project failure patterns.,Unclear goals|Scope creep|No tracking|Clear plans|Good tracking,0|1|2,,,"These patterns repeat again and again, not just once."
 173,35,true_false,exercise,172,Unclear goals are a common failure pattern.,,true,,,
-174,35,select_blank,exercise,172,"These patterns repeat ___, not just once.",often|never|rarely,0,,,
+174,35,select_blank,exercise,172,"Common project failure patterns repeat ___, not just once.",often|never|rarely,0,,,
 175,35,multiple_choice,exercise,172,Give an example failure pattern.,No tracking|Clear goals|Honest reviews,0,,,
 176,6,order,exercise,27,Order a project's phases.,Initiation|Planning|Execution|Closure,,cards/card_176.png,,"Every phase feeds the next: define why the project exists, plan how to do it, do the work, then formally close it out."
 177,8,order,exercise,37,Order these Scrum ceremonies in a sprint.,Sprint Planning|Daily Standup|Sprint Review|Sprint Retrospective,,cards/card_177.png,,"A sprint opens with planning, runs on daily standups, and closes with a review of the work and a retrospective on the process."

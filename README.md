@@ -30,6 +30,8 @@ changes (see "Course catalog site" further down).
 | [`sdlc/`](sdlc/) | The software development lifecycle | 34 | 143 |
 | [`managing-software-projects/`](managing-software-projects/) | Running a real software project | 35 | 147 |
 | [`emotional-intelligence/`](emotional-intelligence/) | Self-awareness and interpersonal skills | 40 | 172 |
+| [`opentelemetry/`](opentelemetry/) | Traces, metrics, logs, and the Collector | 38 | 228 |
+| [`harness/`](harness/) | Unified CI/CD pipelines and delivery | 34 | 204 |
 
 > **Delivery mechanism:** each course ships as a `<slug>.zip` (meta/units/cards.csv
 > plus every referenced image/audio file), **committed to the repo tree** right next
@@ -54,6 +56,7 @@ changes (see "Course catalog site" further down).
 ├── README.md                     (this file)
 ├── AUTHORING.md                  (how to write a course — content rules, card variety, etc.)
 ├── build_course_zip.py           (builds <slug>.zip from source/ — stdlib-only, same as validate_course.py)
+├── catalog.json                  (auto-generated — see below, don't hand-edit)
 ├── .github/workflows/
 │   └── validate-courses.yml      (runs validate_course.py on every PR/push)
 ├── python-basics/
@@ -116,6 +119,19 @@ live — see `meta.json`'s `id` field below.
 
 A folder at the repo root with no valid `meta.json` is just skipped (not treated as an
 error) — so a plain README, a `LICENSE`, or a `.github/` folder at the root is fine.
+
+### `catalog.json`
+
+Every course's `meta.json` concatenated into one file — this is what the Yaaddi app
+actually fetches to load the Course Library (one request instead of a directory
+listing plus one request per course, which matters once this repo has hundreds or
+thousands of courses in it). **You never write this by hand.** `python
+tools/build_catalog.py` regenerates it from whatever's currently at the repo root, and
+`validate-courses.yml` does that automatically and commits the result on every push to
+`main` — same pattern as `id` auto-assignment above. `validate_course.py --all` checks
+it's actually in sync (a hard error if it's stale), which mainly matters for a PR from
+a fork, where CI can't push the auto-commit back (`GITHUB_TOKEN` is read-only there) —
+run `python tools/build_catalog.py` locally in that case before opening the PR.
 
 ### The course source itself
 

@@ -1,7 +1,7 @@
 {
   "id": "eba617a0e3bf",
   "title": "Testing in Software Engineering",
-  "description": "Why tests actually pay off, the different kinds worth writing, and the habits — TDD, coverage, flaky-test fixes, CI — that keep a suite trustworthy.",
+  "description": "Why tests actually pay off, the different kinds worth writing, and the habits â€” TDD, coverage, flaky-test fixes, CI â€” that keep a suite trustworthy.",
   "image": "cover.png",
   "file": "testing-in-software-engineering.zip",
   "version": "1.0.0",
@@ -15,7 +15,7 @@
     {
       "version": "1.0.0",
       "date": "2026-08-15",
-      "notes": "Initial release — 32 decks, 226 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+      "notes": "Initial release â€” 32 decks, 226 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
     }
   ],
   "toc": [

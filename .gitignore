@@ -11,8 +11,20 @@ draft/
 # OS/editor cruft
 .DS_Store
 Thumbs.db
+desktop.ini
 __pycache__/
+*.pyc
+.idea/
+.vscode/
 
 # GitHub Pages site build output (tools/build_site.py) — generated fresh by
 # .github/workflows/pages.yml on every push, never committed.
 _site/
+
+# Local dev-tooling config/instructions — project-specific settings for
+# whatever coding assistant/IDE is in use, not part of the shipped content.
+# Kept on disk (still fully functional locally), just never committed.
+# (A prior slip let two throwaway .claude/worktrees/* checkouts get committed
+# as git submodule links — this rule exists specifically so that never
+# recurs; see git history around the "--amend" commit.)
+.claude/

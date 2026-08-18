@@ -1,0 +1,63 @@
+{
+  "id": "dba791593bf6",
+  "title": "Harness",
+  "description": "The unified CI/CD platform — pipelines, delegates, deployment strategies, and the modules that go beyond just shipping code.",
+  "image": "cover.png",
+  "file": "harness.zip",
+  "version": "1.0.1",
+  "tags": [
+    "cicd",
+    "harness",
+    "devops",
+    "deployment",
+    "intermediate"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.1",
+      "date": "2026-08-24",
+      "notes": "Glossary quality pass — added scope (Account/Organization/Project), SCM, SAST, and DAST entries covering existing card content, and strengthened 6 definitions with concrete examples so they stand alone without needing the \"learn more\" link."
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-08-17",
+      "notes": "Initial release — 34 decks, 238 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What Harness Is and the Problem It Solves",
+    "Harness Modules Overview",
+    "Pipelines: The Core Building Block",
+    "Stages and Steps",
+    "Delegates: How Harness Talks to Your Infrastructure",
+    "Delegate Selectors",
+    "Connectors: Integrating Third-Party Tools",
+    "Secrets Management",
+    "Harness CI: Build Pipeline Basics",
+    "Build Infrastructure: Cloud Build vs. Self-Hosted",
+    "Codebase and Trigger Configuration",
+    "Test Intelligence",
+    "Cache Intelligence",
+    "Harness CD: Services, Environments, Infrastructure Definitions",
+    "Deployment Strategies: Rolling, Canary, Blue-Green",
+    "GitOps in Harness",
+    "Approval Steps and Manual Gates",
+    "Rollback Mechanics",
+    "Continuous Verification During Deploys",
+    "Templates: Reusing Pipeline Logic",
+    "Input Sets and Overlays",
+    "Variables and Expressions",
+    "Triggers: Automating Pipeline Runs",
+    "Policy as Code (OPA Governance)",
+    "Feature Flags Module",
+    "Security Testing Orchestration (STO)",
+    "Chaos Engineering Module",
+    "Cloud Cost Management (CCM)",
+    "Internal Developer Portal (IDP)",
+    "Software Engineering Insights (SEI)",
+    "Harness Open Source vs. Harness Platform",
+    "Projects, Organizations, and RBAC",
+    "Pipeline Notifications and Observability",
+    "Common Harness Anti-Patterns and Best Practices"
+  ]
+}

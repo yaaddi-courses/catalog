@@ -7,8 +7,9 @@ exercise with no main card, a too-long prompt, a duplicate card, an
 orphaned deck with no cards, low explanation coverage, a main card whose
 practice cards are all one type or itself true_false, a course leaning on
 too few of the available card types (see KNOWN_TYPES), a course with too
-much typing overall, a course under the image-coverage floor, a missing or
-duplicate course id, and a course with no narrated (media_card) cards at
+much typing overall, a missing or
+duplicate course id, an image (cover or card art) larger than
+MAX_IMAGE_DIMENSION, and a course with no narrated (media_card) cards at
 all — before you open a PR or import into the app.
 
 No dependencies beyond the standard library.
@@ -39,6 +40,7 @@ import csv
 import io
 import json
 import os
+import struct
 import sys
 import zipfile
 
@@ -77,6 +79,81 @@ MAX_TOTAL_WORDS = 10
 # `value|tolerance|unit`, short_answer/type_answer's single accepted
 # answer) where a "3 words per option" rule doesn't apply.
 CHOICE_LIST_TYPES = {"multiple_choice", "multi_select", "image_choice", "select_blank"}
+
+# Card art is generated at 256x256 (generate_asset.py's default) and shown
+# at small sizes throughout the app — anything larger is wasted bytes
+# bundled into every course zip for no visible benefit.
+MAX_IMAGE_DIMENSION = 256
+
+# The course cover is a deliberate exception: it fills a wide 2.4:1
+# marketplace banner slot (MarketplaceScreen.tsx's cardImage style), so it's
+# intentionally generated at 1024x432, not square — see
+# reference_image_tts_generator / project_cardale_cover_image_aspect_ratio
+# in the app repo's own session memory for why. A flat 256x256 cap would
+# flag every correctly-generated cover as an error.
+MAX_COVER_DIMENSION = (1024, 432)
+
+
+def _image_dimensions(path):
+    """Reads width/height straight from a PNG or JPEG header, no dependency
+    beyond the standard library. Returns None if the file isn't a
+    recognized image or is too short to contain a valid header."""
+    try:
+        with open(path, "rb") as f:
+            head = f.read(32)
+            if head[:8] == b"\x89PNG\r\n\x1a\n":
+                if len(head) < 24:
+                    return None
+                width, height = struct.unpack(">II", head[16:24])
+                return width, height
+            if head[:2] == b"\xff\xd8":
+                # JPEG: scan markers for the first Start-Of-Frame segment,
+                # which carries the actual pixel dimensions.
+                f.seek(2)
+                while True:
+                    marker_prefix = f.read(1)
+                    if not marker_prefix:
+                        return None
+                    if marker_prefix != b"\xff":
+                        continue
+                    marker = f.read(1)
+                    while marker == b"\xff":
+                        marker = f.read(1)
+                    if not marker:
+                        return None
+                    marker_byte = marker[0]
+                    if marker_byte in (0xD8, 0xD9) or 0xD0 <= marker_byte <= 0xD7:
+                        continue
+                    seg_len_bytes = f.read(2)
+                    if len(seg_len_bytes) < 2:
+                        return None
+                    seg_len = struct.unpack(">H", seg_len_bytes)[0]
+                    if 0xC0 <= marker_byte <= 0xCF and marker_byte not in (0xC4, 0xC8, 0xCC):
+                        sof = f.read(5)
+                        if len(sof) < 5:
+                            return None
+                        height, width = struct.unpack(">HH", sof[1:5])
+                        return width, height
+                    f.seek(seg_len - 2, io.SEEK_CUR)
+            return None
+    except OSError:
+        return None
+
+
+def _check_image_size(path, label, report, max_width=MAX_IMAGE_DIMENSION, max_height=None):
+    """max_height defaults to max_width (a square cap); pass both explicitly
+    for a non-square cap like the cover image's 1024x432 banner slot."""
+    if max_height is None:
+        max_height = max_width
+    dims = _image_dimensions(path)
+    if dims is None:
+        return
+    width, height = dims
+    if width > max_width or height > max_height:
+        report.error(
+            f"{label} is {width}x{height}, larger than the "
+            f"{max_width}x{max_height} limit — regenerate it at the right size"
+        )
 
 
 def _word_count(text):
@@ -206,6 +283,14 @@ def validate_meta_json(course_dir, report):
         image_path = os.path.join(course_dir, image)
         if not os.path.isfile(image_path):
             report.error(f'meta.json "image" points to "{image}", which doesn\'t exist')
+        else:
+            _check_image_size(
+                image_path,
+                f'meta.json "image" ("{image}")',
+                report,
+                max_width=MAX_COVER_DIMENSION[0],
+                max_height=MAX_COVER_DIMENSION[1],
+            )
 
     return meta
 
@@ -295,6 +380,30 @@ def validate_cards(units, cards, report, media_files=None):
                         f"{', '.join(long_options)} — limit is {MAX_OPTION_WORDS - 1} words "
                         f"per option, or {MAX_TOTAL_WORDS} words total including the prompt"
                     )
+
+            # A multiple_choice/multi_select card where EVERY listed option
+            # is marked correct has no genuine wrong answer to discriminate
+            # against — it can't actually be graded (a multi_select where
+            # you must tap everything on screen isn't a real judgment call).
+            # That "list all N members, nothing false among them" shape
+            # belongs in a preview card (always-correct by design), not a
+            # graded main/exercise card. Only applies to types that use
+            # options as genuinely parallel choices — see CHOICE_LIST_TYPES.
+            if ctype in ("multiple_choice", "multi_select") and len(option_list) > 1:
+                correct_raw = (c.get("correct_index") or "").strip()
+                if correct_raw:
+                    try:
+                        correct_indices = {int(x) for x in correct_raw.split("|") if x.strip() != ""}
+                    except ValueError:
+                        correct_indices = set()
+                    if correct_indices and correct_indices == set(range(len(option_list))):
+                        report.error(
+                            f"card {cid}: every option is marked correct (correct_index "
+                            f'"{correct_raw}" covers all {len(option_list)} options) — there is '
+                            "no genuine wrong answer to grade against. Move this \"list all "
+                            "of them\" content into a preview card instead, or add a real "
+                            "distractor option."
+                        )
 
             # A soft, deliberately imprecise heuristic for "this prompt is
             # probably testing more than one fact" — true atomicity can't be
@@ -441,23 +550,6 @@ def validate_cards(units, cards, report, media_files=None):
                 f"consider rebalancing so no single type is over {round(100 * MAX_SINGLE_TYPE_SHARE)}%"
             )
 
-    # Image coverage: a picture genuinely helps some concepts (diagrams,
-    # spatial relationships, analogies) and this project's authoring
-    # convention is to aim for a meaningful minority of cards carrying one
-    # — not every card (most plain vocabulary/syntax drills don't need
-    # one), but a course with almost none is a course that skipped this
-    # entirely. 20% is a floor, not a target.
-    MIN_IMAGE_COVERAGE = 0.2
-    if len(cards) >= 20:
-        image_count = sum(1 for c in cards if (c.get("image") or "").strip())
-        image_ratio = image_count / len(cards)
-        if image_ratio < MIN_IMAGE_COVERAGE:
-            report.warn(
-                f"only {image_count}/{len(cards)} cards ({round(100 * image_ratio)}%) have an "
-                f"image — aim for at least {round(100 * MIN_IMAGE_COVERAGE)}% where a picture "
-                "would genuinely help (diagrams, analogies), not just decoration"
-            )
-
     # Typing (type_answer, numeric_answer, code_fill, command_output,
     # short_answer) is slower and more error-prone to grade than tapping —
     # capped at 10% of a course's cards so review stays quick (see
@@ -551,8 +643,59 @@ def validate_zip(course_dir, meta, report):
                 cards = read_csv_text(cards_text)
                 report.info(f"{len(units)} units, {len(cards)} cards")
                 validate_cards(units, cards, report, media_files=media_files)
+
+            glossary_text = read("glossary.csv")
+            if glossary_text is not None:
+                validate_glossary_rows(read_csv_text(glossary_text), report)
     except zipfile.BadZipFile:
         report.error(f'"{meta["file"]}" is not a valid zip file')
+
+
+def validate_glossary(source_dir, report):
+    """Checks source/glossary.csv, if the course has one — see docs/GLOSSARY.md
+    in the app repo for the feature this feeds (tap-to-define technical terms,
+    one shared definition per term instead of duplicating it into every card).
+    Entirely optional: a course with no jargon-heavy content can ship none."""
+    glossary_path = os.path.join(source_dir, "glossary.csv")
+    if not os.path.isfile(glossary_path):
+        return
+    with open(glossary_path, encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    validate_glossary_rows(rows, report)
+
+
+def validate_glossary_rows(rows, report):
+    seen_terms = {}
+    for i, row in enumerate(rows, start=1):
+        term = (row.get("term") or "").strip()
+        definition = (row.get("definition") or "").strip()
+        link = (row.get("link") or "").strip()
+        if not term:
+            report.error(f"glossary.csv row {i}: \"term\" is required.")
+            continue
+        if not definition:
+            report.error(f'glossary.csv row {i} ("{term}"): "definition" is required.')
+        key = term.lower()
+        if key in seen_terms:
+            report.error(
+                f'glossary.csv row {i}: term "{term}" is a duplicate of row '
+                f"{seen_terms[key]} — every term should appear once."
+            )
+        else:
+            seen_terms[key] = i
+        if link and not (link.startswith("http://") or link.startswith("https://")):
+            report.warn(
+                f'glossary.csv row {i} ("{term}"): "link" doesn\'t look like a URL '
+                f'("{link}") — should be a full http(s):// address or left blank.'
+            )
+        # A learner reads the definition standalone, same self-containment
+        # bar as a card — a definition that's just the term restated with a
+        # capital letter isn't actually explaining anything.
+        if definition and definition.rstrip(".").lower() == term.lower():
+            report.warn(
+                f'glossary.csv row {i} ("{term}"): definition just restates the term '
+                "— write a real explanation."
+            )
 
 
 def validate_source(course_dir, report, meta=None):
@@ -585,8 +728,20 @@ def validate_source(course_dir, report, meta=None):
                     # a bare os.listdir() only saw the top-level "cards"
                     # directory name, never the files inside it.
                     available.add((rel_root + "/" + fn).replace(os.sep, "/"))
+                # "cover" images (course-cover.png etc.) are the source copy
+                # behind meta.json's own "image" field, checked separately
+                # above against MAX_COVER_DIMENSION — they intentionally
+                # aren't square and would false-positive here.
+                if d is images_dir and "cover" not in fn.lower():
+                    _check_image_size(
+                        os.path.join(root, fn),
+                        f"source/images/{os.path.relpath(os.path.join(root, fn), images_dir).replace(os.sep, '/')}",
+                        report,
+                    )
 
     validate_cards(units, cards, report, media_files=available)
+
+    validate_glossary(source_dir, report)
 
     # meta.json's optional "toc" is hand-copied from units.csv's title column
     # (see README.md) — nothing keeps them in sync automatically, so this is
@@ -610,6 +765,45 @@ def validate_course_folder(course_dir, check_source=False):
     if check_source:
         validate_source(course_dir, report, meta=meta)
     return report, meta
+
+
+def check_catalog_freshness(repo_root):
+    """catalog.json (tools/build_catalog.py) is the single-file course index
+    the app fetches for a fast Course Library load — see that script's own
+    doc comment. CI regenerates and auto-commits it on every push to main,
+    but that auto-commit can't push on a pull_request from a fork
+    (GITHUB_TOKEN is read-only there), so a fork PR that adds/edits a
+    course would otherwise merge with a silently stale catalog.json and no
+    warning. This regenerates it in-memory and diffs against what's
+    actually committed, catching that case at PR-review time instead."""
+    report = Report("catalog.json")
+    tools_dir = os.path.join(repo_root, "tools")
+    if tools_dir not in sys.path:
+        sys.path.insert(0, tools_dir)
+    import build_catalog  # noqa: E402 (deliberately imported late — needs sys.path set first)
+
+    committed_path = os.path.join(repo_root, "catalog.json")
+    if not os.path.isfile(committed_path):
+        report.error(
+            "catalog.json is missing from the repo root — run `python tools/build_catalog.py` "
+            "and commit the result (CI does this automatically on push to main, but not on a fork PR)"
+        )
+        return report
+
+    try:
+        committed = json.loads(open(committed_path, encoding="utf-8").read())
+    except json.JSONDecodeError as e:
+        report.error(f"catalog.json is not valid JSON: {e}")
+        return report
+
+    fresh = build_catalog.build_catalog(build_catalog.Path(repo_root))
+    if committed != fresh:
+        report.error(
+            "catalog.json is out of date with the actual course folders — run "
+            "`python tools/build_catalog.py` and commit the result (CI does this automatically "
+            "on push to main, but not on a fork PR)"
+        )
+    return report
 
 
 def check_id_uniqueness(reports_and_metas):
@@ -639,12 +833,14 @@ def main():
     repo_root = os.path.dirname(os.path.abspath(__file__))
     results = []
 
+    catalog_report = None
     if args.all:
         for entry in sorted(os.listdir(repo_root)):
             full = os.path.join(repo_root, entry)
             if os.path.isdir(full) and os.path.isfile(os.path.join(full, "meta.json")):
                 results.append(validate_course_folder(full, check_source=args.source))
         check_id_uniqueness(results)
+        catalog_report = check_catalog_freshness(repo_root)
     elif args.course:
         results.append(validate_course_folder(args.course, check_source=args.source))
     else:
@@ -652,6 +848,8 @@ def main():
         sys.exit(1)
 
     reports = [r for r, _meta in results]
+    if catalog_report is not None:
+        reports.append(catalog_report)
     for r in reports:
         r.print()
 

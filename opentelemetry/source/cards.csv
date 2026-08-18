@@ -1,0 +1,267 @@
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+1,1,multiple_choice,main,,What does 'observability' mean?,See internals|Unit tests|Read logs,0,,,Observability is answering new questions using data a system already emits.
+2,1,true_false,preview,1,Observability lets you answer new questions without new code.,,true,,,
+3,1,true_false,exercise,1,Observability needs new code per question.,,false,,,The point is answering new questions from existing telemetry.
+4,1,multiple_choice,exercise,1,Observability is mainly about:,Inspectability|Code style|Test count,0,,,
+5,1,select_blank,exercise,1,Good observability avoids ___ deploys to debug.,new|faster|fewer,0,,,
+6,1,multiple_choice,exercise,1,Monitoring watches known things; observability:,Answers new|Same thing|Only logs,0,,,
+7,1,true_false,exercise,1,Observability only matters during outages.,,false,,,It also aids performance tuning and capacity planning.
+8,2,multiple_choice,main,,Which signal shows a request's path?,Traces|Metrics|Logs,0,,,
+9,2,multiple_choice,preview,8,Which signal shows a request's path?,Traces|Metrics|Logs,0,,,
+10,2,multiple_choice,exercise,8,Best signal for 'is latency rising'?,Metrics|Traces|Logs,0,,,"Metrics aggregate over time, ideal for trends."
+11,2,multiple_choice,exercise,8,A discrete timestamped event is a:,Log|Metric|Trace,0,,,
+12,2,true_false,exercise,8,Profiles show CPU time by code path.,,true,,,Continuous profiling is OTel's newest signal.
+13,2,match_pairs,exercise,8,Match signal to its strength.,Traces↔flow|Metrics↔trends|Logs↔events|Profiles↔CPU time,,,,
+14,2,multi_select,exercise,8,Which are OTel signals?,Traces|Metrics|Logs|Screenshots,0|1|2,,,
+15,3,multiple_choice,main,,What problem did OTel solve?,Vendor lock-in|Slow networks|No logging,0,,,
+16,3,true_false,preview,15,Old proprietary agents locked code to one vendor.,,true,,,
+17,3,true_false,exercise,15,Switching vendors once meant re-instrumenting.,,true,,,Proprietary SDKs tied code to one backend.
+18,3,multiple_choice,exercise,15,OTel merged which two projects?,OpenTracing+Census|Prometheus+Grafana|ELK+Jaeger,0,,,OpenTelemetry formed in 2019 from OpenTracing and OpenCensus.
+19,3,select_blank,exercise,15,OpenTelemetry is a ___ standard.,vendor-neutral|proprietary|closed,0,,,
+20,3,multiple_choice,exercise,15,Who governs OpenTelemetry?,CNCF|One company|No one,0,,,
+21,3,true_false,exercise,15,OTel only works with one backend.,,false,,,It exports to any compatible backend.
+22,4,multiple_choice,main,,Switching backends with OTel needs:,No changes|A rewrite|New code,0,,,
+23,4,true_false,preview,22,Switching backends with OTel needs no code changes.,,true,,,
+24,4,true_false,exercise,22,A proprietary agent works with any backend.,,false,,,Proprietary formats usually lock to one vendor.
+25,4,multiple_choice,exercise,22,OTel's edge over proprietary agents:,Portability|Free cost|Faster CPUs,0,,,
+26,4,select_blank,exercise,22,"Switching backends means changing ___, not code.",config|everything|nothing,0,,,
+27,4,multiple_choice,exercise,22,Data you can't export elsewhere is:,Lock-in|Open|Neutral,0,,,
+28,4,true_false,exercise,22,OTel can export to two backends at once.,,true,,,The Collector can fan out to several exporters.
+29,5,multiple_choice,main,,Libraries should depend on the OTel:,API|SDK|Collector,0,,,Library authors call the API only; the app wires in an SDK.
+30,5,true_false,preview,29,"Libraries should import OTel's API, not its SDK.",,true,,,
+31,5,true_false,exercise,29,A library should import the SDK directly.,,false,,,Libraries depend on the API; the app picks an SDK.
+32,5,multiple_choice,exercise,29,The SDK's job is:,Process it|Define shape|Nothing,0,,,
+33,5,select_blank,exercise,29,The API is stable; the ___ is swappable.,SDK|prompt|language,0,,,
+34,5,multiple_choice,exercise,29,"With no SDK configured, API calls:",No-op safely|Crash|Block,0,,,
+35,5,true_false,exercise,29,API and SDK ship as one package.,,false,,,They're deliberately separate.
+36,6,multiple_choice,main,,Auto-instrumenting Express requests is a:,Library|Manual span|Impossible task,0,,,
+37,6,true_false,preview,36,Instrumentation libraries auto-generate spans for common frameworks.,,true,,,
+38,6,true_false,exercise,36,Manual instrumentation covers business logic.,,true,,,Libraries can't know your domain-specific operations.
+39,6,multiple_choice,exercise,36,Instrumentation libraries usually cover:,Frameworks|Your code only|Nothing,0,,,
+40,6,select_blank,exercise,36,Manual spans live in your ___ code.,app|vendor's|collector's,0,,,
+41,6,multiple_choice,exercise,36,Mixing auto- and manual instrumentation is:,Common|Forbidden|Redundant,0,,,
+42,6,true_false,exercise,36,Libraries remove all need for manual spans.,,false,,,"They cover common cases, not custom logic."
+43,7,multiple_choice,main,,Auto-instrumentation usually needs:,No code edits|A rewrite|New language,0,,,
+44,7,true_false,preview,43,Auto-instrumentation needs no source code edits.,,true,,,
+45,7,true_false,exercise,43,A Java agent can auto-instrument untouched code.,,true,,,It attaches via bytecode manipulation at startup.
+46,7,multiple_choice,exercise,43,Auto-instrumentation is fastest for:,Quick start|Deep logic|Removing spans,0,,,
+47,7,select_blank,exercise,43,Auto-instrumentation is a ___ way to start.,low-effort|manual|code-heavy,0,,,
+48,7,multiple_choice,exercise,43,Auto-instrumentation commonly misses:,Business spans|HTTP calls|DB calls,0,,,
+49,7,true_false,exercise,43,Auto and manual instrumentation can combine.,,true,,,"Auto-instrument the framework, add manual spans for logic."
+50,8,multiple_choice,main,,A trace represents:,A request|CPU load|One log,0,,,
+51,8,true_false,preview,50,A trace records one request end-to-end.,,true,,,
+52,8,true_false,exercise,50,A trace can span multiple services.,,true,,,That's what makes distributed tracing useful.
+53,8,multiple_choice,exercise,50,A trace is made of:,Spans|Metrics|Log lines,0,,,
+54,8,select_blank,exercise,50,A trace tracks one ___ end-to-end.,request|server|deploy,0,,,
+55,8,multiple_choice,exercise,50,Traces mainly help debug:,"Latency, errors|CPU temp|Disk space",0,,,
+56,8,true_false,exercise,50,A single-service app gains nothing from tracing.,,false,,,Even one service benefits from seeing internal spans.
+57,9,multiple_choice,main,,A span always has a:,"Start, duration|Fixed color|Log level",0,,,
+58,9,true_false,preview,57,A span has a start time and duration.,,true,,,
+59,9,true_false,exercise,57,A span can represent a DB query.,,true,,,Any timed unit of work can be a span.
+60,9,multiple_choice,exercise,57,A span's duration comes from:,Elapsed time|A config|A guess,0,,,
+61,9,select_blank,exercise,57,A span is one unit of ___.,work|storage|config,0,,,
+62,9,multiple_choice,exercise,57,Related spans together form a:,Trace|Metric|Log stream,0,,,
+63,9,true_false,exercise,57,A span can't carry any custom data.,,false,,,Spans carry attributes and events.
+64,10,multiple_choice,main,,http.status_code is a span:,Attribute|Event|Trace ID,0,,,
+65,10,select_blank,preview,64,http.status_code is a span ___.,attribute|event|password,0,,,
+66,10,true_false,exercise,64,An event has its own timestamp.,,true,,,Events mark a moment inside the span.
+67,10,multiple_choice,exercise,64,A mid-span exception is best recorded as:,An event|New trace|Nothing,0,,,
+68,10,select_blank,exercise,64,Attributes are ___ pairs on a span.,key-value|random|encrypted,0,,,
+69,10,multiple_choice,exercise,64,Attributes mainly help you:,Filter spans|Change duration|Delete traces,0,,,
+70,10,true_false,exercise,64,Span attributes and log fields serve similar goals.,,true,,,Both attach structured context.
+71,11,multiple_choice,main,,Handling an incoming request is span kind:,Server|Client|Internal,0,,,
+72,11,multiple_choice,preview,71,An incoming request span kind is:,Server|Client|Internal,0,,,
+73,11,true_false,exercise,71,An outbound call is kind 'client'.,,true,,,Client kind marks the caller's side.
+74,11,multiple_choice,exercise,71,Publishing to a queue uses kind:,Producer|Consumer|Internal,0,,,
+75,11,multiple_choice,exercise,71,Reading from a queue uses kind:,Consumer|Producer|Server,0,,,
+76,11,select_blank,exercise,71,Span kind describes the span's ___.,role|color|duration,0,,,
+77,11,match_pairs,exercise,71,Match span kind to its use.,Server↔handles request|Client↔makes request|Producer↔sends message|Consumer↔reads message,,,,
+78,12,multiple_choice,main,,Calling another service creates a:,Child span|New trace|Duplicate,0,,,
+79,12,true_false,preview,78,A child span's parent triggered it.,,true,,,
+80,12,true_false,exercise,78,A trace's spans form a tree.,,true,,,This tree is what a trace waterfall shows.
+81,12,multiple_choice,exercise,78,A span with no parent is the:,Root span|Leaf span|Orphan,0,,,
+82,12,select_blank,exercise,78,A child span usually fits ___ its parent.,within|outside|instead of,0,,,
+83,12,multiple_choice,exercise,78,Root span duration roughly equals:,Total time|Zero|One DB,0,,,
+84,12,true_false,exercise,78,A span can have two parents.,,false,,,Each span has exactly one parent.
+85,13,multiple_choice,main,,All spans in a trace share the:,Trace ID|Span ID|Service name,0,,,
+86,13,true_false,preview,85,Every span in a trace shares one trace ID.,,true,,,
+87,13,true_false,exercise,85,Two spans share the same span ID.,,false,,,Span IDs are unique per span.
+88,13,multiple_choice,exercise,85,A span references its parent via:,Parent ID|Trace ID|Nothing,0,,,
+89,13,select_blank,exercise,85,Trace ID ___ spans as one request.,groups|separates|deletes,0,,,
+90,13,multiple_choice,exercise,85,Trace and span IDs are generated:,Randomly|Sequentially|By hand,0,,,
+91,13,true_false,exercise,85,A trace ID is reused across requests.,,false,,,Each request gets a fresh trace ID.
+92,14,multiple_choice,main,,W3C Trace Context propagates via an:,HTTP header|Cookie|Query param,0,,,
+93,14,select_blank,preview,92,traceparent is a ___ HTTP header.,standard|secret|random,0,,,
+94,14,true_false,exercise,92,traceparent carries the trace ID.,,true,,,It also carries the parent span ID.
+95,14,multiple_choice,exercise,92,"Without propagation, calls get:",Broken traces|One trace|No traces,0,,,
+96,14,select_blank,exercise,92,traceparent is a ___ standard.,W3C|proprietary|deprecated,0,,,
+97,14,multiple_choice,exercise,92,W3C Trace Context is recommended for being:,Vendor-neutral|Fastest|Java-only,0,,,
+98,14,true_false,exercise,92,Most vendors now support W3C Trace Context.,,true,,,It's the widely adopted default.
+99,15,multiple_choice,main,,Baggage carries:,Business context|Trace ID|Span duration,0,,,
+100,15,true_false,preview,99,"Baggage carries business context, not trace IDs.",,true,,,
+101,15,true_false,exercise,99,Baggage uses a separate header from traceparent.,,true,,,"traceparent for trace context, baggage for its own header."
+102,15,multiple_choice,exercise,99,A good baggage use case:,User tier|Passwords|Encryption keys,0,,,
+103,15,select_blank,exercise,99,Baggage travels ___ the trace.,alongside|instead of|before,0,,,
+104,15,multiple_choice,exercise,99,Large baggage payloads risk:,Header bloat|Faster calls|No effect,0,,,
+105,15,true_false,exercise,99,Baggage auto-becomes span attributes everywhere.,,false,,,You must explicitly read and attach baggage.
+106,16,multiple_choice,main,,Injecting context happens on the:,Sending side|Receiving side|Neither,0,,,
+107,16,true_false,preview,106,The sender injects context into request headers.,,true,,,
+108,16,true_false,exercise,106,Extracting context happens on the receiver.,,true,,,The server reads headers to continue the trace.
+109,16,order,exercise,106,Order the propagation steps.,Create span|Inject header|Extract header|Continue trace,,,,
+110,16,multiple_choice,exercise,106,A dropped trace header causes:,Broken trace|Faster trace|No effect,0,,,
+111,16,select_blank,exercise,106,Propagation needs support on ___ sides.,both|neither|one,0,,,
+112,16,true_false,exercise,106,Context propagation works only within one process.,,false,,,Its purpose is crossing process boundaries.
+113,17,multiple_choice,main,,A metric that only increases is a:,Counter|Gauge|Histogram,0,,,
+114,17,multiple_choice,preview,113,A metric that only increases is a:,Counter|Gauge|Histogram,0,,,
+115,17,true_false,exercise,113,A gauge can go up or down.,,true,,,Gauges represent a current value.
+116,17,multiple_choice,exercise,113,Latency distribution is best captured by a:,Histogram|Counter|Gauge,0,,,
+117,17,match_pairs,exercise,113,Match instrument to its use.,Counter↔requests served|Gauge↔memory now|Histogram↔latency spread,,,,
+118,17,select_blank,exercise,113,A counter's value only ever ___.,increases|decreases|resets,0,,,
+119,17,multiple_choice,exercise,113,CPU temperature right now fits a:,Gauge|Counter|Histogram,0,,,
+120,18,multiple_choice,main,,Cumulative temporality reports:,Running total|Just delta|A sample,0,,,
+121,18,select_blank,preview,120,Cumulative temporality reports a running ___.,total|sample|delta,0,,,
+122,18,true_false,exercise,120,Delta temporality resets after each export.,,true,,,It reports only the change since last export.
+123,18,multiple_choice,exercise,120,Prometheus typically expects:,Cumulative counters|Delta only|No counters,0,,,
+124,18,select_blank,exercise,120,Temporality decides how a metric ___ over time.,accumulates|renders|colors,0,,,
+125,18,multiple_choice,exercise,120,The wrong temporality causes:,Wrong totals|Faster exports|No effect,0,,,
+126,18,true_false,exercise,120,Temporality matters most for counters and histograms.,,true,,,"Gauges are instantaneous, so it applies less."
+127,19,multiple_choice,main,,An OTel log record can include a:,Trace ID|Free text|Nothing extra,0,,,
+128,19,true_false,preview,127,"OTel logs are structured, not free text.",,true,,,
+129,19,true_false,exercise,127,Structured logs are easier to query.,,true,,,Fields let you filter instead of parsing strings.
+130,19,multiple_choice,exercise,127,A log's severity field shows:,How serious|Duration|Span kind,0,,,
+131,19,select_blank,exercise,127,"OTel logs carry ___ fields, not just text.",structured|encrypted|binary,0,,,
+132,19,multiple_choice,exercise,127,A log's 'body' field holds:,The message|Trace ID|Span kind,0,,,
+133,19,true_false,exercise,127,OTel logs can never reference a trace.,,false,,,Attaching trace/span IDs enables correlation.
+134,20,multiple_choice,main,,What links a log to its trace?,Shared ID|Same filename|Log level,0,,,
+135,20,true_false,preview,134,Shared trace IDs let you correlate logs.,,true,,,
+136,20,true_false,exercise,134,Correlation lets you jump trace to logs.,,true,,,That's the point of shared identifiers.
+137,20,multiple_choice,exercise,134,Correlated signals share:,Trace/span IDs|Random UUIDs|File paths,0,,,
+138,20,select_blank,exercise,134,Correlation turns signals into one ___ story.,debugging|billing|random,0,,,
+139,20,multiple_choice,exercise,134,"Without correlation, debugging means:",Manual searching|Instant answers|No effort,0,,,
+140,20,true_false,exercise,134,Resource attributes also help correlation.,,true,,,They narrow logs/metrics to the same service.
+141,21,multiple_choice,main,,service.name is a:,Resource attribute|Span attribute|Metric name,0,,,
+142,21,select_blank,preview,141,service.name is a ___ attribute.,resource|span|log,0,,,
+143,21,true_false,exercise,141,Resource attributes are set once per process.,,true,,,"They describe the emitter, not one span."
+144,21,multiple_choice,exercise,141,Resource attributes attach to:,Everything emitted|Only traces|One span,0,,,
+145,21,select_blank,exercise,141,service.name identifies ___ produced telemetry.,which service|which user|which country,0,,,
+146,21,multiple_choice,exercise,141,Missing service.name makes dashboards:,Hard to filter|Faster|More accurate,0,,,
+147,21,true_false,exercise,141,Resource attributes can include pod name.,,true,,,k8s.pod.name is a standard resource attribute.
+148,22,multiple_choice,main,,http.method comes from OTel's:,Conventions|Random naming|Each team,0,,,
+149,22,true_false,preview,148,Semantic conventions standardize attribute names.,,true,,,
+150,22,true_false,exercise,148,Conventions enable shared dashboards.,,true,,,Consistent names let one dashboard work everywhere.
+151,22,multiple_choice,exercise,148,"Without conventions, teams might:",Use odd names|Auto-agree|Skip fields,0,,,
+152,22,select_blank,exercise,148,Conventions standardize attribute ___ across services.,names|colors|IDs,0,,,
+153,22,multiple_choice,exercise,148,db.system is a convention for:,Database type|HTTP status|Span kind,0,,,
+154,22,true_false,exercise,148,"Following conventions is optional, not enforced.",,true,,,"The SDK doesn't force it, but strongly recommends it."
+155,23,multiple_choice,main,,OTLP is OpenTelemetry's:,Wire protocol|Query language|Storage engine,0,,,
+156,23,true_false,preview,155,OTLP is OpenTelemetry's own wire protocol.,,true,,,
+157,23,true_false,exercise,155,OTLP can run over gRPC or HTTP.,,true,,,Both transports are supported.
+158,23,multiple_choice,exercise,155,OTLP moves data between:,SDK-Collector-backend|Disk only|One process,0,,,
+159,23,select_blank,exercise,155,OTLP is OTel's own vendor-___ format.,neutral|specific|locked,0,,,
+160,23,multiple_choice,exercise,155,A backend without OTLP support needs:,A translator|Nothing special|New protocol,0,,,
+161,23,true_false,exercise,155,OTLP is just another name for HTTP.,,false,,,"OTLP can use HTTP, but is its own protocol."
+162,24,multiple_choice,main,,An exporter's job is to:,Send data|Create spans|Sample traces,0,,,
+163,24,true_false,preview,162,An exporter sends telemetry to a destination.,,true,,,
+164,24,true_false,exercise,162,A console exporter helps local debugging.,,true,,,It prints telemetry instead of using a real backend.
+165,24,multiple_choice,exercise,162,Switching backends usually means changing the:,Exporter|App logic|Trace ID,0,,,
+166,24,select_blank,exercise,162,An exporter defines where telemetry ___ up.,ends|starts|vanishes,0,,,
+167,24,multiple_choice,exercise,162,Multiple exporters can run:,At once|Never together|Collector only,0,,,
+168,24,true_false,exercise,162,An exporter only ever sends traces.,,false,,,"Exporters exist for traces, metrics, and logs."
+169,25,multiple_choice,main,,The Collector sits between the app and the:,Backend|Kernel|Compiler,0,,,
+170,25,true_false,preview,169,The Collector sits between app and backend.,,true,,,
+171,25,true_false,exercise,169,The Collector is required to use OTel.,,false,,,It's optional but recommended at scale.
+172,25,multiple_choice,exercise,169,A Collector benefit is:,Decoupling backends|Faster CPUs|Free storage,0,,,
+173,25,select_blank,exercise,169,The Collector is optional but ___.,recommended|forbidden|useless,0,,,
+174,25,multiple_choice,exercise,169,Sending data straight to a backend is:,Direct export|Impossible|Illegal,0,,,
+175,25,true_false,exercise,169,The Collector can run as its own service.,,true,,,It's typically its own process or container.
+176,26,order,main,,Order the Collector pipeline stages.,Receiver|Processor|Exporter,,,,
+177,26,multiple_choice,preview,176,First stage of a Collector pipeline?,Receiver|Processor|Exporter,0,,,
+178,26,multiple_choice,exercise,176,Data enters the Collector via a:,Receiver|Exporter|Sampler,0,,,
+179,26,true_false,exercise,176,Processors run in configured order.,,true,,,Each processor's output feeds the next.
+180,26,true_false,exercise,176,A processor can drop or filter data.,,true,,,That's how filter/sampling processors work.
+181,26,select_blank,exercise,176,A pipeline handles one ___ type at a time.,signal|language|region,0,,,
+182,26,multiple_choice,exercise,176,The final pipeline stage is the:,Exporter|Receiver|Sampler,0,,,
+183,27,multiple_choice,main,,Which processor prevents OOM crashes?,memory_limiter|batch|filter,0,,,
+184,27,select_blank,preview,183,The ___ processor prevents OOM crashes.,memory_limiter|batch|filter,0,,,
+185,27,true_false,exercise,183,batch groups data for efficient export.,,true,,,"Fewer, larger exports beat many tiny ones."
+186,27,multiple_choice,exercise,183,Dropping unwanted spans by rule uses:,filter|batch|receiver,0,,,
+187,27,select_blank,exercise,183,memory_limiter protects against ___ crashes.,out-of-memory|network|disk,0,,,
+188,27,multiple_choice,exercise,183,Production pipelines almost always include:,memory_limiter|No processors|Only exporters,0,,,
+189,27,true_false,exercise,183,Processors are optional in a pipeline.,,true,,,Data can flow receiver straight to exporter.
+190,28,multiple_choice,main,,Sampling mainly controls:,Cost & volume|Trace accuracy|Span naming,0,,,
+191,28,true_false,preview,190,Sampling keeps only some traces to save cost.,,true,,,
+192,28,true_false,exercise,190,Sampling means keeping only some traces.,,true,,,You trade completeness for lower cost.
+193,28,multiple_choice,exercise,190,A high-traffic service usually needs:,Sub-100% sampling|No sampling|Zero traces,0,,,
+194,28,select_blank,exercise,190,Sampling trades completeness for lower ___.,cost|accuracy|latency,0,,,
+195,28,multiple_choice,exercise,190,A 10% sampling rate keeps roughly:,1-in-10|All traces|No traces,0,,,
+196,28,true_false,exercise,190,Sampling only matters for tiny apps.,,false,,,It matters most at high traffic volume.
+197,29,multiple_choice,main,,Deciding before the trace finishes is:,Head-based|Tail-based|Neither,0,,,
+198,29,multiple_choice,preview,197,Deciding after a trace ends is:,Tail-based|Head-based|Neither,0,,,
+199,29,true_false,exercise,197,Tail-based sampling can favor error traces.,,true,,,It decides after seeing the outcome.
+200,29,multiple_choice,exercise,197,Head-based sampling's downside is:,Outcome-blind|Too costly|Needs buffering,0,,,
+201,29,select_blank,exercise,197,Tail-based sampling decides ___ the trace ends.,after|before|never,0,,,
+202,29,multiple_choice,exercise,197,Tail-based sampling generally needs:,Buffering traces|No infra|Head-based first,0,,,
+203,29,true_false,exercise,197,Head-based sampling is simpler at scale.,,true,,,No buffering of whole traces is needed.
+204,30,multiple_choice,main,,A Collector as a K8s DaemonSet is the:,Agent pattern|Gateway pattern|Neither,0,,,
+205,30,select_blank,preview,204,A Collector per host is the ___ pattern.,agent|gateway|neither,0,,,
+206,30,true_false,exercise,204,The gateway pattern centralizes processing.,,true,,,One shared fleet handles data from all apps.
+207,30,multiple_choice,exercise,204,The agent pattern deploys a Collector:,"Per host|Once, centrally|Never",0,,,
+208,30,select_blank,exercise,204,Agent and gateway patterns can be ___.,combined|never mixed|identical,0,,,
+209,30,multiple_choice,exercise,204,A benefit of the agent pattern:,Local buffering|Zero infra|No config,0,,,
+210,30,true_false,exercise,204,Only one deployment pattern is allowed.,,false,,,Many orgs combine both patterns.
+211,31,multiple_choice,main,,A resource detector auto-fills:,Host metadata|Span duration|User passwords,0,,,
+212,31,true_false,preview,211,SDK setup configures a sampler and exporters.,,true,,,
+213,31,true_false,exercise,211,SDK setup includes choosing a sampler.,,true,,,The sampler decides which traces get recorded.
+214,31,multiple_choice,exercise,211,SDK exporters determine:,Data destination|Span names|Sample rate,0,,,
+215,31,select_blank,exercise,211,Resource detectors auto-fill ___ attributes.,resource|span|log,0,,,
+216,31,multiple_choice,exercise,211,Hand-setting every resource attribute is:,Usually unneeded|Only way|Required always,0,,,
+217,31,true_false,exercise,211,SDK config typically happens once at startup.,,true,,,It wires everything before telemetry starts.
+218,32,multiple_choice,main,,An HTTP server span typically records:,Status code|CPU temp|Disk usage,0,,,
+219,32,true_false,preview,218,An HTTP server span records the status code.,,true,,,
+220,32,true_false,exercise,218,An HTTP span starts when the request arrives.,,true,,,It ends once the response is sent.
+221,32,multiple_choice,exercise,218,http.route as an attribute helps you:,By endpoint|Encrypt traffic|Skip sampling,0,,,
+222,32,code_fill,exercise,218,Fill in the method to start a span.,tracer.___('handle')|startSpan,,,,Most OTel SDKs expose a startSpan call.
+223,32,select_blank,exercise,218,HTTP instrumentation follows OTel's ___.,conventions|randomness|encryption,0,,,
+224,32,multiple_choice,exercise,218,Never ending a span eventually causes:,Leaked span|Faster requests|Nothing,0,,,
+225,33,multiple_choice,main,,db.system as an attribute records the:,Database type|Row count|Query result,0,,,
+226,33,true_false,preview,225,DB spans should avoid raw query values.,,true,,,
+227,33,true_false,exercise,225,Raw query parameters should stay out of spans.,,true,,,They can leak sensitive user data.
+228,33,multiple_choice,exercise,225,A slow DB span helps you spot:,Query issues|HTTP codes|Disk temp,0,,,
+229,33,select_blank,exercise,225,DB spans should avoid leaking ___ values.,sensitive|public|empty,0,,,
+230,33,multiple_choice,exercise,225,db.operation might record:,SELECT|200|3.7ms,0,,,
+231,33,true_false,exercise,225,Most common DB drivers have ready libraries.,,true,,,Most popular DB clients have instrumentation available.
+232,34,multiple_choice,main,,Queue context propagation must be handled:,Manually|Automatically|It's impossible,0,,,
+233,34,true_false,preview,232,Queue context must be injected manually.,,true,,,
+234,34,true_false,exercise,232,A producer injects context before sending.,,true,,,The consumer extracts it to continue the trace.
+235,34,multiple_choice,exercise,232,"Without this, a queued trace would:",Splits apart|Stay linked|Vanish,0,,,
+236,34,select_blank,exercise,232,Async propagation needs the ___ to carry context.,message|cable|database,0,,,
+237,34,multiple_choice,exercise,232,"A consumer span's parent, once extracted, is the:",Producer's span|New root|Nothing,0,,,
+238,34,true_false,exercise,232,Kafka and RabbitMQ both support message-metadata propagation.,,true,,,Most major brokers support carrying context this way.
+239,35,multiple_choice,main,,Continuous profiling shows where:,CPU usage|Packets go|Disk fills,0,,,
+240,35,true_false,preview,239,Profiling shows where CPU time goes.,,true,,,
+241,35,true_false,exercise,239,Profiling became a signal in 2026.,,true,,,"It joined traces, metrics, and logs as signal four."
+242,35,multiple_choice,exercise,239,Profiling is most useful for:,Hot paths|Naming spans|Sampling traces,0,,,
+243,35,select_blank,exercise,239,OTel profiling can correlate with the active ___.,trace|database|sampler,0,,,
+244,35,multiple_choice,exercise,239,A profile sample typically captures a:,Call stack|Full body|DB schema,0,,,
+245,35,true_false,exercise,239,Profiling replaces tracing entirely.,,false,,,It's a complementary fourth signal.
+246,36,multiple_choice,main,,Switching from Jaeger to a new backend changes:,Exporter config|App code|Trace format,0,,,
+247,36,true_false,preview,246,OTel lets you switch backends via config.,,true,,,
+248,36,true_false,exercise,246,Prometheus is a common metrics backend.,,true,,,It's a popular choice for metrics storage.
+249,36,multiple_choice,exercise,246,Jaeger is typically used as a:,Tracing backend|Metrics-only tool|Log parser,0,,,
+250,36,select_blank,exercise,246,Neutrality means the backend isn't ___ in.,locked|opened|chosen,0,,,
+251,36,multiple_choice,exercise,246,A team evaluating backends can usually:,Try several|Pick once|Rewrite always,0,,,
+252,36,true_false,exercise,246,Every backend needs totally different instrumentation.,,false,,,Instrumentation stays the same; only exporters differ.
+253,37,multiple_choice,main,,A raw user ID on every metric risks:,Cardinality blowup|Faster queries|No effect,0,,,
+254,37,true_false,preview,253,High-cardinality labels blow up storage cost.,,true,,,
+255,37,true_false,exercise,253,Too many low-value spans bury signal.,,true,,,Over-instrumentation creates noise hiding what matters.
+256,37,multiple_choice,exercise,253,High cardinality mainly hurts:,Storage/query cost|Trace ID format|Nothing,0,,,
+257,37,select_blank,exercise,253,An unbounded metric label causes ___ cardinality.,high|low|zero,0,,,
+258,37,multiple_choice,exercise,253,A good fix for high cardinality:,Use attrs|Delete telemetry|Ignore it,0,,,Traces tolerate high-cardinality attributes far better than metric labels.
+259,37,true_false,exercise,253,Every possible span should be instrumented.,,false,,,Instrument what's genuinely useful.
+260,38,multiple_choice,main,,The OTel Operator manages Collectors as K8s:,Custom resources|Cron jobs|Manual scripts,0,,,
+261,38,true_false,preview,260,The Operator manages Collectors as K8s resources.,,true,,,
+262,38,true_false,exercise,260,The Operator can inject auto-instrumentation.,,true,,,It patches pod specs at deploy time.
+263,38,true_false,exercise,260,The Operator manages Collectors via K8s custom resources.,,true,,,It exposes Collector config as a Kubernetes CRD you apply like any other manifest.
+264,38,select_blank,exercise,260,"The Operator manages Collectors ___, not by hand.",declaratively|manually|never,0,,,
+265,38,multiple_choice,exercise,260,Auto-instrumentation injection happens via a:,Sidecar|Dockerfile edit|SSH session,0,,,
+266,38,true_false,exercise,260,The Operator is the only way to run OTel.,,false,,,You can also deploy the Collector manually.

@@ -44,6 +44,8 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 22px;
   padding: 18px 32px;
   border-bottom: 1px solid var(--border);
   position: sticky;
@@ -58,6 +60,7 @@ img { max-width: 100%; display: block; }
   text-decoration: none;
   letter-spacing: -0.01em;
 }
+.header-nav { display: flex; align-items: center; gap: 22px; }
 .header-link {
   color: var(--text-muted);
   text-decoration: none;
@@ -225,6 +228,22 @@ img { max-width: 100%; display: block; }
 .section { margin-bottom: 40px; }
 .section h2 { font-size: 1.15rem; margin: 0 0 16px; letter-spacing: -0.01em; }
 
+/* Help / Contribute pages — same shell as the course detail page. */
+.content-main { max-width: 720px; margin: 0 auto; padding: 32px 24px 64px; }
+.content-main h1 { font-size: 1.9rem; margin: 0 0 12px; letter-spacing: -0.02em; }
+.content-intro { color: var(--text-muted); font-size: 1rem; margin: 0 0 40px; }
+.content-main .section p { margin: 0 0 12px; }
+.content-main .section a { color: var(--accent); }
+.help-steps { margin: 0; padding-left: 22px; }
+.help-steps li { margin-bottom: 10px; }
+.content-main code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--accent-soft);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+}
+
 .type-bar {
   display: flex;
   height: 10px;
@@ -298,3 +317,8 @@ img { max-width: 100%; display: block; }
   font-size: 0.85rem;
 }
 .site-footer a { color: var(--accent); }
+.footer-credit {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}

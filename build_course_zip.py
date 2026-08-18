@@ -91,6 +91,12 @@ def main():
     with open(cards_path, encoding="utf-8-sig") as f:
         cards_text = f.read()
 
+    glossary_path = os.path.join(source_dir, "glossary.csv")
+    glossary_text = None
+    if os.path.isfile(glossary_path):
+        with open(glossary_path, encoding="utf-8-sig") as f:
+            glossary_text = f.read()
+
     meta_rows = read_csv_text(meta_text)
     if not meta_rows or not (meta_rows[0].get("slug") or "").strip():
         print("source/meta.csv is missing a \"slug\" column/value.", file=sys.stderr)
@@ -125,12 +131,15 @@ def main():
         zf.writestr("meta.csv", meta_text)
         zf.writestr("units.csv", units_text)
         zf.writestr("cards.csv", cards_text)
+        if glossary_text is not None:
+            zf.writestr("glossary.csv", glossary_text)
         for filename, path in resolved.items():
             zf.write(path, filename)
 
     size_kb = round(os.path.getsize(out_path) / 1024)
+    glossary_note = " + glossary.csv" if glossary_text is not None else ""
     print(
-        f"Wrote {out_path} ({size_kb} KB — meta/units/cards.csv + {len(resolved)} media file(s))",
+        f"Wrote {out_path} ({size_kb} KB — meta/units/cards.csv{glossary_note} + {len(resolved)} media file(s))",
         file=sys.stderr,
     )
     print(f"slug={slug} version={version}")

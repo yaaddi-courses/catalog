@@ -1,0 +1,62 @@
+{
+  "id": "871fceeaa2b1",
+  "title": "OpenTelemetry",
+  "description": "The vendor-neutral standard for traces, metrics, and logs — from a single span to a full Collector pipeline in production. The final deck (running OTel on Kubernetes) goes smoothly if you already know pods and Deployments — see this app's Kubernetes Fundamentals course first if those are new.",
+  "image": "cover.png",
+  "file": "opentelemetry.zip",
+  "version": "1.0.0",
+  "tags": [
+    "observability",
+    "opentelemetry",
+    "devops",
+    "monitoring",
+    "intermediate"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-17",
+      "notes": "Initial release â€” 38 decks, 266 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What Observability Actually Means",
+    "The Signals: Traces, Metrics, Logs, and Profiles",
+    "Why OpenTelemetry Exists",
+    "Vendor-Neutral vs. Proprietary Agents",
+    "The API vs. SDK Separation",
+    "Instrumentation Libraries vs. Manual Instrumentation",
+    "Auto-Instrumentation, Briefly",
+    "What a Trace Actually Is",
+    "What a Span Represents",
+    "Span Attributes and Events",
+    "Span Kind",
+    "Parent-Child Span Relationships",
+    "Trace ID and Span ID",
+    "W3C Trace Context Propagation",
+    "Baggage: Carrying Business Context",
+    "Context Propagation Across Service Boundaries",
+    "Metrics: Counters, Gauges, and Histograms",
+    "Metric Aggregation Temporality",
+    "Structured Logs in OpenTelemetry",
+    "Correlating Logs, Traces, and Metrics",
+    "Resource Attributes",
+    "Semantic Conventions",
+    "The OpenTelemetry Protocol (OTLP)",
+    "Exporters: Where Telemetry Goes",
+    "The OpenTelemetry Collector, Briefly",
+    "Collector Pipelines: Receivers, Processors, Exporters",
+    "Common Collector Processors",
+    "Sampling: Why You Can't Keep Everything",
+    "Head-Based vs. Tail-Based Sampling",
+    "Deploying the Collector: Agent vs. Gateway Pattern",
+    "SDK Configuration: Samplers, Exporters, Resource Detectors",
+    "Instrumenting an HTTP Service",
+    "Instrumenting Database Calls",
+    "Propagating Context Across Async/Queue Boundaries",
+    "Continuous Profiling as a Fourth Signal",
+    "Choosing a Backend",
+    "Common Pitfalls",
+    "OpenTelemetry on Kubernetes"
+  ]
+}

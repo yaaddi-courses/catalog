@@ -14,8 +14,8 @@
   "changelog": [
     {
       "version": "1.0.0",
-      "date": "2026-08-15",
-      "notes": "Initial release — 41 decks, 285 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+      "date": "2026-08-18",
+      "notes": "Converted 23 practice cards that tested plain concept recall (e.g. \"control plane\", \"a chart\", \"a demo\") from typing types to tap-based select_blank -- typing cards should be reserved for actual kubectl/CLI syntax."
     }
   ],
   "toc": [

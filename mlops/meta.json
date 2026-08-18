@@ -1,0 +1,48 @@
+{
+  "id": "e401857dccd9",
+  "title": "MLOps",
+  "description": "The practices and tooling that take a machine-learning model from a notebook to reliable production: experiment tracking, model registries, feature stores, CI/CD for ML, serving, and drift monitoring. Builds on this library's docker-and-containers, kubernetes-fundamentals, harness, opentelemetry, and testing-in-software-engineering courses for the general infra/CI/testing/observability mechanics this course specializes for ML — see each for the foundation.",
+  "image": "cover.png",
+  "file": "mlops.zip",
+  "version": "1.0.0",
+  "tags": [
+    "mlops",
+    "machine-learning",
+    "devops",
+    "data-science",
+    "intermediate"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-24",
+      "notes": "Initial release — 24 decks, each pack with a preview card teaching the concept before its graded main card and practice cards."
+    }
+  ],
+  "toc": [
+    "What MLOps Actually Solves",
+    "The ML Lifecycle Loop",
+    "Reproducibility Fundamentals",
+    "Data Versioning",
+    "Experiment Tracking Fundamentals",
+    "MLflow Tracking",
+    "Weights & Biases",
+    "Model Registry & Lifecycle Stages",
+    "Feature Store Fundamentals",
+    "Feast in Practice",
+    "Pipeline Orchestration Fundamentals",
+    "Kubeflow Pipelines",
+    "Airflow and Prefect for ML",
+    "CI for ML: Data and Model Quality Gates",
+    "Continuous Training and Retraining Triggers",
+    "Packaging a Model for Deployment",
+    "Model Serving Patterns",
+    "Model Serving Tools",
+    "Safe Rollouts: Canary and Shadow Deployment",
+    "Monitoring ML Systems in Production",
+    "Data Drift and Concept Drift",
+    "Testing ML Systems",
+    "Model Governance and Model Cards",
+    "LLMOps: What Changes for Large Language Models"
+  ]
+}

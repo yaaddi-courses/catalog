@@ -1,0 +1,42 @@
+term,definition,link
+Project manager,"The person who keeps a project's scope, time, cost, risk, and people all pointed in the same direction, so the team actually ships instead of drifting.",
+Program,"A group of related projects that get managed together on purpose, because coordinating them as one unit delivers more value than running each one in isolation.",
+Product,"Something that keeps being built and improved indefinitely, like an app or service — unlike a project, a product never has a defined end date.",
+Iron triangle,"The idea that a project's scope, time, and cost are all linked — push on one (like cutting the deadline) and it usually forces a tradeoff on one of the other two.",https://en.wikipedia.org/wiki/Project_management_triangle
+Stakeholder mapping,"Identifying everyone with a real stake in a project's outcome, not just the obvious names like the CEO or the developers, so you know who to plan around before work starts.",
+Project charter,"A short document written before real work begins that states a project's purpose, goals, and boundaries, so everyone starts from the same shared understanding of what it's for.",
+Waterfall,"A project approach that moves through fixed phases in strict order, like planning then building then testing — it works well when requirements are stable, but struggles once things change late.",https://en.wikipedia.org/wiki/Waterfall_model
+Agile,"A mindset, not one fixed process, that values responding to change and shipping working software over sticking rigidly to an upfront plan or heavy documentation.",https://en.wikipedia.org/wiki/Agile_software_development
+Scrum,"A specific Agile framework built around fixed-length sprints, defined roles like the Product Owner, and recurring ceremonies like sprint planning and the daily standup.",https://en.wikipedia.org/wiki/Scrum_(software_development)
+Product Owner,"The Scrum role responsible for owning and prioritizing the product backlog, deciding what the team should build next based on what matters most.",
+Scrum Master,"The Scrum role that helps a team follow the process smoothly, removing blockers and facilitating ceremonies, rather than assigning tasks or approving the actual work.",
+Sprint,"A short, fixed-length stretch of time, commonly one to four weeks, during which a Scrum team commits to a set chunk of work, then reviews and reflects before starting the next one.",
+Sprint planning,"The meeting held before each sprint begins where the team decides what work to commit to, based on priority and how much capacity the team actually has.",
+Sprint Review,"The meeting at the end of a sprint where the team shows the work they finished to stakeholders and gathers feedback on it.",
+Kanban,"A way of managing work that visualizes tasks flowing through columns on a board and limits how much can be in progress at once, so nothing gets overloaded.",https://en.wikipedia.org/wiki/Kanban_(development)
+Work in progress,"The tasks a team is actively working on right now, as opposed to what's still waiting in the backlog or already finished — often shortened to WIP.",
+Scrumban,"A hybrid approach that blends Scrum's structure, like fixed roles and planning, with Kanban's continuous flow, often using a flexible board with a limited amount of work in progress.",
+Work breakdown structure,"Splitting one big project into smaller, more manageable pieces, then breaking each piece down further until it's small enough to estimate and assign to someone with confidence.",
+Story points,"A number a team assigns to a task to size its relative effort compared to other tasks — unlike a time estimate, story points don't try to pin down exact hours or days.",
+Planning poker,"A team estimation technique where everyone privately picks a story-point guess, then reveals it at the same time, so no one's guess anchors or sways everyone else's.",
+Critical path,"The longest chain of dependent tasks in a project — since each task waits on the one before it, if any task on this chain slips, the whole project's timeline slips too.",https://en.wikipedia.org/wiki/Critical_path_method
+Buffer,"Extra time deliberately added on top of an estimate to absorb surprises, since estimates are never perfectly accurate — e.g. padding a task you think takes 2 weeks to 2.5 weeks so one bad day doesn't blow the deadline.",
+Slack,"Spare room in a schedule that lets it absorb a delay without pushing back the whole project — used almost interchangeably with buffer in everyday PM talk, though formally it refers to how much a specific task can slip before it starts delaying other work.",
+Burndown chart,"A chart that tracks how much work is left to do in a sprint or project over time, so the team can see whether they're on pace to finish.",
+Burnup chart,"A chart that tracks how much work has already been completed over time, and can also show scope that got added along the way — unlike a burndown chart, which tracks what's left.",
+Velocity,"How much work a team typically completes in one sprint, used to forecast that same team's future sprints — it's not meant for comparing different teams against each other.",
+Scope creep,"When a project's scope quietly grows beyond what was originally approved, usually in small, easy-to-miss pieces — catching it early keeps it from spiraling.",
+Daily standup,"A short daily meeting where each person shares what they did yesterday, what they'll do today, and what's blocking them — it's for the team, not a status report to a boss.",
+Backlog,"The full list of work a team could do, ordered by priority, that hasn't been started yet — sprint planning pulls from the top of it.",
+Backlog grooming,"Regularly reviewing and reordering the backlog, refining vague items and dropping ones that no longer matter, so it's always ready to plan from instead of stale.",
+Risk management,"Spotting potential problems early and acting on them before they happen, rather than waiting until they've already gone wrong and your options have narrowed.",
+Mitigation,"Taking action to reduce or handle a risk once it's been spotted, instead of just noting it down and hoping it doesn't happen.",
+Technical debt,"Shortcuts or quick fixes taken in the code now that will cost extra effort to clean up later — a real, trackable risk to the whole team's plan, not just an engineering complaint.",https://en.wikipedia.org/wiki/Technical_debt
+Definition of done,"An explicit, team-wide agreed checklist, like passing all its tests, that a piece of work has to satisfy before it actually counts as finished — not just one person's private opinion. Commonly shortened to DoD.",
+Quality gate,"A checkpoint that work must pass, like passing its tests, before it's allowed to move forward to the next stage of the project.",
+Retrospective,"A recurring meeting where a team honestly reflects on what to keep doing and what to change, aimed at real improvement, not at assigning blame.",https://en.wikipedia.org/wiki/Retrospective
+Leading without authority,"Getting a team to actually follow your direction when you have no formal power over them — you can't hire, fire, or set anyone's pay or promotion, which is normal for a software PM. It works by earning trust through consistency, setting goals people genuinely buy into, and communicating clearly, instead of by giving orders.",
+Status report,"A short update, usually for executives, that leads with the headline, like a key risk, instead of drowning the reader in every last detail.",
+Change request,"A formal ask to modify a project's scope mid-project, weighed deliberately instead of quietly folded in — skipping this process is exactly how scope creep happens.",
+Postmortem,"An honest review, done after a project ends, of what actually happened, including failures, so the next project can go better.",https://en.wikipedia.org/wiki/Postmortem_documentation
+Async,"Short for asynchronous — communicating, like written updates instead of live meetings, without everyone needing to be online at the same moment, which matters a lot for teams spread across time zones.",

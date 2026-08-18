@@ -13,8 +13,8 @@
   "changelog": [
     {
       "version": "1.0.0",
-      "date": "2026-08-15",
-      "notes": "Initial release — 24 decks, 225 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
+      "date": "2026-08-18",
+      "notes": "Converted 2 cards (\"self\" naming convention, \"PEP 8\" style guide name) from typing types to tap-based select_blank -- typing cards should be reserved for cards whose answer is actual code/CLI syntax, not a definitional/naming-convention term."
     }
   ],
   "toc": [

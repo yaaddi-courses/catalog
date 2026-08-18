@@ -12,6 +12,7 @@ on:
       - "*/source/**"
       - "validate_course.py"
       - "build_course_zip.py"
+      - "tools/build_catalog.py"
   push:
     branches: [main]
     paths:
@@ -20,6 +21,7 @@ on:
       - "*/source/**"
       - "validate_course.py"
       - "build_course_zip.py"
+      - "tools/build_catalog.py"
   workflow_dispatch: {}
 
 # A new push to the same PR/branch supersedes the previous run's result —
@@ -69,6 +71,25 @@ jobs:
         with:
           commit_message: "chore: auto-assign missing course id(s)"
           file_pattern: "*/meta.json"
+
+      # catalog.json (tools/build_catalog.py) is the single-file course
+      # index the app fetches for a fast, one-request Course Library load —
+      # see that script's own doc comment, and src/lib/githubMarketplace.ts's
+      # tryFetchCatalog in the Yaaddi app repo. Regenerated here so an
+      # author never has to remember to run it locally after adding/editing
+      # a course, same reasoning as the id auto-assign step above. Runs
+      # after that step so a freshly-assigned id is already on disk and
+      # gets included.
+      - name: Regenerate catalog.json
+        run: python tools/build_catalog.py
+
+      # Same no-op-if-nothing-changed and fork-PR caveat as the id
+      # auto-commit step above.
+      - name: Commit regenerated catalog.json, if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate catalog.json"
+          file_pattern: "catalog.json"
 
       # validate_course.py is stdlib-only by design (see its own doc
       # comment) — no dependency installation step needed. Runs after the

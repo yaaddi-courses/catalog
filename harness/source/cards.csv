@@ -1,0 +1,239 @@
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+1,1,multiple_choice,main,,Harness is mainly a unified:,CI/CD platform|Text editor|OS kernel,0,,,
+2,1,true_false,preview,1,Harness unifies CI/CD into one platform.,,true,,,"It replaces a patchwork of separate build, deploy, and monitoring tools."
+3,1,true_false,exercise,1,Harness replaces many separate DevOps tools.,,true,,,"It unifies build, deploy, and more in one platform."
+4,1,multiple_choice,exercise,1,A key benefit of one platform is:,Less sprawl|Slower builds|More manual,0,,,
+5,1,select_blank,exercise,1,Harness aims to ___ the DevOps toolchain.,unify|fragment|remove,0,,,
+6,1,multiple_choice,exercise,1,Harness is best described as a:,DevOps platform|Text editor|Database,0,,,
+7,1,true_false,exercise,1,"Harness only handles code building, not deploys.",,false,,,"It covers CI and CD together, plus more modules."
+8,2,multiple_choice,main,,Harness organizes functionality into:,Modules|One monolith|Plugins only,0,,,
+9,2,select_blank,preview,8,Harness splits features into ___.,modules|one file|nothing,0,,,"CI, CD, Feature Flags, Security Testing, and more each get their own module."
+10,2,true_false,exercise,8,CI and CD are separate Harness modules.,,true,,,"Each is purpose-built, sharing common pipeline components."
+11,2,multiple_choice,exercise,8,Feature Flags is a Harness:,Module|Programming language|Database,0,,,
+12,2,multi_select,exercise,8,Which are real Harness modules?,CI|CD|Feature Flags|Word processor,0|1|2,,,
+13,2,select_blank,exercise,8,Modules share common ___ components.,pipeline|database|network,0,,,
+14,2,multiple_choice,exercise,8,Modules in Harness are:,Purpose-built|All identical|Unrelated tools,0,,,
+15,3,multiple_choice,main,,A Harness pipeline represents a:,Workflow|Single command|Database table,0,,,
+16,3,multiple_choice,preview,15,A pipeline is best described as a:,Full workflow|Single click|Random file,0,,,"It's an end-to-end workflow -- build, test, deploy -- made of stages."
+17,3,true_false,exercise,15,A pipeline can span build and deploy.,,true,,,Pipelines cover the whole delivery workflow.
+18,3,multiple_choice,exercise,15,Pipelines are made up of:,Stages|Random scripts|Nothing,0,,,
+19,3,select_blank,exercise,15,A pipeline is Harness's ___ concept.,central|smallest|optional,0,,,
+20,3,multiple_choice,exercise,15,Pipelines can be triggered:,Automatable|Manual only|Never,0,,,
+21,3,true_false,exercise,15,Every Harness module uses pipelines.,,true,,,"CI, CD, and other modules build on the same concept."
+22,4,multiple_choice,main,,A stage is made up of:,Steps|Pipelines|Connectors,0,,,
+23,4,true_false,preview,22,A stage contains individual steps.,,true,,,Each stage groups related steps like running a script or test.
+24,4,true_false,exercise,22,A pipeline can have multiple stages.,,true,,,Common pattern: a build stage then a deploy stage.
+25,4,multiple_choice,exercise,22,Running a single script is a:,Step|Stage|Pipeline,0,,,
+26,4,order,exercise,22,Order these from largest to smallest.,Pipeline|Stage|Step,,,,
+27,4,select_blank,exercise,22,Stages group related ___ together.,steps|pipelines|accounts,0,,,
+28,4,multiple_choice,exercise,22,A build-then-test-then-deploy flow uses:,Multiple stages|One step|No structure,0,,,
+29,5,multiple_choice,main,,The Delegate runs inside:,Your network|Harness servers|Nowhere,0,,,
+30,5,true_false,preview,29,The Delegate runs in your own network.,,true,,,It bridges Harness SaaS and infrastructure behind your firewall.
+31,5,true_false,exercise,29,The Delegate lets Harness reach private infra.,,true,,,It bridges Harness SaaS and infrastructure behind your firewall.
+32,5,multiple_choice,exercise,29,Pipeline tasks are actually executed by the:,Delegate|Browser|Connector,0,,,
+33,5,select_blank,exercise,29,The Delegate is a ___ you run yourself.,process|webpage|database,0,,,
+34,5,multiple_choice,exercise,29,"Without a reachable Delegate, a pipeline:",Tasks fail|Runs faster|Skips steps,0,,,
+35,5,true_false,exercise,29,A Delegate can run inside Kubernetes.,,true,,,It's commonly deployed as a pod in a cluster.
+36,6,multiple_choice,main,,Delegate selectors route tasks by:,Tag|Random luck|Color,0,,,
+37,6,select_blank,preview,36,A selector routes tasks by ___.,tag|color|price,0,,,Selectors are tags that route work to the right Delegate.
+38,6,true_false,exercise,36,Different Delegates can reach different clouds.,,true,,,Selectors let you target the right one per task.
+39,6,multiple_choice,exercise,36,Selectors are useful when you have:,Multiple Delegates|One Delegate|No Delegates,0,,,
+40,6,select_blank,exercise,36,A selector is a ___ on a Delegate.,tag|password|port,0,,,
+41,6,multiple_choice,exercise,36,"Without the right selector, a task might:",Wrong network|Run instantly|Skip entirely,0,,,
+42,6,true_false,exercise,36,Selectors are optional if you only have one Delegate.,,true,,,Routing matters most with several Delegates.
+43,7,multiple_choice,main,,A GitHub connector stores:,"Auth, settings|Nothing useful|Pipeline logic",0,,,
+44,7,multiple_choice,preview,43,A connector stores login info for a:,Third-party tool|Random file|Nothing,0,,,"Like GitHub, Docker Hub, or a cloud provider -- auth and settings live here."
+45,7,true_false,exercise,43,Connectors are reused across many pipelines.,,true,,,"Define once, reference from any pipeline that needs it."
+46,7,multiple_choice,exercise,43,A connector links Harness to a:,Third-party tool|Random file|Nothing,0,,,
+47,7,select_blank,exercise,43,Connectors avoid hardcoding ___ in pipelines.,credentials|stage names|pipeline IDs,0,,,
+48,7,multiple_choice,exercise,43,A Docker registry connector is used to:,Push/pull images|Run tests|Send email,0,,,
+49,7,true_false,exercise,43,Every pipeline needs its own separate connector.,,false,,,Connectors are reusable across pipelines.
+50,8,multiple_choice,main,,"Secrets should be referenced, never:",Hardcoded|Encrypted|Named,0,,,
+51,8,true_false,preview,50,"Secrets should be referenced, never hardcoded.",,true,,,They're stored encrypted and referenced by name in pipelines.
+52,8,true_false,exercise,50,Harness can integrate with HashiCorp Vault.,,true,,,External secret managers are a supported integration.
+53,8,multiple_choice,exercise,50,A pipeline references a secret by its:,Name|Plain value|File path,0,,,
+54,8,select_blank,exercise,50,"Secrets are stored ___, not as plain text.",encrypted|openly|in git,0,,,
+55,8,multiple_choice,exercise,50,Putting a password directly in YAML is:,Bad practice|Best practice|Required,0,,,
+56,8,true_false,exercise,50,Secrets can be scoped to a project.,,true,,,"Access can be scoped at account, org, or project level."
+57,9,multiple_choice,main,,A basic CI pipeline builds an:,Artifact|Invoice|Database schema,0,,,
+58,9,select_blank,preview,57,A CI pipeline uploads a built ___.,artifact|invoice|meeting,0,,,"It pulls the code, builds an artifact, tests it, then uploads it to a registry."
+59,9,true_false,exercise,57,A CI pipeline typically includes testing.,,true,,,Build-then-test is the standard CI shape.
+60,9,multiple_choice,exercise,57,A built artifact is usually uploaded to a:,Registry|Text file|Nowhere,0,,,
+61,9,order,exercise,57,Order a typical CI flow.,Pull code|Build|Test|Upload artifact,,,,
+62,9,select_blank,exercise,57,CI pipelines start by pulling the ___.,codebase|database|secrets,0,,,
+63,9,multiple_choice,exercise,57,Skipping tests in a CI pipeline is:,Risky|Best practice|Required,0,,,
+64,10,multiple_choice,main,,Harness CI Cloud runs builds on:,Managed VMs|Your laptop|Nothing,0,,,
+65,10,true_false,preview,64,Harness CI Cloud runs on managed VMs.,,true,,,Self-hosted builds instead run on your own infra via a Delegate.
+66,10,true_false,exercise,64,Self-hosted builds run through a Delegate.,,true,,,The Delegate executes builds on your own infra.
+67,10,multiple_choice,exercise,64,A benefit of Cloud build infra is:,No maintenance|Full control|Zero cost,0,,,
+68,10,select_blank,exercise,64,Self-hosted builds run on your own ___.,infrastructure|browser|phone,0,,,
+69,10,multiple_choice,exercise,64,Choosing self-hosted often means needing:,More control|No Delegate|Nothing extra,0,,,
+70,10,true_false,exercise,64,Cloud build VMs are preconfigured with common tools.,,true,,,This saves setup time for common languages/tools.
+71,11,multiple_choice,main,,A trigger decides:,When it runs|What builds|Who logs,0,,,
+72,11,multiple_choice,preview,71,A trigger decides when a pipeline:,Runs|Waits|Deletes,0,,,"A push, a PR, a schedule, or a manual click can all trigger a run."
+73,11,true_false,exercise,71,A trigger can fire on a Git push.,,true,,,Git events are a common trigger source.
+74,11,multiple_choice,exercise,71,Running a pipeline on a schedule uses a:,Cron trigger|Manual click|Nothing,0,,,
+75,11,select_blank,exercise,71,Codebase config points a pipeline at a ___.,repo|server|secret,0,,,
+76,11,multiple_choice,exercise,71,A pull-request trigger commonly runs:,Pre-merge checks|Nothing useful|Post-merge,0,,,
+77,11,true_false,exercise,71,A pipeline can only ever run manually.,,false,,,Triggers automate runs on events or schedules.
+78,12,multiple_choice,main,,Test Intelligence speeds up builds by:,Fewer tests|No tests|More tests,0,,,
+79,12,true_false,preview,78,Test Intelligence only runs affected tests.,,true,,,It maps changed files to the tests that actually cover them.
+80,12,true_false,exercise,78,Test Intelligence picks tests affected by the change.,,true,,,It maps code changes to relevant tests automatically.
+81,12,multiple_choice,exercise,78,The main goal of Test Intelligence is:,Faster feedback|More flakiness|Slower CI,0,,,
+82,12,select_blank,exercise,78,Test Intelligence avoids running ___ every test.,always|never|only,0,,,
+83,12,multiple_choice,exercise,78,Test Intelligence relies on knowing:,Code-to-test mapping|Nothing useful|Random luck,0,,,
+84,12,true_false,exercise,78,Test Intelligence removes the need for testing.,,false,,,"It runs relevant tests smarter, not zero tests."
+85,13,multiple_choice,main,,Cache Intelligence speeds up builds by:,Reusing caches|Deleting files|Ignoring dependencies,0,,,
+86,13,select_blank,preview,85,Cache Intelligence reuses ___ between builds.,caches|passwords|nothing,0,,,It caches dependencies and build layers so repeat builds skip redundant work.
+87,13,true_false,exercise,85,Caching avoids redundant dependency downloads.,,true,,,A cached dependency doesn't need re-fetching each run.
+88,13,multiple_choice,exercise,85,Cache Intelligence mainly targets:,"Deps, layers|Test results|Secrets",0,,,
+89,13,select_blank,exercise,85,Reusing a cache skips redundant ___ work.,download|testing|deploy,0,,,
+90,13,multiple_choice,exercise,85,"Without caching, every build tends to be:",Slower|Faster|Identical speed,0,,,
+91,13,true_false,exercise,85,Cache Intelligence works automatically once enabled.,,true,,,It requires little manual cache management.
+92,14,multiple_choice,main,,A Service in Harness CD defines the:,What deploys|Deploy target|Deploy timing,0,,,
+93,14,true_false,preview,92,A Service defines what gets deployed.,,true,,,"Environment defines where, and Infrastructure Definition defines the exact target."
+94,14,true_false,exercise,92,An Environment can represent staging or prod.,,true,,,Environments group deploy targets logically.
+95,14,multiple_choice,exercise,92,An Infrastructure Definition specifies the:,Target cluster/VM|App version|Test suite,0,,,
+96,14,match_pairs,exercise,92,Match CD concept to its role.,Service↔what|Environment↔where|Infra Definition↔exact target,,,,
+97,14,select_blank,exercise,92,Environments separate staging from ___.,production|the codebase|the Delegate,0,,,
+98,14,multiple_choice,exercise,92,Reusing one Service across environments is:,Common|Forbidden|Impossible,0,,,
+99,15,multiple_choice,main,,Testing a new version on some traffic is:,Canary|Rolling|Blue-green,0,,,
+100,15,multiple_choice,preview,99,A canary release sends new code to:,Some traffic|All traffic|No traffic,0,,,Rolling replaces instances gradually; blue-green switches all traffic at once.
+101,15,true_false,exercise,99,Blue-green keeps two full environments running.,,true,,,"Old (blue) and new (green), switching traffic between them."
+102,15,multiple_choice,exercise,99,Gradually replacing instances one by one is:,Rolling|Canary|Blue-green,0,,,
+103,15,match_pairs,exercise,99,Match strategy to its approach.,Rolling↔gradual replace|Canary↔small slice first|Blue-green↔instant switch,,,,
+104,15,select_blank,exercise,99,Canary deploys reduce ___ from a bad release.,risk|speed|cost,0,,,
+105,15,multiple_choice,exercise,99,Blue-green's main cost is:,Two environments|No cost|Slower rollback,0,,,
+106,16,multiple_choice,main,,"In GitOps, the source of truth is:",Git|Manual click|A spreadsheet,0,,,
+107,16,true_false,preview,106,"In GitOps, Git is the source of truth.",,true,,,An agent continuously reconciles the live cluster to match the repo.
+108,16,true_false,exercise,106,A GitOps agent continuously reconciles cluster state.,,true,,,It keeps the live cluster matching the repo's declared state.
+109,16,multiple_choice,exercise,106,Changing a deploy in GitOps means:,Git commit|Button click|Cluster edit,0,,,
+110,16,select_blank,exercise,106,GitOps continuously ___ the live state to match Git.,reconciles|ignores|deletes,0,,,
+111,16,multiple_choice,exercise,106,A benefit of GitOps is:,Full audit|No audit|Manual-only changes,0,,,
+112,16,true_false,exercise,106,GitOps requires manually SSHing into servers.,,false,,,The agent applies changes automatically from Git.
+113,17,multiple_choice,main,,An approval pauses a pipeline for a:,Human decision|Random delay|Nothing,0,,,
+114,17,select_blank,preview,113,An approval pauses a pipeline for a ___.,human decision|random delay|nothing,0,,,It waits for a designated person or group to approve before continuing.
+115,17,true_false,exercise,113,An approval can require a specific group.,,true,,,Approvals can be scoped to particular approvers.
+116,17,multiple_choice,exercise,113,Approval gates are common before deploying to:,Production|A sandbox|Nowhere,0,,,
+117,17,select_blank,exercise,113,An approval waits for a ___ decision.,human|random|automatic,0,,,
+118,17,multiple_choice,exercise,113,Skipping approval gates in prod pipelines is:,Risky|Always required|Impossible,0,,,
+119,17,true_false,exercise,113,An approval can time out if unanswered.,,true,,,A configurable timeout prevents pipelines hanging forever.
+120,18,multiple_choice,main,,A rollback reverts to the:,Prior state|Newest version|Random state,0,,,
+121,18,true_false,preview,120,A rollback reverts to a prior state.,,true,,,It can trigger manually or automatically when a health check fails.
+122,18,true_false,exercise,120,A failed health check can auto-trigger rollback.,,true,,,Automatic rollback is a common safety mechanism.
+123,18,multiple_choice,exercise,120,Rollback is mainly a safety net for:,Bad releases|Slow builds|Test failures,0,,,
+124,18,select_blank,exercise,120,A rollback reverts to the last ___ version.,known-good|newest|random,0,,,
+125,18,multiple_choice,exercise,120,Manual rollback is triggered by a:,Person|A schedule|Nothing,0,,,
+126,18,true_false,exercise,120,Rollback is only possible for blue-green deploys.,,false,,,Most deployment strategies support some rollback path.
+127,19,multiple_choice,main,,Continuous Verification watches metrics during a:,Deploy|Code review|Meeting,0,,,
+128,19,true_false,preview,127,Continuous Verification compares new metrics to a baseline.,,true,,,It watches live metrics/logs during a deploy to auto-detect a regression.
+129,19,true_false,exercise,127,Continuous Verification compares against a baseline.,,true,,,New version behavior is compared to known-good baseline.
+130,19,multiple_choice,exercise,127,A goal of Continuous Verification is:,Early detection|No monitoring|Slower deploys,0,,,
+131,19,select_blank,exercise,127,Continuous Verification can trigger an automatic ___.,rollback|approval|commit,0,,,
+132,19,multiple_choice,exercise,127,Continuous Verification analyzes:,"Metrics, logs|Code diffs|Nothing live",0,,,
+133,19,true_false,exercise,127,Continuous Verification requires zero live traffic data.,,false,,,It relies on real metrics/logs from the live rollout.
+134,20,multiple_choice,main,,A template's main purpose is:,Reuse|Deletion|Encryption,0,,,
+135,20,select_blank,preview,134,Templates exist to avoid duplicate ___.,YAML|servers|secrets,0,,,A template captures config once so many pipelines can reuse it.
+136,20,true_false,exercise,134,A template can be a whole pipeline.,,true,,,"Templates exist at step, stage, and pipeline level."
+137,20,multiple_choice,exercise,134,"Without templates, teams often end up with:",Duplicated YAML|Less YAML|No pipelines,0,,,
+138,20,select_blank,exercise,134,Templates keep pipelines ___ across projects.,consistent|unrelated|random,0,,,
+139,20,multiple_choice,exercise,134,Updating a shared template affects:,All users|Nothing else|Only itself,0,,,
+140,20,true_false,exercise,134,Templates can be versioned.,,true,,,Different pipelines can pin to different template versions.
+141,21,multiple_choice,main,,An Input Set saves a bundle of:,Input values|Secrets only|Nothing useful,0,,,
+142,21,true_false,preview,141,An Input Set saves pipeline input values.,,true,,,An overlay can combine multiple input sets into one run config.
+143,21,true_false,exercise,141,An overlay can combine multiple input sets.,,true,,,Overlays merge several input sets into one run config.
+144,21,multiple_choice,exercise,141,Input Sets help avoid re-entering:,Same values|All logic|Nothing,0,,,
+145,21,select_blank,exercise,141,An Input Set is a saved ___ bundle.,values|secrets|template,0,,,
+146,21,multiple_choice,exercise,141,A common Input Set use case is:,Different environments|Deleting pipelines|Renaming stages,0,,,
+147,21,true_false,exercise,141,Input Sets are unrelated to pipeline runs.,,false,,,They directly supply the values a run needs.
+148,22,multiple_choice,main,,A Harness expression references a:,Runtime value|Static file|Nothing dynamic,0,,,
+149,22,select_blank,preview,148,An expression references a ___ value.,runtime|static|nothing,0,,,Like <+pipeline.name> -- it keeps a pipeline generic instead of hardcoded.
+150,22,true_false,exercise,148,Expressions help avoid hardcoding values.,,true,,,A pipeline can reference dynamic context instead.
+151,22,multiple_choice,exercise,148,An expression might reference the current:,Pipeline name|Weather|Font size,0,,,
+152,22,select_blank,exercise,148,Expressions keep pipelines ___ instead of hardcoded.,generic|frozen|identical,0,,,
+153,22,multiple_choice,exercise,148,Variables let a template stay:,Reusable|Static only|Unusable,0,,,
+154,22,true_false,exercise,148,Expressions can pull values from earlier steps.,,true,,,A later step can reference an earlier step's output.
+155,23,multiple_choice,main,,A trigger starts a pipeline:,Automatically|Manual only|Never,0,,,
+156,23,true_false,preview,155,A trigger can start a pipeline automatically.,,true,,,"A webhook, a schedule, or a new artifact can all fire one."
+157,23,true_false,exercise,155,A trigger can fire on a new artifact.,,true,,,New artifact publication is a valid trigger source.
+158,23,multiple_choice,exercise,155,A cron-based trigger fires on a:,Schedule|Random moment|Manual click,0,,,
+159,23,select_blank,exercise,155,Triggers remove the need to run pipelines ___.,manually|automatically|never,0,,,
+160,23,multiple_choice,exercise,155,A webhook trigger commonly reacts to:,Git event|The weather|Nothing real,0,,,
+161,23,true_false,exercise,155,A pipeline can have more than one trigger.,,true,,,Multiple triggers can start the same pipeline.
+162,24,multiple_choice,main,,Harness governance is built on:,Open Policy|A checklist|Nothing automated,0,,,
+163,24,select_blank,preview,162,Harness governance is built on Open ___.,Policy|Water|Season,0,,,Open Policy (OPA) evaluates pipelines and can block a run that violates a rule.
+164,24,true_false,exercise,162,A policy violation can block a pipeline run.,,true,,,"Governance enforces rules before execution, not just afterward."
+165,24,multiple_choice,exercise,162,Policy as Code lets rules be:,Version-controlled|Verbal only|Untracked,0,,,
+166,24,select_blank,exercise,162,OPA evaluates pipelines against written ___.,policies|invoices|diagrams,0,,,
+167,24,multiple_choice,exercise,162,A governance rule might require:,An approval|No steps|Nothing,0,,,
+168,24,true_false,exercise,162,Policies can be scoped to specific projects.,,true,,,Governance rules can apply broadly or narrowly.
+169,25,multiple_choice,main,,Feature Flags decouple releasing code from:,Feature release|Writing tests|App build,0,,,
+170,25,true_false,preview,169,Feature Flags separate code release from feature release.,,true,,,"Toggle functionality on/off, or for a subset of users, at runtime."
+171,25,true_false,exercise,169,A flag can target a subset of users.,,true,,,"Flags support percentage/targeted rollouts, not just all-or-nothing."
+172,25,multiple_choice,exercise,169,Toggling a flag off usually needs:,No redeploy|A redeploy|A rebuild,0,,,
+173,25,select_blank,exercise,169,Feature Flags toggle functionality at ___.,runtime|build time|never,0,,,
+174,25,multiple_choice,exercise,169,A common Feature Flags use case is:,Beta test|Deleting data|Encrypting secrets,0,,,
+175,25,true_false,exercise,169,Feature Flags is a separate Harness module.,,true,,,It sits alongside CI and CD as its own module.
+176,26,multiple_choice,main,,STO (Security Testing Orchestration) orchestrates security:,Scanners|Marketing copy|Invoices,0,,,
+177,26,true_false,preview,176,STO (Security Testing Orchestration) orchestrates security scanners in pipelines.,,true,,,"It aggregates results from static analysis, dependency checks, and dynamic testing."
+178,26,true_false,exercise,176,STO can aggregate results from multiple scanners.,,true,,,One unified view instead of many separate tool outputs.
+179,26,multiple_choice,exercise,176,A dependency vulnerability scan is a type of:,Security scan|Load test|UI test,0,,,
+180,26,select_blank,exercise,176,STO runs security scans as pipeline ___.,steps|invoices|secrets,0,,,
+181,26,multiple_choice,exercise,176,Running security checks in the pipeline enables:,Earlier detection|Later detection|No detection,0,,,
+182,26,true_false,exercise,176,STO replaces the need for any scanning tools.,,false,,,"It orchestrates existing scanners, not replaces them."
+183,27,multiple_choice,main,,Chaos Engineering deliberately introduces:,Failures|New features|Documentation,0,,,
+184,27,true_false,preview,183,Chaos Engineering injects failures on purpose.,,true,,,"Like killing a pod or adding latency, to verify real resilience."
+185,27,true_false,exercise,183,Chaos experiments are meant to be controlled.,,true,,,"The goal is a safe, bounded test, not a real outage."
+186,27,multiple_choice,exercise,183,Killing a pod on purpose tests:,Resilience|UI design|Billing accuracy,0,,,
+187,27,select_blank,exercise,183,Chaos Engineering verifies a system's real ___.,resilience|revenue|colors,0,,,
+188,27,multiple_choice,exercise,183,A chaos experiment might add:,Network latency|New users|Free coupons,0,,,
+189,27,true_false,exercise,183,Chaos experiments should run without any monitoring.,,false,,,Monitoring during the experiment is essential to learn from it.
+190,28,multiple_choice,main,,CCM (Cloud Cost Management) mainly helps you manage:,Cloud spend|Source code|User passwords,0,,,
+191,28,select_blank,preview,190,CCM (Cloud Cost Management) keeps track of cloud ___.,spend|weather|traffic,0,,,It flags waste and can auto-apply cost-saving actions like stopping idle instances.
+192,28,true_false,exercise,190,"CCM can flag idle, wasted resources.",,true,,,Idle-resource detection is a core CCM feature.
+193,28,multiple_choice,exercise,190,CCM can automatically:,Stop idle VMs|Write code|Delete repos,0,,,
+194,28,select_blank,exercise,190,CCM tracks spend across cloud ___.,providers|employees|meetings,0,,,
+195,28,multiple_choice,exercise,190,A common CCM finding is:,Unused resources|Perfect efficiency|Nothing ever,0,,,
+196,28,true_false,exercise,190,CCM only works for a single cloud provider.,,false,,,It's designed to track spend across multiple providers.
+197,29,multiple_choice,main,,An IDP (Internal Developer Portal) mainly offers developers:,Self-service catalog|Nothing useful|Chat tool,0,,,
+198,29,true_false,preview,197,An IDP (Internal Developer Portal) gives developers a self-service catalog.,,true,,,"It also offers golden-path templates and docs, cutting tickets to the platform team."
+199,29,true_false,exercise,197,An IDP can reduce tickets to platform teams.,,true,,,Self-service replaces manual request-and-wait workflows.
+200,29,multiple_choice,exercise,197,A 'golden path' template gives developers a:,A template|Random guess|Nothing,0,,,
+201,29,select_blank,exercise,197,An IDP acts as a service ___.,catalog|graveyard|invoice,0,,,
+202,29,multiple_choice,exercise,197,IDPs mainly serve which audience?,Developers|Customers|Investors,0,,,
+203,29,true_false,exercise,197,An IDP replaces the need for a platform team entirely.,,false,,,"It's a tool platform teams build and offer, not a replacement for them."
+204,30,multiple_choice,main,,SEI (Software Engineering Insights) mainly surfaces:,Engineering metrics|Marketing data|Invoices,0,,,
+205,30,select_blank,preview,204,SEI (Software Engineering Insights) mainly surfaces engineering ___.,metrics|invoices|recipes,0,,,"Like DORA metrics, cycle time, and PR review time from your tools."
+206,30,true_false,exercise,204,DORA metrics are a common SEI output.,,true,,,"Deployment frequency, lead time, and similar metrics are core DORA measures."
+207,30,multiple_choice,exercise,204,SEI can help spot:,Process bottlenecks|Weather patterns|Stock prices,0,,,
+208,30,select_blank,exercise,204,SEI pulls data from your existing ___.,tools|invoices|meetings,0,,,
+209,30,multiple_choice,exercise,204,Cycle time roughly measures:,Delivery speed|Server uptime|Disk usage,0,,,
+210,30,true_false,exercise,204,SEI requires manually re-entering all engineering data.,,false,,,It integrates with existing tools instead of manual re-entry.
+211,31,multiple_choice,main,,Harness Open Source is:,Free & self-hosted|Paid only|Cloud-only,0,,,
+212,31,true_false,preview,211,Harness Open Source is free and self-hosted.,,true,,,The full Platform adds managed hosting and every module on top.
+213,31,true_false,exercise,211,The full Platform includes more modules than Open Source.,,true,,,Open Source covers core CI/CD; the Platform adds every module.
+214,31,multiple_choice,exercise,211,Self-hosting Harness Open Source means running it:,Yourself|Cloud only|Nowhere,0,,,
+215,31,select_blank,exercise,211,Harness Open Source is the ___ core.,free|paid|hidden,0,,,
+216,31,multiple_choice,exercise,211,Choosing the full Platform often means wanting:,Managed hosting|No support|Fewer features,0,,,
+217,31,true_false,exercise,211,Harness Open Source includes an artifact registry.,,true,,,"SCM, CI/CD, and artifact registry are core included pieces."
+218,32,multiple_choice,main,,"Harness scopes resources under Account, Org, then:",Project|Server|Database,0,,,
+219,32,select_blank,preview,218,A Project always sits within an ___.,organization|invoice|secret,0,,,"Harness scopes resources under Account > Organization > Project, with RBAC at each level."
+220,32,true_false,exercise,218,RBAC controls who can do what.,,true,,,Roles and permissions gate access at each scope level.
+221,32,multiple_choice,exercise,218,A Project typically sits inside an:,Organization|Individual pipeline|Secret,0,,,
+222,32,order,exercise,218,"Order Harness's scoping levels, broadest first.",Account|Organization|Project,,,,
+223,32,select_blank,exercise,218,RBAC restricts actions based on a user's ___.,role|location|mood,0,,,
+224,32,multiple_choice,exercise,218,Giving every user full admin access is:,Risky|Best practice|Required,0,,,
+225,33,multiple_choice,main,,Pipeline notifications can go to:,"Slack, email|Nowhere ever|CLI only",0,,,
+226,33,true_false,preview,225,Pipeline notifications can be sent to Slack.,,true,,,Email and webhooks work too -- and the execution view shows real-time logs.
+227,33,true_false,exercise,225,The execution view shows step-by-step logs.,,true,,,Real-time logs help debug a run as it happens.
+228,33,multiple_choice,exercise,225,A notification is often sent on:,Pipeline failure|Random intervals|Nothing,0,,,
+229,33,select_blank,exercise,225,Notifications keep teams ___ of pipeline events.,aware|unaware|banned,0,,,
+230,33,multiple_choice,exercise,225,Watching logs live helps you:,Debug faster|Deploy slower|Skip testing,0,,,
+231,33,true_false,exercise,225,Notifications can only be sent via email.,,false,,,Slack and webhooks are common channels too.
+232,34,multiple_choice,main,,Hardcoding a secret in pipeline YAML is a:,Bad practice|Best practice|Requirement,0,,,
+233,34,true_false,preview,232,Hardcoding secrets in pipeline YAML is risky.,,true,,,"Other anti-patterns: one giant pipeline instead of templates, and skipping approval gates."
+234,34,true_false,exercise,232,A single giant pipeline is harder to reuse.,,true,,,Breaking logic into templates keeps things maintainable.
+235,34,multiple_choice,exercise,232,Skipping approvals before prod deploys is:,Risky|Always safe|Required,0,,,
+236,34,select_blank,exercise,232,Reusable templates beat one giant ___.,pipeline|secret|connector,0,,,
+237,34,multiple_choice,exercise,232,A good practice is storing secrets:,"Encrypted, referenced|Plain YAML|Chat messages",0,,,
+238,34,true_false,exercise,232,Following best practices avoids most Harness anti-patterns.,,true,,,"Reuse, secrets hygiene, and gating are the core wins."

@@ -1,0 +1,45 @@
+{
+  "id": "7f3a91c04e2b",
+  "title": "Canadian Citizenship",
+  "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course — history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real photos), not a summary of it — reading through this course covers the same ground as reading the book itself.",
+  "image": "cover.png",
+  "file": "canadian-citizenship.zip",
+  "version": "1.0.0",
+  "tags": [
+    "canada",
+    "citizenship",
+    "civics",
+    "history",
+    "government"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-20",
+      "notes": "Initial release — built from the official Discover Canada study guide (IRCC), using the guide's own photos as card images, covering all 18 decks: applying for citizenship, rights and responsibilities, history, government, justice, symbols, the economy, and every region."
+    }
+  ],
+  "toc": [
+    "Applying for Citizenship & the Test",
+    "Rights and Responsibilities of Citizenship",
+    "Who We Are",
+    "Indigenous Peoples, New France & Early Canada",
+    "The Road to Confederation",
+    "Building the Dominion",
+    "Canada in the World Wars",
+    "Modern Canada",
+    "How Canadians Govern Themselves",
+    "Federal Elections",
+    "The Justice System",
+    "Canadian Symbols",
+    "Canada's Economy",
+    "The Atlantic Provinces",
+    "Central Canada",
+    "The Prairie Provinces",
+    "The West Coast",
+    "The Northern Territories",
+    "Practice Exam 1",
+    "Practice Exam 2",
+    "Practice Exam 3"
+  ]
+}

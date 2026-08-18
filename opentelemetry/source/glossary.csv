@@ -1,0 +1,55 @@
+term,definition,link
+Observability,"The ability to answer brand-new questions about a running system using data it already emits, without shipping new code just to investigate that one question.",https://opentelemetry.io/docs/concepts/observability-primer/
+Trace,"The full end-to-end record of one request as it travels through your system, possibly across many services, stitched together from all the timed steps it went through.",https://opentelemetry.io/docs/concepts/signals/traces/
+Span,"One timed unit of work inside a trace — like 'handle this HTTP request' or 'run this DB query' — with a start time, a duration, and optional extra detail attached to it.",https://opentelemetry.io/docs/concepts/signals/traces/#spans
+Metric,"A numeric measurement recorded over time, like requests-per-second or memory usage, aggregated to spot trends rather than to explain any single event.",https://opentelemetry.io/docs/concepts/signals/metrics/
+Log,"A discrete, timestamped record of something that happened, usually a short text or structured message — the oldest and most familiar of the telemetry signals.",https://opentelemetry.io/docs/concepts/signals/logs/
+Continuous profiling,"OpenTelemetry's newest signal: repeatedly sampling which line of code is running on the CPU right now, so you can see exactly where CPU time is actually going.",
+OpenTelemetry (OTel),"A vendor-neutral, CNCF-governed open standard for generating and shipping telemetry (traces, metrics, logs, profiles) so you instrument your code once and can freely switch which backend reads that data.",https://opentelemetry.io/docs/what-is-opentelemetry/
+Vendor lock-in,"The trap of a proprietary tracing/monitoring agent tying your instrumented code so tightly to one company's backend that switching providers later means re-instrumenting everything from scratch.",
+OpenTracing,"An older open standard for distributed tracing that merged with OpenCensus in 2019 to form OpenTelemetry, so it's no longer maintained on its own.",
+OpenCensus,"An older Google-originated project for collecting traces and metrics that merged with OpenTracing in 2019 to form OpenTelemetry, so it's no longer maintained on its own.",
+CNCF,"The Cloud Native Computing Foundation, the neutral non-profit that hosts and governs open infrastructure projects like OpenTelemetry and Kubernetes so no single vendor controls their direction.",https://www.cncf.io/
+API (in OpenTelemetry),"The stable set of calls (like 'start a span') that library and application code is written against — it defines the shape of telemetry without deciding what happens to it, so it barely ever needs to change.",
+SDK (in OpenTelemetry),"The swappable implementation that plugs into the API and actually does something with telemetry — processing it, sampling it, and shipping it out — which is why only the app, never a shared library, should configure one.",
+No-op,"The safe default behavior of an OpenTelemetry API call when no SDK has been configured: it silently does nothing instead of crashing, so instrumented library code never breaks an app that hasn't set up telemetry.",
+Instrumentation library,"A pre-built package that automatically generates spans for a common framework or client (like Express or a DB driver) without you writing any tracing code yourself.",
+Manual instrumentation,"Tracing code you write by hand to capture your own business logic — the parts of your app an instrumentation library can't know about because they're specific to what your code does.",
+Auto-instrumentation,"A way to add tracing to an application with no source code edits at all, typically by attaching an agent that rewrites the compiled code's behavior at startup to inject spans automatically.",
+Span attribute,"A key-value pair attached to a span to add searchable detail, like recording http.status_code=200 or db.system=postgres alongside the span's timing.",
+Span event,"A single timestamped note recorded inside a span to mark something that happened mid-span, like an exception being thrown partway through the work.",
+Span kind,"A label describing the role a span played in a request — server (handling an incoming call), client (making an outbound call), internal, producer (sending a queue message), or consumer (reading one).",
+Root span,"The very first span in a trace, the one with no parent — its duration roughly equals the total time the whole request took.",
+Parent-child span relationship,"How spans nest to show what triggered what: a child span represents work that a parent span's operation kicked off, and together they form a tree shape called a trace waterfall.",
+Trace ID,"The single identifier shared by every span belonging to the same request, which is how a backend groups scattered spans back into one trace.",
+Span ID,"A unique identifier for one individual span, distinct from every other span's ID, even ones in the same trace.",
+W3C Trace Context,"The standardized HTTP header format (traceparent) for carrying a request's trace ID and parent span ID across a network call, so a distributed trace stays connected between services.",https://www.w3.org/TR/trace-context/
+traceparent,"The specific HTTP header defined by the W3C Trace Context standard that actually carries the trace ID and parent span ID from one service to the next.",https://www.w3.org/TR/trace-context/
+Baggage,"User-defined key-value business context (like a customer's plan tier) that travels alongside a trace in its own HTTP header, separate from traceparent, and must be explicitly read to become useful.",https://opentelemetry.io/docs/concepts/signals/baggage/
+Context propagation,"The mechanism of injecting trace context into an outgoing request's headers on the sending side, then extracting it back out on the receiving side, so a trace stays linked across service boundaries.",
+Inject (context),"The step where the sending side of a call writes the current trace context into the outgoing request's headers before it leaves.",
+Extract (context),"The step where the receiving side of a call reads trace context back out of an incoming request's headers so it can continue the same trace.",
+Counter,"A metric instrument whose value only ever goes up, like a running count of total requests served — never decreases, never resets on its own.",
+Gauge,"A metric instrument that represents a current value which can go up or down at any time, like CPU temperature right now or how much memory is in use.",
+Histogram,"A metric instrument that captures the distribution of many values, like request latency, so you can see not just an average but how spread out the measurements are.",
+Cumulative temporality,"A way of reporting a metric where each export shows the running total accumulated since the very start, rather than just what changed recently.",
+Delta temporality,"A way of reporting a metric where each export shows only the change since the last export, resetting after every report instead of accumulating forever.",
+Resource attribute,"Metadata set once per process that describes the thing producing telemetry — like which service or which Kubernetes pod — rather than describing any single span, metric, or log.",
+service.name,"The specific resource attribute that identifies which service produced a given piece of telemetry, essential for filtering dashboards when many services share one backend.",
+Semantic conventions,"OpenTelemetry's standardized names for common attributes (like http.method or db.system), so different teams' telemetry uses the same field names and can share one dashboard.",https://opentelemetry.io/docs/specs/semconv/
+OTLP (OpenTelemetry Protocol),"OpenTelemetry's own vendor-neutral wire protocol for actually transmitting telemetry data between an SDK, a Collector, and a backend, running over either gRPC or HTTP.",https://opentelemetry.io/docs/specs/otlp/
+Exporter,"The component responsible for sending processed telemetry out to its final destination, like a specific backend or just the console for local debugging — switching backends usually just means swapping the exporter.",
+Collector,"An optional but recommended standalone process that sits between your app and its backend, receiving, processing, and re-exporting telemetry, so apps don't need to know backend details directly.",https://opentelemetry.io/docs/collector/
+Receiver,"The first stage of a Collector pipeline, responsible for accepting incoming telemetry data before it's processed.",
+Processor,"The middle stage of a Collector pipeline that transforms, filters, batches, or otherwise modifies telemetry data as it flows through, with multiple processors running in the order you configure them.",
+batch processor,"A Collector processor that groups many small pieces of telemetry into fewer, larger export batches, which is far more efficient than sending everything one at a time.",
+memory_limiter processor,"A Collector processor that protects against out-of-memory crashes by capping how much telemetry data the Collector holds in memory at once.",
+filter processor,"A Collector processor that drops unwanted telemetry data based on rules you configure, so irrelevant signals never reach the backend.",
+Sampling,"Deliberately keeping only a fraction of traces instead of every single one, trading some completeness for lower storage cost and query load at high traffic volume.",
+Head-based sampling,"Deciding whether to keep a trace right at its start, before the request has even finished — simple and needs no buffering, but can't factor in how the trace actually turned out.",
+Tail-based sampling,"Deciding whether to keep a trace only after it's fully finished, which lets you favor traces with errors or slow outcomes, but requires buffering the whole trace in memory until then.",
+Agent pattern,"A Collector deployment pattern where one Collector instance runs on every host (like a Kubernetes DaemonSet), giving local buffering close to each app.",
+Gateway pattern,"A Collector deployment pattern where one small centralized fleet of Collectors handles telemetry from every app, instead of running a Collector per host.",
+Resource detector,"A piece of SDK setup code that automatically fills in resource attributes (like the Kubernetes pod name or cloud region) by reading them from the environment at startup, so you don't have to hand-type values that are already discoverable.",
+Cardinality,"How many distinct combinations of label values a metric can take on — attaching something highly variable, like a raw user ID, to a metric label causes a cardinality blowup that overwhelms storage and query cost.",
+OpenTelemetry Operator,"A Kubernetes controller that manages Collectors as declarative custom resources and can automatically inject auto-instrumentation into your workloads' pods at deploy time, instead of you configuring either by hand.",https://opentelemetry.io/docs/kubernetes/operator/

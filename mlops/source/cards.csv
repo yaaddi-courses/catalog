@@ -1,0 +1,339 @@
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+1,1,true_false,preview,2,A notebook model isn't automatically production-ready.,,true,,,
+2,1,multiple_choice,main,,What gap does MLOps close?,Prod gap|Hiring gap|Meeting gap,0,,,"A model that scores well in a Jupyter notebook can still fail once real traffic hits it, because production needs monitoring, versioning, and reliable pipelines the notebook never had."
+3,1,true_false,exercise,2,A notebook model is automatically reliable in production.,,false,,,"Getting good numbers in a notebook says nothing about how the model behaves under real traffic, scale, or messy live data."
+4,1,select_blank,exercise,2,MLOps is mainly about closing the ___ gap.,notebook-to-production|marketing-to-sales|design-to-hiring,0,,,
+5,1,multiple_choice,exercise,2,Which is a real production concern MLOps addresses?,Monitoring|Notebook themes|Font choice,0,,,
+6,1,multi_select,exercise,2,Which problems does MLOps help solve?,Untracked runs|Manual deploys|Better fonts|Model decay,0|1|3,,,
+7,1,true_false,exercise,2,Working code alone guarantees production reliability.,,false,,,"Reliability also depends on monitoring, retraining, and handling live data that looks different from training data."
+8,1,multiple_choice,exercise,2,Why can a notebook model fail in production?,No monitoring|Wrong font|Many comments,0,,,
+9,2,select_blank,preview,10,The ML lifecycle is a continuous ___.,loop|sprint|meeting,0,,,
+10,2,order,main,,Order the ML lifecycle loop steps.,Train|Validate|Deploy|Monitor|Retrain,,,,"For example, a fraud-detection model gets retrained every month as spending patterns shift — after retrain, the cycle starts back at train instead of ever finishing."
+11,2,true_false,exercise,10,"Monitoring happens only once, at the start.",,false,,,
+12,2,multiple_choice,exercise,10,What comes right after deploy in the loop?,Monitor|Retrain|Train,0,,,
+13,2,select_blank,exercise,10,"After monitoring detects decay, teams often ___.",retrain|delete model|ignore it,0,,,
+14,2,multi_select,exercise,10,Which are stages in the ML lifecycle loop?,Train|Validate|Fundraising|Monitor,0|1|3,,,
+15,2,true_false,exercise,10,The ML lifecycle loop feeds back into itself.,,true,,,
+16,2,order,exercise,10,Order these three loop stages.,Validate|Deploy|Monitor,,,,
+17,2,multiple_choice,exercise,10,Why is it called a 'loop' not a line?,It repeats|It's shorter|It's cheaper,0,,,
+18,3,true_false,preview,19,Reproducing a result needs more than just code.,,true,,,
+19,3,multi_select,main,,What must you fix to reproduce an ML result?,Code|Training data|Environment version|Team size,0|1|2,,,"Re-running the same training script six months later with an updated library version can silently change the accuracy, even though the code itself never changed."
+20,3,true_false,exercise,19,Code alone is enough to reproduce a result.,,false,,,
+21,3,select_blank,exercise,19,A different library ___ can change results silently.,version|font|color,0,,,
+22,3,multiple_choice,exercise,19,Which factor also affects reproducibility?,Random seed|Variable names|Comment style,0,,,
+23,3,categorize,exercise,19,Sort each item into its category.,Training data↔Must Fix|Library version↔Must Fix|Variable naming↔Doesn't Matter|Code comments↔Doesn't Matter,,,,
+24,3,true_false,exercise,19,A fixed random seed helps reproduce results.,,true,,,
+25,3,multi_select,exercise,19,Which change could break reproducibility?,Library update|Random seed|Renamed variable|Training data,0|1|3,,,
+26,3,multiple_choice,exercise,19,Why track environment versions?,Matching environments|Faster training|Prettier code,0,,,"When everyone trains with the exact same library versions, the same code produces the same result — that's what environment tracking buys you."
+27,4,select_blank,preview,28,Data versioning tracks the exact ___ used for training.,dataset|font|meeting notes,0,,,
+28,4,multiple_choice,main,,What does data versioning let you retrieve later?,Past dataset|Font choices|Meeting notes,0,,,"A tool like DVC snapshots a dataset the way git snapshots code, so you can check out the exact CSV a model was trained on six months ago."
+29,4,true_false,exercise,28,Data versioning treats datasets like git treats code.,,true,,,
+30,4,multiple_choice,exercise,28,Why version training data?,Retrieve datasets|Save space|Faster code,0,,,
+31,4,select_blank,exercise,28,"Without data versioning, an old result may be ___.",unreproducible|faster|cheaper,0,,,
+32,4,true_false,exercise,28,An unversioned dataset can change without notice.,,true,,,
+33,4,multi_select,exercise,28,What does versioning data protect against?,Silent changes|Lost snapshots|Slower CPUs|Bad results,0|1|3,,,
+34,4,multiple_choice,exercise,28,What's a real tool for data versioning?,DVC|Photoshop|Excel macros,0,,,
+35,4,match_pairs,exercise,28,Match each tool to what it versions.,Git↔Versions code|DVC↔Versions datasets|Random seed↔Fixes randomness,,,,
+36,5,true_false,preview,37,An experiment tracker logs runs automatically.,,true,,,
+37,5,multiple_choice,main,,What does an experiment tracker log per run?,Params metrics|Final code|Meeting notes,0,,,"Instead of naming files 'model_v3_final_REALFINAL.pt' and hoping to remember the settings, a tracker automatically records the learning rate, batch size, and accuracy for every run."
+38,5,true_false,exercise,37,Spreadsheets scale well for hundreds of experiments.,,false,,,A spreadsheet gets unmanageable fast once you're comparing dozens of runs with many parameters each — that's exactly what a tracker automates.
+39,5,select_blank,exercise,37,An experiment tracker replaces manual ___ naming.,file|font|folder color,0,,,
+40,5,multiple_choice,exercise,37,What problem does tracking solve?,Lost history|Slow internet|Ugly UI,0,,,
+41,5,multi_select,exercise,37,What does a tracker typically record?,Hyperparameters|Metrics|Employee ages|Artifacts,0|1|3,,,
+42,5,true_false,exercise,37,A run's parameters and results are stored together.,,true,,,
+43,5,categorize,exercise,37,Sort each item by whether it's logged.,Learning rate↔Logged|Accuracy score↔Logged|Employee birthday↔Not Logged|Office location↔Not Logged,,,,
+44,5,multiple_choice,exercise,37,Why compare runs in a tracker?,Best run|Old code|Change fonts,0,,,
+45,6,true_false,preview,46,MLflow Tracking is a real tracking tool.,,true,,,
+46,6,multiple_choice,main,,What does MLflow Tracking record per run?,Run data|Just code|Just accuracy,0,,,"Calling mlflow.log_param('lr', 0.01) and mlflow.log_metric('accuracy', 0.93) inside a training script saves both to a run you can later browse in MLflow's web UI."
+47,6,true_false,exercise,46,MLflow is open source.,,true,,,
+48,6,multiple_choice,exercise,46,How do you browse past MLflow runs?,Web UI|Only email|Printed reports,0,,,
+49,6,select_blank,exercise,46,"In MLflow, log_metric() saves a run's ___.",metric|font|folder,0,,,
+50,6,true_false,exercise,46,MLflow runs cannot be compared to each other.,,false,,,MLflow's UI is built specifically to let you compare runs side by side — that's a big part of the point.
+51,6,multiple_choice,exercise,46,What is an MLflow 'run'?,Tracked attempt|GitHub repo|Docker image,0,,,
+52,6,multi_select,exercise,46,What can MLflow Tracking store per run?,Parameters|Metrics|Employee names|Output artifacts,0|1|3,,,
+53,6,match_pairs,exercise,46,Match each MLflow term to its meaning.,Param↔Input setting logged|Metric↔Result value logged|Artifact↔File output saved,,,,
+121,7,true_false,preview,122,W&B sweeps automate hyperparameter search.,,true,,,
+122,7,multiple_choice,main,,What does a W&B sweep automate?,Hyperparameter search|Data labeling|Model deployment,0,,,A sweep launches many training runs automatically — trying different learning rates or batch sizes — then W&B's dashboard shows which combination scored best.
+123,7,true_false,exercise,122,A sweep tries many hyperparameter combos automatically.,,true,,,
+124,7,select_blank,exercise,122,A W&B ___ automates hyperparameter search.,sweep|dashboard|registry,0,,,
+125,7,multiple_choice,exercise,122,What might a sweep search over?,Learning rate|File names|Git commits,0,,,
+126,7,multi_select,exercise,122,Pick things a sweep can vary.,Learning rate|Batch size|Company logo,0|1,,,
+127,7,true_false,exercise,122,A sweep only ever runs training once.,,false,,,"A sweep's whole point is running many training attempts automatically, not just one."
+128,7,multiple_choice,exercise,122,What picks the best sweep result?,Highest score|Random choice|Alphabetical order,0,,,"The sweep dashboard ranks runs by whichever metric you chose, like validation accuracy."
+129,8,true_false,preview,130,Staging and production are registry stages.,,true,,,
+130,8,multi_select,main,,Pick model registry lifecycle stages.,Staging|Production|Archived|Marketing,0|1|2,,,"A model moves from Staging (being tested) to Production (serving real traffic), then eventually Archived once a newer version replaces it."
+131,8,order,exercise,130,"Order registry stages, earliest first.",Staging|Production|Archived,,,,
+132,8,match_pairs,exercise,130,Match stage to what it means.,Staging↔being tested|Production↔serving real traffic|Archived↔retired,,,,
+133,8,true_false,exercise,130,Archived means retired from serving.,,true,,,
+134,8,select_blank,exercise,130,A model in ___ serves real traffic.,Production|Staging|Archived,0,,,
+135,8,multiple_choice,exercise,130,Which stage comes right before Production?,Staging|Marketing|Archived,0,,,
+136,8,true_false,exercise,130,Marketing is a registry lifecycle stage.,,false,,,"Marketing isn't a model lifecycle stage — the real ones are Staging, Production, and Archived."
+137,9,true_false,preview,138,Online feature stores serve real-time predictions.,,true,,,
+138,9,multiple_choice,main,,What does an online feature store serve?,Real-time predictions|Batch training|Nightly reports,0,,,"When a fraud model scores a transaction in milliseconds, it pulls features from the online store. The same features live in the offline store for training — keeping both in sync avoids training-serving skew, when training and live features quietly drift apart."
+139,9,true_false,exercise,138,Offline stores serve model training.,,true,,,
+140,9,select_blank,exercise,138,The ___ store serves real-time predictions.,online|offline|neither,0,,,
+141,9,multiple_choice,exercise,138,Which store is used at training time?,Offline|Online|Neither,0,,,
+142,9,match_pairs,exercise,138,Match store type to its use.,Offline↔training|Online↔real-time serving,,,,
+143,9,multi_select,exercise,138,Pick traits an online store needs.,Fast|Low-latency|Batch-only,0|1,,,
+144,9,true_false,exercise,138,Feature stores help prevent training-serving skew.,,true,,,
+145,9,categorize,exercise,138,Sort each use into store type.,Model training↔Offline|Real-time scoring↔Online|Nightly batch job↔Offline|Fraud check API↔Online,,,,
+146,10,true_false,preview,147,A Feast FeatureView groups related features.,,true,,,
+147,10,multiple_choice,main,,What does a Feast FeatureView group?,Related features|Random files|User accounts,0,,,"A 'driver_stats' FeatureView might group avg_rating and trips_today, since both come from the same underlying table — so Feast can serve them together as one unit."
+148,10,true_false,exercise,147,A FeatureView bundles features from one source.,,true,,,
+149,10,select_blank,exercise,147,A Feast ___ groups related features.,FeatureView|Notebook|Container,0,,,
+150,10,multiple_choice,exercise,147,Example grouped features in one FeatureView?,Driver stats|Random files|Passwords,0,,,
+151,10,multi_select,exercise,147,Pick things a FeatureView can group.,Related features|Same-source columns|Unrelated secrets,0|1,,,
+152,10,select_blank,exercise,147,Grouping features avoids repeating ___.,definitions|images|passwords,0,,,
+153,10,true_false,exercise,147,A FeatureView can group unrelated secrets.,,false,,,"A FeatureView is meant to group related features from the same source, not random unrelated secrets."
+154,11,true_false,preview,155,A DAG has no cycles.,,true,,,
+155,11,multiple_choice,main,,What must a DAG never contain?,Cycles|Steps|Dependencies,0,,,"A training pipeline DAG might run fetch-data, then validate, then train, then evaluate. Each step depends on the one before it, and nothing loops back — that's what makes it a DAG, a directed acyclic graph."
+156,11,true_false,exercise,155,DAG stands for directed acyclic graph.,,true,,,
+157,11,select_blank,exercise,155,A DAG has no ___.,cycles|steps|inputs,0,,,
+158,11,order,exercise,155,"Order this pipeline, first step first.",Fetch data|Validate|Train|Evaluate,,,,
+159,11,multiple_choice,exercise,155,Why avoid cycles in a pipeline?,Avoid loops|Save disk|Faster GPUs,0,,,
+160,11,true_false,exercise,155,A DAG step can depend on earlier steps.,,true,,,
+161,11,match_pairs,exercise,155,Match pipeline step to its job.,Fetch data↔get raw data|Validate↔check data quality|Train↔fit the model|Evaluate↔score performance,,,,
+162,11,select_blank,exercise,155,Orchestration runs steps in the right ___.,order|color|font,0,,,
+163,12,true_false,preview,164,Each Kubeflow Pipelines step runs in a container.,,true,,,
+164,12,multiple_choice,main,,How does each Kubeflow pipeline step run?,A container|A spreadsheet|An email,0,,,"A 'preprocess' component and a 'train' component each package their own code and dependencies into separate Docker containers, so they can run on different machines in the cluster without dependency conflicts."
+165,12,true_false,exercise,164,Kubeflow components can run on different machines.,,true,,,
+166,12,select_blank,exercise,164,Each Kubeflow step runs in its own ___.,container|spreadsheet|inbox,0,,,
+167,12,multiple_choice,exercise,164,Why package steps as separate containers?,Avoid conflicts|Save typing|Reduce colors,0,,,
+168,12,multi_select,exercise,164,Pick benefits of containerized steps.,Isolated dependencies|Different machines|Shared state,0|1,,,
+169,12,true_false,exercise,164,Kubeflow Pipelines runs on Kubernetes.,,true,,,
+170,12,select_blank,exercise,164,Kubeflow runs steps on a ___ cluster.,Kubernetes|spreadsheet|email,0,,,
+241,13,select_blank,preview,242,"A DAG is a directed, ___ graph.",acyclic|circular|random,0,,,
+242,13,select_blank,main,,DAG stands for directed ___ graph.,acyclic|circular|random,0,,,"Airflow pipelines are written as DAGs — tasks point to what runs after them, with no loops back."
+243,13,true_false,exercise,242,A DAG can loop back to an earlier task.,,false,,,That loop back is exactly what 'acyclic' rules out.
+244,13,select_blank,exercise,242,DAG tasks run in dependency ___.,order|circle|random,0,,,
+245,13,multiple_choice,exercise,242,Why must a DAG avoid cycles?,Avoid loops|Run faster|Save memory,0,,,
+246,13,true_false,exercise,242,Airflow pipelines are written as DAGs.,,true,,,
+247,13,true_false,preview,248,Prefect pipelines feel more like plain Python.,,true,,,
+248,13,multiple_choice,main,,What makes Prefect more Pythonic than Airflow?,Dynamic flows|No code|Only YAML,0,,,Airflow traditionally needs DAGs defined upfront in a fixed shape; Prefect flows are regular Python functions that can branch at runtime.
+249,13,true_false,exercise,248,Airflow DAGs are traditionally defined upfront.,,true,,,
+250,13,select_blank,exercise,248,Prefect flows are just regular ___ functions.,Python|YAML|SQL,0,,,
+251,13,multiple_choice,exercise,248,Which is more rigid about pipeline shape?,Airflow|Prefect|Neither,0,,,
+252,13,multiple_choice,exercise,248,What do Airflow and Prefect share?,General-purpose orchestration|ML-only focus|GPU scheduling,0,,,"Unlike Kubeflow Pipelines, which runs natively on Kubernetes, Airflow and Prefect are general-purpose orchestrators applied to ML work."
+253,13,true_false,preview,254,Orchestrators can auto-retry a failed task.,,true,,,
+254,13,multiple_choice,main,,What happens when a task fails?,Auto-retry|Pipeline erases|Nothing happens,0,,,"You set a retry count and delay, and the orchestrator reruns just that failed task instead of the whole pipeline."
+255,13,true_false,exercise,254,A failed task always restarts the entire pipeline.,,false,,,"Only that one task retries, not the whole DAG."
+256,13,select_blank,exercise,254,You configure a retry ___ before giving up.,count|password|logo,0,,,
+257,13,multiple_choice,exercise,254,What retries after a task fails?,That task|Whole pipeline|Nothing,0,,,
+258,13,true_false,exercise,254,Retry delay is configurable.,,true,,,
+259,14,true_false,preview,260,A data check can block a bad merge.,,true,,,
+260,14,multiple_choice,main,,What can a data quality gate block?,A merge|Every commit|Nothing ever,0,,,"Beyond normal code tests, ML CI adds checks like schema validation or missing-value limits, failing the build if data looks wrong."
+261,14,true_false,exercise,260,Data quality gates check things a normal test suite wouldn't.,,true,,,
+262,14,select_blank,exercise,260,A schema check catches unexpected column ___.,types|colors|fonts,0,,,
+263,14,multi_select,exercise,260,Pick genuine data quality checks.,Schema check|Missing-value limit|Logo check|Duplicate rows,0|1|3,,,
+264,14,true_false,exercise,260,Data quality gates run only after deployment.,,false,,,"They run in CI, before a merge or promotion, not after deployment."
+265,14,true_false,preview,266,A model gate can reject a worse model.,,true,,,
+266,14,multiple_choice,main,,What does a model quality gate compare?,Baseline metric|Font metric|Logo metric,0,,,"If the new model's accuracy (or another metric) falls below a set threshold, CI fails the build instead of promoting it."
+267,14,select_blank,exercise,266,A model gate compares against a set ___.,threshold|password|font,0,,,
+268,14,multiple_choice,exercise,266,What happens if accuracy drops below threshold?,Build fails|Auto-promoted|Ignored,0,,,
+269,14,true_false,exercise,266,Model gates only check code style.,,false,,,"They check model performance metrics, not code style — that's what normal linting already covers."
+270,14,multiple_choice,exercise,266,Why compare against a baseline model?,Catch regressions|Save storage|Faster training,0,,,
+271,14,true_false,preview,272,ML CI adds steps beyond a normal test suite.,,true,,,
+272,14,code_fill,main,,Complete: fail the build on low accuracy.,if accuracy < ___: fail_build()|threshold,,,,"A quality gate is just an extra check step bolted onto a normal CI pipeline — same mechanics as any other pipeline step, just a new condition."
+273,14,true_false,exercise,272,ML CI reuses the same pipeline mechanics as normal CI.,,true,,,
+274,14,select_blank,exercise,272,ML CI adds ___ on top of normal tests.,extra checks|nothing new|random delays,0,,,
+275,14,multiple_choice,exercise,272,What triggers an ML quality gate check?,A merge|Coffee break|Logo change,0,,,
+276,14,true_false,exercise,272,A quality gate step can stop a pipeline early.,,true,,,
+277,15,true_false,preview,278,A retraining job can run on a fixed schedule.,,true,,,
+278,15,code_fill,main,,Complete: cron for every Sunday midnight.,___ * * 0|0 0,,,,"This cron trigger fires the retraining pipeline once a week — the same schedule syntax used for cron jobs anywhere, not something ML-specific."
+279,15,true_false,exercise,278,Scheduled retraining runs regardless of recent data changes.,,true,,,It just fires on a timer — whether retraining was actually needed is a separate question.
+280,15,select_blank,exercise,278,A scheduled trigger fires on a fixed ___.,timer|whim|refresh,0,,,
+281,15,multiple_choice,exercise,278,What kind of trigger is 'every Sunday'?,Scheduled|Drift-triggered|Manual only,0,,,
+282,15,true_false,exercise,278,Cron syntax was invented specifically for ML.,,false,,,It's the same general-purpose scheduling syntax used across all kinds of automation.
+283,15,true_false,preview,284,Detected drift can trigger retraining.,,true,,,
+284,15,multiple_choice,main,,What can trigger retraining besides a schedule?,Detected drift|Logo change|Coffee break,0,,,"Instead of waiting for the next scheduled run, a drift alert can kick off retraining immediately."
+285,15,true_false,exercise,284,Drift-triggered retraining reacts to a clock.,,false,,,"It reacts to a detected drift signal, not a clock — that's the scheduled kind."
+286,15,select_blank,exercise,284,Drift-triggered retraining reacts to detected ___.,drift|holidays|meetings,0,,,
+287,15,multiple_choice,exercise,284,Why retrain on drift instead of waiting?,React sooner|Save space|Change logo,0,,,
+288,15,true_false,exercise,284,A pipeline can have more than one trigger type.,,true,,,
+289,15,true_false,preview,290,A challenger model must beat the champion to win.,,true,,,
+290,15,multiple_choice,main,,What is a 'champion' model?,Production model|Backup file|Training script,0,,,The newly retrained model is the 'challenger' — it only replaces the champion if it performs better on held-out data.
+291,15,true_false,exercise,290,A challenger automatically replaces the champion.,,false,,,It only replaces the champion if it wins the comparison — otherwise the champion stays live.
+292,15,select_blank,exercise,290,The newly retrained model is the ___.,challenger|champion|backup,0,,,
+293,15,multiple_choice,exercise,290,When does a challenger get promoted?,Performs better|Always|Never,0,,,
+294,15,multi_select,exercise,290,Pick roles in a champion/challenger setup.,Champion|Challenger|Reviewer|Firewall,0|1,,,
+295,16,true_false,preview,296,A model artifact includes the trained weights.,,true,,,
+296,16,multiple_choice,main,,What is a model artifact?,Weights metadata|Just code|Just logo,0,,,"Like a Docker image, but the payload is trained weights and metadata (like framework version) instead of app code."
+297,16,true_false,exercise,296,A model artifact is just the training script.,,false,,,The training script produces the artifact — the artifact itself is the trained weights and metadata.
+298,16,select_blank,exercise,296,A model artifact stores trained ___.,weights|passwords|logos,0,,,
+299,16,multiple_choice,exercise,296,What metadata might an artifact include?,Framework version|Wifi password|Font choice,0,,,
+300,16,true_false,exercise,296,A model artifact can be versioned like code.,,true,,,
+301,16,true_false,preview,302,Inference code loads the model and predicts.,,true,,,
+302,16,multiple_choice,main,,What does inference code do?,Predicts output|Trains model|Deletes model,0,,,"Packaging bundles the weights with the small amount of code that loads them and runs a prediction — without it, the weights alone are unusable."
+303,16,true_false,exercise,302,Weights alone are unusable without inference code.,,true,,,
+304,16,select_blank,exercise,302,Inference code ___ predictions from input.,produces|deletes|hides,0,,,
+305,16,multiple_choice,exercise,302,What gets bundled with model weights?,Inference code|Marketing copy|Old logs,0,,,
+306,16,true_false,exercise,302,Inference code retrains the model each run.,,false,,,Inference code only runs predictions — retraining is a separate process.
+307,16,true_false,preview,308,Pinning library versions avoids a training/serving mismatch.,,true,,,
+308,16,multiple_choice,main,,Why pin exact library versions?,Avoid mismatch|Smaller files|Faster training,0,,,"If serving uses a different library version than training, the same weights can produce different results — pinning keeps behavior consistent, the same idea Docker images use for OS packages."
+309,16,true_false,exercise,308,An unpinned library version can change model output.,,true,,,
+310,16,select_blank,exercise,308,Pinning versions keeps training and serving ___.,consistent|random|separate,0,,,
+311,16,multiple_choice,exercise,308,What happens without pinned versions?,Possible skew|Faster serving|Nothing changes,0,,,
+312,16,true_false,exercise,308,Version pinning is unique to machine learning.,,false,,,"It's a general packaging practice — ML just depends on it more, since even a small library version bump can shift predictions."
+313,16,true_false,preview,314,ONNX lets a model run across different frameworks.,,true,,,
+314,16,multiple_choice,main,,What problem does a format like ONNX solve?,Cross-framework portability|Faster typing|Smaller logos,0,,,"ONNX (Open Neural Network Exchange) is a shared file format, so a model trained in one framework, like PyTorch, can be served by tools built for another."
+315,16,true_false,exercise,314,Every framework requires its own unique file format.,,false,,,A shared format like ONNX avoids that — one exported file can run in multiple serving tools.
+316,16,select_blank,exercise,314,ONNX is a shared model file ___.,format|password|meeting,0,,,
+317,16,multiple_choice,exercise,314,Which is a cross-framework model format?,ONNX|MP3|CSV,0,,,
+318,16,true_false,exercise,314,Exporting to ONNX can remove framework lock-in.,,true,,,
+319,17,true_false,preview,320,Batch inference scores data with no live request.,,true,,,
+320,17,multiple_choice,main,,What is batch inference?,On schedule|Per request|Streaming events,0,,,"Batch inference runs on a pile of data all at once, like scoring last night's orders every morning — no user is waiting on a live response."
+321,17,true_false,exercise,320,Batch inference responds instantly to one request.,,false,,,That's online inference — batch runs on a schedule instead.
+322,17,select_blank,exercise,320,Batch inference processes data in ___.,bulk|real time|isolation,0,,,
+323,17,multiple_choice,exercise,320,Give an example use for batch inference.,Nightly scoring|Chat reply|Game render,0,,,
+324,17,true_false,exercise,320,Batch inference suits cases where latency doesn't matter.,,true,,,
+325,17,true_false,preview,326,Online inference answers one request at a time.,,true,,,
+326,17,multiple_choice,main,,What defines online inference?,Low-latency request|Runs overnight|No response,0,,,"A live API call comes in, the model predicts, and a response goes back within milliseconds — like a fraud check during checkout."
+327,17,true_false,exercise,326,"Online inference is synchronous, request by request.",,true,,,
+328,17,select_blank,exercise,326,Online inference must respond with low ___.,latency|storage|logo,0,,,
+329,17,multiple_choice,exercise,326,Give an example of online inference.,Fraud check|Nightly report|Weekly retrain,0,,,
+330,17,true_false,exercise,326,Online inference tolerates multi-hour delays.,,false,,,"It needs to answer within a short window, often milliseconds — that's the whole point of 'online.'"
+331,17,true_false,preview,332,Streaming inference reacts to a continuous event flow.,,true,,,
+332,17,multiple_choice,main,,What does streaming inference process?,Event stream|Single file|Nothing else,0,,,"Predictions run continuously as new events arrive, like scoring transactions off a live event queue — a middle ground between batch's schedule and online's single request."
+333,17,true_false,exercise,332,Streaming inference waits for a nightly schedule.,,false,,,"It reacts continuously as events arrive, not on a fixed nightly schedule — that's batch."
+334,17,select_blank,exercise,332,Streaming inference reacts to a live event ___.,queue|logo|font,0,,,
+335,17,multiple_choice,exercise,332,Which pattern fits a live transaction feed?,Streaming|Batch|Neither,0,,,
+336,17,categorize,exercise,332,Sort each workload by serving pattern.,Nightly report↔Batch|Fraud check API↔Online|Live transaction feed↔Streaming,,,,
+337,18,true_false,preview,338,TensorFlow Serving is built to serve TF models.,,true,,,
+338,18,multiple_choice,main,,What is TensorFlow Serving for?,Serving models|Training models|Labeling data,0,,,"It exposes a trained TensorFlow model over gRPC or REST, handling versioning and swaps without you writing a server from scratch."
+339,18,true_false,exercise,338,TensorFlow Serving trains new models.,,false,,,It only serves already-trained models — training happens separately.
+340,18,select_blank,exercise,338,TensorFlow Serving exposes a model over gRPC or ___.,REST|USB|Bluetooth,0,,,
+341,18,multiple_choice,exercise,338,What does a model server save you from writing?,From scratch|Training loop|A logo,0,,,
+342,18,command_output,exercise,338,Predict the output: check model status.,"curl localhost:8501/v1/models/my_model|{""state"": ""AVAILABLE""}",,,,"Hitting a TF Serving REST endpoint reports whether the model version is loaded and ready, here AVAILABLE."
+343,18,true_false,preview,344,TorchServe is PyTorch's equivalent of TensorFlow Serving.,,true,,,
+344,18,multiple_choice,main,,What is TorchServe built for?,PyTorch models|TF models|Training models,0,,,"Same idea as TensorFlow Serving, but for models trained in PyTorch."
+345,18,true_false,exercise,344,TorchServe serves models trained in PyTorch.,,true,,,
+346,18,select_blank,exercise,344,TorchServe is TensorFlow Serving's PyTorch ___.,equivalent|opposite|replacement,0,,,
+347,18,multiple_choice,exercise,344,Which tool is TensorFlow's equivalent?,TensorFlow Serving|TorchServe|Triton,0,,,
+348,18,true_false,exercise,344,TorchServe and TensorFlow Serving solve the same problem.,,true,,,
+349,18,true_false,preview,350,Triton can serve models from multiple frameworks.,,true,,,
+350,18,multiple_choice,main,,What makes Triton different from TorchServe?,Multiple frameworks|Only PyTorch|Only training,0,,,"NVIDIA Triton Inference Server can host TensorFlow, PyTorch, and ONNX models side by side on the same GPU-optimized server, instead of locking you into one framework."
+351,18,true_false,exercise,350,Triton locks you into a single framework.,,false,,,That's the opposite of its point — it serves multiple frameworks side by side.
+352,18,select_blank,exercise,350,Triton is optimized for ___ hardware.,GPU|floppy disk|dial-up,0,,,
+353,18,multiple_choice,exercise,350,Pick a genuine multi-framework server.,Triton|TorchServe|TensorFlow Serving,0,,,
+354,18,multi_select,exercise,350,Pick real model serving tools.,TensorFlow Serving|TorchServe|Triton|Photoshop,0|1|2,,,
+361,19,true_false,preview,362,A canary deployment starts with a small traffic slice.,,true,,,
+362,19,multiple_choice,main,,What is a canary deployment?,Small traffic|Full switch|Local testing,0,,,"Like a real canary release: maybe 5% of users get the new model version while 95% stay on the old one, so a bad version only affects a few people before you notice."
+363,19,true_false,exercise,362,Canary deployments start with most traffic on new version.,,false,,,A canary starts small — often just 1-5% — precisely so a bad version only hurts a few users.
+364,19,select_blank,exercise,362,A canary deployment sends a ___ of traffic first.,small slice|full amount|zero amount,0,,,
+365,19,multiple_choice,exercise,362,Why start a canary at low traffic?,Limit exposure|Save money|Speed training,0,,,
+366,19,multi_select,exercise,362,Which metrics does a canary watch?,Error rate|Latency|Lunch menu|Meeting notes,0|1,,,
+367,19,code_fill,exercise,362,Complete: give the new version 5% of traffic.,"canary:
+  version: v2
+  weight: ___|5",,,,A weight of 5 means 5% of live traffic goes to the canary version while the rest stays on the stable one.
+368,19,order,exercise,362,Order the canary rollout steps.,Route 5% traffic|Watch metrics|Increase to 100%,,,,"If metrics look bad partway through, the rollout can also reverse — a rollback that sends all traffic back to the old version instead of continuing to ramp up."
+369,19,true_false,preview,370,Shadow deployment sends live traffic but ignores its output.,,true,,,
+370,19,multiple_choice,main,,What happens to a shadow model's output?,Discarded|Shown live|Replaces prod,0,,,"The new model runs on real, live requests in parallel with production, but its predictions are only logged for comparison — real users never see them, so there's zero user-facing risk."
+371,19,true_false,exercise,370,Shadow deployment carries zero user-facing risk.,,true,,,"Because its predictions never reach a real user, a shadow model can be badly broken without anyone but you noticing."
+372,19,select_blank,exercise,370,Shadow traffic is ___ real user traffic.,mirrored|invented|deleted,0,,,
+373,19,multiple_choice,exercise,370,How is shadow different from canary?,Stays hidden|Fake data|No logging,0,,,
+374,19,multi_select,exercise,370,What can shadow deployment help check?,New accuracy|New latency|Font choices|Logo design,0|1,,,
+375,19,true_false,exercise,370,A shadow model's output can reach a real user.,,false,,,"Its output is only ever logged for comparison, never returned to a real request."
+376,20,true_false,preview,377,Watching a model's output distribution can reveal problems.,,true,,,
+377,20,multiple_choice,main,,What does output monitoring track?,Prediction shape|CPU only|Network cables,0,,,"Beyond the logs, metrics, and traces you'd track for any service, ML systems also need to watch the shape of what the model predicts — if a spam filter suddenly flags 90% of email as spam, that's a red flag even with normal latency and error rates."
+378,20,true_false,exercise,377,Normal latency metrics catch every ML problem.,,false,,,A model can be fast and error-free while still quietly predicting garbage — that's why output distribution needs its own watch.
+379,20,select_blank,exercise,377,ML monitoring watches prediction ___ over time.,distribution|font|color,0,,,
+380,20,multiple_choice,exercise,377,A sudden shift in predicted classes signals?,Model issue|Faster servers|Better uptime,0,,,
+381,20,multiple_choice,exercise,377,Which of these is specifically ML monitoring?,Output distribution|Request latency|Disk space,0,,,Latency and disk space apply to any service — watching what a model actually predicts is the ML-specific layer on top.
+382,20,true_false,exercise,377,Output distribution monitoring is unique to ML systems.,,true,,,
+383,20,true_false,preview,384,A model's confidence scores can be monitored too.,,true,,,
+384,20,multiple_choice,main,,What is a confidence score?,Model certainty|CPU load|Network ping,0,,,"It's the probability a model attaches to its own prediction — a spike in low-confidence predictions often shows up before accuracy even drops, since confidence shifts the moment inputs start looking unfamiliar."
+385,20,true_false,exercise,384,Rising low-confidence predictions can warn of trouble early.,,true,,,
+386,20,select_blank,exercise,384,Confidence monitoring flags ___ predictions.,uncertain|fast|colorful,0,,,
+387,20,multiple_choice,exercise,384,Why watch confidence instead of just accuracy?,Accuracy lags|Confidence slower|Accuracy instant,0,,,"Real accuracy needs the true outcome, which often arrives later — confidence is available the instant a prediction is made."
+388,20,multiple_choice,exercise,384,A confidence score near 50/50 means?,Model unsure|Model certain|Model crashed,0,,,
+389,20,true_false,exercise,384,Confidence scores replace the need for ground truth.,,false,,,"They're an early warning signal, not a replacement — you still need real outcomes, the ground truth, to know if predictions were actually correct."
+390,21,true_false,preview,391,Data drift means input data has changed shape.,,true,,,
+391,21,multiple_choice,main,,What is data drift?,Input shifts|Code bug|Server crash,0,,,"Say a loan model was trained on applicants averaging age 35 — if most applicants are now 22, the input distribution has shifted even though the model itself never changed."
+392,21,true_false,exercise,391,Data drift can happen without any code change.,,true,,,
+393,21,select_blank,exercise,391,Data drift is a shift in ___ data.,input|output|no,0,,,
+394,21,multiple_choice,exercise,391,Data drift affects which side of a model?,Input features|Only labels|Neither side,0,,,
+395,21,true_false,exercise,391,Data drift alone always breaks predictions.,,false,,,"Feature values can shift while the model still handles them fine — drift is a warning sign to watch, not proof predictions broke."
+396,21,multiple_choice,exercise,391,A classic data drift example is?,Age shift|Server reboot|Logo redesign,0,,,
+397,21,true_false,preview,398,Concept drift means the input-output link changes.,,true,,,
+398,21,multiple_choice,main,,What is concept drift?,Link shifts|Server slows|Data deleted,0,,,"During a sudden shift like a pandemic, past purchase patterns stopped predicting future buying behavior — inputs looked similar, but what they meant for the correct output had genuinely changed."
+399,21,true_false,exercise,398,Concept drift can happen with unchanged input data.,,true,,,The features can look statistically identical while the correct answer for those same features quietly changes.
+400,21,select_blank,exercise,398,Concept drift changes what output ___ correct.,counts as|never is|always is,0,,,
+401,21,multiple_choice,exercise,398,Concept drift differs from data drift how?,Relationship shifts|Inputs vanish|Servers crash,0,,,
+402,21,true_false,exercise,398,Concept drift is always easy to spot fast.,,false,,,It often only shows up once real outcomes arrive
+403,21,multiple_choice,exercise,398,Concept drift means the same input now?,Predicts differently|Never appears|Doubles size,0,,,
+404,21,true_false,preview,405,A drift score above a threshold flags an alert.,,true,,,
+405,21,multiple_choice,main,,How is drift usually detected?,Distance score|Random guess|Code reading,0,,,"A common tool is PSI, the Population Stability Index — a single number comparing today's feature distribution to the training distribution; the bigger the number, the more the data has shifted."
+406,21,true_false,exercise,405,A higher PSI score means less drift.,,false,,,"PSI grows as distributions diverge — a small PSI looks like training data, a large one means they've moved apart."
+407,21,select_blank,exercise,405,PSI compares today's data to the ___ data.,training|test|fake,0,,,
+408,21,command_output,exercise,405,What does this drift check print?,"psi_score = compute_psi(train_dist, live_dist)
+print('ALERT' if psi_score > 0.2 else 'OK')
+# psi_score = 0.35|ALERT",,,,
+409,21,multiple_choice,exercise,405,A drift score is compared against a?,Threshold|Password|Meeting time,0,,,
+410,21,true_false,exercise,405,PSI needs the original training distribution to work.,,true,,,
+411,21,true_false,preview,412,Detected drift can trigger a retraining pipeline.,,true,,,
+412,21,multiple_choice,main,,What often happens after drift is confirmed?,Retraining triggers|Server reboots|Logo update,0,,,"This is the same retraining-trigger idea from continuous training — instead of waiting on a fixed schedule, a confirmed drift alert can kick off training on fresh data right away."
+413,21,true_false,exercise,412,Drift response always means discarding the model.,,false,,,Often it just means retraining the same architecture on newer data — no need to throw anything away.
+414,21,select_blank,exercise,412,Drift can trigger a fresh ___ run.,training|vacation|meeting,0,,,
+415,21,multiple_choice,exercise,412,"Besides retraining, a drift alert can prompt?",Human review|Delete data|Ignore users,0,,,
+416,21,true_false,exercise,412,Ignoring persistent drift usually improves accuracy.,,false,,,"Left unaddressed, drift tends to make predictions steadily less reliable as live data drifts further from training data."
+417,21,multiple_choice,exercise,412,A drift-triggered retrain uses which data?,Fresh data|Old dataset|No data,0,,,
+418,22,true_false,preview,419,Data validation tests check incoming data quality.,,true,,,
+419,22,multiple_choice,main,,What do data validation tests check?,Data quality|Server uptime|UI colors,0,,,"Beyond a normal unit test that checks your code's logic, a data validation test checks the data itself — like making sure an 'age' column never holds a negative number before it reaches the model."
+420,22,true_false,exercise,419,Data validation tests run before training or inference.,,true,,,
+421,22,select_blank,exercise,419,Data validation catches bad data before the ___.,model sees|logo loads|font renders,0,,,
+422,22,multiple_choice,exercise,419,A data validation test might catch?,Negative age|Slow CPU|Broken link,0,,,
+423,22,multiple_choice,exercise,419,Data validation differs from a unit test by checking?,The data|Nothing|Only UI,0,,,
+424,22,true_false,exercise,419,Schema checks are a form of data validation.,,true,,,"A schema check confirms columns have the right names, types, and shape — one of the most common data validation tests."
+425,22,true_false,preview,426,An invariance test expects output to stay the same.,,true,,,
+426,22,multiple_choice,main,,What does an invariance test check?,Stays stable|Never restarts|No bugs,0,,,Change something the model shouldn't care about — like swapping a loan applicant's name from 'John' to 'Maria' — and a fair model's approval decision should stay exactly the same.
+427,22,true_false,exercise,426,An irrelevant edit changing output is a bug.,,true,,,"If flipping an unrelated detail flips the decision, that's exactly the kind of hidden bias a behavioral test is meant to catch."
+428,22,select_blank,exercise,426,"Invariance tests change ___ inputs, expect the same result.",irrelevant|every|no,0,,,
+429,22,multiple_choice,exercise,426,Behavioral tests mainly focus on a model's?,Outputs|Source code|Server logs,0,,,
+430,22,multiple_choice,exercise,426,A directional test expects output to move?,Predictable way|Randomly|Never,0,,,"Raising a house's square footage in a price model should predictably push the predicted price up, not down."
+431,22,true_false,exercise,426,Invariance and directional tests are both behavioral tests.,,true,,,
+432,23,true_false,preview,433,A model card documents a model before it ships.,,true,,,
+433,23,multiple_choice,main,,What is a model card?,Model doc|ID badge|Billing invoice,0,,,"It's a short standardized document covering a model's intended use, its training data, known limitations, and its measured performance — similar in spirit to a nutrition label, but for a model."
+434,23,true_false,exercise,433,A model card lists a model's intended use.,,true,,,
+435,23,select_blank,exercise,433,A model card records known ___.,limitations|jokes|colors,0,,,
+436,23,multiple_choice,exercise,433,A model card is most like a?,Nutrition label|Marketing flyer|Sales receipt,0,,,
+437,23,multi_select,exercise,433,What belongs on a model card?,Training data|Known limitations|Office address|Lunch menu,0|1,,,
+438,23,true_false,exercise,433,Model cards are written after a model already failed.,,false,,,"They're meant to exist before a model ships, so anyone using it already knows its limits."
+439,23,true_false,preview,440,Some models need human sign-off before going live.,,true,,,
+440,23,multiple_choice,main,,What is an approval workflow for?,Human sign-off|Faster deploys|Skip docs,0,,,"A high-stakes model, like one deciding loan approvals, often needs a designated reviewer to sign off before it's promoted to production — the same instinct as a code review, applied to a model release."
+441,23,true_false,exercise,440,Approval workflows apply mostly to high-stakes models.,,true,,,
+442,23,select_blank,exercise,440,Approval gates require a human ___.,sign-off|password|logo,0,,,
+443,23,multiple_choice,exercise,440,An approval workflow is closest to a?,Code review|Server restart|Marketing pitch,0,,,
+444,23,multiple_choice,exercise,440,Skipping approval on a risky model risks?,Unchecked harm|Faster training|Cheaper storage,0,,,
+445,23,true_false,exercise,440,Every internal experiment needs full approval sign-off.,,false,,,Approval gates matter most for models that reach production and affect real people — not every early experiment needs the same ceremony.
+446,23,true_false,preview,447,A fairness check compares performance across groups.,,true,,,
+447,23,multiple_choice,main,,What does a fairness check compare?,Group performance|Response time|Line count,0,,,"For example, checking whether a hiring model approves resumes at similar rates across genders — a model can look accurate overall while quietly performing worse for one subgroup."
+448,23,true_false,exercise,447,A model can look accurate but still unfair.,,true,,,
+449,23,select_blank,exercise,447,Fairness checks compare results across ___.,subgroups|servers|files,0,,,
+450,23,multiple_choice,exercise,447,A fairness check might reveal?,Uneven accuracy|Faster inference|Lower memory,0,,,
+451,23,multiple_choice,exercise,447,Fairness checks should mainly happen?,Before shipping|After lawsuit|Never,0,,,"Ideally it's caught before shipping — governance is about catching gaps early, not reacting after harm is already done."
+452,23,true_false,exercise,447,Fairness checks are unrelated to model governance.,,false,,,They're actually a core part of governance — fairness is one of the things a responsible approval process checks for.
+453,24,true_false,preview,454,LLM apps need to version prompts like code.,,true,,,
+454,24,multiple_choice,main,,What is prompt versioning?,Tracking changes|Deleting prompts|Ignoring edits,0,,,"The same instinct behind a model registry tracking which trained weights are live now applies to prompts too — an LLM app needs to know exactly which prompt text produced which behavior, and roll back a bad edit just as easily."
+455,24,true_false,exercise,454,A prompt change can break app behavior.,,true,,,
+456,24,select_blank,exercise,454,Prompt versioning tracks changes over ___.,time|weekends|lunch,0,,,
+457,24,multiple_choice,exercise,454,Prompt versioning borrows its idea from?,Model registries|Coffee orders|Office seating,0,,,
+458,24,multiple_choice,exercise,454,"Without prompt versioning, a bad edit is hard to?",Roll back|Type|Read,0,,,
+459,24,true_false,exercise,454,Prompts are stable enough to never need tracking.,,false,,,"A small wording tweak can noticeably change an LLM's answers, so prompts need the same careful tracking as model weights."
+460,24,true_false,preview,461,RAG answers are graded on real grounding.,,true,,,
+461,24,multiple_choice,main,,What does RAG evaluation check?,Answer grounding|Server uptime|Font rendering,0,,,"RAG stands for Retrieval-Augmented Generation — the model looks up real documents before answering. Evaluation checks whether the final answer is actually grounded in those documents, not just fluent-sounding text the model invented."
+462,24,true_false,exercise,461,A fluent RAG answer can still be ungrounded.,,true,,,An answer can read perfectly well while citing facts the retrieved documents never actually said — that's exactly what grounding checks catch.
+463,24,select_blank,exercise,461,RAG evaluation checks answers against retrieved ___.,documents|passwords|invoices,0,,,
+464,24,multiple_choice,exercise,461,RAG stands for retrieval-augmented?,Generation|Deployment|Testing,0,,,
+465,24,multiple_choice,exercise,461,Why can't tests assert one exact LLM answer?,Wording varies|Never respond|Answers cached,0,,,"The same prompt can produce differently-worded answers each run, which is why many teams grade LLM output with another model acting as a judge, instead of one fixed expected string."
+466,24,true_false,exercise,461,An LLM-as-judge approach can score answer quality.,,true,,,
+467,24,true_false,preview,468,Token usage adds a new cost dimension to watch.,,true,,,
+468,24,multiple_choice,main,,What is token cost monitoring?,Request spend|Disk space|Screen colors,0,,,"Every LLM call is billed by tokens in and out, so on top of the prediction-distribution and confidence monitoring from earlier, LLM systems also need to watch cost per request — a subtle prompt change can quietly multiply your bill."
+469,24,true_false,exercise,468,A longer prompt can directly raise token cost.,,true,,,
+470,24,select_blank,exercise,468,LLM calls are billed by ___ used.,tokens|pixels|seconds,0,,,
+471,24,multiple_choice,exercise,468,Token cost monitoring is mostly unique to?,LLM systems|Every system|No systems,0,,,
+472,24,multiple_choice,exercise,468,A cost spike might come from?,Longer prompts|Faster servers|Smaller datasets,0,,,
+473,24,true_false,exercise,468,Token cost is irrelevant once accuracy looks fine.,,false,,,"A model can be accurate and still quietly burn far more budget than expected — cost is its own thing to watch, separate from correctness."
+474,19,match_pairs,exercise,362,Match each canary term to its meaning.,Canary↔Small traffic slice|Rollback↔Revert on bad metrics|Ramp-up↔Increase traffic gradually,,,,
+475,21,categorize,exercise,398,Sort each example by drift type.,"Applicant ages shift↔Data drift|Same inputs, new correct label↔Concept drift|Buying habits change meaning↔Concept drift|Fewer young applicants apply↔Data drift",,,,
+476,22,match_pairs,exercise,426,Match each ML test to what it checks.,Data validation↔Incoming data quality|Invariance test↔Output stays stable|Directional test↔Output moves predictably,,,,
+477,24,categorize,exercise,468,Sort each task to its LLMOps concept.,Tracking prompt edits↔Prompt versioning|Checking answer grounding↔RAG evaluation|Watching spend per call↔Token cost monitoring,,,,

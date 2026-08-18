@@ -1,0 +1,14 @@
+term,definition,link
+Vibecoding,"Directing an AI coding agent in plain natural language to build software — describing the outcome you want and reviewing what it produces, instead of typing every line yourself.",
+Prompt,"The natural-language instructions you type to tell an agent what to do — vibecoding's equivalent of writing code, but in plain English. A good prompt gives enough detail to avoid guessing, without spelling out every line yourself.",
+CLAUDE.md,"A project file (sometimes named AGENTS.md instead) that you write once, upfront, listing your codebase's conventions and rules, so an AI agent doesn't have to guess them fresh on every task.",
+Boilerplate,"Repetitive, predictable code every project needs (setup, config, standard structure) that takes no real creative thought to write — exactly the kind of grunt work AI agents handle well.",
+Diff,"The exact set of changes — lines added, removed, or edited — an agent made to your code, shown side by side so you can review precisely what changed before accepting it.",https://en.wikipedia.org/wiki/Diff
+Hallucination,"When an AI agent states something false as if it were fact — like a function, flag, or API that doesn't actually exist — sounding just as confident as it would if it were right.",https://en.wikipedia.org/wiki/Hallucination_(artificial_intelligence)
+Scope creep,"When an agent's changes quietly spread beyond what you actually asked for — touching extra files or features you didn't request — which makes the diff harder to trust and review.",
+Version control,"A system (like Git) that tracks every change made to your code over time, so you can undo a change or roll back to an earlier state if something goes wrong.",https://en.wikipedia.org/wiki/Version_control
+Repo,"Short for 'repository' — the folder holding a project's entire codebase, tracked by a version control system like Git so every file and its history lives in one place.",
+Branch,"A separate, parallel copy of a codebase in version control (like Git) where you can make and test changes without touching the main version — you merge it back in only once you're happy with it.",
+Commit,"A saved snapshot of your code's current state in version control, labeled with a short message describing what changed. Committing often — e.g. after every small step — gives you an undo button back to any of those points.",
+Force-push,"A Git command that overwrites a shared branch's history with your local version, permanently discarding whatever commits were there before — unlike a normal edit, it can't just be undone.",
+Losing the thread,"When an agent's grip on the conversation drifts during a long chat, and it starts forgetting or ignoring rules and constraints you set earlier in that same session.",
