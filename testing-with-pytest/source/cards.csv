@@ -1,0 +1,407 @@
+id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,explanation
+1,1,multiple_choice,main,,pytest tests are written as:,Functions|Classes only|Modules,0,,,"def test_addition():
+    assert 2 + 2 == 4  # a plain function is enough, no class needed"
+2,1,true_false,preview,1,pytest tests can be plain functions.,,true,,,
+3,1,true_false,exercise,1,unittest tests must be class methods.,,true,,,unittest requires subclassing TestCase and writing test methods on it.
+4,1,true_false,exercise,1,pytest functions don't need self.,,true,,,Plain functions have no self parameter — that's only for class methods.
+5,1,select_blank,exercise,1,"pytest tests are plain ___, not classes.",functions|modules|classes,0,,,
+6,1,true_false,exercise,1,You must subclass TestCase for pytest.,,false,,,That's the unittest requirement pytest was built to remove.
+7,1,multiple_choice,exercise,1,unittest tests live inside a:,Class|Function|File,0,,,
+8,1,match_pairs,exercise,1,Match framework to its test unit.,pytest↔function|unittest↔class method,,,,
+9,1,multiple_choice,main,,pytest checks results using:,assert|assertEqual|checkThat,0,,,"assert result == 4  # instead of self.assertEqual(result, 4)"
+10,1,true_false,preview,9,pytest uses Python's assert keyword.,,true,,,
+11,1,true_false,exercise,9,unittest uses self.assertEqual for checks.,,true,,,unittest needs its own methods like assertEqual instead of plain assert.
+12,1,multiple_choice,exercise,9,Which keyword does pytest use to check?,assert|assertEqual|verify,0,,,
+13,1,true_false,exercise,9,pytest needs special assert methods.,,false,,,Plain assert is all pytest needs — no special methods to memorize.
+14,1,select_blank,exercise,9,pytest replaces assertEqual with plain ___.,assert|print|self,0,,,
+15,1,true_false,exercise,9,assert is a built-in Python keyword.,,true,,,pytest doesn't invent assert — it just reads more into your existing assert statements.
+16,1,multiple_choice,exercise,9,self.assertEqual belongs to which tool?,unittest|pytest|pip,0,,,
+17,2,multiple_choice,main,,You install pytest using:,pip|npm|apt,0,,,pip install pytest — the standard way to add pytest to a Python environment.
+18,2,true_false,preview,17,pip install pytest installs pytest.,,true,,,
+19,2,true_false,exercise,17,pytest installs via pip.,,true,,,pip is Python's package installer
+20,2,select_blank,exercise,17,Run pip ___ pytest to add it.,install|remove|list,0,,,
+21,2,code_fill,exercise,17,Complete the install command.,pip ___ pytest|install,,,,
+22,2,multiple_choice,exercise,17,pytest is installed as a:,Package|Compiler|OS,0,,,
+23,2,true_false,exercise,17,You need Python installed first.,,true,,,pytest is a Python library — it needs Python already on the machine.
+24,2,true_false,exercise,17,pytest works without Python.,,false,,,pytest is written in Python and runs on top of it.
+25,2,multiple_choice,main,,Which command runs your tests?,pytest|python test|run test,0,,,"Typing pytest alone in your terminal finds and runs every test file it can discover, e.g. $ pytest"
+26,2,true_false,preview,25,Typing pytest runs your tests.,,true,,,
+27,2,short_answer,exercise,25,What command runs pytest tests?,pytest,,,,
+28,2,true_false,exercise,25,pytest runs from the terminal.,,true,,,You type it into your command line
+29,2,multiple_choice,exercise,25,Where do you type pytest?,Terminal|Browser|Editor menu,0,,,
+30,2,order,exercise,25,Order the basic first-test workflow.,Install pytest|Write a test function|Run pytest,,,,
+31,2,select_blank,exercise,25,Typing pytest ___ your test files.,runs|deletes|edits,0,,,
+32,2,true_false,exercise,25,pytest needs no config to run.,,true,,,Just typing pytest works out of the box
+33,3,multiple_choice,main,,pytest finds test files starting with:,test_|check_|run_,0,,,A file like test_math.py or math_test.py is auto-discovered — no registration needed.
+34,3,true_false,preview,33,Files named test_math.py are auto-found.,,true,,,
+35,3,true_false,exercise,33,math_test.py also counts as a test file.,,true,,,pytest accepts either the test_ prefix or the _test.py suffix.
+36,3,true_false,exercise,33,You must register test files manually.,,false,,,Naming alone is enough — no list
+37,3,multiple_choice,exercise,33,A valid pytest file ending is:,_test.py|_check.py|_spec.py,0,,,
+38,3,true_false,exercise,33,utils.py is auto-discovered as a test.,,false,,,It doesn't start with test_ or end in _test.py
+39,3,select_blank,exercise,33,Test files start or end with ___.,test|main|util,0,,,
+40,3,categorize,exercise,33,Sort each filename by discovery.,test_math.py↔Discovered|math_test.py↔Discovered|utils.py↔Not discovered|helpers.py↔Not discovered,,,,
+41,3,multiple_choice,main,,pytest discovers functions named:,test_*|check_*|run_*,0,,,"def test_login(): is picked up automatically; def check_login() is not, no matter the file it's in."
+42,3,true_false,preview,41,Functions named test_login are discovered.,,true,,,
+43,3,true_false,exercise,41,check_login() is auto-discovered by pytest.,,false,,,It doesn't start with test_
+44,3,select_blank,exercise,41,Test functions must start with ___.,test_|check_|run_,0,,,
+45,3,true_false,exercise,41,A test class must start with Test.,,true,,,A class named TestLogin is discovered; loginTest is not.
+46,3,multiple_choice,exercise,41,pytest test classes must not define:,__init__|test_x|self,0,,,A test class with its own __init__ is skipped by pytest's collector.
+47,3,true_false,exercise,41,TestLogin is a valid test class name.,,true,,,
+48,3,true_false,exercise,41,loginTest is a valid pytest class name.,,false,,,It doesn't start with a capital Test
+49,4,multiple_choice,main,,assert fails the test when its expression is:,False|True|Empty,0,,,assert 2 + 2 == 5 fails the test because the expression is False; assert 2 + 2 == 4 passes silently.
+50,4,true_false,preview,49,assert fails when its expression is False.,,true,,,
+51,4,true_false,exercise,49,assert 1 == 1 passes silently.,,true,,,A True expression means assert does nothing and the test moves on.
+52,4,code_fill,exercise,49,Complete: check status code equals 200.,assert response.status_code == ___|200,,,,
+53,4,multiple_choice,exercise,49,assert 5 > 10 will:,Fail|Pass|Skip,0,,,
+54,4,true_false,exercise,49,assert needs parentheses like a function.,,false,,,assert is a keyword
+55,4,select_blank,exercise,49,assert stops the test if the expression is ___.,false|true|empty,0,,,
+56,4,true_false,exercise,49,assert works with any boolean expression.,,true,,,Comparisons
+57,4,multiple_choice,main,,A custom assert message follows a:,Comma|Colon|Semicolon,0,,,"assert total == 0, 'cart is empty' — the text after the comma only shows up if the assert fails."
+58,4,true_false,preview,57,A comma adds a custom failure message.,,true,,,
+59,4,true_false,exercise,57,The message shows only on failure.,,true,,,A passing assert never shows the message — it's silent either way.
+60,4,code_fill,exercise,57,Complete the failure message text.,"assert total == 0, 'cart is ___'|empty",,,,
+61,4,true_false,exercise,57,You must use a comma before the message.,,true,,,The comma separates the checked expression from the message text.
+62,4,multiple_choice,exercise,57,The custom message helps you:,Debug|Slow tests|Skip tests,0,,,
+63,4,true_false,exercise,57,The message runs even if assert passes.,,false,,,It's only ever shown when the assertion actually fails.
+64,4,select_blank,exercise,57,"assert expr, ___ adds context on failure.",message|nothing|loop,0,,,
+65,5,multiple_choice,main,,"On failure, pytest shows the:",Actual values|Just False|Nothing,0,,,assert x == 4 failing shows something like 'assert 3 == 4' — pytest rewrites the assert to reveal what x actually was.
+66,5,true_false,preview,65,pytest shows actual values on failure.,,true,,,
+67,5,true_false,exercise,65,This works without a custom message.,,true,,,You get the actual values for free
+68,5,multiple_choice,exercise,65,This pytest feature is called:,Assertion rewriting|Test discovery|Fixture scope,0,,,
+69,5,true_false,exercise,65,unittest shows this detail by default.,,false,,,"unittest just says the assertion failed, unless you also pass a custom message."
+70,5,select_blank,exercise,65,pytest ___ assert to add detail.,rewrites|deletes|ignores,0,,,
+71,5,true_false,exercise,65,Rewriting only happens on failing asserts.,,true,,,A passing assert is silent — the extra detail only appears on failure.
+72,5,multiple_choice,exercise,65,Assertion rewriting saves you from writing:,Manual messages|Test files|Fixtures,0,,,
+73,5,true_false,exercise,65,You must import a debugger to see values.,,false,,,pytest shows the values automatically — no debugger or extra import needed.
+74,6,multiple_choice,main,,You declare a fixture with:,@pytest.fixture|@pytest.mark|def only,0,,,"@pytest.fixture
+def sample_user():
+    return {'name': 'Ada'}"
+75,6,true_false,preview,74,@pytest.fixture marks a setup function.,,true,,,
+76,6,true_false,exercise,74,Any function can be a fixture.,,false,,,Only a function decorated with @pytest.fixture is treated as one.
+77,6,short_answer,exercise,74,Decorator that declares a fixture?,@pytest.fixture,,,,
+78,6,multiple_choice,exercise,74,A fixture function usually provides:,Test data|Random noise|Nothing,0,,,
+79,6,true_false,exercise,74,Fixtures reduce repeated setup code.,,true,,,Write the setup once as a fixture
+80,6,select_blank,exercise,74,@pytest.fixture goes ___ the function.,above|below|inside,0,,,
+81,6,true_false,exercise,74,A fixture must return a value.,,false,,,A fixture can also just perform setup and return nothing at all.
+82,6,multiple_choice,main,,A test uses a fixture by:,Parameter name|Import statement|File path,0,,,"def test_profile(sample_user):
+    assert sample_user['name'] == 'Ada'  # pytest matches the parameter name to the fixture"
+83,6,true_false,preview,82,Tests request fixtures by parameter name.,,true,,,
+84,6,true_false,exercise,82,The parameter name must match the fixture name.,,true,,,pytest looks up fixtures by exact name
+85,6,true_false,exercise,82,You must import fixtures like functions.,,false,,,No import needed — naming the parameter is the whole mechanism.
+86,6,multiple_choice,exercise,82,pytest injects a fixture's:,Return value|File path|Class name,0,,,
+87,6,true_false,exercise,82,A test can request several fixtures.,,true,,,Just list more parameters — one per fixture you want to use.
+88,6,select_blank,exercise,82,Naming a parameter ___ a fixture requests it.,like|unlike|without,0,,,
+89,6,multi_select,exercise,82,Which are true about fixture injection?,Param name|By import|Multiple allowed|File path,0|2,,,"Matching the parameter name is how pytest finds a fixture, and a test can request as many as it needs."
+151,7,true_false,preview,152,A fixture's scope decides how often it reruns.,,true,,,"Scope is set with @pytest.fixture(scope=""..."") — the default is 'function', meaning it reruns for every single test."
+152,7,multiple_choice,main,,The default fixture scope is:,Function|Session|Module,0,,,@pytest.fixture with no scope argument reruns for every test. Use @pytest.fixture(scope='module') to share one instance across a whole file instead.
+153,7,true_false,exercise,152,Session scope reruns once per test.,,false,,,Session scope actually runs once for the entire test run — the opposite of function scope.
+154,7,multiple_choice,exercise,152,Which scope runs once per file?,Module|Function|Class,0,,,A module-scoped fixture is built once and reused by every test in that file.
+155,7,select_blank,exercise,152,Session scope fixtures run only ___.,once|every test|every class,0,,,
+156,7,true_false,exercise,152,Function scope is pytest's default.,,true,,,
+157,7,multiple_choice,exercise,152,Which scope shares setup across a class?,Class|Function|Session,0,,,
+158,7,order,exercise,152,Order these scopes from narrowest to widest.,Function|Class|Module|Session,,,,Each level widens how many tests share the same fixture instance.
+159,7,match_pairs,exercise,152,Match each scope to how often it runs.,Function↔Each test|Class↔Each class|Module↔Each file|Session↔Whole run,,,,
+160,7,true_false,preview,161,Broader fixture scope trades isolation for speed.,,true,,,"A session-scoped database connection is fast to set up once, but tests now share state and can affect each other."
+161,7,multiple_choice,main,,A broad fixture scope is usually:,Faster|Slower|Unrelated,0,,,"Fewer setup/teardown runs means less overhead, but tests sharing one instance can leak state between each other."
+162,7,true_false,exercise,161,Narrower scope means safer test isolation.,,true,,,"Function scope gives every test its own fresh instance, so nothing carries over."
+163,7,multiple_choice,exercise,161,Sharing fixture state risks:,Test leakage|Faster runs|Nothing,0,,,
+164,7,multiple_choice,exercise,161,Function scope favors:,Isolation|Speed|Neither,0,,,
+165,7,multiple_choice,exercise,161,Session scope favors:,Speed|Isolation|Neither,0,,,
+166,7,select_blank,exercise,161,Wider scope means ___ but riskier tests.,faster|slower|safer,0,,,
+167,7,true_false,exercise,161,Class scope is broader than function scope.,,true,,,
+168,7,true_false,exercise,161,Broad scope can leak state between tests.,,true,,,"A session-scoped fixture wrapping a list, for example, keeps whatever a test appended to it for every test after."
+169,8,true_false,preview,170,conftest.py fixtures need no import to use.,,true,,,pytest automatically discovers conftest.py and makes its fixtures available to every test in that directory.
+170,8,multiple_choice,main,,conftest.py fixtures are available:,Without import|If imported|Never,0,,,"Define def db(): ... in tests/conftest.py, and any test file in tests/ can just take db as a parameter — no import line needed."
+171,8,true_false,exercise,170,You must import fixtures from conftest.py.,,false,,,That's the whole point of conftest.py — pytest wires it up automatically.
+172,8,true_false,exercise,170,conftest.py fixtures apply to their directory.,,true,,,
+173,8,short_answer,exercise,170,Name the shared-fixtures file pytest auto-loads.,conftest.py,,,,
+174,8,multiple_choice,exercise,170,conftest.py fixtures reach:,Whole project|One file|Nothing,0,,,"Well, at least everything in and below the directory that holds that conftest.py."
+175,8,select_blank,exercise,170,conftest.py fixtures work with ___ import.,no|explicit|manual,0,,,
+176,8,true_false,exercise,170,pytest finds conftest.py files automatically.,,true,,,
+177,8,multiple_choice,exercise,170,"Without conftest.py, sharing needs:",Imports|Nothing|Magic,0,,,Without it you'd have to import the fixture function into every test file by hand.
+178,8,true_false,preview,179,A nested conftest.py overrides its parent's fixture.,,true,,,"pytest walks from the test file up to the root, and the closest conftest.py wins."
+179,8,multiple_choice,main,,A closer conftest.py fixture:,Overrides parent|Is ignored|Errors always,0,,,"A tests/api/conftest.py can redefine a fixture from tests/conftest.py, and only tests under tests/api/ see the new version."
+180,8,true_false,exercise,179,Subdirectories inherit parent conftest fixtures.,,true,,,
+181,8,true_false,exercise,179,A subdirectory conftest can redefine a fixture.,,true,,,
+182,8,multiple_choice,exercise,179,Root conftest fixtures reach:,Whole project|One folder|Nothing,0,,,
+183,8,select_blank,exercise,179,A test uses the ___ matching conftest.,closest|farthest|random,0,,,
+184,8,true_false,exercise,179,conftest.py files need explicit registration.,,false,,,pytest discovers them by filename and folder position alone.
+185,8,multiple_choice,exercise,179,Nested conftest.py mirrors your:,Folder structure|File imports|Class names,0,,,
+186,8,multiple_choice,exercise,179,Multiple conftest.py files can:,Coexist nested|Never coexist|Conflict always,0,,,
+187,9,true_false,preview,188,tmp_path gives each test a fresh folder.,,true,,,"It's a pathlib.Path pointing at a brand-new, empty temp directory just for that test."
+188,9,multiple_choice,main,,tmp_path fixture provides a:,Temp folder|Network socket|Database,0,,,"def test_write(tmp_path): (tmp_path / 'out.txt').write_text('hi') — no real filesystem cleanup code needed, pytest handles it."
+189,9,true_false,exercise,188,tmp_path is unique to each test.,,true,,,
+190,9,multiple_choice,exercise,188,tmp_path returns a:,Path object|String only|List,0,,,"It's a pathlib.Path, so you can use / to join paths directly."
+191,9,select_blank,exercise,188,tmp_path avoids polluting your ___ directory.,project|memory|network,0,,,
+192,9,multiple_choice,exercise,188,Writing test files should use:,tmp_path|Home folder|System root,0,,,
+193,9,true_false,exercise,188,Two tests share the same tmp_path.,,false,,,"Each test gets its own unique directory, even within the same test run."
+194,9,multiple_choice,exercise,188,tmp_path is useful for testing:,File I/O|Networking|Threading,0,,,
+195,9,multiple_choice,exercise,188,tmp_path is provided by:,pytest itself|A plugin|The OS,0,,,No install needed — it ships with pytest out of the box.
+196,9,true_false,preview,197,capsys captures printed output in tests.,,true,,,It intercepts stdout and stderr so a test can assert on what a function printed.
+197,9,multiple_choice,main,,capsys lets you check a test's:,Printed output|Return value|File size,0,,,def test_hi(capsys): greet(); out = capsys.readouterr().out; assert out == 'hi\n'
+198,9,true_false,exercise,197,capsys captures stdout and stderr.,,true,,,
+199,9,multiple_choice,exercise,197,capsys.readouterr() returns:,Captured text|A path|A boolean,0,,,It gives back an object with .out and .err attributes.
+200,9,true_false,exercise,197,"Without capsys, print() output stays unchecked.",,true,,,"pytest normally swallows stdout during a run, so you'd have no way to assert on it."
+201,9,code_fill,exercise,197,Complete the call reading captured output.,captured = capsys.___()|readouterr,,,,readouterr() returns the captured text and clears the buffer for the next read.
+202,9,select_blank,exercise,197,capsys.readouterr() returns .out and .___.,err|end|len,0,,,
+203,9,true_false,exercise,197,capsys works without redirecting print yourself.,,true,,,
+204,9,multiple_choice,exercise,197,capsys is mainly used for testing:,CLI output|GUI clicks|Network calls,0,,,
+205,9,true_false,preview,206,monkeypatch changes things temporarily during a test.,,true,,,It automatically undoes every change it made once the test finishes.
+206,9,multiple_choice,main,,monkeypatch safely modifies things:,Temporarily|Permanently|Never,0,,,"monkeypatch.setenv('DEBUG', '1') sets it for this test only — pytest reverts it right after, pass or fail."
+207,9,true_false,exercise,206,monkeypatch reverts changes after the test.,,true,,,
+208,9,multiple_choice,exercise,206,monkeypatch.setenv sets a:,Env variable|File path|Database row,0,,,
+209,9,code_fill,exercise,206,Complete setting an environment variable.,"monkeypatch.___('KEY', 'value')|setenv",,,,
+210,9,select_blank,exercise,206,monkeypatch.setattr changes an object's ___.,attribute|filename|network,0,,,"monkeypatch.setattr(obj, 'method', fake_method) swaps in a fake version for the test."
+211,9,true_false,exercise,206,monkeypatch can replace a function during a test.,,true,,,
+212,9,multiple_choice,exercise,206,monkeypatch.delenv removes a:,Env variable|Test file|Fixture,0,,,
+213,9,true_false,exercise,206,monkeypatch changes leak into other tests.,,false,,,That's exactly what monkeypatch is designed to prevent.
+214,10,true_false,preview,215,yield splits a fixture into setup and teardown.,,true,,,Everything before yield is setup; everything after it is cleanup.
+215,10,multiple_choice,main,,Code after yield in a fixture is:,Teardown|Setup|Ignored,0,,,def resource(): r = open_conn(); yield r; r.close() — the close() call only runs after the test finishes using r.
+216,10,true_false,exercise,215,Code before yield runs as setup.,,true,,,
+217,10,multiple_choice,exercise,215,"After yield, cleanup code is:",Teardown|Setup|Unused,0,,,
+218,10,true_false,exercise,215,A fixture can yield a value tests use.,,true,,,Whatever you pass to yield becomes the fixture's value inside the test function.
+219,10,select_blank,exercise,215,yield fixtures split setup from ___.,teardown|imports|assertions,0,,,
+220,10,multiple_choice,exercise,215,return fixtures skip:,Teardown|Setup|Injection,0,,,A plain return fixture has no built-in place to run cleanup code.
+221,10,true_false,exercise,215,Only one yield fixture per file is allowed.,,false,,,A file can define as many yield fixtures as it needs.
+222,10,multiple_choice,exercise,215,The value tests receive comes from:,Before yield|After yield|Neither,0,,,
+223,10,code_fill,exercise,215,Complete the fixture that uses yield.,"@pytest.fixture
+def resource():
+    r = open_conn()
+    ___ r
+    r.close()|yield",,,,
+224,10,true_false,preview,225,Teardown code runs even if a test fails.,,true,,,"pytest always runs the code after yield, whether the test passed, failed, or raised."
+225,10,multiple_choice,main,,"If a test fails, teardown:",Still runs|Is skipped|Errors,0,,,"A failed assert still triggers r.close() — pytest guarantees teardown runs no matter what, so connections never leak."
+226,10,true_false,exercise,225,Teardown guarantees cleanup like closing files.,,true,,,
+227,10,multiple_choice,exercise,225,Guaranteed teardown prevents:,Resource leaks|Faster runs|More bugs,0,,,
+228,10,true_false,exercise,225,An assertion failure skips fixture teardown.,,false,,,
+229,10,select_blank,exercise,225,"Teardown always ___, pass or fail.",runs|skips|fails,0,,,
+230,10,multiple_choice,exercise,225,A yield fixture closing a file does so in:,Teardown|Setup|Neither,0,,,
+231,10,true_false,exercise,225,Multiple yield fixtures tear down in reverse order.,,true,,,The last fixture set up is the first one torn down — like unwinding a stack.
+232,10,multiple_choice,exercise,225,This setup/cleanup split resembles Python's:,try/finally|for loop|import system,0,,,"finally always runs too, whether the try block succeeded or raised."
+233,11,true_false,preview,234,parametrize reruns one test with different inputs.,,true,,,"One test function becomes many test runs, one per value you supply."
+234,11,multiple_choice,main,,@pytest.mark.parametrize runs a test:,Multiple times|Once only|Never,0,,,"@pytest.mark.parametrize('n', [1, 2, 3]) turns test_positive(n) into three separate test runs, one per value."
+235,11,true_false,exercise,234,Each parametrize value becomes a separate test run.,,true,,,
+236,11,multiple_choice,exercise,234,Parametrize avoids writing:,Duplicate tests|More fixtures|Assertions,0,,,"Instead of test_positive_1, test_positive_2, and so on, you write one test and a list of inputs."
+237,11,true_false,exercise,234,Parametrized failures show which input failed.,,true,,,pytest reports each run with its specific input value in the test name.
+238,11,select_blank,exercise,234,parametrize takes names and a list of ___.,values|fixtures|files,0,,,
+239,11,multiple_choice,exercise,234,Parametrize is best for testing:,Many inputs|One input|No inputs,0,,,
+240,11,true_false,exercise,234,Parametrize needs a separate function per case.,,false,,,That's precisely what it removes the need for.
+241,11,multiple_choice,exercise,234,Each parametrized run gets a unique:,Test ID|File name|Class,0,,,"You'll see names like test_positive[1], test_positive[2] in the output."
+242,11,true_false,preview,243,parametrize's first argument names the parameter.,,true,,,"In parametrize('n', [1, 2, 3]), 'n' becomes the test function's parameter name."
+243,11,code_fill,main,,Complete the parametrize decorator.,"@pytest.___.parametrize('n', [1, 2, 3])
+def test_positive(n):
+    assert n > 0|mark",,,,"The decorator lives on pytest.mark, so it's always written as @pytest.mark.parametrize."
+244,11,true_false,exercise,243,The decorator's first argument is a string name.,,true,,,"It names the parameter, e.g. 'n', matching the test function's argument."
+245,11,select_blank,exercise,243,Parametrize's second argument is a list of ___.,values|fixtures|imports,0,,,
+246,11,multiple_choice,exercise,243,The parametrized name becomes a:,Test parameter|A fixture|Class name,0,,,
+247,11,true_false,exercise,243,You can parametrize with tuples for multiple args.,,true,,,"parametrize('a,b', [(1, 2), (3, 4)]) varies two arguments together."
+248,11,multiple_choice,exercise,243,The parametrize decorator comes from:,pytest.mark|unittest|Python core,0,,,
+249,11,true_false,exercise,243,Parametrize values must be pytest fixtures.,,false,,,"They're just plain Python values — numbers, strings, tuples, anything."
+250,11,command_output,exercise,243,How many test runs does this create?,"@pytest.mark.parametrize('n', [1, 2, 3])
+def test_it(n):
+    assert n > 0|3",,,,"One test run per value in the list — three values, three runs."
+251,12,true_false,preview,252,A parametrized fixture reruns every test using it.,,true,,,"Unlike a plain fixture, it builds a separate instance per param value for every test that depends on it."
+252,12,multiple_choice,main,,A parametrized fixture varies for:,Every test|One test|No tests,0,,,"@pytest.fixture(params=[1, 2]) def n(request): return request.param — every test using n now runs once per param value."
+253,12,true_false,exercise,252,Fixture parametrize is set via params=.,,true,,,
+254,12,multiple_choice,exercise,252,Fixture-level parametrize affects:,All tests|One test|No tests,0,,,"It reruns every single test that requests that fixture, not just one."
+255,12,true_false,exercise,252,Test-level parametrize affects one test function.,,true,,,"That's the difference from fixture-level parametrize, which spreads across every dependent test."
+256,12,select_blank,exercise,252,Fixture params create multiple fixture ___.,instances|files|classes,0,,,
+257,12,multiple_choice,exercise,252,Parametrizing a fixture avoids repeating in:,Every test|One test|No test,0,,,
+258,12,true_false,exercise,252,Fixture parametrize needs pytest.mark.parametrize.,,false,,,It's set with params= right on @pytest.fixture instead.
+259,12,multiple_choice,exercise,252,Fixture params live on:,@pytest.fixture|@pytest.mark|A class,0,,,
+260,12,true_false,preview,261,request.param holds the fixture's current value.,,true,,,"Inside a parametrized fixture, request.param is whichever value is being used for that run."
+261,12,short_answer,main,,What attribute reads a fixture's current param?,request.param,,,,"@pytest.fixture(params=[1, 2]) def n(request): return request.param — request is itself a built-in pytest fixture."
+262,12,true_false,exercise,261,request is itself a built-in pytest fixture.,,true,,,
+263,12,multiple_choice,exercise,261,request.param comes from the fixture's:,params= list|Test function|Nowhere,0,,,
+264,12,true_false,exercise,261,Every fixture automatically has a request.param.,,false,,,Only fixtures declared with params= have one — a plain fixture has nothing to read there.
+265,12,select_blank,exercise,261,request.param changes with each fixture ___.,instance|file|import,0,,,
+266,12,multiple_choice,exercise,261,request is used inside:,The fixture|Test only|Never,0,,,
+267,12,true_false,exercise,261,You must accept request as a fixture argument.,,true,,,"def n(request): — without naming it as a parameter, the fixture can't reach request.param."
+268,12,code_fill,exercise,261,Complete the fixture reading its param.,"@pytest.fixture(params=[1, 2])
+def n(request):
+    return request.___|param",,,,
+301,13,multiple_choice,main,,How do you always skip a test?,@pytest.mark.skip|@pytest.mark.skipif|@pytest.fixture,0,,,"@pytest.mark.skip unconditionally skips a test. @pytest.mark.skipif(condition, reason=""..."") only skips when that condition is true, like on the wrong OS."
+302,13,true_false,preview,301,@pytest.mark.skip always skips a test.,,true,,,
+303,13,true_false,exercise,301,skipif skips only under a condition.,,true,,,"e.g. @pytest.mark.skipif(sys.platform == ""win32"", reason=""windows only"")."
+304,13,multiple_choice,exercise,301,skipif takes what as its first arg?,Condition|Reason string|Test name,0,,,
+305,13,select_blank,exercise,301,skipif needs a boolean ___ to check.,condition|decorator|fixture,0,,,
+306,13,multiple_choice,exercise,301,Why give skip a reason=?,Explains why|Runs faster|Fixes bug,0,,,
+307,13,true_false,exercise,301,skip needs a condition argument.,,false,,,"skip always skips, no condition needed — that's skipif's whole job."
+308,13,multiple_choice,exercise,301,Which marker needs no condition?,skip|skipif|parametrize,0,,,
+309,13,multiple_choice,main,,xfail marks a test as expected to?,Fail|Pass|Skip,0,,,"@pytest.mark.xfail(reason=""known bug"") lets a known-failing test stay in the suite without breaking the build."
+310,13,true_false,preview,309,xfail means the test is expected to fail.,,true,,,
+311,13,true_false,exercise,309,An xfail test failing breaks the build.,,false,,,"It's reported as ""xfailed"", not counted as a failure."
+312,13,multiple_choice,exercise,309,"If an xfail test passes, it's reported as?",XPASS|XFAIL|ERROR,0,,,XPASS flags a surprising pass — worth checking if the bug actually got fixed.
+313,13,select_blank,exercise,309,XPASS means the test ___.,passed|failed|errored,0,,,
+314,13,multiple_choice,exercise,309,xfail is useful for a test with a?,Known bug|New feature|Fast runtime,0,,,
+315,13,true_false,exercise,309,xfail deletes the test from the suite.,,false,,,"It keeps running the test, it just doesn't fail the build over it."
+316,13,multiple_choice,exercise,309,strict=True on xfail turns XPASS into a?,Failure|Pass|Skip,0,,,"With strict=True, an unexpected pass is treated as a real failure — handy once a bug gets fixed."
+317,13,select_blank,exercise,309,xfail takes an optional ___ string.,reason|fixture|marker,0,,,
+318,14,multiple_choice,main,,A custom marker looks like?,@pytest.mark.slow|def slow():|import slow,0,,,"You can tag tests with any name, e.g. @pytest.mark.slow, then run just that group with -m slow."
+319,14,true_false,preview,318,@pytest.mark.slow tags a test as slow.,,true,,,
+320,14,true_false,exercise,318,Custom markers can have any name.,,true,,,
+321,14,multiple_choice,exercise,318,How do you run only slow tests?,-m slow|-k fast|--slow,0,,,-m slow filters down to tests marked @pytest.mark.slow.
+322,14,short_answer,exercise,318,Which flag runs only marked tests?,-m,,,,pytest -m slow runs only tests tagged @pytest.mark.slow.
+323,14,multiple_choice,exercise,318,Custom markers are defined using?,@pytest.mark.name|def name():|class Name:,0,,,
+324,14,true_false,exercise,318,A test can have multiple markers.,,true,,,Stack them: @pytest.mark.slow and @pytest.mark.integration on the same test.
+325,14,multiple_choice,exercise,318,Excluding a marker uses which keyword?,not|and|or,0,,,"-m ""not slow"" runs everything except tests marked slow."
+326,14,multiple_choice,main,,Unregistered markers by default cause?,A warning|A crash|Nothing,0,,,"pytest just warns ""Unknown marker"" unless --strict-markers is on, which turns that into a real error."
+327,14,true_false,preview,326,--strict-markers turns unknown markers into errors.,,true,,,
+328,14,true_false,exercise,326,--strict-markers catches marker name typos.,,true,,,A typo like @pytest.mark.slwo fails loudly instead of silently doing nothing.
+329,14,select_blank,exercise,326,Markers are registered in the ___ section.,markers|fixtures|imports,0,,,"In pyproject.toml: [tool.pytest.ini_options] markers = [""slow: marks slow tests""]."
+330,14,multiple_choice,exercise,326,Registering a marker also adds a?,Description|New fixture|Test file,0,,,
+331,14,true_false,exercise,326,Registration is required to use any marker.,,false,,,Registration is optional unless --strict-markers is enabled — then it's required.
+332,14,multiple_choice,exercise,326,Where do you list registered markers?,pyproject.toml|conftest.py|test file,0,,,
+333,14,multi_select,exercise,326,Which help catch marker typos?,--strict-markers|Registering markers|Ignoring warnings|Renaming tests,0|1,,,Registering every marker's name and turning on --strict-markers together turn a silent typo into a loud failure.
+334,15,code_fill,main,,Fill in what pytest.raises expects here.,"with pytest.raises(___):
+    int(""x"")|ValueError",,,,pytest.raises(ValueError) as a context manager asserts the code inside raises exactly that exception — the test fails if it doesn't.
+335,15,true_false,preview,334,pytest.raises checks a block raises an exception.,,true,,,
+336,15,true_false,exercise,334,pytest.raises is used as a context manager.,,true,,,Written as: with pytest.raises(ValueError): ...
+337,15,multiple_choice,exercise,334,"If no exception is raised inside, the test?",Fails|Passes|Skips,0,,,pytest.raises expects the exception — no exception means the assertion failed.
+338,15,select_blank,exercise,334,with pytest.raises(ValueError): wraps the risky ___.,code|import|fixture,0,,,
+339,15,multiple_choice,exercise,334,pytest.raises takes what as its argument?,Exception type|Function name|File path,0,,,
+340,15,true_false,exercise,334,The wrong exception type still passes.,,false,,,Raising a different exception than expected still fails the test.
+341,15,multiple_choice,exercise,334,A ValueError test needs pytest.raises with?,ValueError|Exception|BaseException,0,,,
+342,15,select_blank,exercise,334,pytest.raises replaces manual try/___ blocks.,except|finally|else,0,,,
+343,15,multiple_choice,main,,match= checks the exception's?,Message|Type|Line number,0,,,"pytest.raises(ValueError, match=""invalid"") only passes if the message matches that regex too, not just the type."
+344,15,true_false,preview,343,match= checks the exception message text.,,true,,,
+345,15,true_false,exercise,343,"match= uses regex, not exact text.",,true,,,"""invalid"" matches any message containing that pattern."
+346,15,select_blank,exercise,343,match= is passed as a ___ argument.,keyword|positional|required,0,,,
+347,15,multiple_choice,exercise,343,as excinfo captures the raised?,Exception|Traceback text|File name,0,,,
+348,15,true_false,exercise,343,excinfo.value gives the exception object.,,true,,,"You can inspect its attributes, like excinfo.value.args."
+349,15,multiple_choice,exercise,343,"Without match=, only the type is?",Checked|Ignored|Printed,0,,,
+350,15,select_blank,exercise,343,with pytest.raises(...) as ___: names the info.,excinfo|error|exc,0,,,
+351,16,multiple_choice,main,,pytest.warns checks code triggers a?,Warning|Exception|Print,0,,,"with pytest.warns(UserWarning): ... asserts the code inside issues that warning — the same idea as pytest.raises, but for warnings."
+352,16,true_false,preview,351,pytest.warns checks code raises a warning.,,true,,,
+353,16,true_false,exercise,351,pytest.warns mirrors pytest.raises for warnings.,,true,,,"Same context-manager shape, just for warnings instead of exceptions."
+354,16,multiple_choice,exercise,351,"If no warning fires, the test?",Fails|Passes|Skips,0,,,
+355,16,select_blank,exercise,351,pytest.warns takes a warning ___ as argument.,class|message|number,0,,,
+356,16,true_false,exercise,351,pytest.warns also supports a match= argument.,,true,,,"Just like pytest.raises, match= filters by the warning's message text."
+357,16,multiple_choice,exercise,351,A common warning class to catch is?,UserWarning|ValueError|KeyError,0,,,
+358,16,true_false,exercise,351,Warnings normally stop a test from running.,,false,,,A warning alone doesn't fail a test — pytest.warns is what turns catching one into an assertion.
+359,16,multiple_choice,exercise,351,pytest.warns is best used to test?,Deprecation notices|Fast runtime|File paths,0,,,
+360,16,select_blank,exercise,351,with pytest.warns(UserWarning): wraps the ___ code.,warning-triggering|passing|unrelated,0,,,
+361,17,multiple_choice,main,,pytest-mock gives you which fixture?,mocker|patcher|faker,0,,,"The mocker fixture wraps unittest.mock with a cleaner API, and automatically undoes every patch after the test finishes."
+362,17,true_false,preview,361,pytest-mock provides a fixture called mocker.,,true,,,
+363,17,true_false,exercise,361,mocker automatically undoes patches after the test.,,true,,,"No manual cleanup needed, unlike raw unittest.mock.patch."
+364,17,select_blank,exercise,361,mocker.patch replaces a real ___ temporarily.,object|test|file,0,,,
+365,17,multiple_choice,exercise,361,mocker wraps which standard library module?,unittest.mock|itertools|functools,0,,,
+366,17,true_false,exercise,361,You must install pytest-mock separately.,,true,,,pip install pytest-mock adds the mocker fixture — it isn't built into pytest itself.
+367,17,multiple_choice,exercise,361,mocker.patch takes a target as a?,String path|Function object|File name,0,,,
+368,17,select_blank,exercise,361,"mocker.patch(""module.func"") replaces func inside ___.",module|pytest|conftest,0,,,
+369,17,true_false,exercise,361,Mocking avoids calling a real network request.,,true,,,Handy for testing code that calls an external API without actually hitting it.
+370,17,multiple_choice,main,,assert_called_with checks the mock's?,Call arguments|Return type|File path,0,,,mock.assert_called_with(5) fails the test if the mock wasn't called with exactly that argument.
+371,17,true_false,preview,370,assert_called_with checks how a mock was called.,,true,,,
+372,17,true_false,exercise,370,return_value sets what a mock gives back.,,true,,,mocker.patch(...).return_value = 42 makes every call return 42.
+373,17,select_blank,exercise,370,side_effect can raise an ___ instead.,exception|import|fixture,0,,,Set side_effect = ValueError to make the mock raise instead of return.
+374,17,multiple_choice,exercise,370,"To check a mock ran once, use?",assert_called_once|assert_ran|assert_true,0,,,
+375,17,true_false,exercise,370,A mock records every call it receives.,,true,,,That history is exactly what assert_called_with checks against.
+376,17,select_blank,exercise,370,side_effect can also be a ___ function.,custom|missing|broken,0,,,
+377,17,multiple_choice,exercise,370,mock.call_count tells you the?,Call count|Return value|Argument type,0,,,
+378,17,true_false,exercise,370,side_effect and return_value do the same thing.,,false,,,return_value gives a fixed value; side_effect can vary per call or raise an error.
+379,18,multiple_choice,main,,pytest-cov adds which command-line flag?,--cov|--mock|--verbose,0,,,pytest --cov=mypackage runs the suite and reports what percentage of mypackage's lines actually executed.
+380,18,true_false,preview,379,--cov reports what percent of code ran.,,true,,,
+381,18,true_false,exercise,379,--cov requires installing pytest-cov separately.,,true,,,pip install pytest-cov adds the --cov option — it isn't built into pytest.
+382,18,select_blank,exercise,379,--cov=mypackage measures coverage of that ___.,package|test|fixture,0,,,
+383,18,multiple_choice,exercise,379,The coverage report shows percent lines?,Executed|Deleted|Renamed,0,,,
+384,18,true_false,exercise,379,100% coverage guarantees zero bugs.,,false,,,It just means every line ran at least once — not that every case was checked.
+385,18,short_answer,exercise,379,Which flag makes an HTML report?,--cov-report=html,,,,"pytest --cov --cov-report=html, then open htmlcov/index.html to browse it line by line."
+386,18,select_blank,exercise,379,Coverage below target might mean ___ tests.,missing|passing|slow,0,,,
+387,18,true_false,exercise,379,Coverage tells you if assertions are meaningful.,,false,,,"A line can run without being properly checked — coverage just tracks execution, not correctness."
+388,18,multiple_choice,main,,Branch coverage additionally tracks?,If/else paths|Line count|File size,0,,,Line coverage just checks a line ran. Branch coverage (--cov-branch) checks that both the if and the else were actually taken.
+389,18,true_false,preview,388,Branch coverage tracks both sides of an if.,,true,,,
+390,18,true_false,exercise,388,Line coverage can miss an untested else.,,true,,,"The if-line ran, but line coverage alone won't tell you the else path was never tested."
+391,18,short_answer,exercise,388,What flag enables branch coverage?,--cov-branch,,,,pytest --cov --cov-branch turns on tracking both sides of every branch.
+392,18,multiple_choice,exercise,388,A high percentage alone proves tests are?,Not conclusive|Definitely thorough|Always correct,0,,,
+393,18,true_false,exercise,388,Missing lines are called out by name.,,true,,,The coverage report lists exact line numbers your tests never touched.
+394,18,multiple_choice,exercise,388,"Coverage percentage is a signal, not a?",Guarantee|Requirement|Command,0,,,
+395,18,select_blank,exercise,388,Chasing 100% coverage can waste ___.,time|memory|disk,0,,,Testing trivial getters just to hit 100% often isn't worth the effort.
+396,18,true_false,exercise,388,Coverage replaces the need for code review.,,false,,,"It's one useful signal among many, not a substitute for actually reading tests."
+397,18,order,exercise,379,Order the coverage check workflow.,Run pytest --cov|Read the report|Add missing tests,,,,"Run with --cov, see which lines were missed, then write tests to cover the gaps."
+398,17,match_pairs,exercise,370,Match each mock feature to its role.,return_value↔Fixed output|side_effect↔Custom behavior or error|assert_called_with↔Checks call arguments,,,,"return_value fixes what comes back, side_effect controls or varies behavior, and assert_called_with checks what the mock was called with."
+451,19,true_false,preview,452,pytest-xdist runs tests in parallel.,,true,,,
+452,19,multiple_choice,main,,What does pytest-xdist add to pytest?,Parallel runs|Slower tests|New syntax,0,,,pytest-xdist is a plugin that splits your test suite across multiple worker processes so they run at the same time instead of one after another.
+453,19,select_blank,exercise,452,pytest -n auto splits tests across ___.,workers|files|imports,0,,,
+454,19,true_false,exercise,452,-n auto picks the worker count automatically.,,true,,,It looks at your CPU's core count and spins up that many workers for you.
+455,19,multiple_choice,exercise,452,Which flag enables parallel test runs?,-n|-v|-x,0,,,
+456,19,multiple_choice,exercise,452,Which package provides pytest -n?,pytest-xdist|pytest-cov|pytest-mock,0,,,
+457,19,true_false,exercise,452,xdist still runs every test in one process.,,false,,,Each worker is its own separate process -- that's exactly what makes them run in parallel.
+458,19,select_blank,exercise,452,Each xdist worker runs in its own ___.,process|thread|file,0,,,
+459,19,short_answer,exercise,452,Flag that sets the worker count?,-n,,,,
+460,19,order,exercise,452,Order the steps to run tests in parallel.,Install pytest-xdist|Add -n auto|Run pytest,,,,
+461,19,true_false,preview,462,Shared state can break tests running in parallel.,,true,,,
+462,19,multiple_choice,main,,Why can parallel runs reveal new failures?,Shared state|Faster CPU|More memory,0,,,"When tests run at the same time, anything they share -- a file, a database row, a global variable -- can get overwritten mid-test by another worker."
+463,19,true_false,exercise,462,Two tests writing the same file can clash.,,true,,,
+464,19,multiple_choice,exercise,462,A common shared-state culprit is a:,Global variable|Local variable|Docstring,0,,,
+465,19,select_blank,exercise,462,Independent tests should never share ___.,state|assertions|names,0,,,
+466,19,true_false,exercise,462,xdist guarantees the same worker order every run.,,false,,,"Which worker grabs which test can vary between runs, so don't rely on a fixed order."
+467,19,multiple_choice,exercise,462,The real fix for shared-state flakiness is:,Better isolation|Shared globals|Ignore it,0,,,
+468,19,true_false,exercise,462,Passing tests alone prove there's no shared state.,,false,,,Parallel runs can pass by luck once and fail the next time if state leaks between workers.
+469,20,true_false,preview,470,pytest can read its config from pyproject.toml.,,true,,,
+470,20,multiple_choice,main,,Where can pytest settings live?,pyproject.toml|package.json|Dockerfile,0,,,"Putting testpaths, markers, and addopts in one file means every teammate and every CI run uses the exact same settings."
+471,20,select_blank,exercise,470,The pytest section is [tool.pytest.___].,ini_options|settings|config,0,,,
+472,20,true_false,exercise,470,addopts sets default command-line flags.,,true,,,
+473,20,multiple_choice,exercise,470,testpaths tells pytest where to:,Find tests|Store logs|Install packages,0,,,
+474,20,true_false,exercise,470,pytest.ini is the only valid config file.,,false,,,setup.cfg and pyproject.toml can hold the exact same settings too.
+475,20,select_blank,exercise,470,addopts stores default ___ flags.,command-line|import|network,0,,,
+476,20,multiple_choice,exercise,470,Centralizing config mainly avoids:,Retyping flags|Faster tests|More bugs,0,,,
+477,20,code_fill,exercise,470,Complete the ini_options test path setting.,"[tool.pytest.ini_options]
+testpaths = [""___""]|tests",,,,"testpaths tells pytest which directory to search, so you don't have to type it on every invocation."
+478,20,true_false,preview,479,Custom markers can be registered in config.,,true,,,
+479,20,multiple_choice,main,,Where do you register custom markers?,ini options|Test body|Fixture,0,,,Listing markers under [tool.pytest.ini_options] means pytest recognizes them by name instead of flagging them as unknown.
+480,20,select_blank,exercise,479,Registering markers avoids ___ warnings.,unknown-marker|import|syntax,0,,,
+481,20,true_false,exercise,479,--strict-markers rejects unregistered markers.,,true,,,
+482,20,multiple_choice,exercise,479,An unregistered marker normally just gives a:,Warning|Silent pass|Crash,0,,,
+483,20,true_false,exercise,479,Markers are registered under ini_options.,,true,,,
+484,20,select_blank,exercise,479,An unregistered marker can signal a ___.,typo|feature|import,0,,,
+485,20,true_false,exercise,479,--strict-markers helps catch typo'd markers early.,,true,,,
+486,21,true_false,preview,487,src layout puts your package under a src folder.,,true,,,
+487,21,multiple_choice,main,,"In src layout, app code lives under:",src/|tests/|Project root,0,,,"Everything the app actually ships lives inside src/your_package, while tests/ sits right next to it, outside that folder, so nothing gets confused about what's real code."
+488,21,true_false,exercise,487,Tests live outside the src directory.,,true,,,
+489,21,select_blank,exercise,487,src layout avoids accidental ___ imports.,local|remote|circular,0,,,
+490,21,multiple_choice,exercise,487,"Without src layout, pytest might import from:",Current dir|PyPI|Docker,0,,,
+491,21,true_false,exercise,487,src layout needs an editable install to test.,,true,,,pip install -e . links your src package so pytest can import it just like any installed library.
+492,21,multiple_choice,exercise,487,Tests in src layout import the package as if:,Installed|Deleted|Broken,0,,,
+493,21,code_fill,exercise,487,Complete the src-layout folder for tests.,"myproject/
+  src/
+    mypkg/
+  ___/
+    test_mypkg.py|tests",,,,"tests/ sits beside src/, never inside it, so test code is never mistaken for shippable code."
+494,21,true_false,exercise,487,Flat layout can accidentally shadow the installed package.,,true,,,
+495,22,true_false,preview,496,-x stops the test run at the first failure.,,true,,,
+496,22,multi_select,main,,Which flags narrow down a test run?,-x|-k|-v|--pdb,0|1,,,-x stops the whole run the moment one test fails; -k lets you run only tests whose name matches a keyword expression -- both narrow what actually runs.
+497,22,true_false,exercise,496,-x stops after the first failing test.,,true,,,
+498,22,select_blank,exercise,496,-k selects tests by ___.,keyword|line number|file size,0,,,
+499,22,multiple_choice,exercise,496,pytest -k login runs tests:,Matching login|Every test|None,0,,,
+500,22,true_false,exercise,496,-x keeps running after a failure.,,false,,,That's the opposite of -x -- it halts immediately so you fix one failure at a time.
+501,22,multiple_choice,exercise,496,Which flag runs tests by name pattern?,-k|-x|-v,0,,,
+502,22,true_false,exercise,496,-k accepts expressions like not slow.,,true,,,
+503,22,short_answer,exercise,496,Flag that stops at the first failure?,-x,,,,
+504,22,match_pairs,exercise,496,Match each flag to what it does.,-x↔Stop early|-k↔Keyword filter,,,,
+505,22,true_false,preview,506,-v prints more detail about each test.,,true,,,
+506,22,multi_select,main,,Which flags show more detail on failure?,-v|--pdb|-x|-k,0|1,,,-v prints each test's full name and result instead of just dots; --pdb drops you straight into an interactive debugger right where a test failed.
+507,22,true_false,exercise,506,-v prints each test's name and result.,,true,,,
+508,22,select_blank,exercise,506,--pdb drops you into a ___ on failure.,debugger|new file|log viewer,0,,,
+509,22,multiple_choice,exercise,506,-v mainly increases output:,Detail|Speed|File count,0,,,
+510,22,true_false,exercise,506,--pdb pauses your terminal forever.,,false,,,"It only pauses at the failing line -- typing c continues, q quits back to your shell."
+511,22,multiple_choice,exercise,506,Which flag opens an interactive debugger?,--pdb|-v|-k,0,,,
+512,22,true_false,exercise,506,Plain pytest output shows a dot per test.,,true,,,-v replaces those terse dots with one line per test naming it and its result.
+513,22,short_answer,exercise,506,Flag that gives verbose output?,-v,,,,
+514,22,match_pairs,exercise,506,Match each flag to what it does.,-v↔More detail|--pdb↔Opens debugger,,,,
+515,23,true_false,preview,516,Testing internals makes tests break needlessly.,,true,,,
+516,23,multiple_choice,main,,Testing implementation over behavior mainly causes:,Brittle tests|Faster runs|Fewer bugs,0,,,"If a test checks a private helper's exact steps instead of the function's actual output, a harmless refactor can break dozens of tests for no real bug."
+517,23,true_false,exercise,516,"Good tests check behavior, not internals.",,true,,,
+518,23,select_blank,exercise,516,Refactoring shouldn't ___ a good test.,break|help|slow,0,,,
+519,23,multiple_choice,exercise,516,An anti-pattern is asserting on a:,Private detail|Return value|Public output,0,,,
+520,23,true_false,exercise,516,Mocking every dependency can hide real bugs.,,true,,,"If everything is faked, you're really only testing your mocks, not the real code they stand in for."
+521,23,multiple_choice,exercise,516,Over-mocking risks a test verifying:,Fakes only|Real code|Nothing new,0,,,
+522,23,true_false,exercise,516,A test coupled to internals needs frequent rewrites.,,true,,,
+523,23,true_false,preview,524,A too-broad fixture scope can leak state.,,true,,,
+524,23,multiple_choice,main,,An over-broad fixture scope mainly risks:,Shared state|Faster setup|Cleaner code,0,,,A session-scoped fixture built once and reused everywhere can carry leftover state from an earlier test into a later one -- the same shared-state bug pytest-xdist can also expose.
+525,23,true_false,exercise,524,Session-scoped fixtures can leak state between tests.,,true,,,
+526,23,select_blank,exercise,524,The safest default fixture scope is ___.,function|session|module,0,,,
+527,23,multiple_choice,exercise,524,Copy-pasted near-duplicate tests should use:,Parametrize|More mocks|Bigger fixtures,0,,,
+528,23,true_false,exercise,524,Skipping a flaky test forever hides real bugs.,,true,,,
+529,23,multiple_choice,exercise,524,Best practice keeps fixture scope:,Minimal|Broad|Global,0,,,
+530,23,true_false,exercise,524,Broad fixture scope trades isolation for speed.,,true,,,
+531,23,categorize,exercise,524,Sort each habit as good or bad.,Narrow fixture scope↔Good practice|Session fixture everywhere↔Anti-pattern|Testing behavior↔Good practice|Testing internals↔Anti-pattern,,,,

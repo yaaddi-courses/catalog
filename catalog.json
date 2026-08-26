@@ -925,5 +925,53 @@
       "Mutation Testing",
       "When Not to Write a Test"
     ]
+  },
+  {
+    "path": "testing-with-pytest",
+    "title": "Testing with pytest",
+    "description": "The pytest testing framework in depth: fixtures, parametrization, mocking, coverage, and configuration. Assumes you already know Python (see this library's python-basics course) and general testing vocabulary (see testing-in-software-engineering) \u2014 this course is about the pytest tool itself.",
+    "file": "testing-with-pytest.zip",
+    "id": "7244ef316a80",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "pytest",
+      "python",
+      "testing",
+      "qa",
+      "intermediate"
+    ],
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-08-26",
+        "notes": "Initial release \u2014 23 decks, each pack with a preview card teaching the concept before its graded main card and practice cards."
+      }
+    ],
+    "toc": [
+      "What pytest Is and Why It Replaced unittest",
+      "Installing pytest and Running Your First Test",
+      "Test Discovery Conventions",
+      "Writing Assertions with Plain assert",
+      "Assertion Rewriting and Failure Messages",
+      "Fixtures Fundamentals",
+      "Fixture Scopes",
+      "conftest.py and Fixture Sharing",
+      "Built-in Fixtures: tmp_path, capsys, monkeypatch",
+      "Yield Fixtures and Teardown",
+      "Parametrizing Tests",
+      "Parametrizing Fixtures",
+      "Marking Tests: skip, skipif, xfail",
+      "Custom Markers and Registration",
+      "Testing Exceptions with pytest.raises",
+      "Testing Warnings with pytest.warns",
+      "Mocking with pytest-mock",
+      "Measuring Coverage with pytest-cov",
+      "Running Tests in Parallel with pytest-xdist",
+      "Configuring pytest: pyproject.toml and ini Options",
+      "Organizing a Test Suite: src Layout",
+      "Debugging Failing Tests: -v, -x, -k, --pdb",
+      "Common pytest Anti-Patterns and Best Practices"
+    ]
   }
 ]
