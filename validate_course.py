@@ -48,7 +48,8 @@ KNOWN_TYPES = {
     "multiple_choice", "true_false", "order", "select_blank", "multi_select",
     "match_pairs", "image_choice", "type_answer", "code_fill", "media_card",
     "image_occlusion", "numeric_answer", "command_output", "short_answer",
-    "preview_card", "categorize", "spot_error",
+    "preview_card", "categorize", "spot_error", "listening_card",
+    "speech_recognition", "reading_passage", "cloze_passage",
 }
 
 # Typing is slower and more error-prone than tapping, so courses are
@@ -335,13 +336,36 @@ def validate_cards(units, cards, report, media_files=None):
             report.error(f'card {cid}: unit_id "{uid}" does not match any row in units.csv')
 
         prompt = (c.get("prompt") or "").strip()
-        if not prompt:
+        if not prompt and ctype != "listening_card":
             report.error(f"card {cid}: empty prompt")
         elif ctype == "preview_card":
             # preview_card's "prompt" column holds teaching prose (the
             # `concept`), not a quiz question — the atomicity word-count
             # rule below is aimed at prompts a learner must parse under
             # time pressure and doesn't apply here.
+            pass
+        elif ctype == "reading_passage":
+            # reading_passage's "prompt" column holds the passage itself —
+            # a longer text, dialogue, or short story — which is deliberately
+            # over the atomicity word cap by design, not a sign of a
+            # bloated quiz question. The actual comprehension question is
+            # options[0] (see the CSV format doc comment near KNOWN_TYPES),
+            # which is checked for length below instead.
+            options_raw = (c.get("options") or "").strip()
+            option_list = [o for o in options_raw.split("|")] if options_raw else []
+            question = option_list[0] if option_list else ""
+            if _word_count(question) >= MAX_PROMPT_WORDS:
+                report.error(
+                    f"card {cid}: reading_passage's comprehension question "
+                    f"(options[0]) is {_word_count(question)} words — limit is "
+                    f"{MAX_PROMPT_WORDS - 1}."
+                )
+        elif ctype == "cloze_passage":
+            # Same reasoning as reading_passage: the passage itself is
+            # deliberately long. Unlike reading_passage there's no separate
+            # short "question" text to check either — the whole point is
+            # blanks in a longer passage — so this is a full exemption, not
+            # a check on a different field.
             pass
         else:
             options_raw = (c.get("options") or "").strip()
@@ -427,16 +451,27 @@ def validate_cards(units, cards, report, media_files=None):
             # prompt across many cards whose real content lives in
             # `options` — comparing prompt alone flagged dozens of false
             # positives on real courses before this was caught.
-            normalized = " ".join(prompt.lower().split()) + "||" + (c.get("options") or "").strip().lower()
-            if normalized in prompt_seen_at:
-                report.warn(
-                    f'card {cid}: prompt+options are a near-exact duplicate of card {prompt_seen_at[normalized]}'
-                )
-            else:
-                prompt_seen_at[normalized] = cid
+            # speech_recognition/listening_card are exempt here too, same
+            # reasoning as the in-pack identical-question check above:
+            # repeating a production/listening prompt verbatim across
+            # unrelated cards is genuine, intentional spaced repetition of
+            # the same phrase, not a copy-paste accident.
+            if ctype not in ("speech_recognition", "listening_card"):
+                normalized = " ".join(prompt.lower().split()) + "||" + (c.get("options") or "").strip().lower()
+                if normalized in prompt_seen_at:
+                    report.warn(
+                        f'card {cid}: prompt+options are a near-exact duplicate of card {prompt_seen_at[normalized]}'
+                    )
+                else:
+                    prompt_seen_at[normalized] = cid
 
-        if c.get("audio") and ctype != "media_card":
-            report.error(f'card {cid}: "audio" is set but type is "{ctype}" — audio only works on media_card')
+        if c.get("audio") and ctype not in ("media_card", "listening_card"):
+            report.error(
+                f'card {cid}: "audio" is set but type is "{ctype}" — audio only works on '
+                "media_card or listening_card"
+            )
+        if ctype == "listening_card" and not c.get("audio"):
+            report.error(f'card {cid}: listening_card needs "audio" set — it has no visible text.')
 
         if role == "main":
             # A main card is the one graded encounter that actually schedules
@@ -514,6 +549,47 @@ def validate_cards(units, cards, report, media_files=None):
                 "consider mixing in another type for variety"
             )
 
+        # A pack's practice cards are supposed to "attack the same concept
+        # from a different angle" (see AUTHORING.md) — asking the literal
+        # identical question twice with only the wrong-answer set changed
+        # (e.g. "Hello یعنی چی؟" three times, each with different
+        # distractors) isn't a different angle, it's the same test with
+        # cosmetic variation. Repetition of a *production* prompt
+        # (speech_recognition/listening_card — genuinely re-saying/re-
+        # hearing the same phrase) is fine and excluded here, as are
+        # reading_passage and cloze_passage: their "prompt" is the shared
+        # passage text itself — several genuinely different comprehension
+        # questions (or different blank sets) about the same passage are
+        # supposed to repeat it (what actually varies lives in options, not
+        # prompt). The preview
+        # card is part of this same scope too — a preview that's a verbatim
+        # copy of its own main card (same type, same prompt) isn't a
+        # preview at all, just the same question asked twice in a row.
+        pack_ids = (
+            {mid}
+            | {e.get("id") for e in exercises if e.get("related_main_id") == mid}
+            | set(previews_by_main.get(mid, []))
+        )
+        prompt_type_counts = {}
+        for c in cards:
+            if c.get("id") not in pack_ids:
+                continue
+            ctype = c.get("type") or "multiple_choice"
+            if ctype in ("speech_recognition", "listening_card", "reading_passage", "cloze_passage"):
+                continue
+            prompt = (c.get("prompt") or "").strip()
+            if not prompt:
+                continue
+            key = (ctype, prompt)
+            prompt_type_counts[key] = prompt_type_counts.get(key, 0) + 1
+        for (ctype, prompt), count in prompt_type_counts.items():
+            if count > 1:
+                report.error(
+                    f'main card {mid}: {count} cards ask the identical "{ctype}" question '
+                    f'"{prompt}" — vary the question itself, not just the wrong answers, '
+                    "or use a different card type for that practice angle"
+                )
+
     # Course-wide type variety: catches a whole course leaning on 1-2 types
     # out of the 16 available, which the per-deck check above can miss if
     # each individual deck looks varied but the course as a whole doesn't.
@@ -555,7 +631,21 @@ def validate_cards(units, cards, report, media_files=None):
     # capped at 10% of a course's cards so review stays quick (see
     # AUTHORING.md's "typing budget" section).
     if cards:
-        typing_count = sum(1 for c in cards if (c.get("type") or "multiple_choice") in TYPING_TYPES)
+        def _requires_typing(c):
+            card_type = c.get("type") or "multiple_choice"
+            if card_type in TYPING_TYPES:
+                return True
+            # listening_card only requires typing for its own
+            # response_type: "type" variant (not "select"/"order") — see
+            # this file's KNOWN_TYPES doc comment and the app's own
+            # src/domain/cardTypeMix.ts, which makes the identical
+            # content-aware distinction.
+            if card_type == "listening_card":
+                response_type = (c.get("options") or "").split("|", 1)[0].strip()
+                return response_type == "type"
+            return False
+
+        typing_count = sum(1 for c in cards if _requires_typing(c))
         typing_ratio = typing_count / len(cards)
         if typing_ratio > MAX_TYPING_CARD_RATIO:
             report.warn(
@@ -569,10 +659,13 @@ def validate_cards(units, cards, report, media_files=None):
     # "does every technical term specifically have audio" (that needs a
     # human judgment call on what counts as a new term), but a total-zero
     # count is a reliable, cheap signal that audio was skipped entirely.
-    if len(cards) >= 20 and not any((c.get("type") or "") == "media_card" for c in cards):
+    if len(cards) >= 20 and not any(
+        (c.get("type") or "") in ("media_card", "listening_card") for c in cards
+    ):
         report.warn(
-            "no media_card cards found in this course — only media_card carries audio, "
-            "so nothing in this course has narration for a learner who prefers listening"
+            "no media_card or listening_card cards found in this course — nothing in it "
+            "has any real recorded audio (a teachesLanguage course's own auto-played TTS "
+            "doesn't count as authored narration)"
         )
 
     # An orphaned deck (no card at all references it) usually means a deck

@@ -272,7 +272,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 271,36,match_pairs,exercise,177,Match each command to its output.,kubectl logs:A pod's output|kubectl describe:A pod's recent events,,cards/card_271.png,,
 272,36,order,exercise,177,Order the words: view a pod's logs.,kubectl|logs|mypod,,,,
 273,37,multi_select,exercise,182,Who can RBAC grant permissions to?,Users|Service accounts|Nodes|Volumes,0|1,,,
-274,37,select_blank,exercise,182,RBAC grants permissions through ___.,roles|namespaces|labels,0,,,
+274,37,true_false,exercise,182,"RBAC grants permissions through namespaces, not roles.",,false,,,
 275,38,match_pairs,exercise,187,Match each cap to its scope.,ResourceQuota:Caps a whole namespace|Limit:Caps a single pod,,,,
 276,38,select_blank,exercise,187,A ResourceQuota stops one team from ___ others.,starving|scheduling|labeling,0,,,
 277,39,multi_select,exercise,192,What does a PodDisruptionBudget limit?,Pods down|Disruption impact|CPU speed|Pull time,0|1,,,

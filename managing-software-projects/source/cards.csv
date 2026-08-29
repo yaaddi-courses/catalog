@@ -14,7 +14,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 13,3,true_false,exercise,12,You can usually fix all three constraints at once freely.,,false,,,Tightening one usually forces a tradeoff on one of the other two.
 14,3,select_blank,exercise,12,Fixing one side usually forces a ___ elsewhere.,tradeoff|bonus|shortcut,0,,,
 15,3,multiple_choice,exercise,12,Name one iron triangle constraint.,Cost|Font size|Logo color,0,,,
-16,4,multiple_choice,preview,17,What does stakeholder mapping identify?,Key stakeholders|Team salaries|Office location,0,cards/card_16.png,,
+16,4,true_false,preview,17,Stakeholder mapping identifies who has a real stake.,,true,cards/card_16.png,,
 17,4,multiple_choice,main,,What does stakeholder mapping identify?,Everyone|The CEO|Developers,0,,,Do this before you start planning — every stakeholder has a real stake in the outcome.
 18,4,true_false,exercise,17,Stakeholder mapping should happen before planning.,,true,,,
 19,4,select_blank,exercise,17,A stakeholder has a real ___ in the outcome.,stake|font|logo,0,,,
@@ -64,7 +64,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 63,13,true_false,exercise,62,A WBS makes work more manageable to plan.,,true,,,
 64,13,select_blank,exercise,62,A WBS breaks work into smaller ___.,pieces|logos|fonts,0,,,
 65,13,multiple_choice,exercise,62,Why use a WBS?,Easier planning|Fewer meetings|More logos,0,,,
-66,14,multiple_choice,preview,67,What do story points measure?,Relative effort|Exact hours|Team salary,0,cards/card_66.png,,
+66,14,true_false,preview,67,"Story points measure relative effort, not exact hours.",,true,cards/card_66.png,,
 67,14,multiple_choice,main,,What do story points measure?,Relative effort|Exact hours|A budget,0,,,"A time estimate, by contrast, sizes exact hours or days directly — story points don't."
 68,14,true_false,exercise,67,A time estimate measures hours or days directly.,,true,,,
 69,14,select_blank,exercise,67,"Story points size ___ effort, not exact time.",relative|zero|fixed,0,,,
@@ -84,7 +84,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 83,17,true_false,exercise,82,Estimates are always perfectly accurate.,,false,,,"Estimates carry real uncertainty, which is exactly why buffers help."
 84,17,select_blank,exercise,82,A buffer is added to a schedule on ___.,purpose|accident|Fridays,0,,,
 85,17,multiple_choice,exercise,82,Why include a buffer at all?,Absorb surprises|Look impressive|Save money,0,,,
-86,18,multiple_choice,preview,87,What does a burndown chart show?,Work remaining|Work completed|Team headcount,0,cards/card_86.png,,
+86,18,true_false,preview,87,A burndown chart shows how much work remains.,,true,cards/card_86.png,,
 87,18,multiple_choice,main,,What does a burndown chart show?,Work remaining|A logo|A font,0,,,"A burnup chart, by contrast, shows work completed, including any scope added along the way."
 88,18,true_false,exercise,87,A burnup chart can show added scope.,,true,,,
 89,18,select_blank,exercise,87,A burnup chart shows work ___.,completed|deleted|hidden,0,,,
@@ -94,7 +94,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 93,19,true_false,exercise,92,Velocity is meant to compare different teams fairly.,,false,,,"It is meant for one team's own forecasting, not for comparing across teams."
 94,19,select_blank,exercise,92,Velocity is mainly used for ___.,forecasting|hiring|marketing,0,,,
 95,19,multiple_choice,exercise,92,What is a misuse of velocity?,Cross-team compare|One forecast|Trend view,0,,,
-96,20,multiple_choice,preview,97,What is scope creep?,Scope growth|Budget cuts|Finished project,0,cards/card_96.png,,
+96,20,true_false,preview,97,Scope creep is unapproved growth in a project's scope.,,true,cards/card_96.png,,
 97,20,multiple_choice,main,,What is scope creep?,Unapproved growth|Approved growth|No growth,0,,,"It tends to happen quietly, in small pieces — catch it early, before it grows further."
 98,20,true_false,exercise,97,"Scope creep tends to happen quietly, in small pieces.",,true,,,
 99,20,select_blank,exercise,97,"Catch scope creep ___, not after it grows.",early|never|late,0,,,
@@ -119,7 +119,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 118,24,true_false,exercise,117,Technical debt can affect a project's plan.,,true,,,
 119,24,select_blank,exercise,117,Technical debt should be a ___ risk item.,tracked|hidden|ignored,0,,,
 120,24,multiple_choice,exercise,117,Who should care about technical debt?,Whole team|Engineers only|No one,0,,,
-121,25,multiple_choice,preview,122,What is a definition of done?,Finish checklist|Start checklist|Budget report,0,cards/card_121.png,,
+121,25,true_false,preview,122,A definition of done is a shared checklist.,,true,cards/card_121.png,,
 122,25,multiple_choice,main,,What is a definition of done?,Shared checklist|Private note|A guess,0,,,"It's explicit, not just shared informally, and the whole team agrees on it — for when work truly counts as finished."
 123,25,true_false,exercise,122,A definition of done should be explicit and shared.,,true,,,
 124,25,select_blank,exercise,122,A DoD defines when work is truly ___.,finished|started|planned,0,,,

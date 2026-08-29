@@ -34,7 +34,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 33,2,match_pairs,exercise,28,Match each workload to its type.,"Resizing 10,000 images locally:CPU-bound|Calling 10,000 web APIs:I/O-bound|Encrypting a large file:CPU-bound|Waiting on a slow database:I/O-bound",,cards/card_33.png,,
 34,2,order,exercise,28,Order the steps to diagnose a slow program.,"Profile the program to see where time is spent|Check if it's mostly waiting (I/O) or mostly computing (CPU)|Pick threading/asyncio for I/O-bound, multiprocessing for CPU-bound|Re-measure after applying the fix",,cards/card_34.png,,
 35,3,media_card,main,,What is the GIL (Global Interpreter Lock)?,A mutex in CPython that allows only one thread to execute Python bytecode at a time|A tool for locking files on disk|A type of Python variable|A network security protocol,0,,gil.wav,
-36,3,true_false,exercise,35,The GIL lets only one thread run bytecode.,true,true,,,
+36,3,true_false,exercise,35,Two threads can run bytecode at the same instant.,,false,,,
 37,3,true_false,exercise,35,GIL stands for Global Interpreter Lock.,true,true,,,
 38,3,select_blank,exercise,35,The GIL is a ___ protecting memory management.,mutex (lock)|network socket|file handle|generator,0,,,
 39,3,multiple_choice,exercise,35,What's the 3-letter acronym for 'Global Interpreter Lock'?,GIL|JIT|ABI|API,0,,,"GIL stands for Global Interpreter Lock, the mechanism that lets only one thread execute Python bytecode at a time in CPython."

@@ -119,7 +119,7 @@ than deciding case-by-case which concepts "need" one.
 
 ## Card types reference
 
-Fifteen card types are available. Each row below is a `cards.csv` line — see the "CSV
+Twenty-one card types are available. Each row below is a `cards.csv` line — see the "CSV
 format" section further down for the full column list.
 
 | type | what the learner sees | how to encode it in `cards.csv` |
@@ -139,6 +139,12 @@ format" section further down for the full column list.
 | `command_output` | A command/snippet (syntax-highlighted), type what it prints | `options[0]` = the command; `options[1]` = its expected output (may contain newlines — quote the field). **Case-sensitive**, unlike `type_answer`. Different skill from `code_fill` — this is "run it, predict the result," not "fill in the blank" |
 | `short_answer` | A question, type a short answer (a flag, command name, or keyword) | `options` = accepted answer, or pipe-delimited if more than one spelling is acceptable; **case-sensitive**, like `code_fill`. Each accepted answer must be **24 characters or fewer** — this type is for a keystroke or two, not a phrase; use `type_answer` if the real answer is longer |
 | `preview_card` | A one-time "here's the concept" intro shown right before a main card's first attempt — plain teaching text, tap the single button to continue | `prompt` = the concept, stated plainly (not as a question); `options[0]` = the button label (e.g. `"Got it"`). Only valid with `role` = `preview` — see "Preview cards" below |
+| `categorize` | A list of items, tap each one into the bucket it belongs in | each `options` entry is one item written as `item↔bucket` (2-4 distinct bucket names across the whole item list, ≥3 items) — many-to-few, unlike `match_pairs`' strict 1:1 pairing |
+| `spot_error` | A code/command line broken into pieces, tap the one that's wrong | `options` = the line's pipe-delimited segments/tokens; `correct_index` = which segment is broken |
+| `listening_card` | Audio plays (no visible text at all — this is a listening exercise), answer by typing, tapping an option, or arranging words | `options[0]` = `response_type` (`type`/`select`/`order`); for `type`, `options[1]` = the accepted answer (case/whitespace-insensitive, like `type_answer`); for `select`, `options[1+]` = pipe-delimited choices and `correct_index` = the right one; for `order`, `options[1+]` = the words **already in correct order**. The `audio` column (filename) is required, same convention as `media_card`'s. Only counts toward the typing budget below when `response_type` is `type` |
+| `speech_recognition` | A phrase to read aloud — passes automatically once on-device speech recognition hears a match (the app's normal skip button is always available as a fallback) | `prompt` = the phrase. Only makes sense in a `teaches_language: true` course (see below) — the phrase is spoken as a pronunciation model, then the learner reproduces it |
+| `reading_passage` | A longer passage (paragraph, dialogue, or short story) in its own box, then a separate comprehension question with multiple-choice answers | `prompt` = the passage (a properly-quoted CSV field may contain real newlines — author it multi-line directly). `options[0]` = the comprehension question; `options[1+]` = the answer choices; `correct_index` refers to that choice sub-list (0 = `options[1]`, not `options[0]`). Several cards may share the identical `prompt` with a different question each time — build a real pack of one main + several exercises about the same passage |
+| `cloze_passage` | The same kind of longer passage, but with several words blanked out, filled in via either per-blank multiple choice or one shared tap-to-build word bank — no typed blanks | `prompt` = the passage with `{{1}}`, `{{2}}`, … numbered blank placeholders, in order. `options[0]` = mode: `choice` or `word_bank`. For `choice`: `options[1+]` = one entry per blank, each blank's own options joined by `~` (e.g. `"weather~bill~menu"`); `correct_index` = one `\|`-delimited index per blank (e.g. `"0\|1"`). For `word_bank`: `options[1]` = the shared word pool joined by `~` (may include distractors never used); `options[2]` = the correct fill sequence, also `~`-joined; `correct_index` unused. `~` is used instead of `\|` for the inner lists because `\|` already splits the outer `options` column |
 
 Every type also accepts an optional `explanation` column, shown when the answer is
 wrong, and an optional `image` column (a filename, becomes a picture shown above the
@@ -205,6 +211,10 @@ folder. IDs everywhere are small human-friendly integers, not UUIDs.
 | `color` | no | hex color, e.g. `#58CC02` |
 | `icon` | no | an [Ionicons](https://icons.expo.fyi/Index/Ionicons) glyph name |
 | `image` | no | cover image filename (this is separate from — and simpler than — the `cover.png`/`meta.json` pair the Course Library reads; see this repo's `README.md`) |
+| `language` | no | the course's own content language (e.g. `en`, `fa`) — drives card-content text direction in the app, independent of the app's own interface language. Defaults to `en`. |
+| `teaches_language` | no | `true` only when this course teaches `language` itself as a spoken/written skill (a "Learn English" course) — **not** just because its content happens to be written in that language (a Farsi course about, say, personal finance stays `false`). Set to `true` to get automatic text-to-speech playback of each card and to unlock the language-course typing-card exception below. Defaults to `false`. |
+| `title_fa` | no | Farsi override of `title`, shown when the app's interface language is Farsi (falls back to `title` otherwise). Extend with `title_<code>` for another interface language. |
+| `description_fa` | no | Farsi override of `description` — same rule as `title_fa`. |
 
 ### `units.csv` — one row per deck
 
@@ -227,17 +237,124 @@ Columns: `id,unit_id,type,role,related_main_id,prompt,options,correct_index,imag
 |---|---|---|
 | `id` | yes | integer, unique within this file |
 | `unit_id` | yes | matches an `id` in `units.csv` |
-| `type` | no | one of the 15 types above; defaults to `multiple_choice` |
+| `type` | no | one of the 19 types above; defaults to `multiple_choice` |
 | `role` | yes | `main`, `exercise`, or `preview` |
 | `related_main_id` | exercise/preview cards only | the main card's `id` this drills (exercise) or introduces (preview) — leave empty on main cards |
 | `prompt` | yes | the question text (may contain commas — CSV-quote the field if so) |
 | `options` | depends on `type` | see the card-types table above |
 | `correct_index` | depends on `type` | see the card-types table above |
 | `image` | no | filename, becomes a picture above the prompt (every type except `media_card`) |
-| `audio` | `media_card` only | filename — this is the **only** column/type combination the app supports audio on |
+| `audio` | `media_card`/`listening_card` only | filename — see the card-types table above for each type's own audio semantics |
 | `explanation` | no | shown when the answer is wrong |
 
 A malformed row (unknown `unit_id`, a `type_answer` with empty `options`, an
 `exercise` with no `related_main_id`, etc.) fails the whole import with a clear,
 per-card error naming the offending row — nothing partial gets written.
 `validate_course.py --source` catches this before you even get as far as an import.
+
+## Generating a language course from a vocabulary list
+
+For a "teach language A to language B speakers" course (e.g. English for
+Farsi Speakers), hand-authoring every pack is slow and error-prone —
+`tools/generate_language_course.py` builds `source/units.csv` and
+`source/cards.csv` automatically from a plain vocabulary spreadsheet,
+following the exact base-language-framing pedagogy this repo settled on
+(one new item per pack, `true_false` reserved for preview only, distractors
+always drawn from already-taught items, no script-mixing in an options list).
+
+Input CSV columns: `deck,target_word,target_type,base_gloss,example_sentence,example_gloss`
+— one row per word/phrase, **in the exact order it should be introduced**
+(row order is the ledger every later pack's distractors and reinforcement
+draw from). The last two columns are optional:
+
+```
+deck,target_word,target_type,base_gloss,example_sentence,example_gloss
+Greetings,Hello,word,سلام,,
+Greetings,Please,word,لطفاً,,
+Greetings,Thank you,phrase,متشکرم,"Hello,|Thank you","سلام، متشکرم"
+Numbers,One,word,یک,,
+Numbers,Two,word,دو,,
+```
+
+`example_sentence` is pipe-delimited chips (same convention as every other
+options column here) — supply one whenever a row's item can combine with
+already-taught items into a genuine sentence, and that row's pack gets an
+extra `order` practice card building it. This is deliberately **author-
+supplied, not auto-composed**: gluing two random taught words together
+does not reliably produce a grammatical sentence, and the
+flashcard-course-creator skill's "don't teach isolated words forever" rule
+(a sentence-building pack every 4-6 items) is a correctness requirement,
+not something worth risking on a wrong auto-generated sentence. Leave both
+columns blank on rows that don't fit one — not every item needs to.
+
+```bash
+python tools/generate_language_course.py my-vocab.csv <course-folder>
+```
+
+This writes `<course-folder>/source/units.csv` (one unit per distinct
+`deck` value, first-seen order), `source/cards.csv` (a full preview + main
++ 4-6 practice pack per row, now including a `listening_card` rep and, when
+supplied, a sentence-building `order` card), and `source/tts_manifest.csv`
+(one row per audio file the `listening_card` cards reference, `audio,text`)
+— then continue exactly like a hand-authored course: write `source/meta.csv`
+yourself (the generator doesn't know the course's title/color/
+`target_language`/etc.), add deck cover images and set `units.csv`'s
+`image` column, **record/synthesize every row in `tts_manifest.csv` into
+`source/media/<audio>`** (this repo's own TTS tooling — see the app's
+CLAUDE.md's narration/pronunciation-audio note — same as how the original
+hand-authored course's audio was made; never ship a placeholder), run
+`build_course_zip.py`, and `validate_course.py --source`.
+
+The generated packs deliberately reuse only card types that already exist
+(`true_false`, `multiple_choice`, `match_pairs`, `listening_card`, `order`,
+`type_answer`, `speech_recognition`) — no new card type is needed to scale
+this pattern to a new language pair. `tools/test_generate_language_course.py`
+checks the ledger/script/role invariants the pedagogy depends on; run it
+after changing the generator.
+
+### Why a type_answer card, every 3rd row
+
+`type_answer` is normally reserved for code/commands (see this doc's own
+"typing budget" rules) — a term or definition shouldn't demand exact
+keyboard input when there's often more than one valid phrasing. A
+teachesLanguage course's own target word is the deliberate exception:
+typing the word IS the skill being tested (spelling recall from the
+meaning alone, no options to recognize it from), and grading is
+case-insensitive so capitalization never trips up a right answer. It's
+throttled to every 3rd row, not every pack, because one per pack alone
+would already push a course over the 10% typing-card budget
+`validate_course.py` warns on.
+
+### Why a listening_card rep, every pack
+
+Language-learning research (Duolingo's own published work on spaced
+repetition and half-life regression, and reviews of app-based vocabulary
+practice more broadly) consistently treats listening comprehension as a
+distinct skill that reading/production drills alone don't exercise — an
+app whose only "audio" is `speech_recognition`'s pronunciation check never
+tests whether the learner can understand the target language *heard*, only
+whether they can *say* it. That's the whole reason `listening_card` exists
+in this app's card-type set — the generator now actually uses it instead
+of leaving it a type nothing outputs.
+
+### Why a "translate this sentence" card, every other sentence
+
+Surveying Duolingo's actual exercise taxonomy (not just its early-lesson
+structure) turned up one exercise type used constantly across a whole
+course that this generator had no equivalent for: given the sentence's
+*meaning*, produce the whole sentence — not recognize it in a list, not
+hear it and transcribe it, not rearrange it from chips someone else
+already picked. Every other sentence-practice format this generator emits
+(`order`, `select_blank`, `listening_card`) tests recognizing/hearing/
+arranging a sentence that's already been laid out for the learner; none of
+them tests actually producing one unprompted, which is the real target
+skill a course like this is for. Implemented as a `type_answer` scored
+against the row's full `example_sentence`, prompted from `example_gloss`
+(the only cue that doesn't just hand back the English answer — a row with
+`example_sentence` but no `example_gloss` doesn't get this card). Every
+other sentence, not every one: combined with the word-level `type_answer`
+card above, doing this for every sentence would push a course well past
+the 10% typing-card budget. Also skipped outright when the prompt template
+plus a long `example_gloss` (a two-sentence combo, say) would blow the
+9-word prompt cap on its own — `_fits_as_card` checks this before emitting,
+the same defensive pattern `_fits_as_option` already applies to options.

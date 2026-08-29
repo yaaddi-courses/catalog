@@ -1,0 +1,48 @@
+{
+  "id": "fe65dde5e532",
+  "title": "English for Farsi Speakers",
+  "description": "Practical, real-world English for Farsi speakers who want to travel and get by in everyday situations — greetings, airports, hotels, food, shopping, small talk, and handling problems. No grammar drills, no exam prep, just the phrases you'd actually use.",
+  "image": "cover.png",
+  "file": "english-for-farsi-speakers.zip",
+  "version": "1.0.0",
+  "language": "fa",
+  "titleTranslations": {
+    "fa": "انگلیسی برای فارسی‌زبان‌ها"
+  },
+  "descriptionTranslations": {
+    "fa": "انگلیسی کاربردی و واقعی برای فارسی‌زبان‌هایی که می‌خواهند سفر کنند و در موقعیت‌های روزمره از پس خودشان بربیایند — سلام و احوال‌پرسی، فرودگاه، هتل، غذا، خرید، گپ زدن، و حل مشکلات. بدون تمرین‌های خشک گرامری، بدون آماده شدن برای امتحان، فقط عبارت‌هایی که واقعاً به کارت می‌آیند."
+  },
+  "tags": [
+    "english",
+    "language-learning",
+    "travel",
+    "beginner"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-08-27",
+      "notes": "Initial release: 18 decks of practical travel/communication English for Farsi speakers, using speech-recognition and listening/dictation cards alongside the usual tap-based types, with every card's English text played aloud automatically."
+    }
+  ],
+  "toc": [
+    "Sounds & Survival Phrases",
+    "Introducing Yourself",
+    "Numbers & Money",
+    "Telling Time & Dates",
+    "At the Airport",
+    "Getting Around",
+    "At the Hotel",
+    "Ordering Food",
+    "Shopping",
+    "Small Talk & Politeness",
+    "Asking for Help",
+    "Phone & Wifi",
+    "Emergencies & Health",
+    "Making Plans",
+    "Common Everyday Verbs in Action",
+    "Describing People & Things",
+    "Public Signs & Announcements",
+    "Saying Goodbye & Staying in Touch"
+  ]
+}

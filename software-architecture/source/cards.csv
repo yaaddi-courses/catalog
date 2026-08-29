@@ -14,7 +14,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 13,3,true_false,exercise,12,Quality attributes are non-functional goals.,,true,,,
 14,3,select_blank,exercise,12,Architecture exists to serve quality ___.,attributes|colors|fonts,0,,,
 15,3,multiple_choice,exercise,12,What kind of goal is maintainability?,Non-functional|A feature|A button,0,,,
-16,4,multiple_choice,preview,17,What does an ADR record?,Decision reasoning|Whole codebase|A meeting,0,cards/card_16.png,,
+16,4,true_false,preview,17,An ADR records the reasoning behind a decision.,,true,cards/card_16.png,,
 17,4,multiple_choice,main,,What does an ADR record?,Why decided|Whole codebase|A meeting,0,cards/card_17.png,,"ADRs matter most for major decisions, helping future team members understand the reasoning later."
 18,4,true_false,exercise,17,An ADR helps future team members understand past reasoning.,,true,,,
 19,4,select_blank,exercise,17,ADR stands for architectural decision ___.,record|report|review,0,,,
@@ -34,7 +34,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 33,7,true_false,exercise,32,A layer talks to its neighbor layer.,,true,,,
 34,7,select_blank,exercise,32,Data access is typically its own ___.,layer|button|font,0,,,
 35,7,multiple_choice,exercise,32,Name a typical layer in this style.,Business logic|Font size|A logo,0,,,
-36,8,multiple_choice,preview,37,What can microservices deploy independently?,Each service|Whole app|Nothing,0,cards/card_36.png,,
+36,8,true_false,preview,37,Microservices can be deployed independently of each other.,,true,cards/card_36.png,,
 37,8,multiple_choice,main,,What can microservices deploy independently?,Each service|The app|Nothing,0,cards/card_37.png,,"Microservices are small, independently deployable services — trading some simplicity for the ability to scale each one separately."
 38,8,true_false,exercise,37,Microservices trade away some simplicity for flexibility.,,true,,,
 39,8,select_blank,exercise,37,Microservices are ___ deployable units.,"small, independent|one giant|zero",0,,,
@@ -59,7 +59,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 58,12,true_false,exercise,57,A modular monolith has strict internal boundaries.,,true,,,
 59,12,select_blank,exercise,57,Modules stay strictly ___ from each other.,bounded|merged|deleted,0,,,
 60,12,multiple_choice,exercise,57,How many units is a modular monolith deployed as?,One|Many|Zero,0,,,
-61,13,multiple_choice,preview,62,What does hexagonal architecture isolate?,Core logic|The database|The UI,0,cards/card_61.png,,
+61,13,true_false,preview,62,Hexagonal architecture isolates the core logic from the outside world.,,true,cards/card_61.png,,
 62,13,multiple_choice,main,,What does hexagonal architecture isolate?,Core logic|The database|UI only,0,cards/card_62.png,,"It isolates that core logic by talking to the outside world only through defined ports and adapters, so pieces like the database can be swapped easily."
 63,13,true_false,exercise,62,Ports and adapters connect core logic to the outside world.,,true,,,
 64,13,select_blank,exercise,62,Core logic talks out only through ___.,ports|the UI|the database,0,,,

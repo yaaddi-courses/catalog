@@ -34,12 +34,12 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 33,7,true_false,exercise,32,A tight chest can signal an emotion.,,true,,,
 34,7,select_blank,exercise,32,Physical signals can come ___ you notice the feeling.,before|after only|never before,0,,,
 35,7,multiple_choice,exercise,32,Give an example physical signal.,Clenched jaw|Calendar alert|An email,0,,,
-36,8,multiple_choice,preview,37,What is a trigger?,Reliable setoff|Random guess|Quiet room,0,cards/card_36.png,,
+36,8,true_false,preview,37,A trigger reliably sets off the same strong reaction.,,true,cards/card_36.png,,
 37,8,multiple_choice,main,,What is a trigger?,Reliable setoff|Random mood|Weekly meeting,0,cards/card_37.png,,Spotting the pattern is the first step to managing a trigger.
 38,8,true_false,exercise,37,Spotting a trigger's pattern is the first step.,,true,,,
 39,8,select_blank,exercise,37,A trigger reliably sets off a strong ___.,reaction|meeting|calendar,0,,,
 40,8,multiple_choice,exercise,37,What makes something a trigger rather than a mood?,Repeats reliably|Is random|Never happens,0,,,
-41,9,multiple_choice,preview,42,What is a blind spot?,Unseen weakness|Known strength|Loud voice,0,cards/card_41.png,,
+41,9,true_false,preview,42,A blind spot is a weakness you cannot see.,,true,cards/card_41.png,,
 42,9,multiple_choice,main,,What is a blind spot?,Unseen weakness|Known strength|Random guess,0,,,"A blind spot is a weakness you genuinely can't see in yourself — which is exactly why honest outside feedback matters, since it reveals gaps you'd otherwise miss."
 43,9,true_false,exercise,42,Outside feedback can reveal a blind spot.,,true,,,
 44,9,select_blank,exercise,42,A blind spot is a weakness you cannot ___.,see|fix instantly|avoid,0,,,
@@ -89,7 +89,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 88,18,true_false,exercise,87,A meaningful goal connects to something you care about.,,true,,,
 89,18,select_blank,exercise,87,A goal sticks best with real personal ___.,meaning|numbers|pressure,0,,,
 90,18,multiple_choice,exercise,87,What is a weak source for a goal?,Someone's number|Own values|Real interest,0,,,
-91,19,multiple_choice,preview,92,What does useful optimism focus on?,Moving forward|Giving up|Blaming others,0,cards/card_91.png,,
+91,19,true_false,preview,92,"Useful optimism focuses on moving forward, not denial.",,true,cards/card_91.png,,
 92,19,multiple_choice,main,,What does useful optimism focus on?,Moving forward|Denying it|Blaming others,0,,,
 93,19,true_false,exercise,92,Optimism means ignoring that a setback happened.,,false,,,"It means explaining it in a way that keeps you moving, not denying it."
 94,19,select_blank,exercise,92,How you ___ a setback shapes what comes next.,explain|delete|hide,0,,,

@@ -53,7 +53,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 52,11,code_fill,main,,Complete: download the redis image.,docker ___ redis|pull,,,,"Docker Hub is the public registry these ready-made images, like redis, come from by default."
 53,11,true_false,exercise,52,Docker Hub hosts ready-made images.,,true,,,
 54,11,select_blank,exercise,52,docker ___ downloads an image locally.,pull|push|run,0,,,
-55,11,multiple_choice,exercise,52,What is Docker Hub?,Public registry|Local folder|A firewall,0,,,
+55,11,true_false,exercise,52,"Docker Hub is a private, invitation-only registry.",,false,,,
 56,12,true_false,preview,57,Docker skips rebuilding unchanged layers.,,true,cards/card_56.png,,
 57,12,multiple_choice,main,,What does Docker cache during a build?,Unchanged layers|Every file|Net traffic,0,,,Skipping unchanged layers is what makes a rebuild so much faster than starting from scratch.
 58,12,true_false,exercise,57,An image is made of stacked layers.,,true,,,
@@ -119,7 +119,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 118,24,true_false,exercise,117,A bind mount's data survives a container restart.,,true,,,
 119,24,select_blank,exercise,117,A bind mount links a host ___ directly.,folder|password|network,0,,,
 120,24,multiple_choice,exercise,117,Where does a bind mount's data actually live?,On host|In image|Nowhere,0,,,
-121,25,multiple_choice,preview,122,Who manages a volume's storage?,Docker itself|You directly|The kernel,0,cards/card_121.png,,
+121,25,true_false,preview,122,Docker manages a volume's storage for you.,,true,cards/card_121.png,,
 122,25,multiple_choice,main,,Who manages a volume's storage?,Docker|You manually|Kernel only,0,,,
 123,25,true_false,exercise,122,A volume's data is lost when its container is removed.,,false,,,That's the whole point of a volume — it outlives the container.
 124,25,select_blank,exercise,122,Docker ___ where a volume's data actually lives.,manages|deletes|ignores,0,,,
@@ -202,7 +202,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 201,41,select_blank,preview,202,A ___ registry limits who can see an image.,private|public|open,0,cards/card_201.png,,
 202,41,multiple_choice,main,,What does a private registry restrict?,Image visibility|Build speed|Layer count,0,,,Docker Hub itself is public by default — a private registry is the alternative when you don't want that.
 203,41,true_false,exercise,202,Docker Hub images are public by default.,,true,,,
-204,41,select_blank,exercise,202,A ___ registry limits who can see an image.,private|public|local,0,,,
+204,41,true_false,exercise,202,A public registry limits who can see an image.,,false,,,
 205,41,multiple_choice,exercise,202,Who might use a private registry?,Company team|Whole internet|No one,0,,,
 206,42,select_blank,preview,207,docker ___ uploads a local image to a registry.,push|pull|build,0,cards/card_206.png,,
 207,42,code_fill,main,,Complete: upload myapp to a registry.,docker ___ myapp|push,,,,

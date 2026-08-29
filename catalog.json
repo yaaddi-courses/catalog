@@ -2,7 +2,7 @@
   {
     "path": "canadian-citizenship",
     "title": "Canadian Citizenship",
-    "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course \u2014 history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real photos), not a summary of it \u2014 reading through this course covers the same ground as reading the book itself.",
+    "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course \u2014 history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real\u2026",
     "file": "canadian-citizenship.zip",
     "id": "7f3a91c04e2b",
     "image": "cover.png",
@@ -14,36 +14,7 @@
       "history",
       "government"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-20",
-        "notes": "Initial release \u2014 built from the official Discover Canada study guide (IRCC), using the guide's own photos as card images, covering all 18 decks: applying for citizenship, rights and responsibilities, history, government, justice, symbols, the economy, and every region."
-      }
-    ],
-    "toc": [
-      "Applying for Citizenship & the Test",
-      "Rights and Responsibilities of Citizenship",
-      "Who We Are",
-      "Indigenous Peoples, New France & Early Canada",
-      "The Road to Confederation",
-      "Building the Dominion",
-      "Canada in the World Wars",
-      "Modern Canada",
-      "How Canadians Govern Themselves",
-      "Federal Elections",
-      "The Justice System",
-      "Canadian Symbols",
-      "Canada's Economy",
-      "The Atlantic Provinces",
-      "Central Canada",
-      "The Prairie Provinces",
-      "The West Coast",
-      "The Northern Territories",
-      "Practice Exam 1",
-      "Practice Exam 2",
-      "Practice Exam 3"
-    ]
+    "deckCount": 21
   },
   {
     "path": "concurrency-in-python",
@@ -60,100 +31,7 @@
       "threading",
       "intermediate"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u2014 85 decks, 914 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "Concurrency Models Comparison",
-      "Workload Types (I/O-Bound vs. CPU-Bound)",
-      "Global Interpreter Lock (GIL) Mechanics",
-      "GIL Impact on Workloads",
-      "Circumventing & Modern Evolution of the GIL",
-      "Creating & Managing Threads",
-      "Thread Execution Synchronization (join)",
-      "Main vs. Worker vs. Daemon Threads",
-      "Thread Metadata & Identity",
-      "Thread Communication & Return Values",
-      "Race Conditions & Critical Sections",
-      "Mutual Exclusion (threading.Lock)",
-      "Reentrant Locking (threading.RLock)",
-      "Deadlocks & Lock Ordering",
-      "Atomic Operations & Built-in Thread Safety",
-      "Event Signaling (threading.Event)",
-      "Conditional Synchronization (threading.Condition)",
-      "Resource Throttling (threading.Semaphore)",
-      "Delayed Execution (threading.Timer)",
-      "Thread-Local Storage (threading.local)",
-      "Process Creation & Execution",
-      "Memory Isolation: Threads vs. Processes",
-      "Process Start Methods (fork, spawn, forkserver)",
-      "Platform-Specific Process Behaviors",
-      "Process Exit Codes & Error Handling",
-      "Inter-Process Queues (multiprocessing.Queue)",
-      "Inter-Process Pipes (multiprocessing.Pipe)",
-      "Basic Shared Memory (Value & Array)",
-      "Modern Shared Memory (multiprocessing.shared_memory)",
-      "Process Managers (multiprocessing.Manager)",
-      "Inter-Process Locking (multiprocessing.Lock)",
-      "Reentrant Inter-Process Locking (multiprocessing.RLock)",
-      "Inter-Process Events & Semaphores",
-      "Process Synchronization Barriers (multiprocessing.Barrier)",
-      "Worker Process Teardown Patterns",
-      "Executor Pool Selection",
-      "Task Submission Mechanics (submit vs. map)",
-      "Pool Context Management & Lifecycle",
-      "Pool Sizing & Resource Management",
-      "Queue Backpressure in Executors",
-      "Future Objects Core Lifecycle",
-      "Non-Blocking Future Checks & Timeouts",
-      "Future Completion Callbacks",
-      "Handling Collections of Futures",
-      "Task Cancellation Mechanics",
-      "Async Syntax & Coroutines",
-      "The Event Loop Paradigm",
-      "Yielding Control in Coroutines",
-      "Event Loop Starvation & Blocking",
-      "Coroutines vs. Synchronous Functions",
-      "Task Instantiation (asyncio.create_task)",
-      "Coroutines vs. Tasks vs. Futures in Asyncio",
-      "Concurrent Task Gathering (asyncio.gather)",
-      "Out-of-Order Async Results (asyncio.as_completed)",
-      "Async Task Cancellation Mechanics",
-      "Async Timeouts & Deadlines",
-      "Structured Concurrency (asyncio.TaskGroup)",
-      "Exception Groups in Async Contexts",
-      "Multi-Task Waiting Strategies",
-      "Shielding Async Tasks from Cancellation",
-      "Async Mutual Exclusion (asyncio.Lock)",
-      "Async Throttling (asyncio.Semaphore)",
-      "Async Signaling (Event & Condition)",
-      "Async Queues (asyncio.Queue)",
-      "Sync Lock Errors in Async Code",
-      "High-Level Async Network Streams",
-      "Async Stream Readers & Writers",
-      "Transports & Protocols (Low-Level Async)",
-      "Async Subprocesses",
-      "Asynchronous HTTP Clients",
-      "Offloading CPU Tasks from Async (run_in_executor)",
-      "Modern Thread Offloading (asyncio.to_thread)",
-      "Dedicated Event Loop Threads",
-      "Sync-to-Async Bridge",
-      "Thread-Safe Async Scheduling",
-      "Producer-Consumer Pattern Architecture",
-      "Queue Implementation Selection",
-      "Queue Completion & Joining",
-      "Graceful Shutdown & Poison Pills",
-      "Bounded Queues & Backpressure",
-      "Common Concurrency Bugs",
-      "Profiling Concurrent Code",
-      "Asyncio Debug Mode",
-      "Signal Handling & Graceful Teardown",
-      "Concurrency Selection Decision Tree"
-    ]
+    "deckCount": 85
   },
   {
     "path": "docker-and-containers",
@@ -169,59 +47,7 @@
       "infrastructure",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u2014 44 decks, 224 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What a Container Actually Is",
-      "Containers vs. Virtual Machines",
-      "Solving \"It Works on My Machine\"",
-      "Installing Docker",
-      "Images vs. Containers",
-      "Running Your First Container",
-      "docker run Pulls Images Automatically",
-      "Stopping a Running Container",
-      "Removing a Container",
-      "A Container's Lifecycle",
-      "Pulling Images From Docker Hub",
-      "Image Layers and Caching",
-      "Writing Your First Dockerfile",
-      "The FROM Instruction",
-      "The COPY Instruction",
-      "The RUN Instruction",
-      "The CMD Instruction",
-      "Building an Image",
-      "Multi-Stage Builds",
-      "Tagging and Versioning Images",
-      "The 'latest' Tag Isn't Special",
-      "Mapping Ports",
-      "Environment Variables in Containers",
-      "Bind Mounts",
-      "Volumes",
-      "Container Networking Basics",
-      "Getting a Shell Inside a Running Container",
-      "Reading Container Logs",
-      "Inspecting a Container",
-      "Setting Resource Limits",
-      "Restart Policies",
-      "Why You Need Docker Compose",
-      "Writing a docker-compose.yml",
-      "Networking Between Compose Services",
-      "Compose Volumes and Config",
-      "Keeping Images Small",
-      "Using .dockerignore",
-      "Avoiding Baked-In Secrets",
-      "Run as a Non-Root User",
-      "Use Trusted Base Images",
-      "Docker Hub and Private Registries",
-      "Pushing and Pulling From a Registry",
-      "Cleaning Up Unused Docker Resources",
-      "Why You'd Eventually Need an Orchestrator"
-    ]
+    "deckCount": 44
   },
   {
     "path": "effective-vibecoding",
@@ -237,42 +63,7 @@
       "productivity",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u2014 27 decks, 194 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What \"Vibecoding\" Actually Means",
-      "A Different Job: Director, Not Typist",
-      "What Agents Are Genuinely Good At",
-      "Where Agents Still Fall Short",
-      "Project Context Files",
-      "Scoping a Task Before You Ask",
-      "Breaking Big Asks Into Small Steps",
-      "Being Specific Without Over-Specifying",
-      "Showing an Example Instead of a Rule",
-      "Asking for a Plan First",
-      "Correcting an Agent Mid-Task",
-      "Never Trust, Always Verify",
-      "Reading a Diff Like a Reviewer",
-      "Running and Testing the Result Yourself",
-      "Spotting a Confident Hallucination",
-      "Reversible vs. Irreversible Actions",
-      "Sandboxing and Permissions",
-      "Committing in Small Steps While Vibecoding",
-      "Knowing When to Take Back the Wheel",
-      "Pair-Programming With an Agent",
-      "Using an Agent for Code Review",
-      "Delegating Research vs. Delegating Implementation",
-      "Losing the Thread in a Long Session",
-      "Over-Trusting a Confident Tone",
-      "Letting Scope Creep In",
-      "Building Reusable Prompts and Playbooks",
-      "Knowing When Not to Vibecode"
-    ]
+    "deckCount": 27
   },
   {
     "path": "emotional-intelligence",
@@ -288,55 +79,30 @@
       "communication",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u00e2\u20ac\u201d 40 decks, 212 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
+    "deckCount": 40
+  },
+  {
+    "path": "english-for-farsi-speakers",
+    "title": "English for Farsi Speakers",
+    "description": "Practical, real-world English for Farsi speakers who want to travel and get by in everyday situations \u2014 greetings, airports, hotels, food, shopping, small talk, and handling problems. No grammar drills, no exam prep, just the phrases you'd\u2026",
+    "file": "english-for-farsi-speakers.zip",
+    "id": "fe65dde5e532",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "english",
+      "language-learning",
+      "travel",
+      "beginner"
     ],
-    "toc": [
-      "What Emotional Intelligence Actually Is",
-      "The Four EQ Domains",
-      "EQ vs IQ: What Each Predicts",
-      "The Brain's Role in Emotion",
-      "Why EQ Can Be Trained",
-      "Naming Your Emotions Precisely",
-      "Recognizing Physical Signals of Emotion",
-      "Identifying Your Emotional Triggers",
-      "Strengths, Weaknesses, and Blind Spots",
-      "Journaling as a Self-Awareness Tool",
-      "The Pause Between Trigger and Reaction",
-      "Reframing Negative Thoughts",
-      "Managing Anger Constructively",
-      "Handling In-the-Moment Anxiety",
-      "Building Emotional Resilience",
-      "Delaying Gratification",
-      "Intrinsic vs Extrinsic Motivation",
-      "Setting Meaningful Goals",
-      "Staying Optimistic Under Setbacks",
-      "Commitment and Follow-Through",
-      "Cognitive vs Emotional Empathy",
-      "Active Listening Techniques",
-      "Reading Nonverbal Cues",
-      "Perspective-Taking",
-      "Empathy Fatigue",
-      "Building Rapport Quickly",
-      "Giving Constructive Feedback",
-      "Receiving Criticism Gracefully",
-      "Resolving Conflict Without Escalating",
-      "Ethical Persuasion and Influence",
-      "Reading the Room in Groups",
-      "Emotional Intelligence in Leadership",
-      "Reading Your Manager's Emotional State",
-      "Team Emotional Climate",
-      "Difficult Conversations at Work",
-      "Staying Composed Under Deadline Pressure",
-      "Emotional Contagion",
-      "Cultural Differences in Emotional Expression",
-      "Common EQ Myths, Debunked",
-      "Tracking Your Own EQ Growth"
-    ]
+    "language": "fa",
+    "titleTranslations": {
+      "fa": "\u0627\u0646\u06af\u0644\u06cc\u0633\u06cc \u0628\u0631\u0627\u06cc \u0641\u0627\u0631\u0633\u06cc\u200c\u0632\u0628\u0627\u0646\u200c\u0647\u0627"
+    },
+    "descriptionTranslations": {
+      "fa": "\u0627\u0646\u06af\u0644\u06cc\u0633\u06cc \u06a9\u0627\u0631\u0628\u0631\u062f\u06cc \u0648 \u0648\u0627\u0642\u0639\u06cc \u0628\u0631\u0627\u06cc \u0641\u0627\u0631\u0633\u06cc\u200c\u0632\u0628\u0627\u0646\u200c\u0647\u0627\u06cc\u06cc \u06a9\u0647 \u0645\u06cc\u200c\u062e\u0648\u0627\u0647\u0646\u062f \u0633\u0641\u0631 \u06a9\u0646\u0646\u062f \u0648 \u062f\u0631 \u0645\u0648\u0642\u0639\u06cc\u062a\u200c\u0647\u0627\u06cc \u0631\u0648\u0632\u0645\u0631\u0647 \u0627\u0632 \u067e\u0633 \u062e\u0648\u062f\u0634\u0627\u0646 \u0628\u0631\u0628\u06cc\u0627\u06cc\u0646\u062f \u2014 \u0633\u0644\u0627\u0645 \u0648 \u0627\u062d\u0648\u0627\u0644\u200c\u067e\u0631\u0633\u06cc\u060c \u0641\u0631\u0648\u062f\u06af\u0627\u0647\u060c \u0647\u062a\u0644\u060c \u063a\u0630\u0627\u060c \u062e\u0631\u06cc\u062f\u060c \u06af\u067e \u0632\u062f\u0646\u060c \u0648 \u062d\u0644 \u0645\u0634\u06a9\u0644\u0627\u062a. \u0628\u062f\u0648\u0646 \u062a\u0645\u0631\u06cc\u0646\u200c\u0647\u0627\u06cc \u062e\u0634\u06a9 \u06af\u0631\u0627\u0645\u0631\u06cc\u060c \u0628\u062f\u0648\u0646 \u0622\u0645\u0627\u062f\u0647 \u0634\u062f\u0646 \u0628\u0631\u0627\u06cc \u0627\u0645\u062a\u062d\u0627\u0646\u060c \u0641\u0642\u0637 \u0639\u0628\u0627\u0631\u062a\u200c\u0647\u0627\u06cc\u06cc \u06a9\u0647 \u0648\u0627\u0642\u0639\u0627\u064b \u0628\u0647 \u06a9\u0627\u0631\u062a \u0645\u06cc\u200c\u0622\u06cc\u0646\u062f."
+    },
+    "deckCount": 18
   },
   {
     "path": "git",
@@ -352,54 +118,7 @@
       "programming",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u2014 39 decks, 291 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What Version Control Actually Solves",
-      "Installing and Setting Up Git",
-      "Starting a Repository",
-      "The Three Areas: Working, Staged, Committed",
-      "Tracking and Staging Changes",
-      "Committing Snapshots",
-      "Reading Your History",
-      "Comparing Changes",
-      "Unstaging and Discarding Changes",
-      "Fixing Your Last Commit",
-      "Reverting a Commit Safely",
-      "Resetting to an Earlier Point",
-      "What a Branch Really Is",
-      "Creating and Switching Branches",
-      "Merging Branches Together",
-      "Resolving a Merge Conflict",
-      "Rebasing Instead of Merging",
-      "Cleaning Up History With Interactive Rebase",
-      "Understanding Remotes",
-      "Pushing and Pulling",
-      "Fetch vs. Pull",
-      "Tracking Branches",
-      "Forks and Pull Requests",
-      "Writing Reviewable Commits",
-      "Common Team Branching Strategies",
-      ".gitignore and What Not to Track",
-      "Removing Untracked Files",
-      "Searching Commit History",
-      "Blaming a Line, Fairly",
-      "Binary-Searching for a Bug",
-      "Tagging a Release",
-      "Stashing Work in Progress",
-      "Cherry-Picking a Single Commit",
-      "Rewriting History Without Breaking Everyone",
-      "Recovering \"Lost\" Commits",
-      "Common Git Mistakes and Their Fixes",
-      "Submodules, Briefly",
-      "Handling Large Files With Git LFS",
-      "How Git Actually Stores Your Data"
-    ]
+    "deckCount": 39
   },
   {
     "path": "harness",
@@ -416,54 +135,7 @@
       "deployment",
       "intermediate"
     ],
-    "changelog": [
-      {
-        "version": "1.0.1",
-        "date": "2026-08-24",
-        "notes": "Glossary quality pass \u2014 added scope (Account/Organization/Project), SCM, SAST, and DAST entries covering existing card content, and strengthened 6 definitions with concrete examples so they stand alone without needing the \"learn more\" link."
-      },
-      {
-        "version": "1.0.0",
-        "date": "2026-08-17",
-        "notes": "Initial release \u2014 34 decks, 238 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What Harness Is and the Problem It Solves",
-      "Harness Modules Overview",
-      "Pipelines: The Core Building Block",
-      "Stages and Steps",
-      "Delegates: How Harness Talks to Your Infrastructure",
-      "Delegate Selectors",
-      "Connectors: Integrating Third-Party Tools",
-      "Secrets Management",
-      "Harness CI: Build Pipeline Basics",
-      "Build Infrastructure: Cloud Build vs. Self-Hosted",
-      "Codebase and Trigger Configuration",
-      "Test Intelligence",
-      "Cache Intelligence",
-      "Harness CD: Services, Environments, Infrastructure Definitions",
-      "Deployment Strategies: Rolling, Canary, Blue-Green",
-      "GitOps in Harness",
-      "Approval Steps and Manual Gates",
-      "Rollback Mechanics",
-      "Continuous Verification During Deploys",
-      "Templates: Reusing Pipeline Logic",
-      "Input Sets and Overlays",
-      "Variables and Expressions",
-      "Triggers: Automating Pipeline Runs",
-      "Policy as Code (OPA Governance)",
-      "Feature Flags Module",
-      "Security Testing Orchestration (STO)",
-      "Chaos Engineering Module",
-      "Cloud Cost Management (CCM)",
-      "Internal Developer Portal (IDP)",
-      "Software Engineering Insights (SEI)",
-      "Harness Open Source vs. Harness Platform",
-      "Projects, Organizations, and RBAC",
-      "Pipeline Notifications and Observability",
-      "Common Harness Anti-Patterns and Best Practices"
-    ]
+    "deckCount": 34
   },
   {
     "path": "kubernetes-fundamentals",
@@ -479,56 +151,7 @@
       "infrastructure",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-18",
-        "notes": "Converted 23 practice cards that tested plain concept recall (e.g. \"control plane\", \"a chart\", \"a demo\") from typing types to tap-based select_blank -- typing cards should be reserved for actual kubectl/CLI syntax."
-      }
-    ],
-    "toc": [
-      "The Problem Kubernetes Solves",
-      "Kubernetes vs. Plain Docker",
-      "Control Plane vs. Nodes",
-      "The API Server and etcd",
-      "etcd: The Cluster's Database",
-      "The Scheduler",
-      "The Kubelet and Container Runtime",
-      "Talking to a Cluster With kubectl",
-      "What a Pod Actually Is",
-      "Multi-Container Pods and Sidecars",
-      "A Pod's Lifecycle",
-      "ReplicaSets",
-      "Deployments",
-      "StatefulSets",
-      "DaemonSets",
-      "Jobs and CronJobs",
-      "Services: Giving Pods a Stable Address",
-      "ClusterIP, NodePort, and LoadBalancer",
-      "DNS Inside a Cluster",
-      "Ingress and Ingress Controllers",
-      "ConfigMaps",
-      "Secrets",
-      "Getting Config Into a Pod",
-      "Volumes, Briefly",
-      "PersistentVolumes and PersistentVolumeClaims",
-      "StorageClasses and Dynamic Provisioning",
-      "Requests and Limits",
-      "Namespaces",
-      "Labels and Selectors",
-      "Node Affinity and Taints",
-      "Liveness, Readiness, and Startup Probes",
-      "Horizontal Pod Autoscaling",
-      "YAML Manifests and Applying Them",
-      "Helm Basics",
-      "Kustomize, Briefly",
-      "Rolling Updates and Rollbacks in Practice",
-      "Reading Logs and Debugging a Pod",
-      "RBAC Basics",
-      "Resource Quotas and Limit Ranges",
-      "Pod Disruption Budgets",
-      "Common Kubernetes Anti-Patterns"
-    ]
+    "deckCount": 41
   },
   {
     "path": "managing-software-projects",
@@ -544,55 +167,12 @@
       "software-engineering",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u2014 35 decks, 182 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What a Software Project Manager Does",
-      "Project vs Product vs Program",
-      "The Iron Triangle: Scope, Time, Cost",
-      "Mapping Your Stakeholders",
-      "Writing a Project Charter",
-      "Waterfall: When It Still Makes Sense",
-      "Agile Values and Principles",
-      "Scrum Roles and Ceremonies",
-      "Sprint Planning Basics",
-      "Kanban Fundamentals",
-      "Scrumban: Mixing Scrum and Kanban",
-      "Choosing a Methodology for Your Team",
-      "Work Breakdown Structures",
-      "Story Points vs Time Estimates",
-      "Planning Poker",
-      "The Critical Path Method",
-      "Buffering for Uncertainty",
-      "Burndown and Burnup Charts",
-      "Tracking Team Velocity",
-      "Managing Scope Creep",
-      "Running a Good Daily Standup",
-      "Backlog Grooming",
-      "Identifying and Mitigating Risk",
-      "Technical Debt as a Project Risk",
-      "Writing a Definition of Done",
-      "Setting Quality Gates",
-      "Leading Without Authority",
-      "Running Effective Retrospectives",
-      "Managing Remote and Distributed Teams",
-      "Resolving Conflict on a Project Team",
-      "Reporting Status to Executives",
-      "Project Management Tools Overview",
-      "Managing Change Requests",
-      "Project Closure and Postmortems",
-      "Common Project Failure Patterns"
-    ]
+    "deckCount": 35
   },
   {
     "path": "mlops",
     "title": "MLOps",
-    "description": "The practices and tooling that take a machine-learning model from a notebook to reliable production: experiment tracking, model registries, feature stores, CI/CD for ML, serving, and drift monitoring. Builds on this library's docker-and-containers, kubernetes-fundamentals, harness, opentelemetry, and testing-in-software-engineering courses for the general infra/CI/testing/observability mechanics this course specializes for ML \u2014 see each for the foundation.",
+    "description": "The practices and tooling that take a machine-learning model from a notebook to reliable production: experiment tracking, model registries, feature stores, CI/CD for ML, serving, and drift monitoring. Builds on this library's\u2026",
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
@@ -604,44 +184,12 @@
       "data-science",
       "intermediate"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-24",
-        "notes": "Initial release \u2014 24 decks, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What MLOps Actually Solves",
-      "The ML Lifecycle Loop",
-      "Reproducibility Fundamentals",
-      "Data Versioning",
-      "Experiment Tracking Fundamentals",
-      "MLflow Tracking",
-      "Weights & Biases",
-      "Model Registry & Lifecycle Stages",
-      "Feature Store Fundamentals",
-      "Feast in Practice",
-      "Pipeline Orchestration Fundamentals",
-      "Kubeflow Pipelines",
-      "Airflow and Prefect for ML",
-      "CI for ML: Data and Model Quality Gates",
-      "Continuous Training and Retraining Triggers",
-      "Packaging a Model for Deployment",
-      "Model Serving Patterns",
-      "Model Serving Tools",
-      "Safe Rollouts: Canary and Shadow Deployment",
-      "Monitoring ML Systems in Production",
-      "Data Drift and Concept Drift",
-      "Testing ML Systems",
-      "Model Governance and Model Cards",
-      "LLMOps: What Changes for Large Language Models"
-    ]
+    "deckCount": 24
   },
   {
     "path": "opentelemetry",
     "title": "OpenTelemetry",
-    "description": "The vendor-neutral standard for traces, metrics, and logs \u2014 from a single span to a full Collector pipeline in production. The final deck (running OTel on Kubernetes) goes smoothly if you already know pods and Deployments \u2014 see this app's Kubernetes Fundamentals course first if those are new.",
+    "description": "The vendor-neutral standard for traces, metrics, and logs \u2014 from a single span to a full Collector pipeline in production. The final deck (running OTel on Kubernetes) goes smoothly if you already know pods and Deployments \u2014 see this app's\u2026",
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
@@ -653,53 +201,7 @@
       "monitoring",
       "intermediate"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-17",
-        "notes": "Initial release \u00e2\u20ac\u201d 38 decks, 266 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What Observability Actually Means",
-      "The Signals: Traces, Metrics, Logs, and Profiles",
-      "Why OpenTelemetry Exists",
-      "Vendor-Neutral vs. Proprietary Agents",
-      "The API vs. SDK Separation",
-      "Instrumentation Libraries vs. Manual Instrumentation",
-      "Auto-Instrumentation, Briefly",
-      "What a Trace Actually Is",
-      "What a Span Represents",
-      "Span Attributes and Events",
-      "Span Kind",
-      "Parent-Child Span Relationships",
-      "Trace ID and Span ID",
-      "W3C Trace Context Propagation",
-      "Baggage: Carrying Business Context",
-      "Context Propagation Across Service Boundaries",
-      "Metrics: Counters, Gauges, and Histograms",
-      "Metric Aggregation Temporality",
-      "Structured Logs in OpenTelemetry",
-      "Correlating Logs, Traces, and Metrics",
-      "Resource Attributes",
-      "Semantic Conventions",
-      "The OpenTelemetry Protocol (OTLP)",
-      "Exporters: Where Telemetry Goes",
-      "The OpenTelemetry Collector, Briefly",
-      "Collector Pipelines: Receivers, Processors, Exporters",
-      "Common Collector Processors",
-      "Sampling: Why You Can't Keep Everything",
-      "Head-Based vs. Tail-Based Sampling",
-      "Deploying the Collector: Agent vs. Gateway Pattern",
-      "SDK Configuration: Samplers, Exporters, Resource Detectors",
-      "Instrumenting an HTTP Service",
-      "Instrumenting Database Calls",
-      "Propagating Context Across Async/Queue Boundaries",
-      "Continuous Profiling as a Fourth Signal",
-      "Choosing a Backend",
-      "Common Pitfalls",
-      "OpenTelemetry on Kubernetes"
-    ]
+    "deckCount": 38
   },
   {
     "path": "python-basics",
@@ -714,39 +216,7 @@
       "programming",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-18",
-        "notes": "Converted 2 cards (\"self\" naming convention, \"PEP 8\" style guide name) from typing types to tap-based select_blank -- typing cards should be reserved for cards whose answer is actual code/CLI syntax, not a definitional/naming-convention term."
-      }
-    ],
-    "toc": [
-      "Environment, Variables & Primitive Data Types",
-      "Operators & Expressions",
-      "String Manipulation",
-      "Conditional Logic",
-      "Loops & Iteration",
-      "Lists",
-      "Tuples & Sets",
-      "Dictionaries",
-      "Comprehensions",
-      "Function Essentials",
-      "Advanced Function Arguments & Lambdas",
-      "Variable Scope",
-      "Modules & Packages",
-      "User Input & Basic Type Conversion",
-      "Exception Handling",
-      "File I/O Basics",
-      "Classes & Objects",
-      "Constructors & Instance vs. Class State",
-      "Inheritance & Polymorphism",
-      "Encapsulation & Pythonic Access Control",
-      "High-Order Built-in Functions",
-      "Sorting & Custom Keys",
-      "Virtual Environments & Package Management",
-      "Type Hints & Code Style"
-    ]
+    "deckCount": 24
   },
   {
     "path": "sdlc",
@@ -762,49 +232,7 @@
       "process",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u2014 34 decks, 177 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What SDLC Actually Means",
-      "Why Structured Process Beats Ad-Hoc Coding",
-      "The Core SDLC Phases, Overview",
-      "Gathering Requirements",
-      "Functional vs Non-Functional Requirements",
-      "User Stories and Acceptance Criteria",
-      "Feasibility Analysis",
-      "High-Level Design vs Low-Level Design",
-      "Writing a Design Document",
-      "Prototyping",
-      "Coding Standards and Style Guides",
-      "Version Control in the SDLC",
-      "Code Reviews",
-      "Pair Programming",
-      "Where Testing Fits in the SDLC",
-      "Test Levels: Unit, Integration, System, Acceptance",
-      "Test-Driven Development Basics",
-      "Deployment Strategies: Blue-Green and Canary",
-      "Continuous Integration Basics",
-      "Continuous Delivery vs Continuous Deployment",
-      "Release Management",
-      "Types of Maintenance",
-      "Monitoring Systems in Production",
-      "Handling a Production Incident",
-      "Deprecating and Sunsetting Features",
-      "The Waterfall Model",
-      "The V-Model",
-      "The Iterative Model",
-      "The Spiral Model",
-      "The Agile Model",
-      "DevOps as an SDLC Evolution",
-      "Documentation Throughout the SDLC",
-      "Compliance and Audit Trails",
-      "Choosing the Right SDLC Model"
-    ]
+    "deckCount": 34
   },
   {
     "path": "software-architecture",
@@ -820,55 +248,7 @@
       "engineering",
       "intermediate"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u00e2\u20ac\u201d 40 decks, 217 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What Software Architecture Actually Is",
-      "Architecture vs Design vs Code",
-      "Quality Attributes (the \"-ilities\")",
-      "Architectural Decision Records",
-      "Identifying Architecture Stakeholders",
-      "Monolithic Architecture",
-      "Layered (N-Tier) Architecture",
-      "Microservices Architecture",
-      "Event-Driven Architecture",
-      "Service-Oriented Architecture",
-      "Serverless Architecture",
-      "Modular Monolith",
-      "Hexagonal (Ports & Adapters) Architecture",
-      "Clean Architecture",
-      "Pipe-and-Filter Architecture",
-      "Separation of Concerns",
-      "Coupling and Cohesion",
-      "SOLID Principles Overview",
-      "Domain-Driven Design Basics",
-      "Bounded Contexts",
-      "CQRS",
-      "Event Sourcing",
-      "Synchronous vs Asynchronous Communication",
-      "REST API Design Basics",
-      "Message Queues and Brokers",
-      "API Gateways",
-      "Service Discovery",
-      "Database per Service vs Shared Database",
-      "Consistency Models: Strong vs Eventual",
-      "Caching Strategies",
-      "The CAP Theorem",
-      "Horizontal vs Vertical Scaling",
-      "Load Balancing Basics",
-      "The Circuit Breaker Pattern",
-      "Retry and Backoff Strategies",
-      "Rate Limiting",
-      "Observability: Logs, Metrics, Traces",
-      "Security in Architecture",
-      "Documenting Architecture (the C4 Model)",
-      "Making Architecture Trade-offs"
-    ]
+    "deckCount": 40
   },
   {
     "path": "testing-in-software-engineering",
@@ -884,52 +264,12 @@
       "quality",
       "beginner"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-15",
-        "notes": "Initial release \u00e2\u20ac\u201d 32 decks, 226 cards, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What Testing Actually Buys You",
-      "The Real Cost of Not Testing",
-      "Unit Tests",
-      "Integration Tests",
-      "End-to-End Tests",
-      "Balancing the Pyramid",
-      "Arrange, Act, Assert",
-      "What Makes a Test \"Good\"",
-      "Naming Tests So They Explain Themselves",
-      "Choosing the Right Assertion",
-      "Mocks, Stubs, Fakes, and Spies",
-      "When Mocking Helps, and When It Hurts",
-      "What Code Coverage Really Measures",
-      "Testing Edge Cases and Boundaries",
-      "Testing Failure Paths, Not Just Success",
-      "Red, Green, Refactor",
-      "What TDD Is Actually Good and Bad At",
-      "Testing Against a Real Database",
-      "Testing HTTP APIs",
-      "Contract Testing Between Services",
-      "Browser-Driven End-to-End Tests",
-      "Flaky Tests: Causes and Fixes",
-      "Performance and Load Testing",
-      "Basic Security Testing",
-      "Basic Accessibility Testing",
-      "Regression Testing",
-      "Running Tests in CI/CD",
-      "Managing Test Data",
-      "Writing a Test With Every Bug Fix",
-      "Property-Based Testing",
-      "Mutation Testing",
-      "When Not to Write a Test"
-    ]
+    "deckCount": 32
   },
   {
     "path": "testing-with-pytest",
     "title": "Testing with pytest",
-    "description": "The pytest testing framework in depth: fixtures, parametrization, mocking, coverage, and configuration. Assumes you already know Python (see this library's python-basics course) and general testing vocabulary (see testing-in-software-engineering) \u2014 this course is about the pytest tool itself.",
+    "description": "The pytest testing framework in depth: fixtures, parametrization, mocking, coverage, and configuration. Assumes you already know Python (see this library's python-basics course) and general testing vocabulary (see\u2026",
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
@@ -941,37 +281,6 @@
       "qa",
       "intermediate"
     ],
-    "changelog": [
-      {
-        "version": "1.0.0",
-        "date": "2026-08-26",
-        "notes": "Initial release \u2014 23 decks, each pack with a preview card teaching the concept before its graded main card and practice cards."
-      }
-    ],
-    "toc": [
-      "What pytest Is and Why It Replaced unittest",
-      "Installing pytest and Running Your First Test",
-      "Test Discovery Conventions",
-      "Writing Assertions with Plain assert",
-      "Assertion Rewriting and Failure Messages",
-      "Fixtures Fundamentals",
-      "Fixture Scopes",
-      "conftest.py and Fixture Sharing",
-      "Built-in Fixtures: tmp_path, capsys, monkeypatch",
-      "Yield Fixtures and Teardown",
-      "Parametrizing Tests",
-      "Parametrizing Fixtures",
-      "Marking Tests: skip, skipif, xfail",
-      "Custom Markers and Registration",
-      "Testing Exceptions with pytest.raises",
-      "Testing Warnings with pytest.warns",
-      "Mocking with pytest-mock",
-      "Measuring Coverage with pytest-cov",
-      "Running Tests in Parallel with pytest-xdist",
-      "Configuring pytest: pyproject.toml and ini Options",
-      "Organizing a Test Suite: src Layout",
-      "Debugging Failing Tests: -v, -x, -k, --pdb",
-      "Common pytest Anti-Patterns and Best Practices"
-    ]
+    "deckCount": 23
   }
 ]

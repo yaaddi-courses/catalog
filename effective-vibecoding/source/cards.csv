@@ -62,7 +62,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 45,9,multiple_choice,exercise,42,Why do examples work well for agents?,Shows pattern|Takes longer|Adds ambiguity,0,,,
 152,9,multiple_choice,exercise,42,An example beats a paragraph at what?,Speed|Length|Nothing,0,,,
 153,9,true_false,exercise,42,A paragraph always beats an example.,,false,,,
-46,10,multiple_choice,preview,47,Why ask for a plan before code?,Catch mistakes|Save characters|Skip testing,0,,,
+46,10,true_false,preview,47,Asking for a plan before code helps catch mistakes early.,,true,,,
 47,10,multiple_choice,main,,Why ask for a plan before code?,Catches mistakes|Save typing|Skip review,0,cards/card_47.png,,Catching a wrong assumption in the plan is far cheaper than catching it after the code is written.
 48,10,true_false,exercise,47,A wrong plan is cheaper to fix than wrong code.,,true,,,
 49,10,select_blank,exercise,47,Asking for a ___ first catches mistakes early.,plan|apology|retry,0,,,
@@ -111,7 +111,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 80,16,multiple_choice,exercise,77,What makes an action irreversible?,No return|Slow undo|Big diff,0,,,
 166,16,multiple_choice,exercise,77,What is usually reversible?,Editing a file|Dropping data|Force-push,0,,,
 167,16,true_false,exercise,77,Force-pushing can overwrite history.,,true,,,
-81,17,multiple_choice,preview,82,How much access should an agent get?,Just enough|Full access|No limits,0,,,
+81,17,true_false,preview,82,"An agent should get just enough access, not more.",,true,,,
 82,17,multiple_choice,main,,How much access should an agent get?,Just enough|Full access|Nothing,0,cards/card_82.png,,"That way, if it makes a mistake, the damage stays contained instead of spreading."
 83,17,true_false,exercise,82,Limiting access contains the damage of a mistake.,,true,,,
 84,17,select_blank,exercise,82,"Give an agent just ___ access, not more.",enough|full|no,0,,,

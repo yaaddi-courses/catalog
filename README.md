@@ -98,6 +98,7 @@ live — see `meta.json`'s `id` field below.
   "version": "1.1.0",
   "toc": ["Python Basics", "Control Flow", "Functions & Data Structures"],
   "tags": ["python", "beginner"],
+  "language": "en",
   "changelog": [
     { "version": "1.0.0", "notes": "Initial release." },
     { "version": "1.1.0", "date": "2026-08-07", "notes": "Added a Type Hints unit." }
@@ -115,6 +116,9 @@ live — see `meta.json`'s `id` field below.
 | `version` | no | Mirrors `meta.csv`'s own `version` — lets a learner's app detect an update without downloading the whole course. Keep it in sync by hand whenever you bump `meta.csv`'s version. |
 | `toc` | no | Deck/unit titles, in order — shown as a preview **before** a learner downloads the course. Without it, title/description/cover is the whole preview. Just copy the `title` column of your `source/units.csv`, in row order. |
 | `tags` | no | Free-form labels (e.g. `"python"`, `"beginner"`) — used to filter the Course Library list. Not a curated/fixed set, use whatever's genuinely descriptive. |
+| `language` | no (defaults to `en`) | This course's own content language (e.g. `en`, `fa`) — mirrors `source/meta.csv`'s own `language` column. The Course Library ranks a course whose `language` matches the app's current interface language above the rest, so set this to whatever language the course's cards are actually written in. |
+| `titleTranslations` | no | Per-interface-language override of `title`, e.g. `{ "fa": "..." }` — mirrors `source/meta.csv`'s `title_fa`/`title_<code>` columns. Shown instead of `title` when the app's interface language has a matching entry. |
+| `descriptionTranslations` | no | Per-interface-language override of `description` — same rule as `titleTranslations`. |
 | `changelog` | no | Array of `{ version, date?, notes }` — one entry per published version. When a learner's app detects an update, the entry whose `version` matches the new `version` is shown as "What's new." Add one new entry each time you bump `version`; never edit or remove a past entry. |
 
 A folder at the repo root with no valid `meta.json` is just skipped (not treated as an

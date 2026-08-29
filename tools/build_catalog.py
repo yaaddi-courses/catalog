@@ -23,6 +23,16 @@ push to main — an author never needs to remember to run this by hand,
 though `python tools/build_catalog.py` also works standalone for a local
 sanity check.
 
+Kept deliberately lean as the course count grows: `description` is
+truncated to DESCRIPTION_MAX_CHARS (full text lives in the course's own
+meta.json), `toc` is collapsed to a `deckCount` integer (the app only
+shows the real deck list once a learner actually expands a course, at
+which point it fetches that one course's full meta.json on demand —
+see the Yaaddi app repo's src/lib/githubMarketplace.ts's
+fetchSingleCourseEntry), and `changelog` is dropped entirely (the app's
+"check for updates" flow already re-fetches each installed course's own
+meta.json fresh, never reading changelog from this bulk file).
+
 Pure Python stdlib — no dependencies, matches validate_course.py and
 build_site.py's own "stdlib-only" convention.
 
@@ -59,13 +69,28 @@ def discover_courses(root: Path) -> list[Path]:
     return courses
 
 
-# The exact field set src/lib/githubMarketplace.ts's fetchCourseEntry
-# builds from one folder's meta.json today — catalog.json's entries must
-# carry the same fields, in the same meaning, so the app can construct an
-# identical MarketplaceCourseEntry from either source. "path" is the only
-# field not read verbatim from meta.json (it's the folder name, needed to
-# resolve `image`/`file`'s relative paths and to build the course's
-# install/update URLs).
+# How much of meta.json's full `description` survives into the summary
+# catalog — the rest is only ever fetched on demand (see module docstring).
+DESCRIPTION_MAX_CHARS = 240
+
+
+def truncate_description(text: str) -> str:
+    if len(text) <= DESCRIPTION_MAX_CHARS:
+        return text
+    # Cut at the last space before the limit so a word never gets sliced
+    # mid-way, then append the ellipsis the app's expand-tap logic looks
+    # for (src/screens/MarketplaceScreen.tsx) to know more text exists.
+    cut = text[:DESCRIPTION_MAX_CHARS].rsplit(" ", 1)[0]
+    return cut.rstrip(",.;: ") + "…"
+
+
+# The lean field set src/lib/githubMarketplace.ts's summary-listing path
+# builds from one folder's meta.json — deliberately NOT the same full set
+# fetchSingleCourseEntry gets from a direct meta.json fetch (see module
+# docstring for why `toc`/`changelog` are trimmed/dropped here). "path" is
+# the only field not read verbatim from meta.json (it's the folder name,
+# needed to resolve `image`/`file`'s relative paths and to build the
+# course's install/update URLs).
 def build_catalog_entry(course_dir: Path) -> dict | None:
     meta_path = course_dir / "meta.json"
     try:
@@ -78,17 +103,23 @@ def build_catalog_entry(course_dir: Path) -> dict | None:
     entry = {
         "path": course_dir.name,
         "title": meta["title"],
-        "description": meta.get("description", ""),
+        "description": truncate_description(meta.get("description", "")),
         "file": meta["file"],
     }
     # Optional fields are only included when meta.json actually provides
     # them — matches fetchCourseEntry's own "undefined, not null/empty"
     # convention for an absent optional field, so the app's existing
     # zod schema (which already treats these as optional) parses either
-    # source identically.
-    for key in ("id", "image", "version", "tags", "changelog", "toc"):
+    # source identically. `changelog` is deliberately never included here
+    # (see module docstring) and `toc` becomes a bare count.
+    for key in (
+        "id", "image", "version", "tags", "language",
+        "titleTranslations", "descriptionTranslations",
+    ):
         if key in meta:
             entry[key] = meta[key]
+    if meta.get("toc"):
+        entry["deckCount"] = len(meta["toc"])
     return entry
 
 
