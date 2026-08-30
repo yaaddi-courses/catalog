@@ -97,7 +97,15 @@ Input CSV columns: deck, target_word, target_type, base_gloss,
 
 Usage:
     python tools/generate_language_course.py <vocab.csv> <course-folder> \\
-        [--seed 0]
+        [--seed 0] [--generate-images]
+
+--generate-images additionally generates one 256x256 deck-cover image per
+unit via this machine's local FLUX.1-schnell server (see the generate-image
+skill / the "Image generator and tts" project), written to
+source/images/deck<N>.png and filled into units.csv's own `image` column.
+Off by default — needs that server running locally, and each image takes
+roughly 1-2 minutes, one at a time (never concurrently). Safe to re-run: a
+deck whose image file already exists on disk is skipped, not regenerated.
 
 Writes <course-folder>/source/units.csv, source/cards.csv, and
 source/tts_manifest.csv (overwriting any existing files there) — run
@@ -107,15 +115,30 @@ tts_manifest.csv into source/media/<audio filename> — this repo's own TTS
 tooling (see the app's CLAUDE.md's "narration/pronunciation audio" note) can
 batch this the same way the original hand-authored course's audio was made.
 
-Pure Python stdlib, matching this repo's other tools.
+Pure Python stdlib, matching this repo's other tools — --generate-images
+talks to the local FLUX server over plain HTTP via urllib, no extra
+dependency (e.g. `requests`) added just for this.
 """
 from __future__ import annotations
 
 import argparse
 import csv
+import json
 import random
 import sys
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
+
+# Local FLUX.1-schnell image server (see the `generate-image` skill / the
+# "Image generator and tts" project's API_USAGE.md) — used only when
+# --generate-images is passed. Never called concurrently: each request
+# takes 1-2 minutes at 256x256 and the server has no request queue of its
+# own, so cover images are generated one unit at a time, in sequence.
+FLUX_HEALTH_URL = "http://127.0.0.1:8881/health"
+FLUX_GENERATE_URL = "http://127.0.0.1:8881/generate"
+FLUX_TIMEOUT_SECONDS = 300
 
 # How many base-language glosses (beyond the row's own correct one) are
 # drawn as distractors for each "meaning" multiple_choice card — capped at
@@ -193,20 +216,117 @@ def build_units_csv(rows: list[VocabRow]) -> list[dict]:
     for row in rows:
         if row.deck not in decks:
             decks.append(row.deck)
-    return [{"id": str(i + 1), "title": deck, "description": ""} for i, deck in enumerate(decks)]
+    return [
+        {"id": str(i + 1), "title": deck, "description": "", "image": ""} for i, deck in enumerate(decks)
+    ]
+
+
+def deck_cover_prompt(deck_title: str) -> str:
+    """A reasonable default prompt for a deck's cover art, built from just
+    its title. Follows the generate-image skill's own guidance for
+    icon/flashcard-style art: clean minimal background, bright vibrant
+    colors, playful/simple design, one clear focal subject. A human author
+    can always regenerate a specific deck's cover with a more specific
+    prompt afterward — this exists so the script's output is complete out
+    of the box, not to be the final word.
+
+    Deliberately phrased as "an icon symbolizing X" rather than quoting the
+    deck title as if it were a caption/poster headline — an earlier version
+    of this prompt did exactly that ("representing the theme 'X'") and FLUX
+    frequently rendered the quoted title as garbled, misspelled on-image
+    text anyway despite an explicit "no text" instruction (a real, observed
+    failure across several decks of the first course this generated).
+    Repeating the no-text instruction with concrete synonyms (labels, signs,
+    banners, captions) and steering away from scene types that naturally
+    invite signage (storefronts, departure boards, menus) measurably cuts
+    down how often the model still tries to add text.
+    """
+    return (
+        f"A single simple flat-vector icon illustration symbolizing {deck_title.lower()}, "
+        f"for a language-learning app. Minimalist icon design, one clear object or "
+        f"character as the focal subject, clean flat background, bright cheerful colors, "
+        f"playful simple shapes. Do not depict any storefronts, signage, menus, "
+        f"departure boards, or posters. Absolutely no text, no words, no letters, no "
+        f"numbers, no captions, no titles, no labels, no readable signs, no banners, "
+        f"no logos anywhere in the image — a pure icon-style illustration only."
+    )
+
+
+def _flux_server_ready() -> bool:
+    try:
+        with urllib.request.urlopen(FLUX_HEALTH_URL, timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            return bool(data.get("model_loaded"))
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
+
+
+def generate_deck_cover(deck_title: str, output_path: Path) -> None:
+    """Generates one 256x256 deck-cover image via the local FLUX server and
+    saves it to `output_path`. Raises RuntimeError with an actionable
+    message if the server isn't running — never silently skips, since a
+    caller that asked for images wants to know why one is missing."""
+    if not _flux_server_ready():
+        raise RuntimeError(
+            "Image server not reachable at "
+            f"{FLUX_HEALTH_URL} (or not finished loading its model). Start it with:\n"
+            r'  & "D:\MRM\01 Mine\Mine R1\Plan\Apps\Image generator and tts\scripts\start_servers.ps1" -Servers flux'
+            "\nthen retry with --generate-images."
+        )
+    payload = json.dumps(
+        {
+            "prompt": deck_cover_prompt(deck_title),
+            "output_path": str(output_path),
+            "width": 256,
+            "height": 256,
+            "num_inference_steps": 4,
+        }
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        FLUX_GENERATE_URL, data=payload, headers={"Content-Type": "application/json"}, method="POST"
+    )
+    with urllib.request.urlopen(req, timeout=FLUX_TIMEOUT_SECONDS) as resp:
+        result = json.loads(resp.read().decode("utf-8"))
+    if not Path(result.get("output_path", output_path)).exists():
+        raise RuntimeError(f"Image server reported success but wrote no file for deck '{deck_title}'")
+
+
+def generate_deck_covers(decks: list[str], images_dir: Path) -> dict[str, str]:
+    """Generates one deck-cover image per deck, one at a time (never
+    concurrently — see this module's FLUX_* constants), skipping any deck
+    whose image file already exists so re-running a partially-completed
+    generation doesn't burn 1-2 minutes per deck redoing finished work."""
+    images_dir.mkdir(parents=True, exist_ok=True)
+    filenames: dict[str, str] = {}
+    for i, deck in enumerate(decks):
+        filename = f"deck{i + 1}.png"
+        filenames[deck] = filename
+        path = images_dir / filename
+        if path.exists():
+            print(f"  [{i + 1}/{len(decks)}] {deck}: already exists, skipping")
+            continue
+        print(f"  [{i + 1}/{len(decks)}] {deck}: generating (~1-2 min)...")
+        started = time.monotonic()
+        generate_deck_cover(deck, path)
+        print(f"    done in {time.monotonic() - started:.0f}s")
+    return filenames
 
 
 def meaning_question(target_word: str) -> str:
     # A target phrase that already ends in "?" (e.g. "What time is it?")
     # already carries the question mark that matters — stacking a second,
     # Farsi one right after it ("What time is it? یعنی چی؟") reads as a
-    # punctuation mistake, not two independent questions.
+    # punctuation mistake, not two independent questions. The English target
+    # and the Farsi question go on separate lines, never side by side on
+    # one — see AUTHORING.md's "Bilingual text goes on separate lines"
+    # section for why (LinkedText can only align a whole line one way; a
+    # line has to be single-script for that to mean anything).
     suffix = "یعنی چی" if target_word.rstrip().endswith("?") else "یعنی چی؟"
-    return f"{target_word} {suffix}"
+    return f"{target_word}\n{suffix}"
 
 
 def true_false_prompt(target_word: str, gloss: str) -> str:
-    return f"{target_word} یعنی «{gloss}»، درست یا غلط؟"
+    return f"{target_word}\nیعنی «{gloss}»، درست یا غلط؟"
 
 
 def build_cards_csv(
@@ -280,7 +400,7 @@ def build_cards_csv(
                 prompt=meaning_question(row.target_word),
                 options="|".join(options),
                 correct_index="0",
-                explanation=f"{row.target_word} یعنی {row.base_gloss}.",
+                explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
         else:
             distractors = []
@@ -289,7 +409,7 @@ def build_cards_csv(
                 type="speech_recognition",
                 role="main",
                 prompt=row.target_word,
-                explanation=f"بگو: {row.target_word}",
+                explanation=f"آن را بگویید:\n{row.target_word}",
             )
 
         # 2. Preview — an obvious true/false statement, the only place
@@ -301,7 +421,7 @@ def build_cards_csv(
             related_main_id=main_id,
             prompt=true_false_prompt(row.target_word, row.base_gloss),
             correct_index="true",
-            explanation=f"{row.target_word} یعنی {row.base_gloss}.",
+            explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
         )
         # The app only cares about related_main_id, not row order, but the
         # CSV reads more naturally with the preview row before its main
@@ -331,9 +451,9 @@ def build_cards_csv(
             glosses += [""] * (len(sentences) - len(glosses))
 
             for sentence_index, (sentence_words, sentence_gloss) in enumerate(zip(sentences, glosses)):
-                explanation = "این جمله رو با کلماتی که تا الان یاد گرفتی می‌سازی."
+                explanation = "این جمله را با کلماتی که تاکنون یاد گرفته‌اید می‌سازید."
                 if sentence_gloss:
-                    explanation += f" معنیش: {sentence_gloss}"
+                    explanation += f" معنای آن: {sentence_gloss}"
                 # A pack with several substitutions (";;") emits one order
                 # card per sentence — none may share its literal prompt
                 # text with another in the same pack, or validate_course.py's
@@ -345,10 +465,10 @@ def build_cards_csv(
                 # pack can list more than two substitutions (e.g. teaching
                 # "o'clock" against three different numbers).
                 order_prompts = [
-                    "جمله را به ترتیب درستش بچین.",
-                    "این جمله رو هم به ترتیب درستش بچین.",
-                    "این یکی رو هم بچین.",
-                    "این جمله‌ی بعدی رو هم درست بچین.",
+                    "جمله را به ترتیب درست بچین.",
+                    "این جمله را هم به ترتیب درست بچین.",
+                    "این جمله را نیز به ترتیب درست بچین.",
+                    "این جمله‌ی بعدی را هم به ترتیب درست بچین.",
                 ]
                 order_prompt = order_prompts[sentence_index % len(order_prompts)]
                 emit(
@@ -374,7 +494,7 @@ def build_cards_csv(
                     role="exercise",
                     related_main_id=main_id,
                     prompt=" ".join(sentence_words),
-                    explanation=f"این جمله رو با صدای بلند بگو: {' '.join(sentence_words)}",
+                    explanation=f"این جمله را با صدای بلند بخوانید:\n{' '.join(sentence_words)}",
                 )
                 if row.target_word in sentence_words and _fits_as_option(row.target_word):
                     blank_index = sentence_words.index(row.target_word)
@@ -418,7 +538,7 @@ def build_cards_csv(
             # otherwise blow well past it.
             primary_gloss = glosses[0]
             primary_sentence = " ".join(sentences[0])
-            translate_prompt = f"«{primary_gloss}» رو به انگلیسی بنویس."
+            translate_prompt = f"«{primary_gloss}» را به انگلیسی بنویسید."
             if (
                 primary_gloss
                 and sentence_rows_seen % 2 == 0
@@ -462,10 +582,10 @@ def build_cards_csv(
                 type="multiple_choice",
                 role="exercise",
                 related_main_id=main_id,
-                prompt=f"کدوم گزینه یعنی «{row.base_gloss}»{reverse_suffix}",
+                prompt=f"کدام گزینه به معنای «{row.base_gloss}» است{reverse_suffix}",
                 options="|".join(reverse_options),
                 correct_index=str(reverse_options.index(row.target_word)),
-                explanation=f"{row.target_word} یعنی {row.base_gloss}.",
+                explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
         elif has_real_choice:
             emit(
@@ -474,7 +594,7 @@ def build_cards_csv(
                 role="exercise",
                 related_main_id=main_id,
                 prompt=row.target_word,
-                explanation=f"دوباره تمرین کن: {row.target_word}",
+                explanation=f"دوباره تمرین کنید:\n{row.target_word}",
             )
         else:
             # No prior item exists yet to build a real multiple_choice or
@@ -495,7 +615,7 @@ def build_cards_csv(
                 role="exercise",
                 related_main_id=main_id,
                 prompt=row.target_word,
-                explanation=f"دوباره تمرین کن: {row.target_word}",
+                explanation=f"دوباره تمرین کنید:\n{row.target_word}",
             )
 
         # 5. Practice — match_pairs reinforcing this item alongside 1-2
@@ -511,9 +631,9 @@ def build_cards_csv(
                 type="match_pairs",
                 role="exercise",
                 related_main_id=main_id,
-                prompt="هر عبارت را به معنی فارسی‌اش وصل کن.",
+                prompt="هر عبارت را به معنای فارسی آن وصل کنید.",
                 options=pairs,
-                explanation="هر عبارت رو با معنی فارسیش جفت کن.",
+                explanation="هر عبارت را با معنای فارسی آن جفت کنید.",
             )
 
         # 6. Practice — production via speech_recognition.
@@ -523,7 +643,7 @@ def build_cards_csv(
             role="exercise",
             related_main_id=main_id,
             prompt=row.target_word,
-            explanation=f"بگو: {row.target_word}",
+            explanation=f"آن را بگویید:\n{row.target_word}",
         )
 
         # 7. Practice — spelling recall: given the base-language meaning,
@@ -548,9 +668,9 @@ def build_cards_csv(
                 type="type_answer",
                 role="exercise",
                 related_main_id=main_id,
-                prompt=f"«{row.base_gloss}» به انگلیسی چیه؟ تایپش کن.",
+                prompt=f"«{row.base_gloss}» به انگلیسی چیست؟ آن را تایپ کنید.",
                 options=row.target_word,
-                explanation=f"{row.target_word} یعنی {row.base_gloss}.",
+                explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
 
         # 8. Practice — listening comprehension. Reuses the exact same
@@ -573,7 +693,7 @@ def build_cards_csv(
                 options="select|" + "|".join(listen_options),
                 correct_index=str(listen_options.index(row.target_word)),
                 audio=audio_file,
-                explanation=f"عبارتی که شنیدید: {row.target_word} ({row.base_gloss})",
+                explanation=f"عبارتی که شنیدید:\n{row.target_word}\n({row.base_gloss})",
             )
             tts_manifest.append({"audio": audio_file, "text": row.target_word})
         elif has_real_choice:
@@ -584,7 +704,7 @@ def build_cards_csv(
                 related_main_id=main_id,
                 options=f"type|{row.target_word}",
                 audio=audio_file,
-                explanation=f"عبارتی که شنیدید: {row.target_word} ({row.base_gloss})",
+                explanation=f"عبارتی که شنیدید:\n{row.target_word}\n({row.base_gloss})",
             )
             tts_manifest.append({"audio": audio_file, "text": row.target_word})
 
@@ -598,16 +718,24 @@ def write_csv(path: Path, fieldnames: list[str], rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
-def generate(vocab_path: Path, course_dir: Path, seed: int = 0) -> None:
+def generate(
+    vocab_path: Path, course_dir: Path, seed: int = 0, generate_images: bool = False
+) -> None:
     rows = read_vocab(vocab_path)
     rng = random.Random(seed)
 
     units = build_units_csv(rows)
+    source_dir = course_dir / "source"
+    if generate_images:
+        deck_titles = [unit["title"] for unit in units]
+        print(f"Generating {len(deck_titles)} deck cover image(s) via the local FLUX server...")
+        images = generate_deck_covers(deck_titles, source_dir / "images")
+        for unit in units:
+            unit["image"] = images.get(unit["title"], "")
     cards, tts_manifest = build_cards_csv(rows, rng, course_slug=course_dir.name)
 
-    source_dir = course_dir / "source"
     source_dir.mkdir(parents=True, exist_ok=True)
-    write_csv(source_dir / "units.csv", ["id", "title", "description"], units)
+    write_csv(source_dir / "units.csv", ["id", "title", "description", "image"], units)
     write_csv(
         source_dir / "cards.csv",
         [
@@ -628,11 +756,27 @@ def main() -> None:
     parser.add_argument("vocab_csv", help="Path to the vocabulary CSV (deck, target_word, target_type, base_gloss)")
     parser.add_argument("course_folder", help="Course folder to write source/units.csv and source/cards.csv into")
     parser.add_argument("--seed", type=int, default=0, help="RNG seed for distractor/reinforcement sampling (default 0, for reproducible output)")
+    parser.add_argument(
+        "--generate-images",
+        action="store_true",
+        help=(
+            "Generate one 256x256 deck-cover image per unit via the local FLUX "
+            "image server (see the generate-image skill) and write source/images/. "
+            "Off by default: needs that server running locally and takes ~1-2 "
+            "minutes per deck. Re-running with this flag skips any deck whose "
+            "image file already exists."
+        ),
+    )
     args = parser.parse_args()
 
     try:
-        generate(Path(args.vocab_csv), Path(args.course_folder), seed=args.seed)
-    except ValueError as e:
+        generate(
+            Path(args.vocab_csv),
+            Path(args.course_folder),
+            seed=args.seed,
+            generate_images=args.generate_images,
+        )
+    except (ValueError, RuntimeError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 

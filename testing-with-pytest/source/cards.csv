@@ -138,7 +138,11 @@ def sample_user():
 194,9,multiple_choice,exercise,188,tmp_path is useful for testing:,File I/O|Networking|Threading,0,,,
 195,9,multiple_choice,exercise,188,tmp_path is provided by:,pytest itself|A plugin|The OS,0,,,No install needed — it ships with pytest out of the box.
 196,9,true_false,preview,197,capsys captures printed output in tests.,,true,,,It intercepts stdout and stderr so a test can assert on what a function printed.
-197,9,multiple_choice,main,,capsys lets you check a test's:,Printed output|Return value|File size,0,,,def test_hi(capsys): greet(); out = capsys.readouterr().out; assert out == 'hi\n'
+197,9,multiple_choice,main,,capsys lets you check a test's:,Printed output|Return value|File size,0,,,"def test_hi(capsys):
+    greet()
+    out = capsys.readouterr().out
+    assert out == 'hi
+'"
 198,9,true_false,exercise,197,capsys captures stdout and stderr.,,true,,,
 199,9,multiple_choice,exercise,197,capsys.readouterr() returns:,Captured text|A path|A boolean,0,,,It gives back an object with .out and .err attributes.
 200,9,true_false,exercise,197,"Without capsys, print() output stays unchecked.",,true,,,"pytest normally swallows stdout during a run, so you'd have no way to assert on it."

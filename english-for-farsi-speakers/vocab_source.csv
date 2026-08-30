@@ -1,21 +1,29 @@
 deck,target_word,target_type,base_gloss,example_sentence,example_gloss
 Sounds & Survival Phrases,Hello,word,سلام,,
+Sounds & Survival Phrases,Good morning,phrase,صبح بخیر,,
+Sounds & Survival Phrases,How are you?,phrase,حالت چطوره؟,,
+Sounds & Survival Phrases,I'm fine,phrase,خوبم,,
+Sounds & Survival Phrases,I'm good,phrase,خوبم,,
+Sounds & Survival Phrases,I'm tired,phrase,خسته‌ام,,
+Sounds & Survival Phrases,And you?,phrase,تو چی؟,,
+Sounds & Survival Phrases,Please,word,لطفاً,,
+Sounds & Survival Phrases,Thank you,phrase,ممنون,,
+Sounds & Survival Phrases,You're welcome,phrase,خواهش می‌کنم,,
 Sounds & Survival Phrases,Yes,word,بله,,
 Sounds & Survival Phrases,No,word,نه,,
-Sounds & Survival Phrases,Please,word,لطفاً,,
-Sounds & Survival Phrases,Thank you,phrase,ممنون,"Yes,|Thank you","بله، ممنون"
 Sounds & Survival Phrases,Excuse me,phrase,ببخشید,,
 Sounds & Survival Phrases,Sorry,word,متاسفم,,
-Sounds & Survival Phrases,a,word,یه,,
-Sounds & Survival Phrases,This is,phrase,این هست,,
+Sounds & Survival Phrases,Goodbye,phrase,خداحافظ,,
 Sounds & Survival Phrases,I want,phrase,می‌خوام,,
-Sounds & Survival Phrases,Water,word,آب,"I want|Water,|Please","آب می‌خوام، لطفاً"
+Sounds & Survival Phrases,a,word,یه,,
+Sounds & Survival Phrases,Water,word,آب,I want|a|Water.,یه آب می‌خوام.
+Sounds & Survival Phrases,This is,phrase,این هست,This is|Water.,این آبه.
 Sounds & Survival Phrases,I'm hungry,phrase,گرسنه هستم,,
-Sounds & Survival Phrases,I'm thirsty,phrase,تشنه هستم,,
-Introducing Yourself,My name is,phrase,اسم من هست,"My name is|Sara","اسم من سارا هست"
-Introducing Yourself,I'm from,phrase,اهل هستم,"I'm from|Iran","اهل ایران هستم"
-Introducing Yourself,I'm staying in,phrase,اقامت دارم در,"I'm staying in|Tehran","در تهران اقامت دارم"
-Introducing Yourself,Nice to meet you,phrase,خوشحالم,"My name is|Sara.|Nice to meet you.","اسم من سارا هست. خوشحالم."
+Sounds & Survival Phrases,I'm thirsty,phrase,تشنه هستم,I'm thirsty.|I want|Water.,تشنه‌ام. آب می‌خوام.
+Introducing Yourself,My name is,phrase,اسم من هست,My name is|Sara,اسم من سارا هست
+Introducing Yourself,I'm from,phrase,اهل هستم,I'm from|Iran,اهل ایران هستم
+Introducing Yourself,I'm staying in,phrase,اقامت دارم در,I'm staying in|Tehran,در تهران اقامت دارم
+Introducing Yourself,Nice to meet you,phrase,خوشحالم,My name is|Sara.|Nice to meet you.,اسم من سارا هست. خوشحالم.
 Numbers & Money,One,word,یک,,
 Numbers & Money,Two,word,دو,,
 Numbers & Money,Three,word,سه,,
@@ -29,99 +37,126 @@ Numbers & Money,Ten,word,ده,,
 Numbers & Money,Eleven,word,یازده,,
 Numbers & Money,Twelve,word,دوازده,,
 Numbers & Money,This,word,این,,
-Numbers & Money,How much is,phrase,چقدره,"How much is|This?","این چقدره؟"
-Numbers & Money,Too expensive,phrase,خیلی گرونه,"This is|Too expensive","این خیلی گرونه"
+Numbers & Money,How much is,phrase,چقدره,How much is|This?,این چقدره؟
+Numbers & Money,Too expensive,phrase,خیلی گرونه,This is|Too expensive,این خیلی گرونه
 Numbers & Money,Change,word,پول خرد,,
+Numbers & Money,Sixty,word,شصت,This is|Sixty.,این شصته.
+Numbers & Money,Seventy,word,هفتاد,This is|Seventy.,این هفتاده.
+Numbers & Money,Eighty,word,هشتاد,This is|Eighty.,این هشتاده.
+Numbers & Money,Ninety,word,نود,This is|Ninety.,این نوده.
+Numbers & Money,Hundred,word,صد,This is|Hundred.,این صده.
 Telling Time & Dates,What time is it?,phrase,ساعت چنده؟,,
 Telling Time & Dates,It's,phrase,ساعته,,
-Telling Time & Dates,o'clock,word,ساعت,"It's|One|o'clock;;It's|Two|o'clock;;It's|Three|o'clock","ساعت یکه؛؛ساعت دوئه؛؛ساعت سه‌ست"
-Telling Time & Dates,half past,phrase,و نیم,"It's|half past|One;;It's|half past|Two","یک و نیمه؛؛دو و نیمه"
-Telling Time & Dates,quarter past,phrase,و ربع,"It's|quarter past|Three","سه و ربعه"
-Telling Time & Dates,quarter to,phrase,ربع به,"It's|quarter to|Two","ربع به دو"
-Telling Time & Dates,Fifteen,word,پونزده,"It's|Two|Fifteen;;It's|Nine|Fifteen","ساعت دو و پونزده دقیقه‌ست؛؛ساعت نه و پونزده دقیقه‌ست"
-Telling Time & Dates,Twenty,word,بیست,"It's|Seven|Twenty;;It's|Three|Five;;It's|Six|Ten","ساعت هفت و بیست دقیقه‌ست؛؛ساعت سه و پنج دقیقه‌ست؛؛ساعت شش و ده دقیقه‌ست"
-Telling Time & Dates,Thirty,word,سی,"It's|Eight|Thirty;;It's|One|Twenty;;It's|Twelve|Ten","ساعت هشت و سی دقیقه‌ست؛؛ساعت یک و بیست دقیقه‌ست؛؛ساعت دوازده و ده دقیقه‌ست"
-Telling Time & Dates,Forty,word,چهل,"It's|Four|Forty;;It's|Eleven|Fifteen;;It's|Two|Thirty","ساعت چهار و چهل دقیقه‌ست؛؛ساعت یازده و پونزده دقیقه‌ست؛؛ساعت دو و سی دقیقه‌ست"
-Telling Time & Dates,Fifty,word,پنجاه,"It's|Five|Fifty;;It's|Nine|Forty;;It's|Ten|Five","ساعت پنج و پنجاه دقیقه‌ست؛؛ساعت نه و چهل دقیقه‌ست؛؛ساعت ده و پنج دقیقه‌ست"
+Telling Time & Dates,o'clock,word,ساعت,It's|One|o'clock;;It's|Two|o'clock;;It's|Three|o'clock,ساعت یکه؛؛ساعت دوئه؛؛ساعت سه‌ست
+Telling Time & Dates,half past,phrase,و نیم,It's|half past|One;;It's|half past|Two,یک و نیمه؛؛دو و نیمه
+Telling Time & Dates,quarter past,phrase,و ربع,It's|quarter past|Three,سه و ربعه
+Telling Time & Dates,quarter to,phrase,ربع به,It's|quarter to|Two,ربع به دو
+Telling Time & Dates,Fifteen,word,پونزده,It's|Two|Fifteen;;It's|Nine|Fifteen,ساعت دو و پونزده دقیقه‌ست؛؛ساعت نه و پونزده دقیقه‌ست
+Telling Time & Dates,Twenty,word,بیست,It's|Seven|Twenty;;It's|Three|Five;;It's|Six|Ten,ساعت هفت و بیست دقیقه‌ست؛؛ساعت سه و پنج دقیقه‌ست؛؛ساعت شش و ده دقیقه‌ست
+Telling Time & Dates,Thirty,word,سی,It's|Eight|Thirty;;It's|One|Twenty;;It's|Twelve|Ten,ساعت هشت و سی دقیقه‌ست؛؛ساعت یک و بیست دقیقه‌ست؛؛ساعت دوازده و ده دقیقه‌ست
+Telling Time & Dates,Forty,word,چهل,It's|Four|Forty;;It's|Eleven|Fifteen;;It's|Two|Thirty,ساعت چهار و چهل دقیقه‌ست؛؛ساعت یازده و پونزده دقیقه‌ست؛؛ساعت دو و سی دقیقه‌ست
+Telling Time & Dates,Fifty,word,پنجاه,It's|Five|Fifty;;It's|Nine|Forty;;It's|Ten|Five,ساعت پنج و پنجاه دقیقه‌ست؛؛ساعت نه و چهل دقیقه‌ست؛؛ساعت ده و پنج دقیقه‌ست
 Telling Time & Dates,Today,word,امروز,,
 Telling Time & Dates,Tomorrow,word,فردا,,
 Telling Time & Dates,Yesterday,word,دیروز,,
-At the Airport,Passport,word,پاسپورت,"Passport,|Please","پاسپورت، لطفاً"
-At the Airport,Boarding pass,phrase,کارت پرواز,"Boarding pass,|Please","کارت پرواز، لطفاً"
+At the Airport,Passport,word,پاسپورت,"Passport,|Please",پاسپورت، لطفاً
+At the Airport,Boarding pass,phrase,کارت پرواز,"Boarding pass,|Please",کارت پرواز، لطفاً
 At the Airport,Where is the,phrase,کجاست,,
-At the Airport,Gate,word,گیت,"Where is the|Gate?","گیت کجاست؟"
-At the Airport,Suitcase,word,چمدون,"Where is the|Suitcase?","چمدون کجاست؟"
+At the Airport,Gate,word,گیت,Where is the|Gate?,گیت کجاست؟
+At the Airport,Suitcase,word,چمدون,Where is the|Suitcase?,چمدون کجاست؟
+At the Airport,Check-in,phrase,چک-این,Where is the|Check-in?,چک-این کجاست؟
+At the Airport,Customs,word,گمرک,Where is the|Customs?,گمرک کجاست؟
+At the Airport,Baggage claim,phrase,تحویل چمدان,Where is the|Baggage claim?,تحویل چمدان کجاست؟
 Getting Around,I need,phrase,نیاز دارم,,
-Getting Around,Taxi,word,تاکسی,"I need|a|Taxi","نیاز دارم به تاکسی"
-Getting Around,Bus,word,اتوبوس,"Where is the|Bus?","اتوبوس کجاست؟"
+Getting Around,Taxi,word,تاکسی,I need|a|Taxi,نیاز دارم به تاکسی
+Getting Around,Bus,word,اتوبوس,Where is the|Bus?,اتوبوس کجاست؟
 Getting Around,Straight ahead,phrase,مستقیم برو,,
 Getting Around,Turn left,phrase,بپیچ چپ,,
 Getting Around,Turn right,phrase,بپیچ راست,,
-At the Hotel,Room,word,اتاق,"I want|a|Room","اتاق می‌خوام"
+Getting Around,Train,word,قطار,I need|a|Train.,نیاز دارم به قطار.
+Getting Around,Ticket,word,بلیط,I need|a|Ticket.,نیاز دارم به بلیط.
+At the Hotel,Room,word,اتاق,I want|a|Room,اتاق می‌خوام
 At the Hotel,I have,phrase,دارم,,
-At the Hotel,Reservation,word,رزرو,"I have|a|Reservation","رزرو دارم"
-At the Hotel,Key,word,کلید,"Key,|Please","کلید، لطفاً"
-At the Hotel,Broken,word,خرابه,"This is|Broken","این خرابه"
-Ordering Food,Menu,word,منو,"Menu,|Please","منو، لطفاً"
-Ordering Food,The bill,phrase,صورتحساب,"The bill,|Please","صورتحساب، لطفاً"
-Ordering Food,Delicious,word,خوشمزه,"This is|Delicious","این خوشمزه‌ست"
-Ordering Food,Spicy,word,تند,"This is|Spicy","این تنده"
-Ordering Food,Sweet,word,شیرین,"This is|Sweet","این شیرینه"
-Ordering Food,Sour,word,ترش,"This is|Sour","این ترشه"
-Ordering Food,Salty,word,شور,"This is|Salty","این شوره"
-Ordering Food,Bitter,word,تلخ,"This is|Bitter","این تلخه"
-Shopping,Too big,phrase,خیلی بزرگه,"This is|Too big","این خیلی بزرگه"
-Shopping,Too small,phrase,خیلی کوچیکه,"This is|Too small","این خیلی کوچیکه"
-Shopping,Discount,word,تخفیف,"I want|a|Discount","تخفیف می‌خوام"
-Shopping,Cash,word,نقد,"I have|Cash","نقد دارم"
-Shopping,Card,word,کارت,"I have|a|Card;;I have|Cash","کارت دارم؛؛نقد دارم"
+At the Hotel,Reservation,word,رزرو,I have|a|Reservation,رزرو دارم
+At the Hotel,Key,word,کلید,"Key,|Please",کلید، لطفاً
+At the Hotel,Broken,word,خرابه,This is|Broken,این خرابه
+At the Hotel,Check-out,phrase,چک-اوت,,
+At the Hotel,Breakfast,word,صبحانه,I want|Breakfast.,صبحانه می‌خوام.
+Ordering Food,Menu,word,منو,"Menu,|Please",منو، لطفاً
+Ordering Food,The bill,phrase,صورتحساب,"The bill,|Please",صورتحساب، لطفاً
+Ordering Food,Delicious,word,خوشمزه,This is|Delicious,این خوشمزه‌ست
+Ordering Food,Spicy,word,تند,This is|Spicy,این تنده
+Ordering Food,Sweet,word,شیرین,This is|Sweet,این شیرینه
+Ordering Food,Sour,word,ترش,This is|Sour,این ترشه
+Ordering Food,Salty,word,شور,This is|Salty,این شوره
+Ordering Food,Bitter,word,تلخ,This is|Bitter,این تلخه
+Ordering Food,I'll have,phrase,سفارش می‌دم,I'll have|Water.,آب سفارش می‌دم.
+Shopping,Too big,phrase,خیلی بزرگه,This is|Too big,این خیلی بزرگه
+Shopping,Too small,phrase,خیلی کوچیکه,This is|Too small,این خیلی کوچیکه
+Shopping,Discount,word,تخفیف,I want|a|Discount,تخفیف می‌خوام
+Shopping,Cash,word,نقد,I have|Cash,نقد دارم
+Shopping,Card,word,کارت,I have|a|Card;;I have|Cash,کارت دارم؛؛نقد دارم
+Shopping,Receipt,word,رسید,,
+Shopping,Try on,phrase,امتحان کردن لباس,,
 Small Talk & Politeness,Nice weather,phrase,هوای خوبیه,,
 Small Talk & Politeness,I agree,phrase,موافقم,,
 Small Talk & Politeness,I disagree,phrase,مخالفم,,
-Small Talk & Politeness,No problem,phrase,مشکلی نیست,"Sorry.|No problem.","متاسفم. مشکلی نیست."
+Small Talk & Politeness,No problem,phrase,مشکلی نیست,Sorry.|No problem.,متاسفم. مشکلی نیست.
 Small Talk & Politeness,Congratulations,word,تبریک,,
-Asking for Help,I'm lost,phrase,گم شدم,"Excuse me,|I'm lost","ببخشید، گم شدم"
-Asking for Help,Can you help me?,phrase,کمکم کن,"I'm lost.|Can you help me?","گم شدم. کمکم کن."
+Asking for Help,I'm lost,phrase,گم شدم,"Excuse me,|I'm lost",ببخشید، گم شدم
+Asking for Help,Can you help me?,phrase,کمکم کن,I'm lost.|Can you help me?,گم شدم. کمکم کن.
 Asking for Help,I don't understand,phrase,نمی‌فهمم,,
-Asking for Help,Slower please,phrase,آروم‌تر لطفاً,"I don't understand.|Slower please.","نمی‌فهمم. آروم‌تر لطفاً."
+Asking for Help,Slower please,phrase,آروم‌تر لطفاً,I don't understand.|Slower please.,نمی‌فهمم. آروم‌تر لطفاً.
 Asking for Help,Repeat please,phrase,تکرار کن لطفاً,,
-Asking for Help,Bathroom,word,دستشویی,"Where is the|Bathroom?;;Where is the|Bus?","دستشویی کجاست؟؛؛اتوبوس کجاست؟"
+Asking for Help,Bathroom,word,دستشویی,Where is the|Bathroom?;;Where is the|Bus?,دستشویی کجاست؟؛؛اتوبوس کجاست؟
 Asking for Help,I'm looking for,phrase,دنبال ... می‌گردم,,
-Asking for Help,This address,phrase,این آدرس,"I'm looking for|This address","دنبال این آدرس می‌گردم"
+Asking for Help,This address,phrase,این آدرس,I'm looking for|This address,دنبال این آدرس می‌گردم
 Asking for Help,Is it far?,phrase,دوره؟,,
-Phone & Wifi,SIM card,phrase,سیم کارت,"I want|a|SIM card","سیم کارت می‌خوام"
-Phone & Wifi,Wifi password,phrase,رمز وای‌فای,"Wifi password,|Please","رمز وای‌فای، لطفاً"
-Phone & Wifi,My phone number,phrase,شماره تلفن من,"This is|My phone number","این شماره تلفن منه"
-Phone & Wifi,Charger,word,شارژر,"I need|a|Charger;;I need|a|Taxi","نیاز دارم به شارژر؛؛نیاز دارم به تاکسی"
+Phone & Wifi,SIM card,phrase,سیم کارت,I want|a|SIM card,سیم کارت می‌خوام
+Phone & Wifi,Wifi password,phrase,رمز وای‌فای,"Wifi password,|Please",رمز وای‌فای، لطفاً
+Phone & Wifi,My phone number,phrase,شماره تلفن من,This is|My phone number,این شماره تلفن منه
+Phone & Wifi,Charger,word,شارژر,I need|a|Charger;;I need|a|Taxi,نیاز دارم به شارژر؛؛نیاز دارم به تاکسی
 Phone & Wifi,No signal,phrase,آنتن نداره,,
 Phone & Wifi,Battery,word,باتری,,
-Emergencies & Health,Doctor,word,دکتر,"I need|a|Doctor;;I need|a|Charger","نیاز دارم به دکتر؛؛نیاز دارم به شارژر"
-Emergencies & Health,Pharmacy,word,داروخانه,"Where is the|Pharmacy?","داروخانه کجاست؟"
+Emergencies & Health,Doctor,word,دکتر,I need|a|Doctor;;I need|a|Charger,نیاز دارم به دکتر؛؛نیاز دارم به شارژر
+Emergencies & Health,Pharmacy,word,داروخانه,Where is the|Pharmacy?,داروخانه کجاست؟
 Emergencies & Health,It hurts,phrase,درد می‌کنه,,
-Emergencies & Health,I'm sick,phrase,مریضم,"I'm sick.|I need|a|Doctor.","مریضم. نیاز دارم به دکتر."
+Emergencies & Health,I'm sick,phrase,مریضم,I'm sick.|I need|a|Doctor.,مریضم. نیاز دارم به دکتر.
 Emergencies & Health,Call an ambulance,phrase,آمبولانس خبر کن,,
 Emergencies & Health,I'm allergic to,phrase,حساسیت دارم به,,
+Emergencies & Health,Police,word,پلیس,,
+Emergencies & Health,Fire,word,آتیش,,
 Making Plans,Let's meet,phrase,بیا همو ببینیم,,
-Making Plans,What time works?,phrase,چه ساعتی خوبه؟,"Let's meet.|What time works?","بیا همو ببینیم. چه ساعتی خوبه؟"
-Making Plans,I'm free,phrase,وقت دارم,"Tomorrow,|I'm free","فردا وقت دارم"
-Making Plans,I'm busy,phrase,سرم شلوغه,"Today,|I'm busy","امروز سرم شلوغه"
+Making Plans,What time works?,phrase,چه ساعتی خوبه؟,Let's meet.|What time works?,بیا همو ببینیم. چه ساعتی خوبه؟
+Making Plans,I'm free,phrase,وقت دارم,"Tomorrow,|I'm free",فردا وقت دارم
+Making Plans,I'm busy,phrase,سرم شلوغه,"Today,|I'm busy",امروز سرم شلوغه
 Making Plans,See you later,phrase,بعداً می‌بینمت,,
-Common Everyday Verbs in Action,I like,phrase,دوست دارم,"I like|This","این رو دوست دارم"
-Common Everyday Verbs in Action,I don't like,phrase,دوست ندارم,"I don't like|This","این رو دوست ندارم"
+Common Everyday Verbs in Action,I like,phrase,دوست دارم,I like|This,این رو دوست دارم
+Common Everyday Verbs in Action,I don't like,phrase,دوست ندارم,I don't like|This,این رو دوست ندارم
 Common Everyday Verbs in Action,Help,word,کمک,,
-Common Everyday Verbs in Action,I can,phrase,می‌تونم,"I can|Help","می‌تونم کمک کنم"
+Common Everyday Verbs in Action,I can,phrase,می‌تونم,I can|Help,می‌تونم کمک کنم
 Common Everyday Verbs in Action,Understand,word,می‌فهمم,,
-Common Everyday Verbs in Action,I can't,phrase,نمی‌تونم,"I can't|Understand","نمی‌تونم بفهمم"
-Describing People & Things,Big,word,بزرگ,"This is|Big","این بزرگه"
-Describing People & Things,Small,word,کوچیک,"This is|Small","این کوچیکه"
-Describing People & Things,Beautiful,word,قشنگ,"This is|Beautiful","این قشنگه"
-Describing People & Things,Cheap,word,ارزون,"This is|Cheap","این ارزونه"
-Public Signs & Announcements,Exit,word,خروجی,"Where is the|Exit?","خروجی کجاست؟"
+Common Everyday Verbs in Action,I can't,phrase,نمی‌تونم,I can't|Understand,نمی‌تونم بفهمم
+Common Everyday Verbs in Action,Go,word,رفتن,I can|Go.,می‌تونم برم.
+Common Everyday Verbs in Action,Eat,word,خوردن,,
+Common Everyday Verbs in Action,Drink,word,نوشیدن,,
+Common Everyday Verbs in Action,See,word,دیدن,,
+Describing People & Things,Big,word,بزرگ,This is|Big,این بزرگه
+Describing People & Things,Small,word,کوچیک,This is|Small,این کوچیکه
+Describing People & Things,Beautiful,word,قشنگ,This is|Beautiful,این قشنگه
+Describing People & Things,Cheap,word,ارزون,This is|Cheap,این ارزونه
+Describing People & Things,Good,word,خوب,This is|Good.,این خوبه.
+Describing People & Things,Bad,word,بد,This is|Bad.,این بده.
+Describing People & Things,Hot,word,داغ,This is|Hot.,این داغه.
+Describing People & Things,Cold,word,سرد,This is|Cold.,این سرده.
+Public Signs & Announcements,Exit,word,خروجی,Where is the|Exit?,خروجی کجاست؟
 Public Signs & Announcements,Entrance,word,ورودی,,
 Public Signs & Announcements,Caution,word,احتیاط,,
-Public Signs & Announcements,Delayed,word,تاخیر داره,"This is|Delayed","این تاخیر داره"
+Public Signs & Announcements,Delayed,word,تاخیر داره,This is|Delayed,این تاخیر داره
 Public Signs & Announcements,Boarding now,phrase,پرواز شروع شد,,
-Saying Goodbye & Staying in Touch,Take care,phrase,مواظب خودت باش,"Goodbye.|Take care.","خداحافظ. مواظب خودت باش."
+Public Signs & Announcements,Open,word,باز,This is|Open.,اینجا بازه.
+Public Signs & Announcements,Closed,word,بسته,This is|Closed.,اینجا بسته‌ست.
+Saying Goodbye & Staying in Touch,Take care,phrase,مواظب خودت باش,Goodbye.|Take care.,خداحافظ. مواظب خودت باش.
 Saying Goodbye & Staying in Touch,Keep in touch,phrase,در تماس باش,,
-Saying Goodbye & Staying in Touch,My email is,phrase,ایمیل من اینه,"My email is|This.","ایمیلم اینه."
-Saying Goodbye & Staying in Touch,Thanks for everything,phrase,خیلی ممنون,"Thanks for everything.|Goodbye.","خیلی ممنون. خداحافظ."
+Saying Goodbye & Staying in Touch,My email is,phrase,ایمیل من اینه,My email is|This.,ایمیلم اینه.
+Saying Goodbye & Staying in Touch,Thanks for everything,phrase,خیلی ممنون,Thanks for everything.|Goodbye.,خیلی ممنون. خداحافظ.

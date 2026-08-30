@@ -3,15 +3,27 @@
 repo's dependency-free convention. Run with:
     python tools/test_generate_language_course.py
 """
+import json
 import random
 import re
 import sys
+import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from generate_language_course import VocabRow, build_cards_csv, build_units_csv
+from generate_language_course import (
+    VocabRow,
+    build_cards_csv,
+    build_units_csv,
+    deck_cover_prompt,
+    generate_deck_cover,
+    generate_deck_covers,
+    meaning_question,
+)
 
 RTL_PATTERN = re.compile(f"[{chr(0x0590)}-{chr(0x08FF)}]")
 CHOICE_TYPES = {"multiple_choice", "multi_select", "image_choice", "select_blank"}
@@ -36,6 +48,9 @@ class GenerateLanguageCourseTest(unittest.TestCase):
         units = build_units_csv(self.rows)
         self.assertEqual([u["title"] for u in units], ["Greetings", "Numbers"])
         self.assertEqual([u["id"] for u in units], ["1", "2"])
+        # No --generate-images flag involved in this call — every unit's
+        # image column stays blank, same as before this feature existed.
+        self.assertEqual([u["image"] for u in units], ["", ""])
 
     def test_every_pack_has_a_preview_a_main_and_at_least_three_practice_cards(self):
         mains = [c for c in self.cards if c["role"] == "main"]
@@ -55,6 +70,26 @@ class GenerateLanguageCourseTest(unittest.TestCase):
     def test_true_false_only_ever_used_for_preview(self):
         offenders = [c for c in self.cards if c["type"] == "true_false" and c["role"] != "preview"]
         self.assertEqual(offenders, [], f"true_false used outside preview: {offenders}")
+
+    def test_bilingual_prompts_and_explanations_split_target_and_gloss_onto_separate_lines(self):
+        # See AUTHORING.md's "Bilingual text goes on separate lines" section:
+        # the app can only align a whole line one way, so a line mixing
+        # English and Farsi can't be aligned correctly either way — every
+        # generator template that combines the target word/phrase with a
+        # Farsi gloss must put them on separate lines (a literal "\n"), never
+        # side by side on one.
+        for card in self.cards:
+            for field in ("prompt", "explanation"):
+                text = card[field]
+                if not (RTL_PATTERN.search(text) and re.search("[A-Za-z]", text)):
+                    continue  # not actually bilingual — nothing to check
+                for line in text.split("\n"):
+                    has_rtl = bool(RTL_PATTERN.search(line))
+                    has_ltr = bool(re.search("[A-Za-z]", line))
+                    self.assertFalse(
+                        has_rtl and has_ltr,
+                        f"card {card['id']} {field!r} mixes scripts on one line: {line!r}",
+                    )
 
     def test_no_options_list_mixes_scripts(self):
         for card in self.cards:
@@ -77,7 +112,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
         for card in self.cards:
             if card["type"] != "multiple_choice":
                 continue
-            target_word = card["prompt"].split(" یعنی")[0]
+            target_word = card["prompt"].split("\n")[0]
             if target_word not in gloss_by_word:
                 continue
             current_index = next(i for i, r in enumerate(self.rows) if r.target_word == target_word)
@@ -164,7 +199,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             example_gloss="سلام، متشکرم",
         )
         cards, _ = build_cards_csv(rows, random.Random(0))
-        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == "Thank you یعنی چی؟")
+        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         sentence_cards = [
             c for c in cards
             if c["type"] == "order" and c["related_main_id"] == main["id"]
@@ -184,7 +219,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             example_gloss="سلام، متشکرم؛؛لطفاً، متشکرم؛؛بله، متشکرم",
         )
         cards, _ = build_cards_csv(rows, random.Random(0))
-        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == "Thank you یعنی چی؟")
+        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         order_cards = [c for c in cards if c["type"] == "order" and c["related_main_id"] == main["id"]]
         self.assertEqual(len(order_cards), 3)
         prompts = [c["prompt"] for c in order_cards]
@@ -203,7 +238,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             example_gloss="سلام، متشکرم",
         )
         cards, _ = build_cards_csv(rows, random.Random(0))
-        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == "Thank you یعنی چی؟")
+        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         pack = [c for c in cards if c["related_main_id"] == main["id"]]
 
         translate_cards = [
@@ -220,7 +255,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             example_gloss="",
         )
         cards, _ = build_cards_csv(rows, random.Random(0))
-        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == "Thank you یعنی چی؟")
+        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         pack = [c for c in cards if c["related_main_id"] == main["id"]]
         translate_cards = [c for c in pack if c["type"] == "type_answer"]
         self.assertEqual(translate_cards, [])
@@ -233,7 +268,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             example_gloss="سلام، متشکرم",
         )
         cards, _ = build_cards_csv(rows, random.Random(0))
-        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == "Thank you یعنی چی؟")
+        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         pack = [c for c in cards if c["related_main_id"] == main["id"]]
 
         speech_cards = [c for c in pack if c["type"] == "speech_recognition" and c["prompt"] == "Hello, Thank you"]
@@ -256,7 +291,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             example_gloss="سلام، متشکرم",
         )
         cards, _ = build_cards_csv(rows, random.Random(0))
-        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == "Thank you یعنی چی؟")
+        main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         exercises = [c for c in cards if c["role"] == "exercise" and c["related_main_id"] == main["id"]]
         # The reverse-direction multiple_choice quiz (step 4) is the first
         # card that is unambiguously NOT part of the sentence-practice
@@ -268,6 +303,88 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             {c["type"] for c in leading}, {"order", "select_blank", "speech_recognition", "type_answer"}
         )
         self.assertIn("order", [c["type"] for c in leading])
+
+
+class FakeResponse:
+    """Minimal stand-in for the object urllib.request.urlopen() returns —
+    just enough to support `with urlopen(...) as resp: resp.read()`."""
+
+    def __init__(self, payload: dict):
+        self._body = json.dumps(payload).encode("utf-8")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return self._body
+
+
+class DeckCoverImageGenerationTest(unittest.TestCase):
+    """--generate-images support. Never hits the real FLUX server (slow,
+    needs a local GPU service running) — urllib.request.urlopen is mocked
+    throughout, matching a real server's request/response shape."""
+
+    def test_deck_cover_prompt_names_the_deck_and_asks_for_no_text(self):
+        prompt = deck_cover_prompt("At the Airport")
+        self.assertIn("at the airport", prompt.lower())
+        self.assertIn("no text", prompt.lower())
+        # Regression: quoting the deck title verbatim as if it were a
+        # caption/poster headline led FLUX to actually render it (often
+        # garbled) despite the "no text" instruction — see this function's
+        # own doc comment. Steer clear of scene types that invite signage.
+        self.assertIn("signage", prompt.lower())
+        self.assertNotIn('"At the Airport"', prompt)
+
+    def test_generate_deck_cover_raises_an_actionable_error_when_server_is_down(self):
+        with patch("generate_language_course.urllib.request.urlopen", side_effect=urllib.error.URLError("refused")):
+            with tempfile.TemporaryDirectory() as tmp:
+                with self.assertRaises(RuntimeError) as ctx:
+                    generate_deck_cover("Greetings", Path(tmp) / "deck1.png")
+                self.assertIn("start_servers.ps1", str(ctx.exception))
+
+    def test_generate_deck_cover_writes_the_file_when_server_is_healthy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output_path = Path(tmp) / "deck1.png"
+
+            def fake_urlopen(req, timeout=None):
+                url = req if isinstance(req, str) else req.full_url
+                if "health" in url:
+                    return FakeResponse({"status": "ok", "model_loaded": True})
+                # Simulate the real server actually writing the file.
+                output_path.write_bytes(b"fake-png-bytes")
+                return FakeResponse({"output_path": str(output_path), "width": 256, "height": 256})
+
+            with patch("generate_language_course.urllib.request.urlopen", side_effect=fake_urlopen):
+                generate_deck_cover("Greetings", output_path)
+            self.assertTrue(output_path.exists())
+
+    def test_generate_deck_covers_skips_decks_whose_image_already_exists(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            images_dir = Path(tmp)
+            (images_dir / "deck1.png").write_bytes(b"already-there")
+            generated_for: list[str] = []
+
+            def fake_urlopen(req, timeout=None):
+                url = req if isinstance(req, str) else req.full_url
+                if "health" in url:
+                    return FakeResponse({"status": "ok", "model_loaded": True})
+                body = json.loads(req.data.decode("utf-8"))
+                generated_for.append(body["prompt"])
+                Path(body["output_path"]).write_bytes(b"fake-png-bytes")
+                return FakeResponse({"output_path": body["output_path"]})
+
+            with patch("generate_language_course.urllib.request.urlopen", side_effect=fake_urlopen):
+                result = generate_deck_covers(["Greetings", "Numbers"], images_dir)
+
+            self.assertEqual(result, {"Greetings": "deck1.png", "Numbers": "deck2.png"})
+            # Only "Numbers" actually triggered a generate call — "Greetings"
+            # already had a file on disk.
+            self.assertEqual(len(generated_for), 1)
+            self.assertIn("numbers", generated_for[0].lower())
+            self.assertTrue((images_dir / "deck2.png").exists())
 
 
 if __name__ == "__main__":

@@ -1,0 +1,184 @@
+9002|true_false|preview|Hello یعنی «سلام»، درست یا غلط؟||Hello یعنی سلام.
+9001|multiple_choice|main|Hello یعنی چی؟|سلام|لطفاً|ممنون|Hello یعنی سلام.
+9003|speech_recognition|exercise|Hello||بگو: Hello
+9004|speech_recognition|exercise|Hello||دوباره تمرین کن: Hello
+9005|type_answer|exercise|«سلام» به انگلیسی چیه؟ تایپش کن.|Hello|Hello یعنی سلام.
+9007|true_false|preview|Good morning یعنی «صبح بخیر»، درست یا غلط؟||Good morning یعنی صبح بخیر.
+9006|multiple_choice|main|Good morning یعنی چی؟|صبح بخیر|سلام|Good morning یعنی صبح بخیر.
+9008|multiple_choice|exercise|کدوم گزینه یعنی «صبح بخیر»؟|Hello|Good morning|Good morning یعنی صبح بخیر.
+9009|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Good morning↔صبح بخیر|Hello↔سلام|هر عبارت رو با معنی فارسیش جفت کن.
+9010|speech_recognition|exercise|Good morning||بگو: Good morning
+9011|order|exercise|این عبارت رو با کلماتش بچین.|Good|morning|Good morning از دو تا کلمه ساخته شده: Good و morning.
+9013|true_false|preview|How are you? یعنی «حالت چطوره؟»، درست یا غلط؟||How are you? یعنی حالت چطوره؟.
+12996|true_false|preview|I want یعنی «می‌خوام»، درست یا غلط؟||I want یعنی می‌خوام.
+12997|multiple_choice|main|I want یعنی چی؟|می‌خوام|ببخشید|بله|I want یعنی می‌خوام.
+12998|multiple_choice|exercise|کدوم گزینه یعنی «می‌خوام»؟|I want|Please|I'm fine|I want یعنی می‌خوام.
+12999|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|I want↔می‌خوام|I'm tired↔خسته‌ام|Good morning↔صبح بخیر|هر عبارت رو با معنی فارسیش جفت کن.
+13000|speech_recognition|exercise|I want||بگو: I want
+13001|type_answer|exercise|«می‌خوام» به انگلیسی چیه؟ تایپش کن.|I want|I want یعنی می‌خوام.
+13002|listening_card|exercise||select|I want|Please|Yes|عبارتی که شنیدید: I want (می‌خوام)
+9012|multiple_choice|main|How are you? یعنی چی|حالت چطوره؟|صبح بخیر|سلام|How are you? یعنی حالت چطوره؟.
+9014|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|How are you?↔حالت چطوره؟|Hello↔سلام|Good morning↔صبح بخیر|هر عبارت رو با معنی فارسیش جفت کن.
+9015|speech_recognition|exercise|How are you?||بگو: How are you?
+9016|speech_recognition|exercise|How are you?||دوباره تمرین کن: How are you?
+9018|true_false|preview|I'm fine یعنی «خوبم»، درست یا غلط؟||I'm fine یعنی خوبم.
+9017|multiple_choice|main|I'm fine یعنی چی؟|خوبم|حالت چطوره؟|سلام|I'm fine یعنی خوبم.
+9019|order|exercise|جمله را به ترتیب درستش بچین.|How are you?|I'm fine|بعد از این سوال، این جوابو می‌دی.
+9020|speech_recognition|exercise|How are you? I'm fine||این جمله رو با صدای بلند بگو: How are you? I'm fine
+9021|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|I'm fine↔خوبم|Hello↔سلام|هر عبارت رو با معنی فارسیش جفت کن.
+9022|order|exercise|این عبارت رو با کلماتش بچین.|I'm|fine|I'm fine از دو تا کلمه ساخته شده: I'm و fine.
+9024|true_false|preview|I'm good یعنی «حالم خوبه»، درست یا غلط؟||I'm good یعنی حالم خوبه.
+9023|multiple_choice|main|I'm good یعنی چی؟|حالم خوبه|خوبم|صبح بخیر|I'm good هم یعنی حالم خوبه — یه جور دیگه‌ی گفتن «خوبم».
+9025|order|exercise|جمله را به ترتیب درستش بچین.|How are you?|I'm good|یه جور دیگه از جواب دادن به این سوال.
+9026|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|I'm good↔حالم خوبه|Good morning↔صبح بخیر|Hello↔سلام|هر عبارت رو با معنی فارسیش جفت کن.
+9027|speech_recognition|exercise|I'm good||بگو: I'm good
+9028|order|exercise|این عبارت رو با کلماتش بچین.|I'm|good|I'm good از دو تا کلمه ساخته شده: I'm و good.
+9030|true_false|preview|I'm tired یعنی «خسته‌ام»، درست یا غلط؟||I'm tired یعنی خسته‌ام.
+13003|true_false|preview|a یعنی «یه»، درست یا غلط؟||a یعنی یه.
+13004|multiple_choice|main|a یعنی چی؟|یه|سلام|می‌خوام|a یعنی یه.
+13005|multiple_choice|exercise|کدوم گزینه یعنی «یه»؟|And you?|a|Excuse me|a یعنی یه.
+13006|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|a↔یه|Hello↔سلام|Thank you↔ممنون|هر عبارت رو با معنی فارسیش جفت کن.
+13007|speech_recognition|exercise|a||بگو: a
+13008|listening_card|exercise||select|a|Good morning|You're welcome|عبارتی که شنیدید: a (یه)
+9029|multiple_choice|main|I'm tired یعنی چی؟|خسته‌ام|حالم خوبه|خوبم|I'm tired یعنی خسته‌ام.
+9031|order|exercise|جمله را به ترتیب درستش بچین.|How are you?|I'm tired|یه جواب دیگه به این سوال، وقتی خسته‌ای.
+9032|select_blank|exercise|امروز خیلی راه رفتی. How are you? ___|I'm tired|I'm fine|I'm good|بعد از این‌همه راه رفتن، معمولاً خسته‌ای.
+9033|select_blank|exercise|امروز حسابی استراحت کردی. How are you? ___|I'm fine|I'm tired|I'm good|بعد از استراحت، معمولاً حالت خوبه، نه خسته.
+9034|type_answer|exercise|«خسته‌ام» را به انگلیسی بنویس.|I'm tired|I'm tired یعنی خسته‌ام.
+9035|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|I'm tired↔خسته‌ام|Hello↔سلام|How are you?↔حالت چطوره؟|هر عبارت رو با معنی فارسیش جفت کن.
+9036|order|exercise|این عبارت رو با کلماتش بچین.|I'm|tired|I'm tired از دو تا کلمه ساخته شده: I'm و tired.
+9037|multiple_choice|exercise|«I'm ___» که یعنی «خسته‌ام»، کدوم کلمه‌ست؟|fine|good|tired|I'm tired یعنی خسته‌ام — نه fine و نه good.
+9039|true_false|preview|And you? یعنی «تو چی؟»، درست یا غلط؟||And you? یعنی تو چی؟.
+9038|multiple_choice|main|And you? یعنی چی|تو چی؟|خسته‌ام|حالم خوبه|And you? یعنی تو چی؟.
+9040|order|exercise|جمله را به ترتیب درستش بچین.|I'm fine.|And you?|بعد از جواب دادن، همون سوال رو برمی‌گردونی.
+9041|multiple_choice|exercise|کدوم گزینه یعنی «تو چی؟»|Good morning|And you?|I'm good|And you? یعنی تو چی؟.
+9042|speech_recognition|exercise|I'm fine. And you?||این جمله رو با صدای بلند بگو: I'm fine. And you?
+9043|order|exercise|این عبارت رو با کلماتش بچین.|And|you?|And you? از دو تا کلمه ساخته شده: And و you?.
+9044|multiple_choice|exercise|«And ___» که یعنی «تو چی؟»، کدوم کلمه‌ست؟|fine|you?|tired|And you? یعنی تو چی؟ — کلمه‌ی دومش «you?»ه.
+9046|true_false|preview|Please یعنی «لطفاً»، درست یا غلط؟||Please یعنی لطفاً.
+9045|multiple_choice|main|Please یعنی چی؟|لطفاً|تو چی؟|سلام|Please یعنی لطفاً.
+9047|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Please↔لطفاً|Hello↔سلام|I'm tired↔خسته‌ام|هر عبارت رو با معنی فارسیش جفت کن.
+9048|speech_recognition|exercise|Please||بگو: Please
+9049|type_answer|exercise|«لطفاً» به انگلیسی چیه؟ تایپش کن.|Please|Please یعنی لطفاً.
+9051|true_false|preview|Thank you یعنی «ممنون»، درست یا غلط؟||Thank you یعنی ممنون.
+13009|true_false|preview|Water یعنی «آب»، درست یا غلط؟||Water یعنی آب.
+13010|multiple_choice|main|Water یعنی چی؟|آب|یه|خوبم|Water یعنی آب.
+13011|order|exercise|جمله را به ترتیب درستش بچین.|I want|a|Water.|این جمله رو با کلماتی که تا الان یاد گرفتی می‌سازی. معنیش: یه آب می‌خوام.
+13012|speech_recognition|exercise|I want a Water.||این جمله رو با صدای بلند بگو: I want a Water.
+13013|multiple_choice|exercise|کدوم گزینه یعنی «آب»؟|Please|Hello|Water|Water یعنی آب.
+13014|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Water↔آب|Yes↔بله|Good morning↔صبح بخیر|هر عبارت رو با معنی فارسیش جفت کن.
+13015|speech_recognition|exercise|Water||بگو: Water
+13016|listening_card|exercise||select|I'm tired|Water|Excuse me|عبارتی که شنیدید: Water (آب)
+9050|multiple_choice|main|Thank you یعنی چی؟|ممنون|لطفاً|تو چی؟|Thank you یعنی ممنون.
+9052|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Thank you↔ممنون|How are you?↔حالت چطوره؟|Good morning↔صبح بخیر|هر عبارت رو با معنی فارسیش جفت کن.
+9053|speech_recognition|exercise|Thank you||بگو: Thank you
+9054|multiple_choice|exercise|کدوم گزینه یعنی «ممنون»؟|Thank you|Please|Hello|Thank you یعنی ممنون.
+9055|order|exercise|این عبارت رو با کلماتش بچین.|Thank|you|Thank you از دو تا کلمه ساخته شده: Thank و you.
+9056|multiple_choice|exercise|«Thank ___» که یعنی «ممنون»، کدوم کلمه‌ست؟|fine|morning|you|Thank you یعنی ممنون — کلمه‌ی دومش «you»یه.
+9058|true_false|preview|You're welcome یعنی «خواهش می‌کنم»، درست یا غلط؟||You're welcome یعنی خواهش می‌کنم.
+9057|multiple_choice|main|You're welcome یعنی چی؟|خواهش می‌کنم|ممنون|لطفاً|You're welcome یعنی خواهش می‌کنم.
+9059|order|exercise|جمله را به ترتیب درستش بچین.|Thank you.|You're welcome.|این یه جفت جواب طبیعیه: یکی تشکر می‌کنه، اون یکی جواب می‌ده.
+9060|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|You're welcome↔خواهش می‌کنم|Hello↔سلام|Please↔لطفاً|هر عبارت رو با معنی فارسیش جفت کن.
+9061|speech_recognition|exercise|You're welcome||بگو: You're welcome
+9062|order|exercise|این عبارت رو با کلماتش بچین.|You're|welcome|You're welcome از دو تا کلمه ساخته شده: You're و welcome.
+9063|multiple_choice|exercise|«You're ___» که یعنی «خواهش می‌کنم»، کدوم کلمه‌ست؟|tired|welcome|fine|You're welcome یعنی خواهش می‌کنم — کلمه‌ی دومش «welcome»ه.
+9065|true_false|preview|Yes یعنی «بله»، درست یا غلط؟||Yes یعنی بله.
+9064|multiple_choice|main|Yes یعنی چی؟|بله|خواهش می‌کنم|ممنون|Yes یعنی بله.
+9066|order|exercise|جمله را به ترتیب درستش بچین.|Yes,|Thank you|وقتی چیزی رو قبول می‌کنی و ممنون هم هستی.
+9067|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Yes↔بله|Good morning↔صبح بخیر|I'm fine↔خوبم|هر عبارت رو با معنی فارسیش جفت کن.
+9068|speech_recognition|exercise|Yes||بگو: Yes
+9070|true_false|preview|No یعنی «نه»، درست یا غلط؟||No یعنی نه.
+13017|true_false|preview|This is یعنی «این هست»، درست یا غلط؟||This is یعنی این هست.
+13018|multiple_choice|main|This is یعنی چی؟|این هست|ممنون|نه|This is یعنی این هست.
+13019|order|exercise|جمله را به ترتیب درستش بچین.|This is|Water.|این جمله رو با کلماتی که تا الان یاد گرفتی می‌سازی. معنیش: این آبه.
+13020|speech_recognition|exercise|This is Water.||این جمله رو با صدای بلند بگو: This is Water.
+13021|select_blank|exercise|___ Water.|This is|I want|Thank you|این جمله رو با کلماتی که تا الان یاد گرفتی می‌سازی. معنیش: این آبه.
+13022|multiple_choice|exercise|کدوم گزینه یعنی «این هست»؟|I'm good|I'm tired|This is|This is یعنی این هست.
+13023|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|This is↔این هست|Good morning↔صبح بخیر|Sorry↔متاسفم|هر عبارت رو با معنی فارسیش جفت کن.
+13024|speech_recognition|exercise|This is||بگو: This is
+13025|type_answer|exercise|«این هست» به انگلیسی چیه؟ تایپش کن.|This is|This is یعنی این هست.
+13026|listening_card|exercise||select|Hello|This is|Thank you|عبارتی که شنیدید: This is (این هست)
+9069|multiple_choice|main|No یعنی چی؟|نه|بله|خواهش می‌کنم|No یعنی نه.
+9071|order|exercise|جمله را به ترتیب درستش بچین.|No,|Thank you|وقتی چیزی رو رد می‌کنی ولی بازم مودبانه تشکر می‌کنی.
+9072|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|No↔نه|Hello↔سلام|You're welcome↔خواهش می‌کنم|هر عبارت رو با معنی فارسیش جفت کن.
+9073|speech_recognition|exercise|No||بگو: No
+9075|true_false|preview|Excuse me یعنی «ببخشید»، درست یا غلط؟||Excuse me یعنی ببخشید.
+9074|multiple_choice|main|Excuse me یعنی چی؟|ببخشید|نه|بله|Excuse me یعنی ببخشید — برای جلب توجه.
+9076|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Excuse me↔ببخشید|How are you?↔حالت چطوره؟|Please↔لطفاً|هر عبارت رو با معنی فارسیش جفت کن.
+9077|speech_recognition|exercise|Excuse me||بگو: Excuse me
+9078|type_answer|exercise|«ببخشید» به انگلیسی چیه؟ تایپش کن.|Excuse me|Excuse me یعنی ببخشید.
+9079|order|exercise|این عبارت رو با کلماتش بچین.|Excuse|me|Excuse me از دو تا کلمه ساخته شده: Excuse و me.
+9080|multiple_choice|exercise|«Excuse ___» که یعنی «ببخشید»، کدوم کلمه‌ست؟|fine|me|morning|Excuse me یعنی ببخشید — کلمه‌ی دومش «me»یه.
+9082|true_false|preview|Sorry یعنی «متاسفم»، درست یا غلط؟||Sorry یعنی متاسفم.
+9081|multiple_choice|main|Sorry یعنی چی؟|متاسفم|ببخشید|نه|Sorry یعنی متاسفم — برای عذرخواهی، نه جلب توجه.
+9083|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Sorry↔متاسفم|Excuse me↔ببخشید|Hello↔سلام|هر عبارت رو با معنی فارسیش جفت کن.
+9084|speech_recognition|exercise|Sorry||بگو: Sorry
+9085|type_answer|exercise|«متاسفم» به انگلیسی چیه؟ تایپش کن.|Sorry|Sorry یعنی متاسفم.
+9087|true_false|preview|Goodbye یعنی «خداحافظ»، درست یا غلط؟||Goodbye یعنی خداحافظ.
+13027|true_false|preview|I'm hungry یعنی «گرسنه هستم»، درست یا غلط؟||I'm hungry یعنی گرسنه هستم.
+13028|multiple_choice|main|I'm hungry یعنی چی؟|گرسنه هستم|این هست|نه|I'm hungry یعنی گرسنه هستم.
+13029|multiple_choice|exercise|کدوم گزینه یعنی «گرسنه هستم»؟|This is|a|I'm hungry|I'm hungry یعنی گرسنه هستم.
+13030|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|I'm hungry↔گرسنه هستم|a↔یه|I want↔می‌خوام|هر عبارت رو با معنی فارسیش جفت کن.
+13031|speech_recognition|exercise|I'm hungry||بگو: I'm hungry
+13032|listening_card|exercise||select|Good morning|I'm hungry|I'm fine|عبارتی که شنیدید: I'm hungry (گرسنه هستم)
+9086|multiple_choice|main|Goodbye یعنی چی؟|خداحافظ|متاسفم|ببخشید|Goodbye یعنی خداحافظ.
+9088|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|Goodbye↔خداحافظ|Hello↔سلام|How are you?↔حالت چطوره؟|You're welcome↔خواهش می‌کنم|هر عبارت رو با معنی فارسیش جفت کن.
+9089|speech_recognition|exercise|Goodbye||بگو: Goodbye
+9090|type_answer|exercise|«خداحافظ» به انگلیسی چیه؟ تایپش کن.|Goodbye|Goodbye یعنی خداحافظ.
+12437|preview_card|preview|حالا یه مکالمه‌ی کوتاه می‌بینی که فقط از کلمات همین دوره ساخته شده، با چندتا جای خالی. باید جاهای خالی رو با کلمه‌ی درست پر کنی.|باشه|
+12438|cloze_passage|main|Ali: Hello! {{1}}, please.
+Sara: Yes, this is {{2}}.
+Ali: {{3}}! I'm thirsty.|choice|Excuse me~I'm thirsty~Please|I want~water~Hello|Thank you~Please~I'm thirsty|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12439|cloze_passage|exercise|Ali: {{1}}! Excuse me, please.
+Sara: {{2}}, this is water.
+Ali: Thank you! I'm thirsty.|word_bank|Hello~Sorry~No~Yes|Hello~Yes|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12440|cloze_passage|exercise|Ali: {{1}}! Excuse me, please.
+Sara: {{2}}, this is water.
+Ali: Thank you! I'm thirsty.|choice|I want~Hello~Excuse me|Yes~I'm hungry~Please|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12441|cloze_passage|exercise|Ali: Hello! {{1}}, please.
+Sara: Yes, this is {{2}}.
+Ali: {{3}}! I'm thirsty.|word_bank|No~Sorry~Thank you~water~Excuse me|Excuse me~water~Thank you|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12527|preview_card|preview|حالا یه مکالمه‌ی کوتاه می‌بینی که فقط از کلمات همین دوره ساخته شده، با چندتا جای خالی. باید جاهای خالی رو با کلمه‌ی درست پر کنی.|باشه|
+12528|cloze_passage|main|Ali: Sorry! {{1}}, thank you.
+Sara: {{2}}, this is {{3}}.|choice|Excuse me~Hello~No|Please~Thank you~This is|I'm thirsty~water~This is|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12529|cloze_passage|exercise|Ali: Sorry! {{1}}, thank you.
+Sara: {{2}}, this is {{3}}.|word_bank|Please~water~No~Excuse me~Yes|No~Please~water|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12530|cloze_passage|exercise|Ali: Sorry! {{1}}, thank you.
+Sara: {{2}}, this is {{3}}.|choice|I'm hungry~No~I want|Please~I want~I'm thirsty|water~This is~Hello|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12531|cloze_passage|exercise|Ali: Sorry! {{1}}, thank you.
+Sara: {{2}}, this is {{3}}.|word_bank|Please~Yes~water~No~Excuse me|No~Please~water|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12532|preview_card|preview|حالا یه مکالمه‌ی کوتاه می‌بینی که فقط از کلمات همین دوره ساخته شده، با چندتا جای خالی. باید جاهای خالی رو با کلمه‌ی درست پر کنی.|باشه|
+13033|true_false|preview|I'm thirsty یعنی «تشنه هستم»، درست یا غلط؟||I'm thirsty یعنی تشنه هستم.
+13034|multiple_choice|main|I'm thirsty یعنی چی؟|تشنه هستم|لطفاً|نه|I'm thirsty یعنی تشنه هستم.
+13035|order|exercise|جمله را به ترتیب درستش بچین.|I'm thirsty.|I want|Water.|این جمله رو با کلماتی که تا الان یاد گرفتی می‌سازی. معنیش: تشنه‌ام. آب می‌خوام.
+13036|speech_recognition|exercise|I'm thirsty. I want Water.||این جمله رو با صدای بلند بگو: I'm thirsty. I want Water.
+13037|multiple_choice|exercise|کدوم گزینه یعنی «تشنه هستم»؟|I'm thirsty|a|I'm fine|I'm thirsty یعنی تشنه هستم.
+13038|match_pairs|exercise|هر عبارت را به معنی فارسی‌اش وصل کن.|I'm thirsty↔تشنه هستم|Water↔آب|a↔یه|هر عبارت رو با معنی فارسیش جفت کن.
+13039|speech_recognition|exercise|I'm thirsty||بگو: I'm thirsty
+13040|listening_card|exercise||select|This is|I'm good|I'm thirsty|عبارتی که شنیدید: I'm thirsty (تشنه هستم)
+12533|cloze_passage|main|Ali: {{1}} water, {{2}}.
+Sara: {{3}}, this is water.|choice|Sorry~a~I want|please~Water~Thank you|I'm hungry~Sorry~Yes|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12534|cloze_passage|exercise|Ali: {{1}} water, {{2}}.
+Sara: {{3}}, this is water.|word_bank|Sorry~No~I want~please~Yes|I want~please~Yes|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12535|cloze_passage|exercise|Ali: {{1}} water, {{2}}.
+Sara: {{3}}, this is water.|choice|Water~I want~Sorry|Hello~please~I'm thirsty|Excuse me~Yes~This is|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12536|cloze_passage|exercise|Ali: {{1}} water, {{2}}.
+Sara: {{3}}, this is water.|word_bank|Yes~please~No~I want~Sorry|I want~please~Yes|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12537|preview_card|preview|حالا یه مکالمه‌ی کوتاه می‌بینی که فقط از کلمات همین دوره ساخته شده، با چندتا جای خالی. باید جاهای خالی رو با کلمه‌ی درست پر کنی.|باشه|
+12538|cloze_passage|main|Ali: {{1}}! {{2}}.
+Sara: Sorry, no {{3}}.|choice|I want~I'm thirsty~Excuse me|I'm hungry~I want~Thank you|a~Sorry~water|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12539|cloze_passage|exercise|Ali: {{1}}! {{2}}.
+Sara: Sorry, no {{3}}.|word_bank|Excuse me~This is~water~Please~I'm hungry|Excuse me~I'm hungry~water|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12540|cloze_passage|exercise|Ali: {{1}}! {{2}}.
+Sara: Sorry, no {{3}}.|choice|I'm thirsty~Excuse me~This is|Thank you~a~I'm hungry|water~I'm thirsty~Sorry|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12541|cloze_passage|exercise|Ali: {{1}}! {{2}}.
+Sara: Sorry, no {{3}}.|word_bank|This is~water~I'm hungry~Please~Excuse me|Excuse me~I'm hungry~water|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12542|preview_card|preview|حالا یه مکالمه‌ی کوتاه می‌بینی که فقط از کلمات همین دوره ساخته شده، با چندتا جای خالی. باید جاهای خالی رو با کلمه‌ی درست پر کنی.|باشه|
+12543|cloze_passage|main|Ali: {{1}}! I'm thirsty.
+Sara: {{2}} water. {{3}}!|choice|I'm thirsty~I'm hungry~Hello|I'm thirsty~a~This is|Thank you~Water~Sorry|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12544|cloze_passage|exercise|Ali: {{1}}! I'm thirsty.
+Sara: {{2}} water. {{3}}!|word_bank|Thank you~This is~Hello~No~Sorry|Hello~This is~Thank you|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.
+12545|cloze_passage|exercise|Ali: {{1}}! I'm thirsty.
+Sara: {{2}} water. {{3}}!|choice|Sorry~Hello~Excuse me|Excuse me~No~This is|I want~Please~Thank you|جاهای خالی رو با کلمه‌ی درستش پر کن.
+12546|cloze_passage|exercise|Ali: {{1}}! I'm thirsty.
+Sara: {{2}} water. {{3}}!|word_bank|This is~Thank you~Sorry~No~Hello|Hello~This is~Thank you|کلمه‌های درست رو از بین گزینه‌ها انتخاب کن.

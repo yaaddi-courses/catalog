@@ -89,7 +89,7 @@ MAX_IMAGE_DIMENSION = 256
 # The course cover is a deliberate exception: it fills a wide 2.4:1
 # marketplace banner slot (MarketplaceScreen.tsx's cardImage style), so it's
 # intentionally generated at 1024x432, not square — see
-# reference_image_tts_generator / project_cardale_cover_image_aspect_ratio
+# reference_image_tts_generator / project_yaaddi_cover_image_aspect_ratio
 # in the app repo's own session memory for why. A flat 256x256 cap would
 # flag every correctly-generated cover as an error.
 MAX_COVER_DIMENSION = (1024, 432)
@@ -367,6 +367,19 @@ def validate_cards(units, cards, report, media_files=None):
             # blanks in a longer passage — so this is a full exemption, not
             # a check on a different field.
             pass
+        elif "\n" in prompt:
+            # A prompt with a literal embedded newline is a code/command
+            # snippet (e.g. "What does this print?\nx = 1\nprint(x)"), never
+            # natural-language prose — no real quiz question is authored
+            # with a hard line break. The atomicity word-count rule assumes
+            # prose and once miscounted a properly-formatted 4-line snippet
+            # as "19 words", which pushed a real course to cram the code
+            # into a single semicolon-joined, unindented line just to pass
+            # validation — objectively worse code, not a shorter question.
+            # Same reasoning as reading_passage/cloze_passage above: this
+            # field holds substantial embedded content, not a question to
+            # keep atomic.
+            pass
         else:
             options_raw = (c.get("options") or "").strip()
             option_list = [o for o in options_raw.split("|")] if options_raw else []
@@ -470,8 +483,16 @@ def validate_cards(units, cards, report, media_files=None):
                 f'card {cid}: "audio" is set but type is "{ctype}" — audio only works on '
                 "media_card or listening_card"
             )
+        # "audio" is optional on listening_card — with none, the app speaks
+        # the correct answer live via the device's own TTS instead (see the
+        # app's listeningCard.tsx's listeningContentSchema doc comment). A
+        # real recording is still preferred when one exists, so this is a
+        # warning, not a hard error.
         if ctype == "listening_card" and not c.get("audio"):
-            report.error(f'card {cid}: listening_card needs "audio" set — it has no visible text.')
+            report.warn(
+                f'card {cid}: listening_card has no "audio" — it will fall back to live '
+                "on-device TTS instead of a real recording"
+            )
 
         if role == "main":
             # A main card is the one graded encounter that actually schedules

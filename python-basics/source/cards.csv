@@ -7,7 +7,9 @@ ___('hello')",print|input|write|return,0,,,print() takes whatever you pass it an
 5,1,multiple_choice,exercise,1,What is the type of True?,int|str|bool|float,2,,,True and False are the two values of the bool type.
 6,1,multiple_choice,exercise,1,Which assignment sets x to 5?,x=5|x==5|5=x|int x=5,0,,,A single = assigns a value to a name — no declaration keyword needed.
 7,1,multiple_choice,exercise,1,"What does this print?
-x=5;x='five';print(type(x))",<class 'str'>|<class 'int'>|str|five,0,cards/card_7.png,,Reassigning x to a string changes its type — the same variable can hold any type at different times.
+x = 5
+x = 'five'
+print(type(x))",<class 'str'>|<class 'int'>|str|five,0,cards/card_7.png,,Reassigning x to a string changes its type — the same variable can hold any type at different times.
 8,2,multiple_choice,main,,Which operator performs floor (integer) division in Python?,//|/|%|**,0,,,"// divides and rounds down to the nearest whole number, discarding any remainder. Related operators: % (modulo) gives the remainder instead, ** raises to a power, == checks equality (returning True/False, even comparing an int to an equal float), and and/or combine boolean conditions — and needs both sides true, or needs just one."
 9,2,command_output,exercise,8,What does this print?,print(7 // 2)|3,,,,"7 divided by 2 is 3.5, and // rounds that down to 3."
 10,2,multiple_choice,exercise,8,"What does this print?
@@ -67,35 +69,49 @@ else:print('done')","0,1,2,done|0,1,2|done|Error",0,,,A for loop's else block ru
 36,6,select_blank,main,,Lists are ___ — you can change them.,mutable|immutable|constant|frozen,0,,,"You can add, remove, or change items in a list without creating a new one — unlike a tuple or string. That mutation happens through methods like append() (add to end), sort() (rearrange in place), and pop() (remove and return the last item), plus len() to count items and slicing (nums[1:]) to grab a range."
 37,6,multiple_choice,exercise,36,Which method adds one item to a list's end?,append()|add()|push()|insert(),0,,,"append() adds exactly one item to the end — for adding several items at once, extend() is what you want instead."
 38,6,multiple_choice,exercise,36,"What does this print?
-nums=[3,1,2];nums.sort();print(nums)","[1,2,3]|[3,1,2]|[3,2,1]|None",0,,,"sort() rearranges the list in place, from smallest to largest by default."
+nums = [3, 1, 2]
+nums.sort()
+print(nums)","[1,2,3]|[3,1,2]|[3,2,1]|None",0,,,"sort() rearranges the list in place, from smallest to largest by default."
 39,6,multiple_choice,exercise,36,"What does this print?
-nums=[1,2,3];nums.pop();print(nums)","[1,2]|[2,3]|[1,2,3]|3",0,cards/card_39.png,,pop() with no argument removes and returns the last item.
+nums = [1, 2, 3]
+nums.pop()
+print(nums)","[1,2]|[2,3]|[1,2,3]|3",0,cards/card_39.png,,pop() with no argument removes and returns the last item.
 40,6,multiple_choice,exercise,36,"What does this print?
-nums=[1,2,3,4];print(len(nums))",4|3|5|Error,0,,,len() counts how many items are in the list.
+nums = [1, 2, 3, 4]
+print(len(nums))",4|3|5|Error,0,,,len() counts how many items are in the list.
 41,6,multiple_choice,exercise,36,"What does this print?
-nums=[1,2,3];print(nums[1:])","[2,3]|[1,2]|[1,2,3]|[3]",0,,,"Leaving off the end of a slice means ""go all the way to the end""."
+nums = [1, 2, 3]
+print(nums[1:])","[2,3]|[1,2]|[1,2,3]|[3]",0,,,"Leaving off the end of a slice means ""go all the way to the end""."
 42,6,select_blank,exercise,36,"Complete: add 'x' to the list's end.
 items.___('x')",append|add|push|insert,0,,,append() is the standard way to grow a list one item at a time.
 43,7,select_blank,main,,Tuples are ___ — their contents can't change.,immutable|mutable|dynamic|editable,0,,,"Tuples are written with parentheses, e.g. (1, 2), and are useful exactly because they can't be accidentally modified."
 44,7,select_blank,exercise,43,"Complete the tuple-unpacking assignment.
 x,y=___","(1,2)|[1,2]|{1,2}|1,2,3",0,cards/card_44.png,,"Unpacking assigns each element of a tuple to a variable in order — x gets 1, y gets 2."
 45,7,multiple_choice,exercise,46,"What does this print?
-s={1,2,2,3};print(len(s))",3|4|2|1,0,,,"A set automatically drops duplicates, so the repeated 2 only counts once."
+s = {1, 2, 2, 3}
+print(len(s))",3|4|2|1,0,,,"A set automatically drops duplicates, so the repeated 2 only counts once."
 46,7,select_blank,main,,A Python ___ automatically removes duplicate values.,set|list|tuple|dict,0,,,Sets are built specifically to guarantee every element is unique. They also support | (union — combine both sets) and & (intersection — only elements in both).
 47,7,multiple_choice,exercise,46,"What does this print?
-a={1,2,3};b={2,3,4};print(a&b)","{2,3}|{1,2,3,4}|{1}|{4}",0,,,& is set intersection — it returns only the elements present in both sets.
+a = {1, 2, 3}
+b = {2, 3, 4}
+print(a & b)","{2,3}|{1,2,3,4}|{1}|{4}",0,,,& is set intersection — it returns only the elements present in both sets.
 48,7,multiple_choice,exercise,46,Which symbol computes the union of two sets?,| (union)|& (intersection)|- (difference)|^ (symdiff),0,,,"| combines both sets into one, keeping every unique element from each."
 49,7,multiple_choice,exercise,46,"What does this print?
-a={1,2};b={2,3};print(a|b)","{1,2,3}|{2}|{1,3}|{1,2,2,3}",0,,,"The union keeps every element from both sets, with 2 (shared by both) only appearing once."
+a = {1, 2}
+b = {2, 3}
+print(a | b)","{1,2,3}|{2}|{1,3}|{1,2,2,3}",0,,,"The union keeps every element from both sets, with 2 (shared by both) only appearing once."
 50,8,select_blank,main,,"Complete the dict mapping 'name' to 'Ada'.
 person={'name':___}",'Ada'|Ada|['Ada']|{'Ada'},0,,,"A dictionary maps keys to values using key: value pairs inside curly braces. You look values up with square brackets (d['key']) or safely with d.get('key', default), which never raises an error for a missing key. keys() and items() let you iterate over a dict's contents, and only hashable (immutable) values like strings, numbers, or tuples can be used as keys — not lists."
 51,8,multiple_choice,exercise,50,"What does this print?
-d={'a':1,'b':2};print(d['a'])",1|2|'a'|KeyError,0,,,Square brackets look up a value by its key.
+d = {'a': 1, 'b': 2}
+print(d['a'])",1|2|'a'|KeyError,0,,,Square brackets look up a value by its key.
 52,8,multiple_choice,exercise,50,Which dict method avoids a KeyError?,get()|fetch()|find()|lookup(),0,,,"d.get('key', default) is a safe lookup — it never raises an error for a missing key."
 53,8,multiple_choice,exercise,50,"What does this print?
-d={'a':1};print(d.get('b',0))",0|None|KeyError|1,0,,,"'b' isn't in the dict, so get() falls back to the default value provided: 0."
+d = {'a': 1}
+print(d.get('b', 0))",0|None|KeyError|1,0,,,"'b' isn't in the dict, so get() falls back to the default value provided: 0."
 54,8,multiple_choice,exercise,50,"What does this print?
-d={'a':1,'b':2};print(list(d.keys()))","['a','b']|[1,2]|('a','b')|{'a','b'}",0,,,"keys() gives you every key in the dictionary, in insertion order."
+d = {'a': 1, 'b': 2}
+print(list(d.keys()))","['a','b']|[1,2]|('a','b')|{'a','b'}",0,,,"keys() gives you every key in the dictionary, in insertion order."
 55,8,true_false,exercise,50,A list cannot be used as a dict key.,,true,cards/card_55.png,,"Lists are mutable, and mutable objects can't be hashed — tuples work fine as keys since they're immutable."
 56,8,multiple_choice,exercise,50,"What does this print?
 d={'a':1,'b':2}
@@ -143,16 +159,22 @@ def minmax(n):return min(n),max(n)
 print(minmax([3,1,2]))","(1,3)|(3,1)|[1,3]|1,3",0,cards/card_76.png,,Returning two values separated by a comma automatically packs them into a tuple.
 77,12,multiple_choice,main,,"Name the scope order: Local, Enclosing, Global, Built-in.",LEGB|GEBL|BLEG|LGEB,0,,,"Python checks each scope in that exact order until it finds the name — Local first, Built-in last. Assigning to a name inside a function makes it local by default; writing global x first tells Python that x refers to the outer, module-level variable instead."
 78,12,multiple_choice,exercise,77,"What does this print?
-x=1
-def f():x=2;print(x)
-f();print(x)","2,1|2,2|1,1|1,2",0,cards/card_78.png,,The x inside f() is a separate local variable — it doesn't affect the global x at all.
+x = 1
+def f():
+    x = 2
+    print(x)
+f()
+print(x)","2,1|2,2|1,1|1,2",0,cards/card_78.png,,The x inside f() is a separate local variable — it doesn't affect the global x at all.
 79,12,true_false,exercise,77,A variable set inside a function is local by default.,,true,,,"Assigning to a name inside a function makes Python treat it as local, unless you say otherwise with global."
 80,12,select_blank,exercise,77,"Complete: let f() modify module-level x.
 def f():___ x;x=2",global|nonlocal|import|static,0,,,"global tells Python that x inside this function refers to the module-level variable, not a new local one."
 81,12,multiple_choice,exercise,77,"What does this print?
-x=1
-def f():global x;x=2
-f();print(x)",2|1|None|Error,0,,,"global lets the function actually reassign the outer x, so the change is visible after the call."
+x = 1
+def f():
+    global x
+    x = 2
+f()
+print(x)",2|1|None|Error,0,,,"global lets the function actually reassign the outer x, so the change is visible after the call."
 82,12,multiple_choice,exercise,77,"In the LEGB rule, which scope is checked first?",Built-in|Global|Enclosing|Local,3,,,Local is checked first — Python looks in the innermost scope before working its way outward.
 83,12,true_false,exercise,77,Reading a global var needs no global keyword.,,true,,,global is only needed when you want to assign to the outer variable — just reading it works without any keyword.
 84,13,select_blank,main,,"Complete: import sqrt from math.
@@ -219,8 +241,12 @@ class Dog:
 print(Dog('Rex').name)",Rex|name|None|Error,0,,,'Rex' was passed into __init__ and stored as d.name.
 120,18,true_false,exercise,117,A class attribute is shared unless overridden per-instance.,,true,,,"Class attributes live on the class itself, so every instance sees the same value until one of them sets its own."
 121,18,multiple_choice,exercise,117,"What does this print?
-class C:count=0
-a=C();b=C();a.count=5
+class C:
+    count = 0
+
+a = C()
+b = C()
+a.count = 5
 print(b.count)",0|5|Error|None,0,cards/card_121.png,,Setting a.count = 5 creates a new instance attribute on a alone — it doesn't touch the shared class attribute b still sees.
 122,18,true_false,exercise,117,Instance attributes are usually set inside __init__.,,true,,,"This is the standard, expected place to initialize an instance's own data."
 123,19,select_blank,main,,"Complete: make Cat inherit from Animal.
@@ -258,7 +284,8 @@ print(any([False, False, True]))",,true,,,any() returns True as soon as at least
 print(all([True, True, False]))",,false,,,all() returns True only if every single item is truthy — one False is enough to fail it.
 142,22,select_blank,main,,___() copies; list.sort() sorts in place.,sorted|reversed|sort|len,0,,,"Use sorted() when you need to keep the original order too; use .sort() when you don't need the original anymore. Both also accept reverse=True for descending order, and a key= function applied to each item to decide the sort order (e.g. key=len sorts by length instead of alphabetically)."
 143,22,multiple_choice,exercise,142,"What does this print?
-nums=[3,1,2];print(sorted(nums))","[1,2,3]|[3,1,2]|[3,2,1]|None",0,,,sorted() returns a brand-new list in ascending order by default.
+nums = [3, 1, 2]
+print(sorted(nums))","[1,2,3]|[3,1,2]|[3,2,1]|None",0,,,sorted() returns a brand-new list in ascending order by default.
 144,22,multiple_choice,exercise,142,"What does this print?
 print(sorted([3,1,2],reverse=True))","[3,2,1]|[1,2,3]|[3,1,2]|None",0,,,reverse=True flips the order to descending instead of ascending.
 145,22,select_blank,exercise,142,"Complete: sort words by length.

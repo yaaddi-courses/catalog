@@ -141,7 +141,7 @@ format" section further down for the full column list.
 | `preview_card` | A one-time "here's the concept" intro shown right before a main card's first attempt — plain teaching text, tap the single button to continue | `prompt` = the concept, stated plainly (not as a question); `options[0]` = the button label (e.g. `"Got it"`). Only valid with `role` = `preview` — see "Preview cards" below |
 | `categorize` | A list of items, tap each one into the bucket it belongs in | each `options` entry is one item written as `item↔bucket` (2-4 distinct bucket names across the whole item list, ≥3 items) — many-to-few, unlike `match_pairs`' strict 1:1 pairing |
 | `spot_error` | A code/command line broken into pieces, tap the one that's wrong | `options` = the line's pipe-delimited segments/tokens; `correct_index` = which segment is broken |
-| `listening_card` | Audio plays (no visible text at all — this is a listening exercise), answer by typing, tapping an option, or arranging words | `options[0]` = `response_type` (`type`/`select`/`order`); for `type`, `options[1]` = the accepted answer (case/whitespace-insensitive, like `type_answer`); for `select`, `options[1+]` = pipe-delimited choices and `correct_index` = the right one; for `order`, `options[1+]` = the words **already in correct order**. The `audio` column (filename) is required, same convention as `media_card`'s. Only counts toward the typing budget below when `response_type` is `type` |
+| `listening_card` | Audio plays (no visible text at all — this is a listening exercise), answer by typing, tapping an option, or arranging words | `options[0]` = `response_type` (`type`/`select`/`order`); for `type`, `options[1]` = the accepted answer (case/whitespace-insensitive, like `type_answer`); for `select`, `options[1+]` = pipe-delimited choices and `correct_index` = the right one; for `order`, `options[1+]` = the words **already in correct order**. The `audio` column (filename, same convention as `media_card`'s) is **optional** — a real recording is preferred, but leaving it blank makes the app speak the correct answer live via the device's own TTS instead, so a pack doesn't have to wait on a recording before it can ship. Only counts toward the typing budget below when `response_type` is `type` |
 | `speech_recognition` | A phrase to read aloud — passes automatically once on-device speech recognition hears a match (the app's normal skip button is always available as a fallback) | `prompt` = the phrase. Only makes sense in a `teaches_language: true` course (see below) — the phrase is spoken as a pronunciation model, then the learner reproduces it |
 | `reading_passage` | A longer passage (paragraph, dialogue, or short story) in its own box, then a separate comprehension question with multiple-choice answers | `prompt` = the passage (a properly-quoted CSV field may contain real newlines — author it multi-line directly). `options[0]` = the comprehension question; `options[1+]` = the answer choices; `correct_index` refers to that choice sub-list (0 = `options[1]`, not `options[0]`). Several cards may share the identical `prompt` with a different question each time — build a real pack of one main + several exercises about the same passage |
 | `cloze_passage` | The same kind of longer passage, but with several words blanked out, filled in via either per-blank multiple choice or one shared tap-to-build word bank — no typed blanks | `prompt` = the passage with `{{1}}`, `{{2}}`, … numbered blank placeholders, in order. `options[0]` = mode: `choice` or `word_bank`. For `choice`: `options[1+]` = one entry per blank, each blank's own options joined by `~` (e.g. `"weather~bill~menu"`); `correct_index` = one `\|`-delimited index per blank (e.g. `"0\|1"`). For `word_bank`: `options[1]` = the shared word pool joined by `~` (may include distractors never used); `options[2]` = the correct fill sequence, also `~`-joined; `correct_index` unused. `~` is used instead of `\|` for the inner lists because `\|` already splits the outer `options` column |
@@ -289,19 +289,30 @@ columns blank on rows that don't fit one — not every item needs to.
 
 ```bash
 python tools/generate_language_course.py my-vocab.csv <course-folder>
+
+# Optional: also generate one deck-cover image per unit (256x256, via this
+# machine's local FLUX server — see the generate-image skill). Needs that
+# server running (start_servers.ps1 -Servers flux); ~1-2 min per deck.
+# Safe to re-run — a deck whose image file already exists is skipped.
+python tools/generate_language_course.py my-vocab.csv <course-folder> --generate-images
 ```
 
 This writes `<course-folder>/source/units.csv` (one unit per distinct
-`deck` value, first-seen order), `source/cards.csv` (a full preview + main
-+ 4-6 practice pack per row, now including a `listening_card` rep and, when
-supplied, a sentence-building `order` card), and `source/tts_manifest.csv`
-(one row per audio file the `listening_card` cards reference, `audio,text`)
-— then continue exactly like a hand-authored course: write `source/meta.csv`
-yourself (the generator doesn't know the course's title/color/
-`target_language`/etc.), add deck cover images and set `units.csv`'s
-`image` column, **record/synthesize every row in `tts_manifest.csv` into
-`source/media/<audio>`** (this repo's own TTS tooling — see the app's
-CLAUDE.md's narration/pronunciation-audio note — same as how the original
+`deck` value, first-seen order — `image` filled in automatically when
+`--generate-images` was passed, blank otherwise), `source/cards.csv` (a
+full preview + main + 4-6 practice pack per row, now including a
+`listening_card` rep and, when supplied, a sentence-building `order` card),
+and `source/tts_manifest.csv` (one row per audio file the `listening_card`
+cards reference, `audio,text`) — then continue exactly like a hand-authored
+course: write `source/meta.csv` yourself (the generator doesn't know the
+course's title/color/`target_language`/etc.), and — if you skipped
+`--generate-images`, or want to swap in a more specific prompt for one
+particular deck than the generic title-based default the flag uses — add/
+regenerate deck cover images by hand and set `units.csv`'s `image` column
+yourself. Either way, still **record/synthesize every row in
+`tts_manifest.csv` into `source/media/<audio>`** (this repo's own TTS
+tooling — see the app's CLAUDE.md's narration/pronunciation-audio note —
+same as how the original
 hand-authored course's audio was made; never ship a placeholder), run
 `build_course_zip.py`, and `validate_course.py --source`.
 
@@ -358,3 +369,69 @@ the 10% typing-card budget. Also skipped outright when the prompt template
 plus a long `example_gloss` (a two-sentence combo, say) would blow the
 9-word prompt cap on its own — `_fits_as_card` checks this before emitting,
 the same defensive pattern `_fits_as_option` already applies to options.
+
+### Write every base-language string in formal, written register
+
+A real course shipped with casual spoken-Farsi contractions baked into
+hand-authored cards and into this generator's own templates: `رو` instead
+of the formal object marker `را`, `چیه`/`کدوم` instead of `چیست`/`کدام`,
+informal second-person verb forms (`یاد گرفتی`, `می‌سازی`, `بگو`) instead
+of the polite/plural forms (`یاد گرفته‌اید`, `می‌سازید`, `بگویید`) a
+written course should use throughout. None of this is a matter of taste —
+a learner paying for a course reasonably expects the same register a
+textbook or a formal app would use, not text messages between friends.
+Every base-language string a generator template emits, and every one a
+human author types into a CSV, should read as formal written prose: prefer
+`را` over `رو`, `چیست`/`کدام` over `چیه`/`کدوم`, and the polite/plural verb
+conjugation over the informal singular one, in Farsi and in whatever other
+base language a future course uses. This applies to prompts and
+explanations alike, not just the learner-facing question text — an
+explanation is still something the learner reads.
+
+### type_answer's accepted-answer list must be a closed set, never "anything true"
+
+A hand-authored card once asked, in effect, "how do you really feel right
+now? Write it in English," with three hardcoded accepted answers — a
+genuinely open personal question crammed into `type_answer`'s exact-match
+grading, so any truthful answer outside those three (or even a truthful
+rephrasing of one of them, like "I am tired" for "I'm tired") was marked
+wrong despite being correct. `type_answer`/`listening_card`'s `type`
+response mode must only ever be used where the correct answer is a
+**specific, predetermined piece of text** — a translation of a *given*
+word/phrase/sentence, a spelling-recall of the taught target word, a
+command or code snippet — never a question whose honest answer depends on
+the learner's own state, opinion, or circumstances. If a card wants to
+practice a response like "I'm tired," give the learner the Farsi phrase to
+translate (`«خسته‌ام» را به انگلیسی بنویسید.` → `I'm tired`), don't ask
+them how they actually feel.
+
+### Bilingual text goes on separate lines, never interleaved on one
+
+A field that mixes two languages — the overwhelmingly common case in a
+base-language-framed course ("Hello یعنی چی؟", a true_false preview
+statement, a sentence-building explanation quoting both the target phrase
+and its gloss) — must put each language on its **own line**, joined by a
+literal `\n` in the CSV field, never side by side on one line. Not `Hello
+یعنی چی؟` but `Hello\nیعنی چی؟`; not `How are you? یعنی «حالتان چطوره؟»،
+درست یا غلط؟` but `How are you?\nیعنی «حالتان چطوره؟»، درست یا غلط؟`. Edit
+the wording as needed so each resulting line reads as a complete, sensible
+piece on its own — don't just drop a `\n` into the middle of a sentence
+and call it done.
+
+This isn't a cosmetic preference: the app's `LinkedText` component (see
+its own doc comment) aligns a block of text ONE way as a whole — it can't
+put an English line flush left and a Farsi line flush right within a
+single mixed paragraph, because a single Text node's `textAlign` only ever
+applies one alignment to the whole block. Splitting by language onto
+separate lines is what lets each line render aligned correctly by its own
+script (Farsi lines right, English lines left) — the app enforces the
+render-time half of this automatically once the CSV field has the `\n` in
+the right place; authoring the split is the part a human (or an LLM
+authoring content) has to get right.
+
+This applies everywhere a CSV field can hold a real newline (a quoted CSV
+field can) — `prompt`, `options` entries, and `explanation` alike — for
+every card type, not just the true_false/multiple_choice "X یعنی چی؟"
+template. It does NOT apply to a short standalone label with no sentence
+around it (a bare option like "Hello" in an all-target-language options
+list) — there's nothing to split there.
