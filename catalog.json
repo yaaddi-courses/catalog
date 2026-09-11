@@ -1,8 +1,9 @@
 [
   {
-    "path": "canadian-citizenship",
+    "repo": "yaaddi-courses/canadian-citizenship",
+    "branch": "main",
     "title": "Canadian Citizenship",
-    "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course \u2014 history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real\u2026",
+    "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course — history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real…",
     "file": "canadian-citizenship.zip",
     "id": "7f3a91c04e2b",
     "image": "cover.png",
@@ -17,9 +18,10 @@
     "deckCount": 21
   },
   {
-    "path": "concurrency-in-python",
+    "repo": "yaaddi-courses/concurrency-in-python",
+    "branch": "main",
     "title": "Concurrency in Python",
-    "description": "Threading, multiprocessing, and asyncio \u2014 from the GIL to structured concurrency, start to finish.",
+    "description": "Threading, multiprocessing, and asyncio — from the GIL to structured concurrency, start to finish.",
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
@@ -34,9 +36,10 @@
     "deckCount": 85
   },
   {
-    "path": "docker-and-containers",
+    "repo": "yaaddi-courses/docker-and-containers",
+    "branch": "main",
     "title": "Docker and Containers",
-    "description": "From what a container actually is through Dockerfiles, networking, Compose, and cleanup \u2014 the day-to-day Docker skills that get real work done.",
+    "description": "From what a container actually is through Dockerfiles, networking, Compose, and cleanup — the day-to-day Docker skills that get real work done.",
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
@@ -50,7 +53,8 @@
     "deckCount": 44
   },
   {
-    "path": "effective-vibecoding",
+    "repo": "yaaddi-courses/effective-vibecoding",
+    "branch": "main",
     "title": "Effective Vibecoding",
     "description": "How to direct an AI coding agent well: scoping tasks, prompting clearly, reviewing what it writes, and staying safely in control the whole time.",
     "file": "effective-vibecoding.zip",
@@ -66,7 +70,8 @@
     "deckCount": 27
   },
   {
-    "path": "emotional-intelligence",
+    "repo": "yaaddi-courses/emotional-intelligence",
+    "branch": "main",
     "title": "Emotional Intelligence",
     "description": "Understanding and managing your own emotions, and reading and responding well to other people's, at home and at work.",
     "file": "emotional-intelligence.zip",
@@ -82,9 +87,10 @@
     "deckCount": 40
   },
   {
-    "path": "english-for-farsi-speakers",
+    "repo": "yaaddi-courses/english-for-farsi-speakers",
+    "branch": "main",
     "title": "English for Farsi Speakers",
-    "description": "Practical, real-world English for Farsi speakers who want to travel and get by in everyday situations \u2014 greetings, airports, hotels, food, shopping, small talk, and handling problems. No grammar drills, no exam prep, just the phrases you'd\u2026",
+    "description": "Practical, real-world English for Farsi speakers who want to travel and get by in everyday situations — greetings, airports, hotels, food, shopping, small talk, and handling problems. No grammar drills, no exam prep, just the phrases you'd…",
     "file": "english-for-farsi-speakers.zip",
     "id": "fe65dde5e532",
     "image": "cover.png",
@@ -97,17 +103,18 @@
     ],
     "language": "fa",
     "titleTranslations": {
-      "fa": "\u0627\u0646\u06af\u0644\u06cc\u0633\u06cc \u0628\u0631\u0627\u06cc \u0641\u0627\u0631\u0633\u06cc\u200c\u0632\u0628\u0627\u0646\u200c\u0647\u0627"
+      "fa": "انگلیسی برای فارسی‌زبان‌ها"
     },
     "descriptionTranslations": {
-      "fa": "\u0627\u0646\u06af\u0644\u06cc\u0633\u06cc \u06a9\u0627\u0631\u0628\u0631\u062f\u06cc \u0648 \u0648\u0627\u0642\u0639\u06cc \u0628\u0631\u0627\u06cc \u0641\u0627\u0631\u0633\u06cc\u200c\u0632\u0628\u0627\u0646\u200c\u0647\u0627\u06cc\u06cc \u06a9\u0647 \u0645\u06cc\u200c\u062e\u0648\u0627\u0647\u0646\u062f \u0633\u0641\u0631 \u06a9\u0646\u0646\u062f \u0648 \u062f\u0631 \u0645\u0648\u0642\u0639\u06cc\u062a\u200c\u0647\u0627\u06cc \u0631\u0648\u0632\u0645\u0631\u0647 \u0627\u0632 \u067e\u0633 \u062e\u0648\u062f\u0634\u0627\u0646 \u0628\u0631\u0628\u06cc\u0627\u06cc\u0646\u062f \u2014 \u0633\u0644\u0627\u0645 \u0648 \u0627\u062d\u0648\u0627\u0644\u200c\u067e\u0631\u0633\u06cc\u060c \u0641\u0631\u0648\u062f\u06af\u0627\u0647\u060c \u0647\u062a\u0644\u060c \u063a\u0630\u0627\u060c \u062e\u0631\u06cc\u062f\u060c \u06af\u067e \u0632\u062f\u0646\u060c \u0648 \u062d\u0644 \u0645\u0634\u06a9\u0644\u0627\u062a. \u0628\u062f\u0648\u0646 \u062a\u0645\u0631\u06cc\u0646\u200c\u0647\u0627\u06cc \u062e\u0634\u06a9 \u06af\u0631\u0627\u0645\u0631\u06cc\u060c \u0628\u062f\u0648\u0646 \u0622\u0645\u0627\u062f\u0647 \u0634\u062f\u0646 \u0628\u0631\u0627\u06cc \u0627\u0645\u062a\u062d\u0627\u0646\u060c \u0641\u0642\u0637 \u0639\u0628\u0627\u0631\u062a\u200c\u0647\u0627\u06cc\u06cc \u06a9\u0647 \u0648\u0627\u0642\u0639\u0627\u064b \u0628\u0647 \u06a9\u0627\u0631\u062a \u0645\u06cc\u200c\u0622\u06cc\u0646\u062f."
+      "fa": "انگلیسی کاربردی و واقعی برای فارسی‌زبان‌هایی که می‌خواهند سفر کنند و در موقعیت‌های روزمره از پس خودشان بربیایند — سلام و احوال‌پرسی، فرودگاه، هتل، غذا، خرید، گپ زدن، و حل مشکلات. بدون تمرین‌های خشک گرامری، بدون آماده شدن برای امتحان، فقط عبارت‌هایی که واقعاً به کارت می‌آیند."
     },
     "deckCount": 18
   },
   {
-    "path": "git",
+    "repo": "yaaddi-courses/git",
+    "branch": "main",
     "title": "Git",
-    "description": "The version control system behind almost every modern codebase \u2014 how to actually understand what it's doing, not just memorize commands.",
+    "description": "The version control system behind almost every modern codebase — how to actually understand what it's doing, not just memorize commands.",
     "file": "git.zip",
     "id": "558d49ba4cfe",
     "image": "cover.png",
@@ -121,9 +128,10 @@
     "deckCount": 39
   },
   {
-    "path": "harness",
+    "repo": "yaaddi-courses/harness",
+    "branch": "main",
     "title": "Harness",
-    "description": "The unified CI/CD platform \u2014 pipelines, delegates, deployment strategies, and the modules that go beyond just shipping code.",
+    "description": "The unified CI/CD platform — pipelines, delegates, deployment strategies, and the modules that go beyond just shipping code.",
     "file": "harness.zip",
     "id": "dba791593bf6",
     "image": "cover.png",
@@ -138,7 +146,8 @@
     "deckCount": 34
   },
   {
-    "path": "kubernetes-fundamentals",
+    "repo": "yaaddi-courses/kubernetes-fundamentals",
+    "branch": "main",
     "title": "Kubernetes Fundamentals",
     "description": "How a Kubernetes cluster actually works: pods, controllers, networking, storage, and the day-to-day commands that keep it running.",
     "file": "kubernetes-fundamentals.zip",
@@ -154,7 +163,8 @@
     "deckCount": 41
   },
   {
-    "path": "managing-software-projects",
+    "repo": "yaaddi-courses/managing-software-projects",
+    "branch": "main",
     "title": "Managing Software Projects",
     "description": "Running a real software project: methodologies, planning, tracking, risk, and the people skills that hold a team together.",
     "file": "managing-software-projects.zip",
@@ -170,9 +180,10 @@
     "deckCount": 35
   },
   {
-    "path": "mlops",
+    "repo": "yaaddi-courses/mlops",
+    "branch": "main",
     "title": "MLOps",
-    "description": "The practices and tooling that take a machine-learning model from a notebook to reliable production: experiment tracking, model registries, feature stores, CI/CD for ML, serving, and drift monitoring. Builds on this library's\u2026",
+    "description": "The practices and tooling that take a machine-learning model from a notebook to reliable production: experiment tracking, model registries, feature stores, CI/CD for ML, serving, and drift monitoring. Builds on this library's…",
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
@@ -187,9 +198,10 @@
     "deckCount": 24
   },
   {
-    "path": "opentelemetry",
+    "repo": "yaaddi-courses/opentelemetry",
+    "branch": "main",
     "title": "OpenTelemetry",
-    "description": "The vendor-neutral standard for traces, metrics, and logs \u2014 from a single span to a full Collector pipeline in production. The final deck (running OTel on Kubernetes) goes smoothly if you already know pods and Deployments \u2014 see this app's\u2026",
+    "description": "The vendor-neutral standard for traces, metrics, and logs — from a single span to a full Collector pipeline in production. The final deck (running OTel on Kubernetes) goes smoothly if you already know pods and Deployments — see this app's…",
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
@@ -204,9 +216,10 @@
     "deckCount": 38
   },
   {
-    "path": "python-basics",
+    "repo": "yaaddi-courses/python-basics",
+    "branch": "main",
     "title": "Python Basics",
-    "description": "A complete beginner-to-solid-fundamentals path through Python \u2014 syntax, data structures, functions, files, and OOP essentials.",
+    "description": "A complete beginner-to-solid-fundamentals path through Python — syntax, data structures, functions, files, and OOP essentials.",
     "file": "python-basics.zip",
     "id": "d1aae68588c5",
     "image": "cover.png",
@@ -219,7 +232,8 @@
     "deckCount": 24
   },
   {
-    "path": "sdlc",
+    "repo": "yaaddi-courses/sdlc",
+    "branch": "main",
     "title": "The Software Development Lifecycle (SDLC)",
     "description": "The software development lifecycle end to end: requirements, design, building, testing, shipping, and keeping a system alive afterward.",
     "file": "sdlc.zip",
@@ -235,7 +249,8 @@
     "deckCount": 34
   },
   {
-    "path": "software-architecture",
+    "repo": "yaaddi-courses/software-architecture",
+    "branch": "main",
     "title": "Software Architecture",
     "description": "The styles, principles, and trade-offs behind how real systems are structured, from a single monolith to distributed microservices.",
     "file": "software-architecture.zip",
@@ -251,9 +266,10 @@
     "deckCount": 40
   },
   {
-    "path": "testing-in-software-engineering",
+    "repo": "yaaddi-courses/testing-in-software-engineering",
+    "branch": "main",
     "title": "Testing in Software Engineering",
-    "description": "Why tests actually pay off, the different kinds worth writing, and the habits \u00e2\u20ac\u201d TDD, coverage, flaky-test fixes, CI \u00e2\u20ac\u201d that keep a suite trustworthy.",
+    "description": "Why tests actually pay off, the different kinds worth writing, and the habits â€” TDD, coverage, flaky-test fixes, CI â€” that keep a suite trustworthy.",
     "file": "testing-in-software-engineering.zip",
     "id": "eba617a0e3bf",
     "image": "cover.png",
@@ -267,9 +283,10 @@
     "deckCount": 32
   },
   {
-    "path": "testing-with-pytest",
+    "repo": "yaaddi-courses/testing-with-pytest",
+    "branch": "main",
     "title": "Testing with pytest",
-    "description": "The pytest testing framework in depth: fixtures, parametrization, mocking, coverage, and configuration. Assumes you already know Python (see this library's python-basics course) and general testing vocabulary (see\u2026",
+    "description": "The pytest testing framework in depth: fixtures, parametrization, mocking, coverage, and configuration. Assumes you already know Python (see this library's python-basics course) and general testing vocabulary (see…",
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
