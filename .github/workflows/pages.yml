@@ -1,19 +1,19 @@
 name: Build and deploy course site
 
-# Rebuilds the GitHub Pages catalog (tools/build_site.py) any time course
-# content actually changes, and deploys it via GitHub's official Pages
-# actions — no generated HTML is ever committed to the repo tree, the build
-# output is a throwaway CI artifact. One-time manual step required: repo
-# Settings -> Pages -> Source = "GitHub Actions" (can't be set from a
-# workflow file).
+# Rebuilds the GitHub Pages catalog (tools/build_site.py) whenever
+# catalog.json changes (chained after rebuild-catalog.yml, since a push to
+# an individual course repo can't directly trigger a workflow living in
+# this repo) or this repo's own site tooling changes, plus manual dispatch.
+# No generated HTML is ever committed — the build output is a throwaway CI
+# artifact. One-time manual step required: repo Settings -> Pages ->
+# Source = "GitHub Actions" (can't be set from a workflow file).
 on:
+  workflow_run:
+    workflows: ["Rebuild catalog"]
+    types: [completed]
   push:
     branches: [main]
     paths:
-      - "**/meta.json"
-      - "**/source/cards.csv"
-      - "**/source/units.csv"
-      - "**/cover.*"
       - "tools/build_site.py"
       - "tools/site_assets/**"
       - ".github/workflows/pages.yml"
@@ -30,14 +30,47 @@ concurrency:
 
 jobs:
   build:
+    # Skip if triggered by a FAILED rebuild-catalog run — a stale/broken
+    # catalog.json isn't something to build a fresh site from.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+
+      # build_site.py needs each course's full source/units.csv +
+      # source/cards.csv (not just meta.json, which is all catalog.json
+      # carries) to render per-course pages — cheaper to shallow-clone
+      # every tagged repo once here than to rewrite the site generator
+      # around per-file API fetches. See tools/list_course_repos.py's own
+      # doc comment; cloning public repos over plain https needs no token.
+      - name: Shallow-clone every course repo into a scratch directory
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_CATALOG_PAT }}
+        run: |
+          mkdir -p /tmp/courses
+          python tools/list_course_repos.py > /tmp/repos.json
+          python - <<'PY'
+          import json, subprocess
+          repos = json.load(open("/tmp/repos.json"))
+          for repo in repos:
+              full_name = repo["full_name"]
+              branch = repo["default_branch"]
+              name = full_name.split("/", 1)[1]
+              subprocess.run(
+                  [
+                      "git", "clone", "--depth=1", "--branch", branch,
+                      f"https://github.com/{full_name}.git", f"/tmp/courses/{name}",
+                  ],
+                  check=True,
+              )
+          PY
+
       - name: Build site
-        run: python tools/build_site.py --out _site
+        run: python tools/build_site.py --out _site --courses-dir /tmp/courses
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

@@ -1,76 +1,70 @@
 #!/usr/bin/env python3
-"""Builds catalog.json — a single-file index of every course in this repo.
+"""Builds catalog.json — a single-file index of every course repo in the
+yaaddi-courses GitHub organization.
 
-The Yaaddi app's in-app Course Library used to discover courses by asking
-GitHub for this repo's root directory listing, then fetching every single
-course folder's own meta.json individually — one HTTP request per course.
-That works fine at today's scale (a dozen courses) but doesn't at
-thousands: even batched, thousands of individual requests take tens of
-seconds to fully resolve, and GitHub's directory-listing API silently
-truncates at 1000 entries with no pagination, meaning a course beyond
-that point wouldn't even be discovered.
+Rearchitected for the one-repo-per-course split (each course used to be a
+subfolder of this monorepo; now each course is its own repo, tagged with
+the `yaaddi-course` topic). Discovery can no longer read local folders —
+it queries GitHub's Search API for every repo in the org carrying that
+topic, then fetches each one's own meta.json directly.
 
-catalog.json collapses all of that into one file, and therefore one
-request: every course folder's meta.json, concatenated into a single JSON
-array at the repo root. The app tries fetching this first and only falls
-back to the old per-folder scan if catalog.json is missing or fails to
-parse — see src/lib/githubMarketplace.ts's fetchMarketplaceCoursesUncached
-in the Yaaddi app repo.
+Two GitHub endpoints, for two different reasons:
+  - api.github.com/search/repositories — lists every yaaddi-course-tagged
+    repo in the org. Needs authentication (a token with at least
+    `public_repo`/`Contents: read` on the org) since the unauthenticated
+    rate limit (60/hour, and lower still for Search specifically — 10/min
+    unauthenticated) is far too low for a scheduled job — see
+    `.github/workflows/rebuild-catalog.yml`.
+  - raw.githubusercontent.com — every actual meta.json fetch. NOT subject
+    to the API rate limit at all, and doesn't need a token even for a
+    public repo — matches the reasoning already documented in the Yaaddi
+    app repo's src/lib/githubMarketplace.ts for why raw content (not the
+    Contents API) is used for actual file bytes.
 
-This is regenerated automatically in CI (.github/workflows/validate-courses.yml,
-the same auto-commit pattern already used for ensure_course_ids.py) on every
-push to main — an author never needs to remember to run this by hand,
-though `python tools/build_catalog.py` also works standalone for a local
-sanity check.
+catalog.json's entry shape changes from the old monorepo version: `path`
+(a folder within this repo) is replaced by `repo` ("owner/repo", the
+course's own dedicated repo) + `branch` (that repo's default branch) — see
+the Yaaddi app repo's src/lib/githubMarketplace.ts's `catalogSchema`,
+which accepts BOTH the old `path`-based shape and this one, permanently
+(there's no way to force an already-installed app build to stop
+understanding the legacy shape). Every other field (title, description,
+file, id, image, version, tags, language, titleTranslations,
+descriptionTranslations, deckCount) is unchanged.
 
-Kept deliberately lean as the course count grows: `description` is
-truncated to DESCRIPTION_MAX_CHARS (full text lives in the course's own
-meta.json), `toc` is collapsed to a `deckCount` integer (the app only
-shows the real deck list once a learner actually expands a course, at
-which point it fetches that one course's full meta.json on demand —
-see the Yaaddi app repo's src/lib/githubMarketplace.ts's
-fetchSingleCourseEntry), and `changelog` is dropped entirely (the app's
-"check for updates" flow already re-fetches each installed course's own
-meta.json fresh, never reading changelog from this bulk file).
+Cross-course id-uniqueness checking (previously validate_course.py --all's
+job, run against local folders) happens here now instead, since this is
+the only place that ever has every course's meta.json in memory at once —
+see check_id_uniqueness() below. A collision is a hard failure (non-zero
+exit), same severity as before.
 
-Pure Python stdlib — no dependencies, matches validate_course.py and
-build_site.py's own "stdlib-only" convention.
+Pure Python stdlib (urllib, not requests) — matches validate_course.py and
+build_site.py's own "stdlib-only" convention, even though this now makes
+real network calls instead of reading local files.
 
 Usage:
-    python tools/build_catalog.py                    # writes ./catalog.json
-    python tools/build_catalog.py --out other.json    # custom output path
+    python tools/build_catalog.py                     # writes ./catalog.json
+    python tools/build_catalog.py --out other.json     # custom output path
+    python tools/build_catalog.py --org other-org --topic other-topic
+    GITHUB_TOKEN=ghp_xxx python tools/build_catalog.py  # authenticated (required for CI-scale use)
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# Folders at repo root that are never course folders — matches
-# build_site.py's SKIP_DIRS exactly (kept as a separate copy, not a shared
-# import, since these are independent CLI scripts with no package
-# structure between them — see AUTHORING.md for why this repo stays a flat
-# script layout rather than introducing a shared module).
-SKIP_DIRS = {
-    ".git", ".github", ".internal", "__pycache__", "tools", "_site",
-    "node_modules",
-}
-
-
-def discover_courses(root: Path) -> list[Path]:
-    courses = []
-    for child in sorted(root.iterdir()):
-        if not child.is_dir() or child.name in SKIP_DIRS or child.name.startswith("."):
-            continue
-        if (child / "meta.json").exists():
-            courses.append(child)
-    return courses
-
+DEFAULT_ORG = "yaaddi-courses"
+DEFAULT_TOPIC = "yaaddi-course"
 
 # How much of meta.json's full `description` survives into the summary
-# catalog — the rest is only ever fetched on demand (see module docstring).
+# catalog — the rest is only ever fetched on demand, via the app's
+# fetchSingleCourseEntry.
 DESCRIPTION_MAX_CHARS = 240
 
 
@@ -84,34 +78,72 @@ def truncate_description(text: str) -> str:
     return cut.rstrip(",.;: ") + "…"
 
 
-# The lean field set src/lib/githubMarketplace.ts's summary-listing path
-# builds from one folder's meta.json — deliberately NOT the same full set
-# fetchSingleCourseEntry gets from a direct meta.json fetch (see module
-# docstring for why `toc`/`changelog` are trimmed/dropped here). "path" is
-# the only field not read verbatim from meta.json (it's the folder name,
-# needed to resolve `image`/`file`'s relative paths and to build the
-# course's install/update URLs).
-def build_catalog_entry(course_dir: Path) -> dict | None:
-    meta_path = course_dir / "meta.json"
+def _github_api_get(url: str, token: str | None) -> dict:
+    req = urllib.request.Request(url)
+    req.add_header("Accept", "application/vnd.github+json")
+    req.add_header("X-GitHub-Api-Version", "2022-11-28")
+    if token:
+        req.add_header("Authorization", f"Bearer {token}")
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def discover_course_repos(org: str, topic: str, token: str | None) -> list[dict]:
+    """Every repo in `org` tagged with `topic`, paginated. Returns each
+    repo's `full_name` ("owner/repo") and `default_branch`."""
+    repos: list[dict] = []
+    page = 1
+    while True:
+        url = (
+            "https://api.github.com/search/repositories"
+            f"?q=org:{org}+topic:{topic}&per_page=100&page={page}"
+        )
+        try:
+            data = _github_api_get(url, token)
+        except urllib.error.HTTPError as err:
+            body = err.read().decode("utf-8", errors="replace")
+            raise SystemExit(
+                f"GitHub search API request failed (status {err.code}): {body}\n"
+                "If this is a rate-limit error (403), the workflow's token "
+                "may be missing or expired — see .github/workflows/rebuild-catalog.yml."
+            ) from err
+        items = data.get("items", [])
+        repos.extend(
+            {"full_name": item["full_name"], "default_branch": item["default_branch"]}
+            for item in items
+        )
+        if len(items) < 100:
+            break
+        page += 1
+    return repos
+
+
+def fetch_meta(full_name: str, branch: str) -> dict | None:
+    url = f"https://raw.githubusercontent.com/{full_name}/{branch}/meta.json"
     try:
-        meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError):
+        with urllib.request.urlopen(url, timeout=30) as resp:
+            if resp.status != 200:
+                return None
+            return json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
         return None
+
+
+# The lean field set src/lib/githubMarketplace.ts's summary-listing path
+# builds from one course's meta.json — deliberately NOT the same full set
+# fetchSingleCourseEntry gets from a direct meta.json fetch (see module
+# docstring for why `toc`/`changelog` are trimmed/dropped here).
+def build_catalog_entry(full_name: str, branch: str, meta: dict) -> dict | None:
     if "title" not in meta or "file" not in meta:
         return None
 
     entry = {
-        "path": course_dir.name,
+        "repo": full_name,
+        "branch": branch,
         "title": meta["title"],
         "description": truncate_description(meta.get("description", "")),
         "file": meta["file"],
     }
-    # Optional fields are only included when meta.json actually provides
-    # them — matches fetchCourseEntry's own "undefined, not null/empty"
-    # convention for an absent optional field, so the app's existing
-    # zod schema (which already treats these as optional) parses either
-    # source identically. `changelog` is deliberately never included here
-    # (see module docstring) and `toc` becomes a bare count.
     for key in (
         "id", "image", "version", "tags", "language",
         "titleTranslations", "descriptionTranslations",
@@ -123,30 +155,65 @@ def build_catalog_entry(course_dir: Path) -> dict | None:
     return entry
 
 
-def build_catalog(root: Path) -> list[dict]:
+def check_id_uniqueness(entries: list[dict]) -> list[str]:
+    """Returns a list of error messages for any `id` used by more than one
+    entry — ported from validate_course.py's --all mode, which used to run
+    this against local folders; this is now the only place that ever has
+    every course in memory at once."""
+    by_id: dict[str, list[str]] = {}
+    for entry in entries:
+        course_id = entry.get("id")
+        if not course_id:
+            continue
+        by_id.setdefault(course_id, []).append(entry["repo"])
+
+    errors = []
+    for course_id, repos in by_id.items():
+        if len(repos) > 1:
+            errors.append(f'id "{course_id}" is used by multiple repos: {", ".join(repos)}')
+    return errors
+
+
+def build_catalog(org: str, topic: str, token: str | None) -> list[dict]:
+    repos = discover_course_repos(org, topic, token)
     entries = []
-    for course_dir in discover_courses(root):
-        entry = build_catalog_entry(course_dir)
+    for repo in repos:
+        meta = fetch_meta(repo["full_name"], repo["default_branch"])
+        if meta is None:
+            print(
+                f"warning: {repo['full_name']} is tagged '{topic}' but has no "
+                "readable meta.json at its repo root — skipped.",
+                file=sys.stderr,
+            )
+            continue
+        entry = build_catalog_entry(repo["full_name"], repo["default_branch"], meta)
         if entry is not None:
             entries.append(entry)
-    # Sorted by folder path for a stable, low-diff-noise output — otherwise
-    # every regeneration could reorder entries based on filesystem
-    # iteration order alone and make every PR's catalog.json diff larger
-    # than the actual change.
-    entries.sort(key=lambda e: e["path"])
+
+    id_errors = check_id_uniqueness(entries)
+    if id_errors:
+        for msg in id_errors:
+            print(f"ERROR: {msg}", file=sys.stderr)
+        raise SystemExit(1)
+
+    # Sorted by repo for a stable, low-diff-noise output.
+    entries.sort(key=lambda e: e["repo"])
     return entries
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--org", default=DEFAULT_ORG, help="GitHub organization to scan")
+    parser.add_argument("--topic", default=DEFAULT_TOPIC, help="Repo topic identifying a course")
     parser.add_argument(
         "--out", default=str(REPO_ROOT / "catalog.json"), help="Output file path"
     )
     args = parser.parse_args()
 
-    catalog = build_catalog(REPO_ROOT)
+    token = os.environ.get("GITHUB_TOKEN")
+    catalog = build_catalog(args.org, args.topic, token)
     out_path = Path(args.out)
-    out_path.write_text(json.dumps(catalog, indent=2) + "\n", encoding="utf-8")
+    out_path.write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Wrote {out_path} ({len(catalog)} course(s))")
 
 

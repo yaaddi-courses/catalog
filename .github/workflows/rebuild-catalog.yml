@@ -1,0 +1,47 @@
+name: Rebuild catalog
+
+# Replaces the old monorepo's per-push catalog regeneration (there's no
+# single push event that could trigger this anymore — a course's own repo
+# changing doesn't touch this repo at all). Runs on a schedule, and can
+# always be triggered manually (Actions tab -> Rebuild catalog -> Run
+# workflow) right after tagging a brand-new course repo, instead of
+# waiting for the next scheduled run.
+on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    name: Scan the org and rebuild catalog.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # GITHUB_TOKEN here is a fine-grained PAT stored as a repo secret,
+      # NOT the automatic per-job secrets.GITHUB_TOKEN — that one is
+      # scoped only to this one repo and can't list/search other repos in
+      # the org. See tools/build_catalog.py's own module doc comment and
+      # README.md's "catalog.json" section for the token's required scope
+      # (Contents: read + Metadata: read on every yaaddi-courses repo).
+      - name: Rebuild catalog.json from the org
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_CATALOG_PAT }}
+        run: python tools/build_catalog.py
+
+      - name: Commit catalog.json, if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: rebuild catalog.json"
+          file_pattern: "catalog.json"

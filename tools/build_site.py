@@ -513,13 +513,26 @@ def copy_images(course_dir: Path, course: dict, out_dir: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default=str(REPO_ROOT / "_site"), help="Output directory")
+    parser.add_argument(
+        "--courses-dir",
+        default=str(REPO_ROOT),
+        help=(
+            "Directory to scan for course subfolders (default: this repo's own "
+            "root, for local/legacy use). In the one-repo-per-course world, the "
+            "workflow that runs this shallow-clones every yaaddi-course-tagged "
+            "repo into a scratch directory first and points this flag at that "
+            "directory instead — site_assets/tools still come from this repo's "
+            "own root regardless (see copy_assets(REPO_ROOT, ...) below), only "
+            "course discovery is redirected."
+        ),
+    )
     args = parser.parse_args()
     out_dir = Path(args.out)
     if out_dir.exists():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
 
-    course_dirs = discover_courses(REPO_ROOT)
+    course_dirs = discover_courses(Path(args.courses_dir))
     courses = []
     for course_dir in course_dirs:
         data = build_course_data(course_dir)
