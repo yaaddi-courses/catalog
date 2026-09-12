@@ -4,7 +4,7 @@
   "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course — history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real photos), not a summary of it — reading through this course covers the same ground as reading the book itself.",
   "image": "cover.png",
   "file": "canadian-citizenship.zip",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "tags": [
     "canada",
     "citizenship",
@@ -13,6 +13,11 @@
     "government"
   ],
   "changelog": [
+    {
+      "version": "1.0.1",
+      "date": "2026-09-12",
+      "notes": "Removed a whole pack (preview + main + 4 practice cards, 6 cards total) duplicated verbatim in two decks — the NWMP-founding pack existed identically in both \"The Road to Confederation\" and \"Building the Dominion\"; kept the copy in \"Building the Dominion\" (NWMP founded in 1873, after Confederation). Reworded 5 other cards that duplicated a sibling deck's card text verbatim while covering a genuinely different angle of the same fact, so each pack now tests something distinct instead of repeating a sibling word-for-word."
+    },
     {
       "version": "1.0.0",
       "date": "2026-08-20",

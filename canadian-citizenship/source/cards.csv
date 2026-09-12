@@ -746,7 +746,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 5170,5,select_blank,exercise,5169,Riel and the Métis seized ___ as territorial capital.,Fort Garry|Fort Edmonton|Fort Victoria|Fort Calgary,0,p19-fort-garry-1863.jpeg,,
 5171,5,true_false,exercise,5169,"About 12,000 Métis lived at Red River.",,true,,,
 5172,5,multiple_choice,exercise,5169,What region did Canada take from HBC in 1869?,The northwest|The Maritimes|Vancouver Island|Quebec,0,,,
-5173,5,true_false,preview,5174,Manitoba became a province in 1870.,,true,,,
+5173,5,true_false,preview,5174,Riel fled to the United States after the uprising.,,true,,,
 5174,5,multiple_choice,main,,What happened after Ottawa retook Fort Garry in 1870?,Manitoba province|Riel Premier|Slavery ended|War Britain,0,,,"Ottawa sent soldiers to retake Fort Garry in 1870, Riel fled to the U.S.A., and Canada established the new province of Manitoba."
 5175,5,select_blank,exercise,5174,Riel fled to the ___ after the uprising.,United States|Britain|France|Quebec,0,,,
 5176,5,true_false,exercise,5174,Riel was elected to Parliament but never took his seat.,,true,,,
@@ -756,12 +756,6 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 5180,5,select_blank,exercise,5179,Riel's execution was strongly opposed in ___.,Quebec|Ontario|Nova Scotia|Alberta,0,,,
 5181,5,true_false,exercise,5179,Gabriel Dumont was the Métis' greatest military leader.,,true,p19-gabriel-dumont.png,,
 5182,5,multiple_choice,exercise,5179,What was Riel convicted of in 1885?,High treason|Theft|Murder soldier|Smuggling,0,,,
-5183,5,true_false,preview,5184,Macdonald founded the North West Mounted Police in 1873.,,true,,,
-5184,5,multiple_choice,main,,Why did Macdonald establish the NWMP in 1873?,Pacify West|Fight U.S.A.|Guard Parliament|Collect taxes,0,p19-sam-steele.png,,"After the first Métis uprising, Macdonald established the North West Mounted Police in 1873 to pacify the West and assist talks with Indians."
-5185,5,select_blank,exercise,5184,The NWMP later became known as the ___.,RCMP|CSIS|CBSA|OPP,0,,,
-5186,5,true_false,exercise,5184,Sam Steele was a famous Mounted Police hero.,,true,p19-sam-steele.png,,
-5187,5,multiple_choice,exercise,5184,Which city became NWMP headquarters?,Regina|Calgary|Winnipeg|Edmonton,0,,,
-5188,5,true_false,exercise,5184,The NWMP founded Fort Calgary and Fort MacLeod.,,true,,,
 6001,6,true_false,preview,6002,Canada took over the northwest region in 1869.,,true,,,
 6002,6,multiple_choice,main,,Who led the Métis uprising after 1869?,Louis Riel|Gabriel Dumont|Sam Steele|John Macdonald,0,p19-fort-garry.jpeg,,"In 1869 the 12,000 Métis of the Red River were not consulted when Canada took over the northwest from the Hudson's Bay Company. Louis Riel led an armed uprising and seized Fort Garry, the territorial capital."
 6003,6,true_false,exercise,6002,Louis Riel led an armed uprising in 1869.,,true,,,
@@ -1325,7 +1319,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 9031,9,true_false,preview,9032,Provinces are responsible for education and health.,,true,,,
 9032,9,multiple_choice,main,,Which is a provincial government responsibility?,Education|Defence|Currency|Foreign policy,0,,,"The provinces are responsible for municipal government, education, health, natural resources, property and civil rights, and highways."
 9033,9,multi_select,exercise,9032,Which are provincial government responsibilities?,Health|Highways|Natural resources|Foreign policy,0|1|2,,,
-9034,9,true_false,exercise,9032,Provinces are responsible for municipal government.,,true,,,
+9034,9,true_false,exercise,9032,Provinces issue driver's licences.,,true,,,
 9035,9,select_blank,exercise,9032,Provinces oversee property and ___ rights.,civil|criminal|international|maritime,0,,,
 9036,9,multiple_choice,exercise,9032,Which is NOT a provincial responsibility?,Defence|Education|Health|Highways,0,,,
 9041,9,true_false,preview,9042,Agriculture and immigration are shared federal-provincial matters.,,true,,,
@@ -1793,7 +1787,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 12016,12,multiple_choice,main,,Who is King of Canada today?,Charles III|Elizabeth II|Queen Victoria|George VI,0,,,"His Majesty King Charles the Third is the current King of Canada. (The book's own text still names Queen Elizabeth II, whose reign has since ended.)"
 12017,12,true_false,preview,12016,King Charles III is the current King of Canada.,,true,,,
 12018,12,multiple_choice,exercise,12016,What is King Charles III's title in Canada?,Canada's King|Prime Minister|Governor General|Chief Justice,0,,,
-12019,12,true_false,exercise,12016,Queen Elizabeth II is Canada's current Sovereign.,,false,,,Queen Elizabeth II's reign has ended; His Majesty King Charles III is Canada's current Sovereign.
+12019,12,true_false,exercise,12016,Charles III has been King of Canada since 2022.,,true,,,"Queen Elizabeth II's reign ended in 2022, when His Majesty King Charles III became Canada's Sovereign."
 12020,12,select_blank,exercise,12016,King Charles III holds the title King of ___.,Canada|Ottawa|Quebec|Ontario,0,,,
 12021,12,multiple_choice,main,,Which does the Crown symbolize in Canada?,"Parliament, courts|Private bank|Film studio|Grocery chain",0,,,"The Crown is a symbol of government, including Parliament, the legislatures, the courts, police services and the Canadian Forces."
 12022,12,true_false,preview,12021,The Crown is a symbol of Parliament and the courts.,,true,,,
@@ -2300,7 +2294,7 @@ id,unit_id,type,role,related_main_id,prompt,options,correct_index,image,audio,ex
 14149,14,select_blank,exercise,14145,New Brunswick's historic capital is ___.,Fredericton|Saint John|Moncton|Charlottetown,0,,,
 14150,14,multiple_choice,exercise,14145,New Brunswick's capital city is which of these?,Fredericton|Regina|Victoria|Winnipeg,0,,,
 14151,14,multiple_choice,main,,Which is Canada's only officially bilingual province?,New Brunswick|Quebec|Ontario|Manitoba,0,,,"New Brunswick is the only officially bilingual province, and about one-third of the population lives and works in French."
-14152,14,true_false,preview,14151,New Brunswick is Canada's only officially bilingual province.,,true,,,
+14152,14,true_false,preview,14151,New Brunswick alone has two official languages in Canada.,,true,,,
 14153,14,true_false,exercise,14151,About one-third of New Brunswick's population works in French.,,true,,,
 14154,14,multiple_choice,exercise,14151,What share of New Brunswick works in French?,One-third|One-half|One-tenth|Two-thirds,0,,,
 14155,14,select_blank,exercise,14151,New Brunswick is the only officially ___ province.,bilingual|monolingual|trilingual|Francophone,0,,,

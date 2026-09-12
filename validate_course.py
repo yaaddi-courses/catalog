@@ -402,6 +402,21 @@ def validate_cards(units, cards, report, media_files=None):
             report.error(f'units.csv: duplicate unit id "{uid}"')
         unit_ids.add(uid)
 
+    # A deck whose whole job is reviewing earlier material (a mock/practice
+    # exam, a final recap) legitimately re-asks questions verbatim from
+    # earlier decks — that's the deck's actual point, not a copy-paste
+    # accident. Recognized by title convention rather than a schema field:
+    # keeps this working for any course that names its own recap decks this
+    # way without a CSV format change. A real example that motivated this:
+    # canadian-citizenship's "Practice Exam 1/2/3" decks re-test ~90
+    # questions from earlier decks verbatim, by design.
+    RECAP_DECK_KEYWORDS = ("practice exam", "practice test", "final review", "recap")
+    recap_unit_ids = {
+        u.get("id")
+        for u in units
+        if any(kw in (u.get("title") or "").lower() for kw in RECAP_DECK_KEYWORDS)
+    }
+
     card_ids = set()
     mains_by_id = {}
     exercises = []
@@ -565,14 +580,21 @@ def validate_cards(units, cards, report, media_files=None):
             # reasoning as the in-pack identical-question check above:
             # repeating a production/listening prompt verbatim across
             # unrelated cards is genuine, intentional spaced repetition of
-            # the same phrase, not a copy-paste accident.
+            # the same phrase, not a copy-paste accident. A card living in a
+            # recap/practice-exam deck (see RECAP_DECK_KEYWORDS above) is
+            # exempt from being flagged as the LATER duplicate — reusing an
+            # earlier deck's question there is the deck's whole point —
+            # but still gets RECORDED into prompt_seen_at like any other
+            # card, so a genuine accidental duplicate within the recap deck
+            # itself (or a later real duplicate of ITS wording) still gets
+            # caught.
             if ctype not in ("speech_recognition", "listening_card"):
                 normalized = " ".join(prompt.lower().split()) + "||" + (c.get("options") or "").strip().lower()
-                if normalized in prompt_seen_at:
+                if normalized in prompt_seen_at and uid not in recap_unit_ids:
                     report.warn(
                         f'card {cid}: prompt+options are a near-exact duplicate of card {prompt_seen_at[normalized]}'
                     )
-                else:
+                if normalized not in prompt_seen_at:
                     prompt_seen_at[normalized] = cid
 
         if c.get("audio") and ctype not in ("media_card", "listening_card"):
