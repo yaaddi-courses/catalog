@@ -41,6 +41,7 @@ import csv
 import io
 import json
 import os
+import re
 import struct
 import sys
 import zipfile
@@ -348,6 +349,48 @@ def validate_meta_json(course_dir, report):
     return meta
 
 
+# Fields a card can hold free-form prose/inline-code in — see app/src/lib/
+# inlineCode.ts's own doc comment for the exact convention this checks
+# against: a single-backtick span (`` `docker run` ``) renders as styled
+# monospace code; anything else involving backticks is a mistake, not a
+# format the app understands.
+INLINE_CODE_CHECKED_FIELDS = ("prompt", "options", "explanation")
+CONSECUTIVE_BACKTICKS_RE = re.compile("`{2,}")
+
+
+def _check_inline_code_markup(card, report):
+    """Catches malformed backtick-delimited inline code before it ships —
+    the exact class of bug behind a real, live-reported issue ("the code in
+    cards is shown like raw text"): a course author reasonably reaches for
+    Markdown-style backticks to mark up a command/snippet inline, but the
+    app only understands a SINGLE matched backtick pair per span (see
+    app/src/lib/inlineCode.ts's own doc comment — no triple-backtick fenced
+    blocks; use a dedicated code_fill/command_output card for a whole-line
+    snippet instead). An unpaired backtick or a run of 2+ consecutive
+    backticks both render as literal stray characters, not code."""
+    cid = card.get("id")
+    for field in INLINE_CODE_CHECKED_FIELDS:
+        text = card.get(field) or ""
+        if "`" not in text:
+            continue
+        if text.count("`") % 2 != 0:
+            report.error(
+                f'card {cid}: "{field}" has an odd number of backtick (`) characters — '
+                "inline code needs a matched opening and closing backtick "
+                "(`` `like this` ``); an unpaired one renders as a literal stray "
+                "character instead of styled code"
+            )
+        run = CONSECUTIVE_BACKTICKS_RE.search(text)
+        if run:
+            report.error(
+                f'card {cid}: "{field}" has {len(run.group())} consecutive backticks — '
+                "only a single-backtick inline-code span is supported (no Markdown-style "
+                "triple-backtick fenced blocks); for a whole-line code/command snippet, use "
+                "a code_fill or command_output card instead of a backtick-fenced block in "
+                "free text"
+            )
+
+
 def validate_cards(units, cards, report, media_files=None):
     """media_files: set of filenames available to reference (image/audio), or
     None to skip the file-existence check (e.g. when validating raw source/
@@ -382,6 +425,8 @@ def validate_cards(units, cards, report, media_files=None):
         role = c.get("role")
         if role not in ("main", "exercise", "preview"):
             report.error(f'card {cid}: role must be "main", "exercise", or "preview", got "{role}"')
+
+        _check_inline_code_markup(c, report)
 
         uid = c.get("unit_id")
         if uid not in unit_ids:
