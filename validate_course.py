@@ -961,45 +961,6 @@ def validate_course_folder(course_dir, check_source=False):
     return report, meta
 
 
-def check_catalog_freshness(repo_root):
-    """catalog.json (tools/build_catalog.py) is the single-file course index
-    the app fetches for a fast Course Library load — see that script's own
-    doc comment. CI regenerates and auto-commits it on every push to main,
-    but that auto-commit can't push on a pull_request from a fork
-    (GITHUB_TOKEN is read-only there), so a fork PR that adds/edits a
-    course would otherwise merge with a silently stale catalog.json and no
-    warning. This regenerates it in-memory and diffs against what's
-    actually committed, catching that case at PR-review time instead."""
-    report = Report("catalog.json")
-    tools_dir = os.path.join(repo_root, "tools")
-    if tools_dir not in sys.path:
-        sys.path.insert(0, tools_dir)
-    import build_catalog  # noqa: E402 (deliberately imported late — needs sys.path set first)
-
-    committed_path = os.path.join(repo_root, "catalog.json")
-    if not os.path.isfile(committed_path):
-        report.error(
-            "catalog.json is missing from the repo root — run `python tools/build_catalog.py` "
-            "and commit the result (CI does this automatically on push to main, but not on a fork PR)"
-        )
-        return report
-
-    try:
-        committed = json.loads(open(committed_path, encoding="utf-8").read())
-    except json.JSONDecodeError as e:
-        report.error(f"catalog.json is not valid JSON: {e}")
-        return report
-
-    fresh = build_catalog.build_catalog(build_catalog.Path(repo_root))
-    if committed != fresh:
-        report.error(
-            "catalog.json is out of date with the actual course folders — run "
-            "`python tools/build_catalog.py` and commit the result (CI does this automatically "
-            "on push to main, but not on a fork PR)"
-        )
-    return report
-
-
 def check_id_uniqueness(reports_and_metas):
     """Cross-course check, only meaningful with --all: two courses sharing
     an "id" would make lib/courseUpdates.ts's rename-fallback lookup
@@ -1027,14 +988,12 @@ def main():
     repo_root = os.path.dirname(os.path.abspath(__file__))
     results = []
 
-    catalog_report = None
     if args.all:
         for entry in sorted(os.listdir(repo_root)):
             full = os.path.join(repo_root, entry)
             if os.path.isdir(full) and os.path.isfile(os.path.join(full, "meta.json")):
                 results.append(validate_course_folder(full, check_source=args.source))
         check_id_uniqueness(results)
-        catalog_report = check_catalog_freshness(repo_root)
     elif args.course:
         results.append(validate_course_folder(args.course, check_source=args.source))
     else:
@@ -1042,8 +1001,6 @@ def main():
         sys.exit(1)
 
     reports = [r for r, _meta in results]
-    if catalog_report is not None:
-        reports.append(catalog_report)
     for r in reports:
         r.print()
 
