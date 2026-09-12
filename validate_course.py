@@ -36,6 +36,7 @@ Exit code is non-zero if any check fails.
 """
 
 import argparse
+import colorsys
 import csv
 import io
 import json
@@ -93,6 +94,57 @@ MAX_IMAGE_DIMENSION = 256
 # in the app repo's own session memory for why. A flat 256x256 cap would
 # flag every correctly-generated cover as an error.
 MAX_COVER_DIMENSION = (1024, 432)
+
+# The app's own error/danger color is #FF4B4B (hue ~0°) — a course whose own
+# brand color sits in the same red/red-adjacent band reads as an error state
+# throughout the UI (course cards, progress rings, buttons), regardless of
+# whether red happens to be the topic's genuine real-world brand color (git,
+# emotional-intelligence were both real, previously-fixed instances of this).
+# Matches the band the flashcard-course-reviewer agent's checklist already
+# names — this hard-codes what used to be a manual, by-eye judgment call.
+RED_HUE_BAND = ((340, 360), (0, 20))
+
+
+def _hex_to_hue(hex_color):
+    """Returns the hue in degrees [0, 360) for a "#RRGGBB" string, or None if
+    it doesn't parse as one (validate_meta_csv reports that separately)."""
+    value = (hex_color or "").strip().lstrip("#")
+    if len(value) != 6:
+        return None
+    try:
+        r, g, b = (int(value[i : i + 2], 16) / 255 for i in (0, 2, 4))
+    except ValueError:
+        return None
+    h, _l, _s = colorsys.rgb_to_hls(r, g, b)
+    return h * 360
+
+
+def _in_red_band(hue):
+    return any(lo <= hue < hi for lo, hi in RED_HUE_BAND)
+
+
+def _validate_meta_csv_color(source_dir, report):
+    """source/meta.csv's own "color" column (distinct from meta.json — see
+    build_course_zip.py, which copies this CSV's color straight into the
+    package the app imports). Only checked when the CSV/column exist; an
+    unparseable value isn't flagged here since it isn't this check's job —
+    the app-side import would already reject a genuinely malformed hex."""
+    meta_csv_path = os.path.join(source_dir, "meta.csv")
+    if not os.path.isfile(meta_csv_path):
+        return
+    with open(meta_csv_path, encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return
+    color = (rows[0].get("color") or "").strip()
+    hue = _hex_to_hue(color)
+    if hue is not None and _in_red_band(hue):
+        report.error(
+            f'source/meta.csv "color" ("{color}") falls in the red/red-adjacent band '
+            f"(hue {round(hue)}°) — reads as an error state throughout the app's UI "
+            "regardless of whether red is the topic's own real-world brand color; "
+            "pick a color outside 340°-360°/0°-20° hue instead"
+        )
 
 
 def _image_dimensions(path):
@@ -759,31 +811,57 @@ def validate_zip(course_dir, meta, report):
                 validate_cards(units, cards, report, media_files=media_files)
 
             glossary_text = read("glossary.csv")
+            card_ids = {c.get("id") for c in cards} if cards_text is not None else None
             if glossary_text is not None:
-                validate_glossary_rows(read_csv_text(glossary_text), report)
+                validate_glossary_rows(read_csv_text(glossary_text), report, card_ids)
     except zipfile.BadZipFile:
         report.error(f'"{meta["file"]}" is not a valid zip file')
 
 
-def validate_glossary(source_dir, report):
+def validate_glossary(source_dir, report, cards=None):
     """Checks source/glossary.csv, if the course has one — see docs/GLOSSARY.md
     in the app repo for the feature this feeds (tap-to-define technical terms,
     one shared definition per term instead of duplicating it into every card).
-    Entirely optional: a course with no jargon-heavy content can ship none."""
+    Entirely optional: a course with no jargon-heavy content can ship none.
+    `cards` (from the same source/cards.csv already loaded by the caller)
+    lets introduced_by_card_id be checked against real card ids."""
     glossary_path = os.path.join(source_dir, "glossary.csv")
     if not os.path.isfile(glossary_path):
         return
     with open(glossary_path, encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
-    validate_glossary_rows(rows, report)
+    card_ids = {c.get("id") for c in cards} if cards is not None else None
+    validate_glossary_rows(rows, report, card_ids)
 
 
-def validate_glossary_rows(rows, report):
+def validate_glossary_rows(rows, report, card_ids=None):
     seen_terms = {}
     for i, row in enumerate(rows, start=1):
         term = (row.get("term") or "").strip()
         definition = (row.get("definition") or "").strip()
         link = (row.get("link") or "").strip()
+        # Which card actually teaches this term, in teaching order — powers
+        # tools/check_key_term_usage.py's forward-reference check (does any
+        # EARLIER card use the term before this one introduces it). No
+        # structural way to infer this automatically (glossary.csv has never
+        # linked to a specific card, unlike language-course vocabulary's
+        # main-card ledger) — a human/reviewer judgment call, filled in once
+        # per term. Warning, not error, until a review pass has back-filled
+        # every existing course's glossary — see docs/TASKS.md for rollout.
+        intro_id = (row.get("introduced_by_card_id") or "").strip()
+        if term:
+            if not intro_id:
+                report.warn(
+                    f'glossary.csv row {i} ("{term}"): no "introduced_by_card_id" set — '
+                    "tools/check_key_term_usage.py can't verify this term isn't used "
+                    "before it's taught until this is filled in with the id of the card "
+                    "that actually introduces it"
+                )
+            elif card_ids is not None and intro_id not in card_ids:
+                report.error(
+                    f'glossary.csv row {i} ("{term}"): introduced_by_card_id "{intro_id}" '
+                    "does not match any card in cards.csv"
+                )
         if not term:
             report.error(f"glossary.csv row {i}: \"term\" is required.")
             continue
@@ -855,7 +933,9 @@ def validate_source(course_dir, report, meta=None):
 
     validate_cards(units, cards, report, media_files=available)
 
-    validate_glossary(source_dir, report)
+    validate_glossary(source_dir, report, cards)
+
+    _validate_meta_csv_color(source_dir, report)
 
     # meta.json's optional "toc" is hand-copied from units.csv's title column
     # (see README.md) — nothing keeps them in sync automatically, so this is
