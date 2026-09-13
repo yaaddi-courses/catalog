@@ -9,7 +9,7 @@ the generated index, the shared tooling that builds it, and the docs. The
 course content is open source; the app itself is separate, closed-source
 software.
 
-**Browse online:** https://yaaddi-courses.github.io/yaaddi-courses/ — a
+**Browse online:** https://yaaddi-courses.github.io/catalog/ — a
 searchable, filterable catalog with cover images, deck lists, and example
 cards for every course, rebuilt automatically (see "Course catalog site"
 below).
