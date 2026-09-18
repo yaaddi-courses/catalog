@@ -1,0 +1,29 @@
+# Raw/unorganized authoring material belongs under .claude/state/, never here.
+# (.claude/ as a whole is already gitignored below — see that entry for why.)
+draft/
+
+# Per-course build tooling (the scripts/manifests that originally generated
+# a course's cards.csv or its narration audio) — dev-only, never read by the
+# app or validate_course.py at runtime. Keep locally, don't publish.
+*/source/build/
+
+# OS/editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+
+# GitHub Pages site build output (tools/build_site.py) — generated fresh by
+# .github/workflows/pages.yml on every push, never committed.
+_site/
+
+# Local dev-tooling config/instructions — project-specific settings for
+# whatever coding assistant/IDE is in use, not part of the shipped content.
+# Kept on disk (still fully functional locally), just never committed.
+# (A prior slip let two throwaway .claude/worktrees/* checkouts get committed
+# as git submodule links — this rule exists specifically so that never
+# recurs; see git history around the "--amend" commit.)
+.claude/
