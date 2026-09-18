@@ -45,12 +45,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SITE_TITLE = "Yaaddi Courses"
 SITE_TAGLINE = "Free, open-source spaced-repetition courses — browse what's inside before you install."
 GITHUB_REPO = "mohammad-reza-mahdiani/yaaddi"
-# Matches the app's own Help screen (src/screens/HelpScreen.tsx's
-# AUTHOR_NAME/AUTHOR_LINKS) — kept in sync manually since this is a
-# separate repo/build with no shared import between them.
-AUTHOR_NAME = "Mohammad Reza Mahdiani"
-AUTHOR_LINKEDIN = "https://www.linkedin.com/in/mohammad-reza-mahdiani/"
-AUTHOR_YOUTUBE = "https://www.youtube.com/channel/UCYWh8QADJmCVE3gdjcIGbPA"
 
 # Folders at repo root that are never course folders.
 SKIP_DIRS = {
@@ -191,13 +185,10 @@ PAGE_HEAD = """<!doctype html>
 <body>
 """
 
-PAGE_TAIL = f"""
+PAGE_TAIL = """
 <footer class="site-footer">
   <p>Open-source course content for <strong>Yaaddi</strong> — a free spaced-repetition
-  learning app. <a href="https://github.com/{{repo}}">View on GitHub</a></p>
-  <p class="footer-credit">Made by {AUTHOR_NAME} —
-  <a href="{AUTHOR_LINKEDIN}">LinkedIn</a> &middot;
-  <a href="{AUTHOR_YOUTUBE}">YouTube</a></p>
+  learning app. <a href="https://github.com/{repo}">View on GitHub</a></p>
 </footer>
 </body>
 </html>
@@ -208,6 +199,7 @@ NAV = """<header class="site-header">
   <nav class="header-nav">
     <a class="header-link" href="{root_prefix}help/index.html">Help</a>
     <a class="header-link" href="{root_prefix}contribute/index.html">Contribute</a>
+    <a class="header-link" href="{root_prefix}privacy/index.html">Privacy</a>
     <a class="header-link" href="https://github.com/{repo}">GitHub</a>
   </nav>
 </header>
@@ -393,6 +385,91 @@ def render_static_page(*, slug: str, nav_title: str, page_title: str, intro: str
     )
 
 
+def render_privacy_page(out_dir: Path) -> None:
+    sections = '''
+  <section class="section">
+    <h2>The short version</h2>
+    <p>Yaaddi doesn't have accounts, doesn't collect personal data, and
+    doesn't run ads or trackers. Your learning progress, stats, and
+    settings are stored only on your own device.</p>
+  </section>
+
+  <section class="section">
+    <h2>No account required</h2>
+    <p>Yaaddi does not require you to sign up, log in, or provide any
+    personal information to use the app. There is no account system.</p>
+  </section>
+
+  <section class="section">
+    <h2>Data stored on your device</h2>
+    <p>Everything Yaaddi needs to function — your course progress,
+    spaced-repetition schedule, stats, streaks, coins, and settings — is
+    stored locally on your device in a private database. This data:</p>
+    <ul>
+      <li>never leaves your device automatically,</li>
+      <li>is not sent to us or any third party,</li>
+      <li>is only included in a backup file if you explicitly choose to
+      create one (Settings &rarr; Backup &amp; restore), which you control
+      and store yourself.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>Fetching course content</h2>
+    <p>When you browse or download a course from the Course Library, your
+    device connects directly to GitHub's servers to fetch that course's
+    public content (the same way any web browser would). This means your
+    device's IP address is visible to GitHub during that request, governed
+    by <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">GitHub's
+    own privacy policy</a> — we do not control, store, or have access to
+    this data ourselves.</p>
+  </section>
+
+  <section class="section">
+    <h2>No ads, no analytics, no tracking</h2>
+    <p>Yaaddi contains no advertising SDKs, no analytics SDKs, and no
+    third-party trackers. We do not know how you use the app beyond what's
+    visible to you in your own local Stats screen.</p>
+  </section>
+
+  <section class="section">
+    <h2>Children's privacy</h2>
+    <p>Yaaddi is not directed at children under 13 and does not knowingly
+    collect any personal information from anyone, regardless of age —
+    consistent with everything above, since the app collects no personal
+    information from any user.</p>
+  </section>
+
+  <section class="section">
+    <h2>Open-source course content</h2>
+    <p>Course content in Yaaddi's Course Library is community-authored and
+    openly licensed — see this catalog's own GitHub repo for the content
+    itself and its license. This policy covers the Yaaddi app's handling
+    of your data, not the licensing of course content.</p>
+  </section>
+
+  <section class="section">
+    <h2>Changes to this policy</h2>
+    <p>If this policy changes, the date at the top of this page will
+    change accordingly. We recommend checking back periodically.</p>
+  </section>
+
+  <section class="section">
+    <h2>Contact</h2>
+    <p>Questions about this policy or how Yaaddi handles data can be sent
+    to <a href="mailto:support@yaaddi.com">support@yaaddi.com</a>.</p>
+  </section>
+'''
+    render_static_page(
+        slug="privacy",
+        nav_title="Privacy Policy",
+        page_title="Privacy Policy — Yaaddi",
+        intro="Last updated: September 17, 2026",
+        sections_html=sections,
+        out_dir=out_dir,
+    )
+
+
 def render_help_page(out_dir: Path) -> None:
     sections = f'''
   <section class="section">
@@ -547,6 +624,7 @@ def main() -> None:
         render_course_page(course, out_dir)
     render_help_page(out_dir)
     render_contribute_page(out_dir)
+    render_privacy_page(out_dir)
 
     print(f"Built {len(courses)} course page(s) into {out_dir}")
 
