@@ -232,6 +232,49 @@
     "deckCount": 24
   },
   {
+    "repo": "yaaddi-courses/scam-fraud-recognition",
+    "branch": "main",
+    "title": "Scam & Fraud Recognition",
+    "description": "Spot phishing, fake calls, AI voice cloning, and financial scams before they cost you money — the red flags that actually work, memorized for life.",
+    "file": "scam-fraud-recognition.zip",
+    "id": "f3e526a52113",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "scam-awareness",
+      "fraud-prevention",
+      "personal-safety",
+      "life-skills",
+      "beginner"
+    ],
+    "deckCount": 26
+  },
+  {
+    "repo": "yaaddi-courses/scam-tashkhis-farsi",
+    "branch": "main",
+    "title": "تشخیص کلاهبرداری",
+    "description": "پیامک جعلی، تماس بانکی، کلون صدا و کلاهبرداری تلگرامی را قبل از اینکه هزینه‌ای برایتان بسازد بشناسید — علامت‌های هشدار واقعی، نه حدس و گمان.",
+    "file": "scam-tashkhis-farsi.zip",
+    "id": "bda3b4eb02ab",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "scam-awareness",
+      "fraud-prevention",
+      "personal-safety",
+      "life-skills",
+      "beginner"
+    ],
+    "language": "fa",
+    "titleTranslations": {
+      "en": "Scam Recognition (Farsi)"
+    },
+    "descriptionTranslations": {
+      "en": "Native Farsi content covering Iran-specific fraud patterns: fake Sana/subsidy SMS, card-to-card fraud, messenger account takeover, Telegram investment scams, and AI voice cloning."
+    },
+    "deckCount": 23
+  },
+  {
     "repo": "yaaddi-courses/sdlc",
     "branch": "main",
     "title": "The Software Development Lifecycle (SDLC)",
