@@ -45,6 +45,12 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SITE_TITLE = "Yaaddi Courses"
 SITE_TAGLINE = "Free, open-source spaced-repetition courses — browse what's inside before you install."
 GITHUB_REPO = "mohammad-reza-mahdiani/yaaddi"
+# The org every individual course's own dedicated repo lives under (see
+# README.md's "one repo per course" architecture) — used to link each
+# course's detail page back to ITS OWN repo (to star/watch/open an issue
+# on that specific course), distinct from GITHUB_REPO above (the app repo,
+# used for the site nav's generic "report an issue with the app" links).
+COURSES_ORG = "yaaddi-courses"
 
 # Folders at repo root that are never course folders.
 SKIP_DIRS = {
@@ -105,6 +111,11 @@ def build_course_data(course_dir: Path) -> dict:
 
     return {
         "slug": slug,
+        # This course's own dedicated repo — one repo per course, named
+        # after its folder/slug (see README.md's "one repo per course"
+        # architecture; `ensure_course_ids.py`/the catalog build never
+        # rename a course's folder after publishing, so this is stable).
+        "repo_url": f"https://github.com/{COURSES_ORG}/{slug}",
         "id": meta.get("id", slug),
         "title": meta["title"],
         "description": meta.get("description", ""),
@@ -324,6 +335,8 @@ def render_course_page(course: dict, out_dir: Path) -> None:
       <h1>{esc(course["title"])}</h1>
       <p class="course-desc-large">{esc(course["description"])}</p>
       <div class="tag-row">{render_tag_chips(course["tags"])}</div>
+      <p class="course-repo-link"><a href="{esc(course["repo_url"])}" target="_blank" rel="noopener">
+        View this course's repo on GitHub &rarr;</a> — star it, open an issue, or suggest a fix.</p>
       <div class="course-stats-row">
         <div class="stat"><strong>{course["deck_count"]}</strong><span>decks</span></div>
         <div class="stat"><strong>{course["main_count"]}</strong><span>main cards</span></div>
