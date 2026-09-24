@@ -1,5 +1,24 @@
 [
   {
+    "repo": "yaaddi-courses/ai-model-optimization",
+    "branch": "main",
+    "title": "Optimizing AI Models for Inference",
+    "description": "How to make trained AI models smaller, faster and cheaper to run: quantization, pruning, distillation, batching, compilers and runtimes, LLM tricks like the KV cache and speculative decoding, plus serving cost and how to verify nothing…",
+    "file": "ai-model-optimization.zip",
+    "id": "e87e69818348",
+    "image": "cover.png",
+    "version": "1.1.0",
+    "tags": [
+      "ai",
+      "machine-learning",
+      "optimization",
+      "inference",
+      "llm",
+      "intermediate"
+    ],
+    "deckCount": 31
+  },
+  {
     "repo": "yaaddi-courses/canadian-citizenship",
     "branch": "main",
     "title": "Canadian Citizenship",
@@ -7,7 +26,7 @@
     "file": "canadian-citizenship.zip",
     "id": "7f3a91c04e2b",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "canada",
       "citizenship",
@@ -25,7 +44,7 @@
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "python",
       "concurrency",
@@ -43,7 +62,7 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "docker",
       "devops",
@@ -60,7 +79,7 @@
     "file": "effective-vibecoding.zip",
     "id": "241d8884a6f3",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "ai",
       "programming",
@@ -118,7 +137,7 @@
     "file": "git.zip",
     "id": "558d49ba4cfe",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "git",
       "version-control",
@@ -153,7 +172,7 @@
     "file": "kubernetes-fundamentals.zip",
     "id": "4c931d3144a0",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "kubernetes",
       "devops",
@@ -187,7 +206,7 @@
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "mlops",
       "machine-learning",
@@ -223,7 +242,7 @@
     "file": "python-basics.zip",
     "id": "d1aae68588c5",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "python",
       "programming",
@@ -239,7 +258,7 @@
     "file": "scam-fraud-recognition.zip",
     "id": "f3e526a52113",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -333,7 +352,7 @@
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "pytest",
       "python",
