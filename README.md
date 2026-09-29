@@ -54,6 +54,15 @@ and `branch` (that repo's default branch) instead of the old monorepo's
 permanently, since an already-installed app build can never be forced to
 understand a new one.
 
+## Code samples in cards
+
+A code sample that stands on its own line(s) is a **fenced block** (three
+backticks + language), not one inline backtick span per line; short code inside
+a sentence stays a single-backtick span. Convert and format an existing course
+with `tools/format_code_blocks.py <course> --lang python --write`, then rebuild
+the zip, bump the version and run `validate_course.py`. Full rules:
+`app/docs/CARD_AUTHORING.md`, "Code samples in card text".
+
 ## Repo layout
 
 ```
