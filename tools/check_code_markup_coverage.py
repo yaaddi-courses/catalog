@@ -102,7 +102,18 @@ FILENAME_RE = re.compile(
     r"env|lock|gitignore|dockerignore)\b|"
     r"\b(Dockerfile|Makefile|requirements\.txt|package\.json|\.gitignore)\b"
 )
-INLINE_PATTERNS = [("call", CALL_RE), ("cli", CLI_RE), ("flag", FLAG_RE), ("filename", FILENAME_RE)]
+# "git ___ file.txt": the tool name, a blank standing in for its subcommand, and an
+# optional file-ish argument are ONE command. Matched on the blank placeholder.
+CLI_BLANK_RE = re.compile(
+    r"\b(?:git|docker|kubectl|pip3?|npm|npx|helm|terraform)\s+ZZBLANKZZ(?:\s+[\w./-]*[./-][\w./-]*)?"
+)
+INLINE_PATTERNS = [
+    ("cli", CLI_BLANK_RE),
+    ("call", CALL_RE),
+    ("cli", CLI_RE),
+    ("flag", FLAG_RE),
+    ("filename", FILENAME_RE),
+]
 
 # Whole-line-is-code heuristics (only meaningful for multi-line text).
 # The block-opener branch REQUIRES a literal colon somewhere in the line -
@@ -156,13 +167,6 @@ BLANK_IS_CODE_CONTEXT_RE = re.compile(
 # looks like code).
 BARE_CODE_TOKEN_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.]*(\(\))?$|^[!=<>]=?$|^-?\d+(\.\d+)?$")
 
-# The argument list directly after a blank standing in for a function name
-# ("___('hi')") - CALL_RE requires an identifier before the "(", which the
-# blank itself isn't (it's been split away by then), so this catches the
-# leading "(...)" on its own.
-LEADING_PAREN_RE = re.compile(r"^\([^()\n]*\)")
-
-
 def find_inline_candidates(text):
     if not text:
         return []
@@ -185,79 +189,80 @@ def find_inline_candidates(text):
     return candidates
 
 
-def fix_text(text):
-    """Return (new_text, list_of_fix_descriptions)."""
+FENCE_RE = re.compile(r"```.*?```", re.S)
+# Stands in for the blank while scanning, so `t.___()` is seen (and wrapped) as ONE call.
+BLANK_PLACEHOLDER = "ZZBLANKZZ"
+
+
+def _fix_prose(text, whole_lines=True):
+    """Fix one stretch of text that contains no fenced block."""
     if not text:
         return text, []
-    if "\n" not in text and "___" not in text and not find_inline_candidates(text):
-        # The blank-aware path below (LEADING_PAREN_RE etc.) needs a "___"
-        # to still go through even when a plain top-level scan finds
-        # nothing - find_inline_candidates alone can't see "___('hi')"'s
-        # code since CALL_RE requires an identifier before "(", which the
-        # blank itself isn't.
+    if "___" in text and "`" in text:
+        # Already marked up by the author. A `code span` may run straight through
+        # the blank; scanning around it would cut the span in two and re-wrap
+        # the pieces - leave the text alone.
         return text, []
-
     fixes = []
-    lines = text.split("\n")
     new_lines = []
-    for line in lines:
+    for line in text.split("\n"):
         stripped = line.strip()
-        if "___" in line:
-            # A select_blank fill-in-the-blank line: never a whole-line code
-            # statement (it's "before ___ after" prose/code mix), so skip
-            # the whole-line check, but the before/after text around the
-            # blank can still independently contain real unmarked code
-            # (e.g. "___('hi') shows text on the screen." - the "('hi')"
-            # after the blank deserves markup same as anywhere else). Split
-            # on the blank, fix each side, and rejoin with "___" untouched
-            # so selectBlankCard.tsx's own content.prompt.split('___') is
-            # never affected - CALL_RE's letter-required lookahead already
-            # keeps this pass from re-matching the blank itself.
-            parts = line.split("___")
-            fixed_parts = []
-            for part in parts:
-                paren_prefix = ""
-                rest = part
-                m = LEADING_PAREN_RE.match(part)
-                if m:
-                    paren_prefix = f"`{m.group()}`"
-                    fixes.append(("call", m.group()))
-                    rest = part[m.end():]
-                candidates = find_inline_candidates(rest)
-                if not candidates:
-                    fixed_parts.append(paren_prefix + rest)
-                    continue
-                out = []
-                cursor = 0
-                for kind, matched, start, end in candidates:
-                    out.append(rest[cursor:start])
-                    out.append(f"`{matched}`")
-                    fixes.append((kind, matched))
-                    cursor = end
-                out.append(rest[cursor:])
-                fixed_parts.append(paren_prefix + "".join(out))
-            new_lines.append("___".join(fixed_parts))
-            continue
-        if stripped and "`" not in line and CODE_LINE_RE.match(stripped):
+        scan = line.replace("___", BLANK_PLACEHOLDER)
+        if whole_lines and "___" not in line and stripped and "`" not in line and CODE_LINE_RE.match(stripped):
             leading_ws = line[: len(line) - len(line.lstrip())]
             new_lines.append(f"{leading_ws}`{stripped}`")
             fixes.append(("whole-line", stripped))
-        else:
-            # Inline candidates within this one line
-            candidates = find_inline_candidates(line)
-            if not candidates:
-                new_lines.append(line)
-                continue
-            out = []
-            cursor = 0
-            for kind, matched, start, end in candidates:
-                out.append(line[cursor:start])
-                out.append(f"`{matched}`")
-                fixes.append((kind, matched))
-                cursor = end
-            out.append(line[cursor:])
-            new_lines.append("".join(out))
+            continue
+        candidates = find_inline_candidates(scan)
+        if not candidates:
+            new_lines.append(line)
+            continue
+        out = []
+        cursor = 0
+        for kind, matched, start, end in candidates:
+            out.append(scan[cursor:start])
+            out.append(f"`{matched}`")
+            fixes.append((kind, matched.replace(BLANK_PLACEHOLDER, "___")))
+            cursor = end
+        out.append(scan[cursor:])
+        new_lines.append("".join(out).replace(BLANK_PLACEHOLDER, "___"))
     return "\n".join(new_lines), fixes
+
+
+def fix_options_cell(text):
+    """Fix an options cell option by option. Each option is inline-fixed on its own
+    (never as a whole code line, and "|" is never inside a span)."""
+    if not text:
+        return text, []
+    fixes = []
+    parts = []
+    for option in text.split("|"):
+        if "`" in option:
+            parts.append(option)
+            continue
+        fixed, option_fixes = fix_text(option, whole_lines=False)
+        parts.append(fixed)
+        fixes += option_fixes
+    return "|".join(parts), fixes
+
+
+def fix_text(text, whole_lines=True):
+    """Return (new_text, list_of_fix_descriptions). Fenced code blocks are never touched."""
+    if not text:
+        return text, []
+    pieces = []
+    fixes = []
+    cursor = 0
+    for m in FENCE_RE.finditer(text):
+        fixed, piece_fixes = _fix_prose(text[cursor : m.start()], whole_lines)
+        pieces.append(fixed)
+        fixes += piece_fixes
+        pieces.append(m.group())
+        cursor = m.end()
+    fixed, piece_fixes = _fix_prose(text[cursor:], whole_lines)
+    pieces.append(fixed)
+    fixes += piece_fixes
+    return "".join(pieces), fixes
 
 
 def fix_options_field(options_text, ctype, prompt_text):
@@ -294,6 +299,13 @@ def fix_options_field(options_text, ctype, prompt_text):
     return "|".join(new_options), fixes
 
 
+def csv_quote(value):
+    """The text as it sits in the CSV file (quoted when it has commas, quotes or newlines)."""
+    if re.search(r'[,"\r\n]', value):
+        return '"' + value.replace('"', '""') + '"'
+    return value
+
+
 def check_or_fix_course(course_dir, do_fix):
     cards_path = os.path.join(course_dir, "source", "cards.csv")
     if not os.path.exists(cards_path):
@@ -317,7 +329,7 @@ def check_or_fix_course(course_dir, do_fix):
             if field == "options":
                 new_text, fixes = fix_options_field(text, ctype, row[prompt_idx])
                 if not fixes:
-                    new_text, fixes = fix_text(text)
+                    new_text, fixes = fix_options_cell(text)
             else:
                 new_text, fixes = fix_text(text)
             if fixes:
@@ -326,8 +338,12 @@ def check_or_fix_course(course_dir, do_fix):
                     row[idx] = new_text
 
     if do_fix and all_fixes:
-        with open(cards_path, "w", encoding="utf-8", newline="") as f:
-            csv.writer(f).writerows(rows)
+        with open(cards_path, "rb") as f:
+            raw = f.read().decode("utf-8")
+        for _cid, _field, _fixes, old, new in all_fixes:
+            raw = raw.replace(csv_quote(old), csv_quote(new))
+        with open(cards_path, "wb") as f:
+            f.write(raw.encode("utf-8"))
 
     return all_fixes
 

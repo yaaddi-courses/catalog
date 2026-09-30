@@ -35,11 +35,13 @@ Reports, in this order:
 """
 import argparse
 import csv
+import json
 import re
-import sys
 from pathlib import Path
 
 MEANING_QUESTION_RE = re.compile(r"^(.*?)\s*یعنی چی؟?$")
+# A letters pack: first line is the capital and small letter ("B b" in the sound decks, "Bb" in the names deck).
+LETTER_LINE_RE = re.compile(r"^([A-Z]) ?([a-z])$")
 
 
 def load_cards(course_dir: Path) -> list[dict]:
@@ -70,6 +72,10 @@ def extract_target_word(card: dict) -> str | None:
     ctype = card["type"]
     prompt = (card.get("prompt") or "").strip()
     if ctype == "multiple_choice":
+        letter = LETTER_LINE_RE.match(prompt.splitlines()[0].strip()) if prompt else None
+        # "Bb" / "B b" is a letter; "No" / "My" / "Go" are words (the second letter is not the small form).
+        if letter and letter.group(2) == letter.group(1).lower():
+            return letter.group(1)
         m = MEANING_QUESTION_RE.match(prompt)
         return m.group(1).strip() if m else None
     if ctype == "speech_recognition":
@@ -102,13 +108,24 @@ def find_duplicates(ledger: list[tuple[int, str, str]]) -> dict[str, list[tuple[
     return {k: v for k, v in by_norm.items() if len(v) > 1}
 
 
-def find_undefined_references(
+def classify_chip_references(
     cards: list[dict], ledger: list[tuple[int, str, str]], unit_order: dict[str, int]
-) -> list[str]:
-    """Chips inside order/match_pairs/select_blank options that don't match
-    anything taught in this card's own unit or an earlier one. Scoped to
-    these three types deliberately: their options are already discrete,
-    atomic chips (not free prose), so comparing them to the ledger is
+) -> list[dict]:
+    """Every chip inside an order/match_pairs/select_blank card's options that
+    is not taught in that card's own unit or an earlier one, classified as:
+
+    - ``taught_later``: the word IS taught, but in a LATER deck (a forward
+      reference — the learner meets it before being taught it). The finding
+      says exactly where it is taught (``taught_in_unit`` / ``taught_in_card``).
+    - ``never_taught``: no card in the course teaches it at all.
+
+    Report-only by design (owner decision 2026-09-30, docs/TASKS.md T59.12):
+    what to do about a forward reference — reorder packs, add a teaching card,
+    or reword the exercise — is a content decision for a human or the
+    reviewer skill, so this tool only makes each one precise and easy to act on.
+
+    Scoped to these three types deliberately: their options are already
+    discrete, atomic chips (not free prose), so comparing them to the ledger is
     reliable — unlike a full sentence (speech_recognition/reading_passage),
     which would need real tokenization against multi-word taught phrases to
     check safely.
@@ -125,6 +142,14 @@ def find_undefined_references(
     (a narrower, less common class of bug) — a reasonable trade for a tool
     meant to be re-run after every edit, not a one-time perfect audit."""
     main_word_by_id = {cid: w for cid, _unit, w in ledger}
+    # First deck (lowest unit rank) and card that teaches each normalized word.
+    first_taught: dict[str, tuple[int, str, str]] = {}
+    for cid, unit_id, word in ledger:
+        rank = unit_order.get(unit_id, 10**9)
+        key = normalize(word)
+        if key not in first_taught or (rank, cid) < (first_taught[key][0], int(first_taught[key][2])):
+            first_taught[key] = (rank, unit_id, str(cid))
+
     findings = []
     for c in cards:
         ctype = c["type"]
@@ -151,7 +176,7 @@ def find_undefined_references(
         taught_before = {
             normalize(w) for _cid, unit_id, w in ledger if unit_order.get(unit_id, 10**9) <= card_unit_rank
         }
-        options_raw = (c.get("options") or "")
+        options_raw = c.get("options") or ""
         if ctype == "match_pairs":
             chips = [pair.split("↔", 1)[0] for pair in options_raw.split("|") if "↔" in pair]
         else:
@@ -160,24 +185,60 @@ def find_undefined_references(
             chip = chip.strip()
             if not chip or chip == "___":
                 continue
-            if normalize(chip) not in taught_before:
-                findings.append(
-                    f'card {c["id"]} ({ctype}, unit={c["unit_id"]}, related_main_id={related}): '
-                    f'"{chip}" does not match any word taught in this deck or an earlier one'
-                )
+            key = normalize(chip)
+            if key in taught_before:
+                continue
+            where = first_taught.get(key)
+            findings.append(
+                {
+                    "card_id": str(c["id"]),
+                    "type": ctype,
+                    "unit_id": c["unit_id"],
+                    "related_main_id": related,
+                    "chip": chip,
+                    "kind": "taught_later" if where else "never_taught",
+                    "taught_in_unit": where[1] if where else None,
+                    "taught_in_card": where[2] if where else None,
+                }
+            )
     return findings
+
+
+def format_reference(finding: dict, units: dict[str, str] | None = None) -> str:
+    """One human-readable line for a `classify_chip_references` finding."""
+    head = (
+        f'card {finding["card_id"]} ({finding["type"]}, unit={finding["unit_id"]}, '
+        f'related_main_id={finding["related_main_id"]}): "{finding["chip"]}"'
+    )
+    if finding["kind"] == "taught_later":
+        deck = (units or {}).get(finding["taught_in_unit"], finding["taught_in_unit"])
+        return f'{head} is used before it is taught - taught later, in deck "{deck}" (card {finding["taught_in_card"]})'
+    return f"{head} is taught nowhere in this course (or is a proper noun - verify)"
+
+
+def find_undefined_references(
+    cards: list[dict], ledger: list[tuple[int, str, str]], unit_order: dict[str, int]
+) -> list[str]:
+    """Human-readable lines for `classify_chip_references` (kept for callers of the old API)."""
+    return [format_reference(f) for f in classify_chip_references(cards, ledger, unit_order)]
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("course_folder")
     parser.add_argument("--words", action="store_true", help="print only the taught-word list")
+    parser.add_argument("--json", action="store_true", help="print the reference findings as JSON and nothing else")
     args = parser.parse_args()
 
     course_dir = Path(args.course_folder)
     cards = load_cards(course_dir)
     units = load_units(course_dir)
     ledger = build_ledger(cards)
+
+    if args.json:
+        references = classify_chip_references(cards, ledger, load_unit_order(course_dir))
+        print(json.dumps({"course": course_dir.name, "references": references}, ensure_ascii=False, indent=2))
+        return
 
     print(f"=== {course_dir.name}: {len(ledger)} vocabulary items across {len(units)} decks ===\n")
 
@@ -203,7 +264,8 @@ def main() -> None:
         print(f"- {locs}")
 
     unit_order = load_unit_order(course_dir)
-    undefined = find_undefined_references(cards, ledger, unit_order)
+    references = classify_chip_references(cards, ledger, unit_order)
+    undefined = [format_reference(f, units) for f in references]
     print(
         "\n=== Possibly-undefined references (heuristic — verify before fixing; "
         "a proper noun in an example sentence, e.g. a person's name, is an "
