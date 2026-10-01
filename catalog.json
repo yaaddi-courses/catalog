@@ -7,7 +7,7 @@
     "file": "ai-model-optimization.zip",
     "id": "e87e69818348",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "tags": [
       "ai",
       "machine-learning",
@@ -16,7 +16,7 @@
       "llm",
       "intermediate"
     ],
-    "deckCount": 31
+    "deckCount": 32
   },
   {
     "repo": "yaaddi-courses/canadian-citizenship",
@@ -26,7 +26,7 @@
     "file": "canadian-citizenship.zip",
     "id": "7f3a91c04e2b",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "canada",
       "citizenship",
@@ -34,7 +34,7 @@
       "history",
       "government"
     ],
-    "deckCount": 21
+    "deckCount": 22
   },
   {
     "repo": "yaaddi-courses/concurrency-in-python",
@@ -44,7 +44,7 @@
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "python",
       "concurrency",
@@ -62,14 +62,14 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "tags": [
       "docker",
       "devops",
       "infrastructure",
       "beginner"
     ],
-    "deckCount": 44
+    "deckCount": 45
   },
   {
     "repo": "yaaddi-courses/effective-vibecoding",
@@ -79,14 +79,14 @@
     "file": "effective-vibecoding.zip",
     "id": "241d8884a6f3",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "tags": [
       "ai",
       "programming",
       "productivity",
       "beginner"
     ],
-    "deckCount": 27
+    "deckCount": 28
   },
   {
     "repo": "yaaddi-courses/emotional-intelligence",
@@ -96,14 +96,14 @@
     "file": "emotional-intelligence.zip",
     "id": "d29883f5a134",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "emotional-intelligence",
       "self-improvement",
       "communication",
       "beginner"
     ],
-    "deckCount": 40
+    "deckCount": 41
   },
   {
     "repo": "yaaddi-courses/english-for-farsi-speakers",
@@ -113,7 +113,7 @@
     "file": "english-for-farsi-speakers.zip",
     "id": "fe65dde5e532",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.4.0",
     "tags": [
       "english",
       "language-learning",
@@ -127,7 +127,7 @@
     "descriptionTranslations": {
       "fa": "انگلیسی کاربردی و واقعی برای فارسی‌زبان‌هایی که می‌خواهند سفر کنند و در موقعیت‌های روزمره از پس خودشان بربیایند — سلام و احوال‌پرسی، فرودگاه، هتل، غذا، خرید، گپ زدن، و حل مشکلات. بدون تمرین‌های خشک گرامری، بدون آماده شدن برای امتحان، فقط عبارت‌هایی که واقعاً به کارت می‌آیند."
     },
-    "deckCount": 18
+    "deckCount": 26
   },
   {
     "repo": "yaaddi-courses/git",
@@ -137,14 +137,14 @@
     "file": "git.zip",
     "id": "558d49ba4cfe",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "git",
       "version-control",
       "programming",
       "beginner"
     ],
-    "deckCount": 39
+    "deckCount": 40
   },
   {
     "repo": "yaaddi-courses/harness",
@@ -154,7 +154,7 @@
     "file": "harness.zip",
     "id": "dba791593bf6",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "cicd",
       "harness",
@@ -162,7 +162,7 @@
       "deployment",
       "intermediate"
     ],
-    "deckCount": 34
+    "deckCount": 35
   },
   {
     "repo": "yaaddi-courses/kubernetes-fundamentals",
@@ -172,14 +172,14 @@
     "file": "kubernetes-fundamentals.zip",
     "id": "4c931d3144a0",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "tags": [
       "kubernetes",
       "devops",
       "infrastructure",
       "beginner"
     ],
-    "deckCount": 41
+    "deckCount": 42
   },
   {
     "repo": "yaaddi-courses/managing-software-projects",
@@ -189,14 +189,14 @@
     "file": "managing-software-projects.zip",
     "id": "e3ae11104967",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "project-management",
       "agile",
       "software-engineering",
       "beginner"
     ],
-    "deckCount": 35
+    "deckCount": 36
   },
   {
     "repo": "yaaddi-courses/mlops",
@@ -206,7 +206,7 @@
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "mlops",
       "machine-learning",
@@ -214,7 +214,7 @@
       "data-science",
       "intermediate"
     ],
-    "deckCount": 24
+    "deckCount": 25
   },
   {
     "repo": "yaaddi-courses/opentelemetry",
@@ -224,7 +224,7 @@
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "observability",
       "opentelemetry",
@@ -232,7 +232,7 @@
       "monitoring",
       "intermediate"
     ],
-    "deckCount": 38
+    "deckCount": 39
   },
   {
     "repo": "yaaddi-courses/python-basics",
@@ -242,13 +242,13 @@
     "file": "python-basics.zip",
     "id": "d1aae68588c5",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "python",
       "programming",
       "beginner"
     ],
-    "deckCount": 24
+    "deckCount": 25
   },
   {
     "repo": "yaaddi-courses/scam-fraud-recognition",
@@ -258,7 +258,7 @@
     "file": "scam-fraud-recognition.zip",
     "id": "f3e526a52113",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -266,7 +266,7 @@
       "life-skills",
       "beginner"
     ],
-    "deckCount": 26
+    "deckCount": 27
   },
   {
     "repo": "yaaddi-courses/scam-tashkhis-farsi",
@@ -276,7 +276,7 @@
     "file": "scam-tashkhis-farsi.zip",
     "id": "bda3b4eb02ab",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -301,14 +301,14 @@
     "file": "sdlc.zip",
     "id": "530976d2fe64",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "sdlc",
       "software-engineering",
       "process",
       "beginner"
     ],
-    "deckCount": 34
+    "deckCount": 35
   },
   {
     "repo": "yaaddi-courses/software-architecture",
@@ -318,14 +318,14 @@
     "file": "software-architecture.zip",
     "id": "bf45793f1b9c",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "software-architecture",
       "system-design",
       "engineering",
       "intermediate"
     ],
-    "deckCount": 40
+    "deckCount": 41
   },
   {
     "repo": "yaaddi-courses/testing-in-software-engineering",
@@ -335,14 +335,14 @@
     "file": "testing-in-software-engineering.zip",
     "id": "eba617a0e3bf",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "testing",
       "software-engineering",
       "quality",
       "beginner"
     ],
-    "deckCount": 32
+    "deckCount": 33
   },
   {
     "repo": "yaaddi-courses/testing-with-pytest",
@@ -352,7 +352,7 @@
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "pytest",
       "python",
@@ -360,6 +360,6 @@
       "qa",
       "intermediate"
     ],
-    "deckCount": 23
+    "deckCount": 24
   }
 ]
