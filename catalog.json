@@ -1,5 +1,21 @@
 [
   {
+    "repo": "yaaddi-courses/ai-at-work",
+    "branch": "main",
+    "title": "AI at Work",
+    "description": "Understand how AI really works, write prompts that get good results, check what it tells you, and use it safely in everyday work. No coding needed. For developers, see Effective Vibecoding.",
+    "file": "ai-at-work.zip",
+    "id": "b3f60a1c9d27",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "ai",
+      "productivity",
+      "prompting",
+      "beginner"
+    ]
+  },
+  {
     "repo": "yaaddi-courses/ai-model-optimization",
     "branch": "main",
     "title": "Optimizing AI Models for Inference",
@@ -53,6 +69,23 @@
       "intermediate"
     ],
     "deckCount": 85
+  },
+  {
+    "repo": "yaaddi-courses/day-trading-plan",
+    "branch": "main",
+    "title": "Day Trading Plan",
+    "description": "A complete-beginner path to building and following a real day trading plan — market mechanics, reading charts, risk and money management, and the psychology and discipline that make a plan actually stick.",
+    "file": "day-trading-plan.zip",
+    "id": "76c5271fd522",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "trading",
+      "finance",
+      "risk-management",
+      "beginner"
+    ],
+    "deckCount": 29
   },
   {
     "repo": "yaaddi-courses/docker-and-containers",
