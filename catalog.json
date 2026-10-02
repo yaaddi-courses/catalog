@@ -163,6 +163,22 @@
     "deckCount": 26
   },
   {
+    "repo": "yaaddi-courses/fix-common-english-mistakes",
+    "branch": "main",
+    "title": "Fix Common English Mistakes",
+    "description": "Stop the everyday mistakes native speakers still make: sound-alike words, apostrophes, commas, I vs me, less vs fewer, and more. Short American English lessons you can use in texts, emails and work.",
+    "file": "fix-common-english-mistakes.zip",
+    "id": "c7a2e9d41b58",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "english",
+      "grammar",
+      "writing",
+      "everyday"
+    ]
+  },
+  {
     "repo": "yaaddi-courses/git",
     "branch": "main",
     "title": "Git",
