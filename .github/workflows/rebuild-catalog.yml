@@ -41,7 +41,7 @@ jobs:
         run: python tools/build_catalog.py
 
       - name: Commit catalog.json, if changed
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: rebuild catalog.json"
           file_pattern: "catalog.json"
