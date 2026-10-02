@@ -398,88 +398,97 @@ def render_static_page(*, slug: str, nav_title: str, page_title: str, intro: str
     )
 
 
+PRIVACY_UPDATED = "October 1, 2026"
+
+# Layout "B — at a glance" (owner-approved 2026-10-01): hero, four summary
+# cards, a table of what the app can use and when, then collapsible details.
+# Keep this in step with the app repo's docs/PRIVACY_POLICY.md and
+# docs/STORE_COMPLIANCE.md (the Play/App Store forms must match this text).
+PRIVACY_CARDS = [
+    ("&#128274;", "On-device only", "Courses, progress and settings never leave your phone."),
+    ("&#128683;", "No tracking", "No ads, analytics or third-party trackers."),
+    ("&#128100;", "No account", "Nothing to sign up for, nothing stored about you on a server."),
+    ("&#128465;&#65039;", "You&rsquo;re in control", "Erase all data in Settings, or just uninstall."),
+]
+
+PRIVACY_FEATURES = [
+    ("Course Library", "needs internet", "You open it",
+     'Downloads public course files from GitHub. GitHub sees your IP address, under '
+     '<a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">its own privacy statement</a>.'),
+    ("Microphone", "optional", "You tap the mic on a speech card",
+     "Your phone&rsquo;s built-in speech recognition (Google&rsquo;s on Android, Apple&rsquo;s on iOS) checks what you said and may process "
+     "the audio on its servers under its own policy. Yaaddi never records, stores or receives the audio &mdash; only the recognised "
+     "text, used once to check your answer. Speech cards can always be skipped."),
+    ("Photos", "optional", "You pick a cover image",
+     "Only the picture you choose is read; a copy stays on your device."),
+    ("Notifications", "optional", "You turn on study reminders",
+     "Reminders are scheduled on your phone; nothing is sent to a server."),
+]
+
+PRIVACY_DETAILS = [
+    ("Where is my data stored?",
+     "In a private database on your device: courses, cards, review history, streaks, Coins and settings. It is never sent to us or "
+     "any third party. A backup file is created only if you choose <em>Backup &amp; restore</em>, and you decide where it goes."),
+    ("How do I delete everything?",
+     "Open <em>Settings &rarr; Delete all my data</em> in the app, or uninstall it. We hold no copy, so there is nothing else to delete."),
+    ("Do you use ads, analytics or tracking?",
+     "No. Yaaddi contains no advertising SDKs, no analytics SDKs and no third-party trackers. We know nothing about how you use the app "
+     "beyond what you can see in your own Stats screen."),
+    ("Is it safe for children?",
+     "Yaaddi is not directed at children under 13 and does not knowingly collect personal information from anyone, of any age."),
+    ("Who owns the course content?",
+     "Courses in the Course Library are community-authored and openly licensed &mdash; see this catalog&rsquo;s GitHub repository for the "
+     "content and its license. This policy covers how the app handles your data, not course licensing."),
+    ("Will this policy change?",
+     "If it does, the date at the top of this page changes. Questions: "
+     '<a href="mailto:support@yaaddi.com">support@yaaddi.com</a>.'),
+]
+
+
 def render_privacy_page(out_dir: Path) -> None:
-    sections = '''
-  <section class="section">
-    <h2>The short version</h2>
-    <p>Yaaddi doesn't have accounts, doesn't collect personal data, and
-    doesn't run ads or trackers. Your learning progress, stats, and
-    settings are stored only on your own device.</p>
-  </section>
-
-  <section class="section">
-    <h2>No account required</h2>
-    <p>Yaaddi does not require you to sign up, log in, or provide any
-    personal information to use the app. There is no account system.</p>
-  </section>
-
-  <section class="section">
-    <h2>Data stored on your device</h2>
-    <p>Everything Yaaddi needs to function — your course progress,
-    spaced-repetition schedule, stats, streaks, coins, and settings — is
-    stored locally on your device in a private database. This data:</p>
-    <ul>
-      <li>never leaves your device automatically,</li>
-      <li>is not sent to us or any third party,</li>
-      <li>is only included in a backup file if you explicitly choose to
-      create one (Settings &rarr; Backup &amp; restore), which you control
-      and store yourself.</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>Fetching course content</h2>
-    <p>When you browse or download a course from the Course Library, your
-    device connects directly to GitHub's servers to fetch that course's
-    public content (the same way any web browser would). This means your
-    device's IP address is visible to GitHub during that request, governed
-    by <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">GitHub's
-    own privacy policy</a> — we do not control, store, or have access to
-    this data ourselves.</p>
-  </section>
-
-  <section class="section">
-    <h2>No ads, no analytics, no tracking</h2>
-    <p>Yaaddi contains no advertising SDKs, no analytics SDKs, and no
-    third-party trackers. We do not know how you use the app beyond what's
-    visible to you in your own local Stats screen.</p>
-  </section>
-
-  <section class="section">
-    <h2>Children's privacy</h2>
-    <p>Yaaddi is not directed at children under 13 and does not knowingly
-    collect any personal information from anyone, regardless of age —
-    consistent with everything above, since the app collects no personal
-    information from any user.</p>
-  </section>
-
-  <section class="section">
-    <h2>Open-source course content</h2>
-    <p>Course content in Yaaddi's Course Library is community-authored and
-    openly licensed — see this catalog's own GitHub repo for the content
-    itself and its license. This policy covers the Yaaddi app's handling
-    of your data, not the licensing of course content.</p>
-  </section>
-
-  <section class="section">
-    <h2>Changes to this policy</h2>
-    <p>If this policy changes, the date at the top of this page will
-    change accordingly. We recommend checking back periodically.</p>
-  </section>
-
-  <section class="section">
-    <h2>Contact</h2>
-    <p>Questions about this policy or how Yaaddi handles data can be sent
-    to <a href="mailto:support@yaaddi.com">support@yaaddi.com</a>.</p>
-  </section>
-'''
-    render_static_page(
-        slug="privacy",
-        nav_title="Privacy Policy",
-        page_title="Privacy Policy — Yaaddi",
-        intro="Last updated: September 17, 2026",
-        sections_html=sections,
-        out_dir=out_dir,
+    cards = "\n".join(
+        f'    <div class="privacy-card"><div class="privacy-card-icon" aria-hidden="true">{icon}</div>'
+        f"<strong>{title}</strong><span>{text}</span></div>"
+        for icon, title, text in PRIVACY_CARDS
+    )
+    rows = "\n".join(
+        f'      <tr><td><strong>{feature}</strong> <span class="privacy-pill">{pill}</span></td>'
+        f"<td>{when}</td><td>{what}</td></tr>"
+        for feature, pill, when, what in PRIVACY_FEATURES
+    )
+    details = "\n".join(
+        f'    <details class="privacy-details"><summary>{q}</summary><p>{a}</p></details>'
+        for q, a in PRIVACY_DETAILS
+    )
+    body = f'''{NAV.format(root_prefix="../", repo=GITHUB_REPO)}
+<div class="privacy-hero">
+  <h1>Your data stays on your phone</h1>
+  <p>No account. No ads. No tracking. Here is exactly what the app does with your information.</p>
+  <p class="privacy-updated">Last updated: {PRIVACY_UPDATED}</p>
+</div>
+<div class="privacy-cards">
+{cards}
+</div>
+<main class="privacy-main">
+  <h2>What the app can use</h2>
+  <div class="privacy-table-wrap">
+    <table class="privacy-table">
+      <thead><tr><th>Feature</th><th>When</th><th>What happens</th></tr></thead>
+      <tbody>
+{rows}
+      </tbody>
+    </table>
+  </div>
+  <h2>The details</h2>
+{details}
+</main>
+{PAGE_TAIL.format(repo=GITHUB_REPO)}'''
+    page_dir = out_dir / "privacy"
+    page_dir.mkdir(parents=True, exist_ok=True)
+    intro = "Yaaddi has no accounts, no ads and no tracking. Your learning data stays on your device."
+    page_dir.joinpath("index.html").write_text(
+        PAGE_HEAD.format(title="Privacy Policy — Yaaddi", description=esc(intro), asset_prefix="../") + body,
+        encoding="utf-8",
     )
 
 

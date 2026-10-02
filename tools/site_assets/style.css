@@ -326,3 +326,27 @@ img { max-width: 100%; display: block; }
   font-size: 0.8rem;
   opacity: 0.85;
 }
+
+
+/* Privacy page (layout "B — at a glance"). */
+.privacy-hero { background: var(--accent-soft); border-bottom: 1px solid var(--border); padding: 44px 24px 56px; text-align: center; }
+.privacy-hero h1 { margin: 0 0 8px; font-size: 2.1rem; letter-spacing: -0.02em; }
+.privacy-hero p { margin: 0 auto 6px; max-width: 560px; color: var(--text-muted); }
+.privacy-hero .privacy-updated { font-size: 0.85rem; }
+.privacy-cards { max-width: 960px; margin: -30px auto 0; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.privacy-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+.privacy-card-icon { font-size: 1.6rem; }
+.privacy-card strong { display: block; margin: 6px 0 2px; }
+.privacy-card span { color: var(--text-muted); font-size: 0.92rem; }
+.privacy-main { max-width: 800px; margin: 0 auto; padding: 8px 24px 64px; }
+.privacy-main h2 { font-size: 1.2rem; margin: 36px 0 12px; letter-spacing: -0.01em; }
+.privacy-main a { color: var(--accent); }
+.privacy-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-elevated); }
+.privacy-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 560px; }
+.privacy-table th, .privacy-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+.privacy-table th { background: var(--accent-soft); }
+.privacy-table tbody tr:last-child td { border-bottom: 0; }
+.privacy-pill { display: inline-block; margin-left: 4px; padding: 1px 9px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.privacy-details { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 4px 16px; margin: 10px 0; }
+.privacy-details summary { cursor: pointer; font-weight: 700; padding: 12px 0; }
+.privacy-details p { margin: 0 0 14px; color: var(--text-muted); }
