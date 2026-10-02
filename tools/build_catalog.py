@@ -84,7 +84,7 @@ def _github_api_get(url: str, token: str | None) -> dict:
     req.add_header("X-GitHub-Api-Version", "2022-11-28")
     if token:
         req.add_header("Authorization", f"Bearer {token}")
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
         return json.loads(resp.read().decode("utf-8"))
 
 
@@ -121,7 +121,7 @@ def discover_course_repos(org: str, topic: str, token: str | None) -> list[dict]
 def fetch_meta(full_name: str, branch: str) -> dict | None:
     url = f"https://raw.githubusercontent.com/{full_name}/{branch}/meta.json"
     try:
-        with urllib.request.urlopen(url, timeout=30) as resp:
+        with urllib.request.urlopen(url, timeout=30) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
             if resp.status != 200:
                 return None
             return json.loads(resp.read().decode("utf-8"))

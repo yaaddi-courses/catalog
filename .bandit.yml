@@ -1,0 +1,20 @@
+# Bandit config. Run: bandit -c .bandit.yml -r . -q   (CI runs exactly this)
+exclude_dirs:
+  - node_modules
+  - tests
+  - .pytest_tmp
+  - .cache
+  - .benchmarks
+  - .ruff_cache
+  - '*/test_*.py'
+  - test_*.py
+skips:
+  # Test files (tests/, and test_*.py next to the code they cover) are
+  # excluded above: asserts (B101) are the point of a test.
+  # B404/B603/B607: scripts call fixed argv lists (never shell=True, never
+  # untrusted input) — flagging every subprocess import/call is noise.
+  # B311: random is used for shuffling exercise options, never for security.
+  - B404
+  - B603
+  - B607
+  - B311

@@ -26,7 +26,7 @@ A fix is "safe" only when it can't break the card's meaning:
   * never makes two options of a card identical;
   * model (LLM) findings are NEVER auto-applied — always "needs review"
     (only the deterministic rules edit files).
-Everything else is reported as "needs review" for a human/Claude.
+Everything else is reported as "needs review" for a human or an LLM assistant.
 
 Resumable: <course>/.internal/english_grammar_state.json keeps a hash of
 each card's English text, so an edited card is re-checked and an
@@ -184,7 +184,7 @@ def english_segments(field, value):
 
 
 def text_hash(strings):
-    return hashlib.sha1("\x1f".join(strings).encode("utf-8")).hexdigest()[:16]
+    return hashlib.sha1("\x1f".join(strings).encode("utf-8"), usedforsecurity=False).hexdigest()[:16]
 
 
 # ----------------------------------------------------------------- LLM
@@ -234,7 +234,7 @@ def call_llm(model, user_content, max_tokens=2500, retries=3):
     last_err = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
+            with urllib.request.urlopen(req, timeout=180) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
                 data = json.loads(resp.read().decode("utf-8"))
             return data["choices"][0]["message"]["content"]
         except Exception as e:  # noqa: BLE001

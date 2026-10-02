@@ -21,7 +21,7 @@ flashcard-course-creator skill's base-language-framing rules):
     Real audio has to be recorded/synthesized separately — this script
     only lays out the card and a `tts_manifest.csv` of what needs voicing,
     it does not call a TTS engine itself (this repo's own audio policy,
-    see the app's CLAUDE.md, requires a real TTS pass, never a placeholder).
+    see the app's contributor notes, requires a real TTS pass, never a placeholder).
   - A row that supplies `example_sentence` gets sentence-practice cards —
     arrange it (`order`), say the whole thing aloud (`speech_recognition`),
     fill the new word back in from a blank (`select_blank`, only when it's
@@ -112,7 +112,7 @@ source/tts_manifest.csv (overwriting any existing files there) — run
 build_course_zip.py and validate_course.py --source afterwards, same as any
 hand-authored course. Before that, record/synthesize every row in
 tts_manifest.csv into source/media/<audio filename> — this repo's own TTS
-tooling (see the app's CLAUDE.md's "narration/pronunciation audio" note) can
+tooling (see the app's "narration/pronunciation audio" notes) can
 batch this the same way the original hand-authored course's audio was made.
 
 Pure Python stdlib, matching this repo's other tools — --generate-images
@@ -254,7 +254,7 @@ def deck_cover_prompt(deck_title: str) -> str:
 
 def _flux_server_ready() -> bool:
     try:
-        with urllib.request.urlopen(FLUX_HEALTH_URL, timeout=5) as resp:
+        with urllib.request.urlopen(FLUX_HEALTH_URL, timeout=5) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
             data = json.loads(resp.read().decode("utf-8"))
             return bool(data.get("model_loaded"))
     except (urllib.error.URLError, OSError, ValueError):
@@ -285,7 +285,7 @@ def generate_deck_cover(deck_title: str, output_path: Path) -> None:
     req = urllib.request.Request(
         FLUX_GENERATE_URL, data=payload, headers={"Content-Type": "application/json"}, method="POST"
     )
-    with urllib.request.urlopen(req, timeout=FLUX_TIMEOUT_SECONDS) as resp:
+    with urllib.request.urlopen(req, timeout=FLUX_TIMEOUT_SECONDS) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
         result = json.loads(resp.read().decode("utf-8"))
     if not Path(result.get("output_path", output_path)).exists():
         raise RuntimeError(f"Image server reported success but wrote no file for deck '{deck_title}'")

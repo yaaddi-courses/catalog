@@ -16,7 +16,7 @@ literally the one confirmed to work:
 
 This is a FLAGGING tool, not an auto-fixer: it never edits cards.csv.
 It writes only the FLAGGED (false) cards to a single, easy-to-grep
-report file so a human or Claude can find and fix each one — for a
+report file so a human or an LLM assistant can find and fix each one — for a
 flagged card, the line has course + card id + prompt so a direct search
 on the id in that course's cards.csv jumps straight to it.
 
@@ -122,7 +122,7 @@ def call_llm(model, user_content, max_tokens=2000, retries=3):
     last_err = None
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
+            with urllib.request.urlopen(req, timeout=120) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
                 data = json.loads(resp.read().decode("utf-8"))
             return data["choices"][0]["message"]["content"]
         except Exception as e:  # noqa: BLE001
