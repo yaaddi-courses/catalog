@@ -13,7 +13,8 @@
       "productivity",
       "prompting",
       "beginner"
-    ]
+    ],
+    "deckCount": 25
   },
   {
     "repo": "yaaddi-courses/ai-model-optimization",
@@ -176,7 +177,8 @@
       "grammar",
       "writing",
       "everyday"
-    ]
+    ],
+    "deckCount": 20
   },
   {
     "repo": "yaaddi-courses/git",
