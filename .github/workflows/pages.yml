@@ -71,7 +71,7 @@ jobs:
       - name: Build site
         run: python tools/build_site.py --out _site --courses-dir /tmp/courses
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
