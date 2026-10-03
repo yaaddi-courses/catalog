@@ -211,6 +211,7 @@ NAV = """<header class="site-header">
     <a class="header-link" href="{root_prefix}help/index.html">Help</a>
     <a class="header-link" href="{root_prefix}contribute/index.html">Contribute</a>
     <a class="header-link" href="{root_prefix}privacy/index.html">Privacy</a>
+    <a class="header-link" href="{root_prefix}terms/index.html">Terms</a>
     <a class="header-link" href="https://github.com/{repo}">GitHub</a>
   </nav>
 </header>
@@ -492,6 +493,33 @@ def render_privacy_page(out_dir: Path) -> None:
     )
 
 
+TERMS_SECTIONS = [
+    ("Educational use only", "Yaaddi and its courses are study aids for general education. They are not legal, immigration, medical, financial, tax, investment, driving-test or other professional advice, and they are not an official source for any test or licence."),
+    ("Accuracy and changes", "Course content is written with care from public sources and reviewed, but it may contain mistakes or become out of date (laws, test formats and the names of office holders change). Always check the official source, or a qualified professional, before you rely on anything for a decision or an exam."),
+    ("Your responsibility", "You decide how to use the content. To the extent the law allows, you are responsible for checking it and for your decisions, and Yaaddi and its developer are not liable for loss or damage that results from relying on course content, including failing a test. Nothing here excludes liability that the law does not allow to be excluded."),
+    ("Courses and third-party content", "Courses are provided as is and as available, without warranty of accuracy or fitness for a particular purpose. Images and links come from third parties under their own licences (see the ATTRIBUTIONS file of any course that has one). Yaaddi is not affiliated with any government body or test provider named in a course."),
+    ("Reporting errors", "Found a mistake? Use Report a problem in the app or write to support@yaaddi.com. Confirmed errors are corrected in a later course version."),
+    ("Changes and contact", "We may update these terms; the last updated date above changes when we do. Contact: support@yaaddi.com."),
+]
+
+
+def render_terms_page(out_dir: Path) -> None:
+    items = "\n".join(f"  <h2>{esc(t)}</h2>\n  <p>{esc(p)}</p>" for t, p in TERMS_SECTIONS)
+    body = f'''{NAV.format(root_prefix="../", repo=GITHUB_REPO)}
+<main class="privacy-main">
+  <h1>Terms of use and content disclaimer</h1>
+  <p class="privacy-updated">Last updated: {PRIVACY_UPDATED}</p>
+{items}
+</main>
+{PAGE_TAIL.format(repo=GITHUB_REPO)}'''
+    page_dir = out_dir / "terms"
+    page_dir.mkdir(parents=True, exist_ok=True)
+    page_dir.joinpath("index.html").write_text(
+        PAGE_HEAD.format(title="Terms of Use — Yaaddi", description=esc("Yaaddi courses are study aids, not professional advice."), asset_prefix="../") + body,
+        encoding="utf-8",
+    )
+
+
 def render_help_page(out_dir: Path) -> None:
     sections = f'''
   <section class="section">
@@ -647,6 +675,7 @@ def main() -> None:
     render_help_page(out_dir)
     render_contribute_page(out_dir)
     render_privacy_page(out_dir)
+    render_terms_page(out_dir)
 
     print(f"Built {len(courses)} course page(s) into {out_dir}")
 
