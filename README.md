@@ -47,6 +47,10 @@ fetches it makes after that).
 hours) and supports `workflow_dispatch` for an on-demand run right after you
 tag a new course — no need to wait for the schedule.
 
+Each entry also carries `updated`, the date of the course's newest release (its newest `changelog`
+date; for a course without one, the date of the newest commit to its zip). The Course Library card
+shows it as "Updated <date>". The app treats it as optional, so an older catalog still works.
+
 Each entry carries `repo` ("owner/repo", the course's own dedicated repo)
 and `branch` (that repo's default branch) instead of the old monorepo's
 `path` (a folder within one shared repo) — the app's own schema

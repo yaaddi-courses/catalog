@@ -409,7 +409,7 @@ PRIVACY_CARDS = [
     ("&#128274;", "On-device only", "Courses, progress and settings never leave your phone."),
     ("&#128683;", "No tracking", "No ads, analytics or third-party trackers."),
     ("&#128100;", "No account", "Nothing to sign up for, nothing stored about you on a server."),
-    ("&#128465;&#65039;", "You&rsquo;re in control", "Erase all data in Settings, or just uninstall."),
+    ("&#128465;&#65039;", "You&rsquo;re in control", "Uninstall the app and everything is gone."),
 ]
 
 PRIVACY_FEATURES = [
@@ -431,7 +431,7 @@ PRIVACY_DETAILS = [
      "In a private database on your device: courses, cards, review history, streaks, Coins and settings. It is never sent to us or "
      "any third party. A backup file is created only if you choose <em>Backup &amp; restore</em>, and you decide where it goes."),
     ("How do I delete everything?",
-     "Open <em>Settings &rarr; Delete all my data</em> in the app, or uninstall it. We hold no copy, so there is nothing else to delete."),
+     "Uninstall the app. Everything is stored only on your phone and we hold no copy, so there is nothing else to delete."),
     ("Do you use ads, analytics or tracking?",
      "No. Yaaddi contains no advertising SDKs, no analytics SDKs and no third-party trackers. We know nothing about how you use the app "
      "beyond what you can see in your own Stats screen."),
@@ -446,30 +446,44 @@ PRIVACY_DETAILS = [
 ]
 
 
-def render_privacy_page(out_dir: Path) -> None:
-    cards = "\n".join(
+def render_legal_hero(title: str, lead: str, cards: list[tuple[str, str, str]]) -> str:
+    """Hero plus summary cards shared by the Privacy and Terms pages (one design for both)."""
+    card_html = "\n".join(
         f'    <div class="privacy-card"><div class="privacy-card-icon" aria-hidden="true">{icon}</div>'
-        f"<strong>{title}</strong><span>{text}</span></div>"
-        for icon, title, text in PRIVACY_CARDS
+        f"<strong>{card_title}</strong><span>{text}</span></div>"
+        for icon, card_title, text in cards
     )
+    return f"""<div class="privacy-hero">
+  <h1>{title}</h1>
+  <p>{lead}</p>
+  <p class="privacy-updated">Last updated: {PRIVACY_UPDATED}</p>
+</div>
+<div class="privacy-cards">
+{card_html}
+</div>"""
+
+
+def render_legal_details(items: list[tuple[str, str]], *, numbered: bool = False) -> str:
+    return "\n".join(
+        f'    <details class="privacy-details"><summary>{f"{i}. " if numbered else ""}{q}</summary><p>{a}</p></details>'
+        for i, (q, a) in enumerate(items, 1)
+    )
+
+
+def render_privacy_page(out_dir: Path) -> None:
     rows = "\n".join(
         f'      <tr><td><strong>{feature}</strong> <span class="privacy-pill">{pill}</span></td>'
         f"<td>{when}</td><td>{what}</td></tr>"
         for feature, pill, when, what in PRIVACY_FEATURES
     )
-    details = "\n".join(
-        f'    <details class="privacy-details"><summary>{q}</summary><p>{a}</p></details>'
-        for q, a in PRIVACY_DETAILS
+    hero = render_legal_hero(
+        "Your data stays on your phone",
+        "No account. No ads. No tracking. Here is exactly what the app does with your information.",
+        PRIVACY_CARDS,
     )
+    details = render_legal_details(PRIVACY_DETAILS)
     body = f'''{NAV.format(root_prefix="../", repo=GITHUB_REPO)}
-<div class="privacy-hero">
-  <h1>Your data stays on your phone</h1>
-  <p>No account. No ads. No tracking. Here is exactly what the app does with your information.</p>
-  <p class="privacy-updated">Last updated: {PRIVACY_UPDATED}</p>
-</div>
-<div class="privacy-cards">
-{cards}
-</div>
+{hero}
 <main class="privacy-main">
   <h2>What the app can use</h2>
   <div class="privacy-table-wrap">
@@ -493,23 +507,36 @@ def render_privacy_page(out_dir: Path) -> None:
     )
 
 
+# Same "at a glance" layout as the privacy page. Keep in step with the app's
+# terms.json (en); test_build_site_privacy.py guards the two against drifting apart.
+TERMS_CARDS = [
+    ("&#128218;", "A study aid", "Courses help you learn; they are not professional advice."),
+    ("&#9989;", "Check official sources", "Confirm anything important before a decision or an exam."),
+    ("&#129517;", "Your decisions", "You choose how to use the content and are responsible for it."),
+    ("&#9993;&#65039;", "Found a mistake?", "Tell us and we will fix it in a later version."),
+]
+
 TERMS_SECTIONS = [
-    ("Educational use only", "Yaaddi and its courses are study aids for general education. They are not legal, immigration, medical, financial, tax, investment, driving-test or other professional advice, and they are not an official source for any test or licence."),
-    ("Accuracy and changes", "Course content is written with care from public sources and reviewed, but it may contain mistakes or become out of date (laws, test formats and the names of office holders change). Always check the official source, or a qualified professional, before you rely on anything for a decision or an exam."),
-    ("Your responsibility", "You decide how to use the content. To the extent the law allows, you are responsible for checking it and for your decisions, and Yaaddi and its developer are not liable for loss or damage that results from relying on course content, including failing a test. Nothing here excludes liability that the law does not allow to be excluded."),
-    ("Courses and third-party content", "Courses are provided as is and as available, without warranty of accuracy or fitness for a particular purpose. Images and links come from third parties under their own licences (see the ATTRIBUTIONS file of any course that has one). Yaaddi is not affiliated with any government body or test provider named in a course."),
-    ("Reporting errors", "Found a mistake? Use Report a problem in the app or write to support@yaaddi.com. Confirmed errors are corrected in a later course version."),
-    ("Changes and contact", "We may update these terms; the last updated date above changes when we do. Contact: support@yaaddi.com."),
+    ("Educational use only", "Yaaddi and its courses are study aids. They are provided for general education and are not legal, immigration, medical, financial, tax, investment, driving-test or other professional advice, and they are not an official source for any test or licence."),
+    ("Accuracy and changes", "Course content is written with care from public sources and reviewed, but it may contain mistakes or become out of date (for example laws, tax figures, test formats and the names of office holders change). Always check the official source (the government agency, test provider or a qualified professional) before you rely on anything for a decision or an exam."),
+    ("Your responsibility", "You decide how to use the content. To the extent the law allows, you are responsible for checking it and for your decisions, and Yaaddi and its developer are not liable for loss or damage that results from relying on course content, including failing a test or exam. Nothing in these terms excludes liability that cannot be excluded by law (for example for fraud, or rights you have as a consumer)."),
+    ("Courses and third-party content", "Courses are provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without any warranty of accuracy or fitness for a particular purpose. Links and images come from third parties under their own licences; see the ATTRIBUTIONS.md of any course that has one. Yaaddi is not affiliated with any government body or test provider named in a course."),
+    ("Reporting errors", 'If you find a mistake, use &ldquo;Report a problem&rdquo; in the app or write to <a href="mailto:support@yaaddi.com">support@yaaddi.com</a>. We will correct confirmed errors in a later course version.'),
+    ("Changes and contact", 'We may update these terms; the &ldquo;last updated&rdquo; date above changes when we do. Contact: <a href="mailto:support@yaaddi.com">support@yaaddi.com</a>.'),
 ]
 
 
 def render_terms_page(out_dir: Path) -> None:
-    items = "\n".join(f"  <h2>{esc(t)}</h2>\n  <p>{esc(p)}</p>" for t, p in TERMS_SECTIONS)
+    hero = render_legal_hero(
+        "Terms of use and content disclaimer",
+        "Yaaddi is a study aid. Here is what that means for you.",
+        TERMS_CARDS,
+    )
     body = f'''{NAV.format(root_prefix="../", repo=GITHUB_REPO)}
+{hero}
 <main class="privacy-main">
-  <h1>Terms of use and content disclaimer</h1>
-  <p class="privacy-updated">Last updated: {PRIVACY_UPDATED}</p>
-{items}
+  <h2>The details</h2>
+{render_legal_details(TERMS_SECTIONS, numbered=True)}
 </main>
 {PAGE_TAIL.format(repo=GITHUB_REPO)}'''
     page_dir = out_dir / "terms"

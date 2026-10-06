@@ -24,7 +24,7 @@
     "file": "ai-model-optimization.zip",
     "id": "e87e69818348",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "tags": [
       "ai",
       "machine-learning",
@@ -43,7 +43,7 @@
     "file": "canadian-citizenship.zip",
     "id": "7f3a91c04e2b",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "tags": [
       "canada",
       "citizenship",
@@ -61,7 +61,7 @@
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "python",
       "concurrency",
@@ -96,7 +96,7 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "tags": [
       "docker",
       "devops",
@@ -113,7 +113,7 @@
     "file": "effective-vibecoding.zip",
     "id": "241d8884a6f3",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "tags": [
       "ai",
       "programming",
@@ -130,7 +130,7 @@
     "file": "emotional-intelligence.zip",
     "id": "d29883f5a134",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "emotional-intelligence",
       "self-improvement",
@@ -147,7 +147,7 @@
     "file": "english-for-farsi-speakers.zip",
     "id": "fe65dde5e532",
     "image": "cover.png",
-    "version": "1.4.0",
+    "version": "1.1.0",
     "tags": [
       "english",
       "language-learning",
@@ -188,7 +188,7 @@
     "file": "git.zip",
     "id": "558d49ba4cfe",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "git",
       "version-control",
@@ -205,7 +205,7 @@
     "file": "harness.zip",
     "id": "dba791593bf6",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "cicd",
       "harness",
@@ -223,7 +223,7 @@
     "file": "kubernetes-fundamentals.zip",
     "id": "4c931d3144a0",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "tags": [
       "kubernetes",
       "devops",
@@ -240,7 +240,7 @@
     "file": "managing-software-projects.zip",
     "id": "e3ae11104967",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "project-management",
       "agile",
@@ -257,7 +257,7 @@
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "mlops",
       "machine-learning",
@@ -275,7 +275,7 @@
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "observability",
       "opentelemetry",
@@ -293,7 +293,7 @@
     "file": "python-basics.zip",
     "id": "d1aae68588c5",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "python",
       "programming",
@@ -309,7 +309,7 @@
     "file": "scam-fraud-recognition.zip",
     "id": "f3e526a52113",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -327,7 +327,7 @@
     "file": "scam-tashkhis-farsi.zip",
     "id": "bda3b4eb02ab",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -352,7 +352,7 @@
     "file": "sdlc.zip",
     "id": "530976d2fe64",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "sdlc",
       "software-engineering",
@@ -369,7 +369,7 @@
     "file": "software-architecture.zip",
     "id": "bf45793f1b9c",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "software-architecture",
       "system-design",
@@ -386,7 +386,7 @@
     "file": "testing-in-software-engineering.zip",
     "id": "eba617a0e3bf",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "testing",
       "software-engineering",
@@ -403,7 +403,7 @@
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "tags": [
       "pytest",
       "python",

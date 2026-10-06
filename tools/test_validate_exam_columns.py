@@ -43,9 +43,12 @@ def test_a_complete_exam_block_is_fine():
 
 def test_a_half_filled_block_is_an_error_naming_the_blank_column():
     errors = errors_for("exam_questions", "20")
-    assert len(errors) == 2
-    assert any("exam_minutes" in e and "blank" in e for e in errors)
-    assert any("exam_pass_percent" in e for e in errors)
+    assert len(errors) == 1
+    assert any("exam_pass_percent" in e and "blank" in e for e in errors)
+
+
+def test_a_blank_exam_minutes_means_no_time_limit():
+    assert errors_for("exam_questions,exam_minutes,exam_pass_percent", "20,,60") == []
 
 
 def test_numbers_must_be_whole_and_in_range():

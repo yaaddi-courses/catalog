@@ -90,7 +90,8 @@ def _github_api_get(url: str, token: str | None) -> dict:
 
 def discover_course_repos(org: str, topic: str, token: str | None) -> list[dict]:
     """Every repo in `org` tagged with `topic`, paginated. Returns each
-    repo's `full_name` ("owner/repo") and `default_branch`."""
+    repo's `full_name` ("owner/repo"), `default_branch` and last push time
+    (the search results already carry them - no extra requests)."""
     repos: list[dict] = []
     page = 1
     while True:
@@ -109,13 +110,37 @@ def discover_course_repos(org: str, topic: str, token: str | None) -> list[dict]
             ) from err
         items = data.get("items", [])
         repos.extend(
-            {"full_name": item["full_name"], "default_branch": item["default_branch"]}
+            {
+                "full_name": item["full_name"],
+                "default_branch": item["default_branch"],
+                "pushed_at": item.get("pushed_at") or "",
+            }
             for item in items
         )
         if len(items) < 100:
             break
         page += 1
     return repos
+
+
+def fetch_last_commit_date(full_name: str, path: str, token: str | None) -> str:
+    """Date (YYYY-MM-DD) of the newest commit that touched `path` in a course repo, or "" when
+    it cannot be read. Used only for a course whose meta.json has no dated changelog."""
+    try:
+        data = _github_api_get(
+            f"https://api.github.com/repos/{full_name}/commits?path={path}&per_page=1", token
+        )
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError, TimeoutError):
+        return ""
+    if not isinstance(data, list) or not data:
+        return ""
+    return str(data[0].get("commit", {}).get("committer", {}).get("date", ""))[:10]
+
+
+def last_update_date(meta: dict, pushed_at: str = "") -> str:
+    """The date of a course's newest release (from its changelog), else the given fallback date."""
+    dates = [c["date"] for c in meta.get("changelog", []) if isinstance(c.get("date"), str)]
+    return max(dates) if dates else pushed_at[:10]
 
 
 def fetch_meta(full_name: str, branch: str) -> dict | None:
@@ -133,7 +158,12 @@ def fetch_meta(full_name: str, branch: str) -> dict | None:
 # builds from one course's meta.json — deliberately NOT the same full set
 # fetchSingleCourseEntry gets from a direct meta.json fetch (see module
 # docstring for why `toc`/`changelog` are trimmed/dropped here).
-def build_catalog_entry(full_name: str, branch: str, meta: dict) -> dict | None:
+def build_catalog_entry(
+    full_name: str,
+    branch: str,
+    meta: dict,
+    pushed_at: str = "",
+) -> dict | None:
     if "title" not in meta or "file" not in meta:
         return None
 
@@ -152,6 +182,10 @@ def build_catalog_entry(full_name: str, branch: str, meta: dict) -> dict | None:
             entry[key] = meta[key]
     if meta.get("toc"):
         entry["deckCount"] = len(meta["toc"])
+    # What the Course Library card shows: when the course was last updated.
+    updated = last_update_date(meta, pushed_at)
+    if updated:
+        entry["updated"] = updated
     return entry
 
 
@@ -186,7 +220,13 @@ def build_catalog(org: str, topic: str, token: str | None) -> list[dict]:
                 file=sys.stderr,
             )
             continue
-        entry = build_catalog_entry(repo["full_name"], repo["default_branch"], meta)
+        # Newest changelog date; only a course without one costs an extra request, for the
+        # date of the newest commit to its zip (the repo's push date is the same for everyone).
+        pushed_at = repo.get("pushed_at", "")
+        if not last_update_date(meta):
+            commit_date = fetch_last_commit_date(repo["full_name"], meta.get("file", ""), token)
+            pushed_at = commit_date or pushed_at
+        entry = build_catalog_entry(repo["full_name"], repo["default_branch"], meta, pushed_at=pushed_at)
         if entry is not None:
             entries.append(entry)
 
