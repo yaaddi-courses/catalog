@@ -14,7 +14,8 @@
       "prompting",
       "beginner"
     ],
-    "deckCount": 25
+    "deckCount": 25,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/ai-model-optimization",
@@ -33,7 +34,8 @@
       "llm",
       "intermediate"
     ],
-    "deckCount": 32
+    "deckCount": 32,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/canadian-citizenship",
@@ -51,7 +53,8 @@
       "history",
       "government"
     ],
-    "deckCount": 22
+    "deckCount": 22,
+    "updated": "2026-10-02"
   },
   {
     "repo": "yaaddi-courses/concurrency-in-python",
@@ -69,7 +72,8 @@
       "threading",
       "intermediate"
     ],
-    "deckCount": 85
+    "deckCount": 85,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/day-trading-plan",
@@ -86,7 +90,8 @@
       "risk-management",
       "beginner"
     ],
-    "deckCount": 29
+    "deckCount": 29,
+    "updated": "2026-09-27"
   },
   {
     "repo": "yaaddi-courses/docker-and-containers",
@@ -103,7 +108,8 @@
       "infrastructure",
       "beginner"
     ],
-    "deckCount": 45
+    "deckCount": 45,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/effective-vibecoding",
@@ -120,7 +126,8 @@
       "productivity",
       "beginner"
     ],
-    "deckCount": 28
+    "deckCount": 28,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/emotional-intelligence",
@@ -137,7 +144,8 @@
       "communication",
       "beginner"
     ],
-    "deckCount": 41
+    "deckCount": 41,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/english-for-farsi-speakers",
@@ -161,7 +169,8 @@
     "descriptionTranslations": {
       "fa": "انگلیسی کاربردی و واقعی برای فارسی‌زبان‌هایی که می‌خواهند سفر کنند و در موقعیت‌های روزمره از پس خودشان بربیایند — سلام و احوال‌پرسی، فرودگاه، هتل، غذا، خرید، گپ زدن، و حل مشکلات. بدون تمرین‌های خشک گرامری، بدون آماده شدن برای امتحان، فقط عبارت‌هایی که واقعاً به کارت می‌آیند."
     },
-    "deckCount": 26
+    "deckCount": 26,
+    "updated": "2026-10-04"
   },
   {
     "repo": "yaaddi-courses/fix-common-english-mistakes",
@@ -178,7 +187,8 @@
       "writing",
       "everyday"
     ],
-    "deckCount": 20
+    "deckCount": 20,
+    "updated": "2026-10-01"
   },
   {
     "repo": "yaaddi-courses/git",
@@ -195,7 +205,8 @@
       "programming",
       "beginner"
     ],
-    "deckCount": 40
+    "deckCount": 40,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/harness",
@@ -213,7 +224,8 @@
       "deployment",
       "intermediate"
     ],
-    "deckCount": 35
+    "deckCount": 35,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/kubernetes-fundamentals",
@@ -230,7 +242,8 @@
       "infrastructure",
       "beginner"
     ],
-    "deckCount": 42
+    "deckCount": 42,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/managing-software-projects",
@@ -247,7 +260,8 @@
       "software-engineering",
       "beginner"
     ],
-    "deckCount": 36
+    "deckCount": 36,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/mlops",
@@ -265,7 +279,8 @@
       "data-science",
       "intermediate"
     ],
-    "deckCount": 25
+    "deckCount": 25,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/opentelemetry",
@@ -283,7 +298,8 @@
       "monitoring",
       "intermediate"
     ],
-    "deckCount": 39
+    "deckCount": 39,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/python-basics",
@@ -299,7 +315,8 @@
       "programming",
       "beginner"
     ],
-    "deckCount": 25
+    "deckCount": 25,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/scam-fraud-recognition",
@@ -317,7 +334,8 @@
       "life-skills",
       "beginner"
     ],
-    "deckCount": 27
+    "deckCount": 27,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/scam-tashkhis-farsi",
@@ -342,7 +360,8 @@
     "descriptionTranslations": {
       "en": "Native Farsi content covering Iran-specific fraud patterns: fake Sana/subsidy SMS, card-to-card fraud, messenger account takeover, Telegram investment scams, and AI voice cloning."
     },
-    "deckCount": 23
+    "deckCount": 23,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/sdlc",
@@ -359,7 +378,8 @@
       "process",
       "beginner"
     ],
-    "deckCount": 35
+    "deckCount": 35,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/software-architecture",
@@ -376,7 +396,8 @@
       "engineering",
       "intermediate"
     ],
-    "deckCount": 41
+    "deckCount": 41,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/testing-in-software-engineering",
@@ -393,7 +414,8 @@
       "quality",
       "beginner"
     ],
-    "deckCount": 33
+    "deckCount": 33,
+    "updated": "2026-09-30"
   },
   {
     "repo": "yaaddi-courses/testing-with-pytest",
@@ -411,6 +433,7 @@
       "qa",
       "intermediate"
     ],
-    "deckCount": 24
+    "deckCount": 24,
+    "updated": "2026-09-30"
   }
 ]
