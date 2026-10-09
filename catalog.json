@@ -25,7 +25,7 @@
     "file": "ai-model-optimization.zip",
     "id": "e87e69818348",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "ai",
       "machine-learning",
@@ -35,7 +35,7 @@
       "intermediate"
     ],
     "deckCount": 32,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/canadian-citizenship",
@@ -45,7 +45,7 @@
     "file": "canadian-citizenship.zip",
     "id": "7f3a91c04e2b",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "canada",
       "citizenship",
@@ -54,7 +54,7 @@
       "government"
     ],
     "deckCount": 22,
-    "updated": "2026-10-02"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/concurrency-in-python",
@@ -64,7 +64,7 @@
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "python",
       "concurrency",
@@ -73,7 +73,7 @@
       "intermediate"
     ],
     "deckCount": 85,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/day-trading-plan",
@@ -101,7 +101,7 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "docker",
       "devops",
@@ -109,7 +109,7 @@
       "beginner"
     ],
     "deckCount": 45,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/effective-vibecoding",
@@ -119,7 +119,7 @@
     "file": "effective-vibecoding.zip",
     "id": "241d8884a6f3",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "ai",
       "programming",
@@ -127,7 +127,7 @@
       "beginner"
     ],
     "deckCount": 28,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/emotional-intelligence",
@@ -137,7 +137,7 @@
     "file": "emotional-intelligence.zip",
     "id": "d29883f5a134",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "emotional-intelligence",
       "self-improvement",
@@ -145,7 +145,7 @@
       "beginner"
     ],
     "deckCount": 41,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/english-for-farsi-speakers",
@@ -198,7 +198,7 @@
     "file": "git.zip",
     "id": "558d49ba4cfe",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "git",
       "version-control",
@@ -206,7 +206,7 @@
       "beginner"
     ],
     "deckCount": 40,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/harness",
@@ -216,7 +216,7 @@
     "file": "harness.zip",
     "id": "dba791593bf6",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "cicd",
       "harness",
@@ -225,7 +225,7 @@
       "intermediate"
     ],
     "deckCount": 35,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/kubernetes-fundamentals",
@@ -235,7 +235,7 @@
     "file": "kubernetes-fundamentals.zip",
     "id": "4c931d3144a0",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "kubernetes",
       "devops",
@@ -243,7 +243,7 @@
       "beginner"
     ],
     "deckCount": 42,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/managing-software-projects",
@@ -253,7 +253,7 @@
     "file": "managing-software-projects.zip",
     "id": "e3ae11104967",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "project-management",
       "agile",
@@ -261,7 +261,7 @@
       "beginner"
     ],
     "deckCount": 36,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/mlops",
@@ -271,7 +271,7 @@
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "mlops",
       "machine-learning",
@@ -280,7 +280,7 @@
       "intermediate"
     ],
     "deckCount": 25,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/opentelemetry",
@@ -290,7 +290,7 @@
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "observability",
       "opentelemetry",
@@ -299,7 +299,7 @@
       "intermediate"
     ],
     "deckCount": 39,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/python-basics",
@@ -309,14 +309,14 @@
     "file": "python-basics.zip",
     "id": "d1aae68588c5",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "python",
       "programming",
       "beginner"
     ],
     "deckCount": 25,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/scam-fraud-recognition",
@@ -389,7 +389,7 @@
     "file": "software-architecture.zip",
     "id": "bf45793f1b9c",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "software-architecture",
       "system-design",
@@ -397,7 +397,7 @@
       "intermediate"
     ],
     "deckCount": 41,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/testing-in-software-engineering",
@@ -407,7 +407,7 @@
     "file": "testing-in-software-engineering.zip",
     "id": "eba617a0e3bf",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "testing",
       "software-engineering",
@@ -415,7 +415,7 @@
       "beginner"
     ],
     "deckCount": 33,
-    "updated": "2026-09-30"
+    "updated": "2026-10-09"
   },
   {
     "repo": "yaaddi-courses/testing-with-pytest",
@@ -425,7 +425,7 @@
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "tags": [
       "pytest",
       "python",
@@ -434,6 +434,6 @@
       "intermediate"
     ],
     "deckCount": 24,
-    "updated": "2026-10-08"
+    "updated": "2026-10-09"
   }
 ]
