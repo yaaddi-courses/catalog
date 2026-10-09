@@ -425,7 +425,7 @@
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "pytest",
       "python",
@@ -434,6 +434,6 @@
       "intermediate"
     ],
     "deckCount": 24,
-    "updated": "2026-09-30"
+    "updated": "2026-10-08"
   }
 ]
