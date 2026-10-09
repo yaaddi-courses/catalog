@@ -399,7 +399,7 @@ def render_static_page(*, slug: str, nav_title: str, page_title: str, intro: str
     )
 
 
-PRIVACY_UPDATED = "October 1, 2026"
+PRIVACY_UPDATED = "October 8, 2026"
 
 # Layout "B — at a glance" (owner-approved 2026-10-01): hero, four summary
 # cards, a table of what the app can use and when, then collapsible details.
@@ -416,10 +416,6 @@ PRIVACY_FEATURES = [
     ("Course Library", "needs internet", "You open it",
      'Downloads public course files from GitHub. GitHub sees your IP address, under '
      '<a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">its own privacy statement</a>.'),
-    ("Microphone", "optional", "You tap the mic on a speech card",
-     "Your phone&rsquo;s built-in speech recognition (Google&rsquo;s on Android, Apple&rsquo;s on iOS) checks what you said and may process "
-     "the audio on its servers under its own policy. Yaaddi never records, stores or receives the audio &mdash; only the recognised "
-     "text, used once to check your answer. Speech cards can always be skipped."),
     ("Photos", "optional", "You pick a cover image",
      "Only the picture you choose is read; a copy stays on your device."),
     ("Notifications", "optional", "You turn on study reminders",

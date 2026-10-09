@@ -16,10 +16,11 @@ def render() -> str:
 
 def test_page_covers_every_data_touching_feature():
     html = render()
-    for feature in ("Course Library", "Microphone", "Photos", "Notifications"):
+    for feature in ("Course Library", "Photos", "Notifications"):
         assert feature in html, feature
-    assert "speech recognition" in html
-    assert "never records, stores or receives the audio" in html
+    # Pronunciation (microphone) cards were removed on 2026-10-08: the page must not claim any microphone use.
+    assert "Microphone" not in html
+    assert "speech recognition" not in html
 
 
 def test_page_explains_deletion_and_no_tracking():
