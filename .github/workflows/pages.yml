@@ -15,6 +15,9 @@ on:
     branches: [main]
     paths:
       - "tools/build_site.py"
+      - "tools/guide_pages.py"
+      - "tools/guide_version.json"
+      - "tools/guide/guide_shots.json"
       - "tools/site_assets/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch: {}

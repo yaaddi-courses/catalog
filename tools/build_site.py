@@ -41,6 +41,8 @@ import shutil
 from collections import Counter
 from pathlib import Path
 
+import guide_pages
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SITE_TITLE = "Yaaddi Courses"
 SITE_TAGLINE = "Free, open-source spaced-repetition courses — browse what's inside before you install."
@@ -208,6 +210,8 @@ PAGE_TAIL = """
 NAV = """<header class="site-header">
   <a class="brand" href="{root_prefix}index.html">Yaaddi Courses</a>
   <nav class="header-nav">
+    <a class="header-link" href="{root_prefix}guide/index.html">Guide</a>
+    <a class="header-link" href="{root_prefix}faq/index.html">FAQ</a>
     <a class="header-link" href="{root_prefix}help/index.html">Help</a>
     <a class="header-link" href="{root_prefix}contribute/index.html">Contribute</a>
     <a class="header-link" href="{root_prefix}privacy/index.html">Privacy</a>
@@ -592,6 +596,19 @@ def render_help_page(out_dir: Path) -> None:
     )
 
 
+def render_guide_pages(out_dir: Path) -> None:
+    """User guide, FAQ and What's New (content in guide_pages.py, screenshots in site_assets/img/guide)."""
+    for slug, nav_title, intro, sections in (
+        ("guide", "User guide", "How to study with Yaaddi, step by step.", guide_pages.render_guide_sections()),
+        ("faq", "Frequently asked questions", "Quick answers about using Yaaddi.", guide_pages.render_faq_sections()),
+        ("whats-new", "What's new", "Changes in each version of the app.", guide_pages.render_whats_new_sections()),
+    ):
+        render_static_page(
+            slug=slug, nav_title=nav_title, page_title=f"{nav_title} — Yaaddi",
+            intro=intro, sections_html=sections, out_dir=out_dir,
+        )
+
+
 def render_contribute_page(out_dir: Path) -> None:
     sections = f'''
   <section class="section">
@@ -696,6 +713,7 @@ def main() -> None:
     for course in courses:
         render_course_page(course, out_dir)
     render_help_page(out_dir)
+    render_guide_pages(out_dir)
     render_contribute_page(out_dir)
     render_privacy_page(out_dir)
     render_terms_page(out_dir)

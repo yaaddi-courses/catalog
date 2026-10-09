@@ -350,3 +350,13 @@ img { max-width: 100%; display: block; }
 .privacy-details { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 4px 16px; margin: 10px 0; }
 .privacy-details summary { cursor: pointer; font-weight: 700; padding: 12px 0; }
 .privacy-details p { margin: 0 0 14px; color: var(--text-muted); }
+
+/* User guide screenshots */
+.guide-toc { margin: 0 0 32px; }
+.guide-shot { margin: 16px 0 0; }
+.guide-shot img { width: 100%; max-width: 270px; height: auto; border: 1px solid var(--border); border-radius: 16px; }
+.guide-shot figcaption { color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; max-width: 420px; }
+.guide-stamp { color: var(--text-muted); font-size: 0.85rem; margin-top: 32px; }
+.content-main h2 small { color: var(--text-muted); font-weight: 400; }
+.guide-toc a { color: var(--accent); }
+.section[id] { scroll-margin-top: 72px; }

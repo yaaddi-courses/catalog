@@ -1,0 +1,16 @@
+{
+  "app_version": "1.1.0",
+  "verified": "2026-10-09",
+  "releases": [
+    {
+      "version": "1.1.0",
+      "date": "2026-10-09",
+      "items": [
+        "Pronunciation (speech and microphone) cards were removed; the app no longer uses the microphone.",
+        "Feedback sounds are no longer cut off when a card is read aloud.",
+        "Exam screens: Submit exam now sits next to Previous or Next on the first and last question.",
+        "Match-pairs boxes now line up to the same height."
+      ]
+    }
+  ]
+}

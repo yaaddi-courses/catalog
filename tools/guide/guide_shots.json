@@ -1,0 +1,166 @@
+{
+  "_doc": "One entry per guide screenshot. Every shot starts from a root tab and may end with cleanup steps. Step kinds: tap_text (text found by OCR, fails if absent; pick top = highest match, default lowest), tap_text_if (same, but skipped when absent), tap [x,y] (px of a 1080x2280 screen), swipe_up / swipe_down (count), back, wait (seconds). expect_text must be on screen when the shot is taken, which also proves the app is in English. Run: python tools/guide/capture_guide_shots.py",
+  "device_size": [
+    1080,
+    2280
+  ],
+  "shots": [
+    {
+      "file": "courses.png",
+      "alt": "The Learn tab: your installed courses, a date picker, search, and the Course Library and menu buttons.",
+      "expect_text": "Pick a course to continue",
+      "steps": [
+        {
+          "tap_text": "Learn"
+        },
+        {
+          "tap_text_if": "All courses"
+        },
+        {
+          "wait": 1
+        }
+      ]
+    },
+    {
+      "file": "library.png",
+      "alt": "The Course Library: search, your installed courses and the official courses you can install with one tap.",
+      "expect_text": "Official Course Library",
+      "steps": [
+        {
+          "tap_text": "Learn"
+        },
+        {
+          "tap_text_if": "All courses"
+        },
+        {
+          "wait": 1
+        },
+        {
+          "tap": [
+            810,
+            321
+          ]
+        },
+        {
+          "wait": 3
+        }
+      ],
+      "cleanup": [
+        {
+          "back": true
+        }
+      ]
+    },
+    {
+      "file": "learn-map.png",
+      "alt": "A course's path: the course card, a Test yourself button and the decks to study in order.",
+      "expect_text": "Test yourself",
+      "steps": [
+        {
+          "tap_text": "Learn"
+        },
+        {
+          "tap_text_if": "All courses"
+        },
+        {
+          "wait": 1
+        },
+        {
+          "tap": [
+            540,
+            1270
+          ]
+        },
+        {
+          "wait": 2
+        }
+      ],
+      "cleanup": [
+        {
+          "tap_text_if": "All courses"
+        }
+      ]
+    },
+    {
+      "file": "stats.png",
+      "alt": "The Stats tab: a calendar heatmap of the days you studied.",
+      "expect_text": "Your progress so far",
+      "steps": [
+        {
+          "tap_text": "Stats"
+        },
+        {
+          "swipe_down": 4
+        },
+        {
+          "wait": 1
+        }
+      ]
+    },
+    {
+      "file": "levels.png",
+      "alt": "The Levels window: your level, Coins to the next level and every level's Coin target.",
+      "expect_text": "All levels",
+      "steps": [
+        {
+          "tap_text": "Learn"
+        },
+        {
+          "tap_text_if": "All courses"
+        },
+        {
+          "wait": 1
+        },
+        {
+          "tap": [
+            633,
+            140
+          ]
+        },
+        {
+          "wait": 1
+        }
+      ],
+      "cleanup": [
+        {
+          "tap_text": "Close"
+        }
+      ]
+    },
+    {
+      "file": "settings.png",
+      "alt": "The Settings tab: appearance, sound effects, text size and animations.",
+      "expect_text": "Make Yaaddi yours",
+      "steps": [
+        {
+          "tap_text": "Settings"
+        },
+        {
+          "swipe_down": 4
+        },
+        {
+          "wait": 1
+        }
+      ]
+    },
+    {
+      "file": "settings-studying.png",
+      "alt": "Settings, Studying section: streak freezes, new topics per session and advanced learning options.",
+      "expect_text": "New topics per session",
+      "steps": [
+        {
+          "tap_text": "Settings"
+        },
+        {
+          "swipe_down": 4
+        },
+        {
+          "swipe_up": 2
+        },
+        {
+          "wait": 1
+        }
+      ]
+    }
+  ]
+}
