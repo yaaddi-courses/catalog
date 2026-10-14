@@ -1,7 +1,7 @@
 # Optional third-party packages the tooling under tools/ and _shared/ can use.
 # Everything else is standard library. Listed so `pip-audit -r requirements.txt`
 # (security.yml) and Dependabot have a manifest to check for known CVEs.
-arabic-reshaper>=3.0   # _shared/rtl_text.py — shaping Arabic/Farsi text for the site build
+arabic-reshaper>=3.0.1   # _shared/rtl_text.py — shaping Arabic/Farsi text for the site build
 python-bidi>=0.6       # _shared/rtl_text.py — bidirectional display order
 black>=24.0            # tools/format_code_blocks.py — formats Python code blocks in cards
 pytest>=8.0            # tools/test_*.py
