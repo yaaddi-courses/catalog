@@ -4,4 +4,4 @@
 arabic-reshaper>=3.0   # _shared/rtl_text.py — shaping Arabic/Farsi text for the site build
 python-bidi>=0.6       # _shared/rtl_text.py — bidirectional display order
 black>=24.0            # tools/format_code_blocks.py — formats Python code blocks in cards
-pytest>=8.0            # tools/test_*.py
+pytest>=9.1.1            # tools/test_*.py
