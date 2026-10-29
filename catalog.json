@@ -64,7 +64,7 @@
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "tags": [
       "python",
       "concurrency",
@@ -101,7 +101,7 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "tags": [
       "docker",
       "devops",
@@ -119,7 +119,7 @@
     "file": "effective-vibecoding.zip",
     "id": "241d8884a6f3",
     "image": "cover.png",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "tags": [
       "ai",
       "programming",
@@ -198,7 +198,7 @@
     "file": "git.zip",
     "id": "558d49ba4cfe",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "git",
       "version-control",
@@ -216,7 +216,7 @@
     "file": "harness.zip",
     "id": "dba791593bf6",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "cicd",
       "harness",
@@ -273,7 +273,7 @@
     "file": "managing-software-projects.zip",
     "id": "e3ae11104967",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "project-management",
       "agile",
@@ -291,7 +291,7 @@
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "mlops",
       "machine-learning",
@@ -331,7 +331,7 @@
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "observability",
       "opentelemetry",
@@ -350,7 +350,7 @@
     "file": "python-basics.zip",
     "id": "d1aae68588c5",
     "image": "cover.png",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "tags": [
       "python",
       "programming",
@@ -386,7 +386,7 @@
     "file": "scam-tashkhis-farsi.zip",
     "id": "bda3b4eb02ab",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -402,7 +402,7 @@
       "en": "Native Farsi content covering Iran-specific fraud patterns: fake Sana/subsidy SMS, card-to-card fraud, messenger account takeover, Telegram investment scams, and AI voice cloning."
     },
     "deckCount": 23,
-    "updated": "2026-09-30"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/sdlc",
@@ -412,7 +412,7 @@
     "file": "sdlc.zip",
     "id": "530976d2fe64",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "sdlc",
       "software-engineering",
@@ -450,7 +450,7 @@
     "file": "software-architecture.zip",
     "id": "bf45793f1b9c",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "software-architecture",
       "system-design",
@@ -468,7 +468,7 @@
     "file": "testing-in-software-engineering.zip",
     "id": "eba617a0e3bf",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "testing",
       "software-engineering",
@@ -486,7 +486,7 @@
     "file": "testing-with-pytest.zip",
     "id": "7244ef316a80",
     "image": "cover.png",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "tags": [
       "pytest",
       "python",
