@@ -7,7 +7,7 @@
     "file": "ai-at-work.zip",
     "id": "b3f60a1c9d27",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "ai",
       "productivity",
@@ -15,7 +15,7 @@
       "beginner"
     ],
     "deckCount": 25,
-    "updated": "2026-09-30"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/ai-model-optimization",
@@ -119,7 +119,7 @@
     "file": "effective-vibecoding.zip",
     "id": "241d8884a6f3",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "ai",
       "programming",
@@ -127,7 +127,7 @@
       "beginner"
     ],
     "deckCount": 28,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/emotional-intelligence",
@@ -137,7 +137,7 @@
     "file": "emotional-intelligence.zip",
     "id": "d29883f5a134",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "emotional-intelligence",
       "self-improvement",
@@ -145,7 +145,7 @@
       "beginner"
     ],
     "deckCount": 41,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/english-for-farsi-speakers",
@@ -228,6 +228,26 @@
     "updated": "2026-10-09"
   },
   {
+    "repo": "yaaddi-courses/job-interview-skills",
+    "branch": "main",
+    "title": "Job Interview Skills",
+    "description": "How to act in a job interview from first handshake to follow-up: research, your stories, common and tough questions, phone and video interviews, body language, questions to ask, salary and offers.",
+    "file": "job-interview-skills.zip",
+    "id": "6c1d9f3a2e84",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "interview",
+      "career",
+      "jobs",
+      "communication",
+      "soft-skills",
+      "beginner"
+    ],
+    "deckCount": 16,
+    "updated": "2026-10-02"
+  },
+  {
     "repo": "yaaddi-courses/kubernetes-fundamentals",
     "branch": "main",
     "title": "Kubernetes Fundamentals",
@@ -253,7 +273,7 @@
     "file": "managing-software-projects.zip",
     "id": "e3ae11104967",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "project-management",
       "agile",
@@ -261,7 +281,7 @@
       "beginner"
     ],
     "deckCount": 36,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/mlops",
@@ -281,6 +301,27 @@
     ],
     "deckCount": 25,
     "updated": "2026-10-09"
+  },
+  {
+    "repo": "yaaddi-courses/ontario-g1-drivers-licence",
+    "branch": "main",
+    "title": "Ontario G1 Driver's Licence",
+    "description": "Get ready for the Ontario G1 knowledge test and the road ahead: licensing steps, traffic signs, lights and markings, rules of the road, safe and legal driving, and what the road tests check.",
+    "file": "ontario-g1-drivers-licence.zip",
+    "id": "e1c07b93a5f2",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "canada",
+      "ontario",
+      "driving",
+      "g1",
+      "drivers-licence",
+      "test-prep",
+      "beginner"
+    ],
+    "deckCount": 20,
+    "updated": "2026-10-02"
   },
   {
     "repo": "yaaddi-courses/opentelemetry",
@@ -326,7 +367,7 @@
     "file": "scam-fraud-recognition.zip",
     "id": "f3e526a52113",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -335,7 +376,7 @@
       "beginner"
     ],
     "deckCount": 27,
-    "updated": "2026-09-30"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/scam-tashkhis-farsi",
@@ -371,7 +412,7 @@
     "file": "sdlc.zip",
     "id": "530976d2fe64",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "tags": [
       "sdlc",
       "software-engineering",
@@ -379,7 +420,27 @@
       "beginner"
     ],
     "deckCount": 35,
-    "updated": "2026-09-30"
+    "updated": "2026-10-29"
+  },
+  {
+    "repo": "yaaddi-courses/soft-skills-at-work",
+    "branch": "main",
+    "title": "Soft Skills for Work",
+    "description": "The people skills that move careers: listening, writing and speaking clearly, feedback, conflict, negotiation, time and focus, decisions and leading others, built on proven frameworks you can use tomorrow.",
+    "file": "soft-skills-at-work.zip",
+    "id": "3f8a6d2e9b17",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "soft-skills",
+      "workplace",
+      "communication",
+      "leadership",
+      "productivity",
+      "career"
+    ],
+    "deckCount": 20,
+    "updated": "2026-10-02"
   },
   {
     "repo": "yaaddi-courses/software-architecture",
@@ -407,7 +468,7 @@
     "file": "testing-in-software-engineering.zip",
     "id": "eba617a0e3bf",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "testing",
       "software-engineering",
@@ -415,7 +476,7 @@
       "beginner"
     ],
     "deckCount": 33,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/testing-with-pytest",
@@ -435,5 +496,45 @@
     ],
     "deckCount": 24,
     "updated": "2026-10-09"
+  },
+  {
+    "repo": "yaaddi-courses/us-citizenship-civics-test",
+    "branch": "main",
+    "title": "US Citizenship Civics Test",
+    "description": "Pass the 2025 US naturalization civics test. All 128 official USCIS questions in short, repeatable lessons on American government, history, symbols and holidays.",
+    "file": "us-citizenship-civics-test.zip",
+    "id": "5d2b8e7a1c43",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "usa",
+      "citizenship",
+      "civics",
+      "test-prep",
+      "history",
+      "government"
+    ],
+    "deckCount": 16,
+    "updated": "2026-10-02"
+  },
+  {
+    "repo": "yaaddi-courses/world-geography",
+    "branch": "main",
+    "title": "World Geography",
+    "description": "Learn the world: continents and oceans, how to read a map, every UN member country with its capital and flag, and the planet's great rivers, lakes, mountains, deserts and seas.",
+    "file": "world-geography.zip",
+    "id": "8b6c1f4d0a95",
+    "image": "cover.png",
+    "version": "1.0.0",
+    "tags": [
+      "geography",
+      "countries",
+      "capitals",
+      "flags",
+      "maps",
+      "general-knowledge"
+    ],
+    "deckCount": 23,
+    "updated": "2026-10-02"
   }
 ]
