@@ -25,7 +25,7 @@
     "file": "ai-model-optimization.zip",
     "id": "e87e69818348",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "ai",
       "machine-learning",
@@ -35,7 +35,7 @@
       "intermediate"
     ],
     "deckCount": 32,
-    "updated": "2026-10-09"
+    "updated": "2026-10-28"
   },
   {
     "repo": "yaaddi-courses/canadian-citizenship",
