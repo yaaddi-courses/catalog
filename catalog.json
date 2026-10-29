@@ -101,7 +101,7 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "docker",
       "devops",
@@ -109,7 +109,7 @@
       "beginner"
     ],
     "deckCount": 45,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/effective-vibecoding",
@@ -331,7 +331,7 @@
     "file": "opentelemetry.zip",
     "id": "871fceeaa2b1",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "observability",
       "opentelemetry",
@@ -340,7 +340,7 @@
       "intermediate"
     ],
     "deckCount": 39,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/python-basics",
@@ -450,7 +450,7 @@
     "file": "software-architecture.zip",
     "id": "bf45793f1b9c",
     "image": "cover.png",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "tags": [
       "software-architecture",
       "system-design",
@@ -458,7 +458,7 @@
       "intermediate"
     ],
     "deckCount": 41,
-    "updated": "2026-10-09"
+    "updated": "2026-10-29"
   },
   {
     "repo": "yaaddi-courses/testing-in-software-engineering",
