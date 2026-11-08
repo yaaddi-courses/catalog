@@ -4,5 +4,5 @@
 # Exact pins so every machine (and CI) formats and tests the same way; bump them on purpose.
 # The screenshot/cover tools have their own file: requirements-media.txt.
 black==26.10.1           # tools/format_code_blocks.py — formats Python code blocks in cards
-pytest==9.0.3            # tools/test_*.py (run by .github/workflows/ci.yml)
+pytest==9.2.0            # tools/test_*.py (run by .github/workflows/ci.yml)
 # (black 26.3.1 and pytest 8.4.2 have known CVEs per pip-audit, 2026-11-01)
