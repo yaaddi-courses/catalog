@@ -1,7 +1,8 @@
 # Optional third-party packages the tooling under tools/ and _shared/ can use.
 # Everything else is standard library. Listed so `pip-audit -r requirements.txt`
 # (security.yml) and Dependabot have a manifest to check for known CVEs.
-arabic-reshaper>=3.0   # _shared/rtl_text.py — shaping Arabic/Farsi text for the site build
-python-bidi>=0.6       # _shared/rtl_text.py — bidirectional display order
-black>=24.0            # tools/format_code_blocks.py — formats Python code blocks in cards
-pytest>=8.0            # tools/test_*.py
+# Exact pins so every machine (and CI) formats and tests the same way; bump them on purpose.
+# The screenshot/cover tools have their own file: requirements-media.txt.
+black==26.10.1           # tools/format_code_blocks.py — formats Python code blocks in cards
+pytest==9.0.3            # tools/test_*.py (run by .github/workflows/ci.yml)
+# (black 26.3.1 and pytest 8.4.2 have known CVEs per pip-audit, 2026-11-01)

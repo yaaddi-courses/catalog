@@ -17,8 +17,9 @@ Usage:
 import argparse
 import csv
 import os
-import re
-import sys
+
+from csv_io import write_dict_csv
+from term_match import build_word_pattern
 
 
 def read_csv(path):
@@ -26,10 +27,6 @@ def read_csv(path):
         return []
     with open(path, encoding="utf-8-sig") as f:
         return list(csv.DictReader(f))
-
-
-def build_word_pattern(term):
-    return re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE | re.UNICODE)
 
 
 def apply_course(course_dir):
@@ -40,6 +37,10 @@ def apply_course(course_dir):
 
     if not glossary:
         print(f"  {os.path.basename(course_dir)}: no glossary.csv, skipping")
+        return False
+    if not cards:
+        # Without cards every unmapped term would look "dead" and be deleted.
+        print(f"  {os.path.basename(course_dir)}: no cards.csv rows, glossary left unchanged")
         return False
 
     unit_order = {u["id"]: i for i, u in enumerate(units)}
@@ -61,13 +62,16 @@ def apply_course(course_dir):
     exercise_only = 0
     dead_terms = set()
 
+    haystacks = [
+        (c, " ".join([c.get("prompt", ""), c.get("options", ""), c.get("explanation", "")]))
+        for c in ordered_cards
+    ]
     for g in missing_sorted:
         term = g["term"]
         pattern = build_word_pattern(term)
         first_teach = None
         first_any = None
-        for c in ordered_cards:
-            haystack = " ".join([c.get("prompt", ""), c.get("options", ""), c.get("explanation", "")])
+        for c, haystack in haystacks:
             if pattern.search(haystack):
                 if first_any is None:
                     first_any = c
@@ -85,10 +89,7 @@ def apply_course(course_dir):
 
     remaining = [g for g in glossary if g["term"] not in dead_terms]
 
-    with open(glossary_path, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
-        w.writeheader()
-        w.writerows(remaining)
+    write_dict_csv(glossary_path, fieldnames, remaining)  # atomic, keeps line endings and BOM
 
     print(f"  {os.path.basename(course_dir)}: {clean} mapped, {dead} dead removed, {exercise_only} exercise-only left for LLM pass")
     return True

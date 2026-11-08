@@ -50,10 +50,13 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import os
 import sys
+import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -108,6 +111,10 @@ def discover_course_repos(org: str, topic: str, token: str | None) -> list[dict]
                 "If this is a rate-limit error (403), the workflow's token "
                 "may be missing or expired — see .github/workflows/rebuild-catalog.yml."
             ) from err
+        if data.get("incomplete_results"):
+            # GitHub's search timed out and returned only part of the matches: building from
+            # it would drop courses from the catalog, so fail and keep the last good one.
+            raise SystemExit(f"GitHub search results for org:{org} topic:{topic} are incomplete; retry later.")
         items = data.get("items", [])
         repos.extend(
             {
@@ -128,9 +135,10 @@ def fetch_last_commit_date(full_name: str, path: str, token: str | None) -> str:
     it cannot be read. Used only for a course whose meta.json has no dated changelog."""
     try:
         data = _github_api_get(
-            f"https://api.github.com/repos/{full_name}/commits?path={path}&per_page=1", token
+            f"https://api.github.com/repos/{full_name}/commits?path={urllib.parse.quote(path)}&per_page=1",
+            token,
         )
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError, TimeoutError):
+    except (OSError, http.client.HTTPException, ValueError):  # network, HTTP or bad JSON: date unknown
         return ""
     if not isinstance(data, list) or not data:
         return ""
@@ -143,15 +151,26 @@ def last_update_date(meta: dict, pushed_at: str = "") -> str:
     return max(dates) if dates else pushed_at[:10]
 
 
-def fetch_meta(full_name: str, branch: str) -> dict | None:
+def fetch_meta(full_name: str, branch: str, attempts: int = 3) -> dict | None:
+    """The course's meta.json, or None when the repo has none (404) or it is unreadable JSON.
+    A temporary failure (5xx, rate limit, timeout, network) is retried and then raised, so a flaky
+    request fails the job - leaving the last good catalog in place - instead of dropping the course."""
     url = f"https://raw.githubusercontent.com/{full_name}/{branch}/meta.json"
-    try:
-        with urllib.request.urlopen(url, timeout=30) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
-            if resp.status != 200:
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(url, timeout=30) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
+                return json.loads(resp.read().decode("utf-8-sig"))
+        except urllib.error.HTTPError as err:
+            if err.code == 404:
                 return None
-            return json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
-        return None
+            failure = err
+        except (urllib.error.URLError, TimeoutError) as err:
+            failure = err
+        except ValueError:  # bad UTF-8 or JSON: the file itself is broken, retrying cannot help
+            return None
+        if attempt < attempts - 1:
+            time.sleep(2**attempt)
+    raise SystemExit(f"could not fetch meta.json for {full_name} after {attempts} attempts: {failure}")
 
 
 # The lean field set src/lib/githubMarketplace.ts's summary-listing path

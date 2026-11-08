@@ -16,26 +16,27 @@ judgment in ~15s; a "thinking" model (glm-4.7-flash) was far too slow/
 verbose for bulk use, and a plain small coder model (qwen2.5-coder-7b)
 was fast but missed real issues.
 
-Resumable: writes progress after every batch, and --resume skips cards
-already covered in an existing report for that course — safe to stop and
-restart across a long unattended run.
+Resumable: writes progress (atomically) after every batch, and by default
+skips cards already covered in an existing report for that course — safe to
+stop and restart across a long unattended run (--no-resume starts over).
+Each report entry stores a hash of the card's question and explanation, so a
+card edited since it was reviewed is reviewed again instead of keeping a
+stale verdict; an answer without any of the flag fields is not stored.
 
 Usage:
     python tools/llm_review_pass.py <course-folder> [--batch-size 6] [--model NAME]
     python tools/llm_review_pass.py --all [--batch-size 6] [--model NAME]
 """
 import argparse
-import csv
-import json
 import os
-import re
 import sys
-import time
-import urllib.request
-import urllib.error
 
-LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
-DEFAULT_MODEL = "google/gemma-4-e4b"
+import llm_common
+from llm_common import (
+    DEFAULT_MODEL, REVIEW_FLAGS, LlmFailures, explanation_hash, extract_json_array, find_all_course_dirs,
+    load_json, question_hash, review_entry_current, save_json,
+)
+
 BATCH_SIZE_DEFAULT = 6
 
 SYSTEM_PROMPT = (
@@ -60,53 +61,11 @@ SYSTEM_PROMPT = (
 
 
 def read_csv(path):
-    if not os.path.isfile(path):
-        return []
-    with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+    return llm_common.read_csv(path)[1]
 
 
-def call_llm(model, user_content, max_tokens=2800, retries=3):
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.1,
-        "max_tokens": max_tokens,
-    }).encode("utf-8")
-    req = urllib.request.Request(
-        LM_STUDIO_URL, data=payload, headers={"Content-Type": "application/json"}
-    )
-    last_err = None
-    for attempt in range(retries):
-        try:
-            with urllib.request.urlopen(req, timeout=180) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
-                data = json.loads(resp.read().decode("utf-8"))
-            return data["choices"][0]["message"]["content"]
-        except Exception as e:  # noqa: BLE001 — bulk unattended run, log & retry
-            last_err = e
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"LM Studio call failed after {retries} attempts: {last_err}")
-
-
-def extract_json_array(text):
-    """The model sometimes wraps output in stray text despite instructions —
-    grab the first [...] block rather than assuming the whole string parses."""
-    text = text.strip()
-    if text.startswith("["):
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            pass
-    match = re.search(r"\[.*\]", text, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except json.JSONDecodeError:
-            return None
-    return None
+def call_llm(model, user_content):
+    return llm_common.call_llm(model, SYSTEM_PROMPT, user_content, temperature=0.1, max_tokens=2800)
 
 
 def build_taught_list(units, cards):
@@ -143,7 +102,8 @@ def format_card(c):
     )
 
 
-def review_course(course_dir, model, batch_size, resume):
+def review_course(course_dir, model, batch_size, resume, failures=None):
+    failures = failures or LlmFailures()
     units = read_csv(os.path.join(course_dir, "source", "units.csv"))
     cards = read_csv(os.path.join(course_dir, "source", "cards.csv"))
     if not cards:
@@ -156,13 +116,13 @@ def review_course(course_dir, model, batch_size, resume):
     os.makedirs(internal_dir, exist_ok=True)
     report_path = os.path.join(internal_dir, "llm_review_report.json")
 
-    report = {}
-    if resume and os.path.isfile(report_path):
-        with open(report_path, encoding="utf-8") as f:
-            report = json.load(f)
+    report = load_json(report_path, {}) if resume else {}
+    # A card edited since its review gets reviewed again: its old verdict is dropped.
+    for c in ordered:
+        if c["id"] in report and not review_entry_current(report[c["id"]], c):
+            del report[c["id"]]
 
-    already_done = set(report.keys())
-    todo = [c for c in ordered if c["id"] not in already_done]
+    todo = [c for c in ordered if c["id"] not in report]
     if not todo:
         print(f"  already fully reviewed ({len(ordered)} cards): {os.path.basename(course_dir)}")
         return
@@ -182,11 +142,13 @@ def review_course(course_dir, model, batch_size, resume):
         )
         try:
             raw = call_llm(model, user_content)
-            parsed = extract_json_array(raw)
         except Exception as e:  # noqa: BLE001
             print(f"    batch {i}-{i+len(batch)} FAILED: {e}")
+            if failures.failed():
+                break
             continue
-
+        failures.ok()
+        parsed = extract_json_array(raw)
         if not parsed:
             print(f"    batch {i}-{i+len(batch)}: could not parse model output, skipping")
             continue
@@ -194,38 +156,22 @@ def review_course(course_dir, model, batch_size, resume):
         by_id = {str(item.get("card_id")): item for item in parsed if isinstance(item, dict)}
         for c in batch:
             result = by_id.get(c["id"])
-            if result is None:
-                continue
+            if result is None or not any(k in result for k in REVIEW_FLAGS):
+                continue  # no verdict at all: left for the next run, not stored as "clean"
             report[c["id"]] = {
                 "unit_id": c["unit_id"],
                 "role": c["role"],
                 "prompt": c.get("prompt", "")[:100],
                 **{k: v for k, v in result.items() if k != "card_id"},
+                "question_hash": question_hash(c),
+                "explanation_hash": explanation_hash(c),
             }
 
-        with open(report_path, "w", encoding="utf-8") as f:
-            json.dump(report, f, ensure_ascii=False, indent=2)
-
+        save_json(report_path, report)
         print(f"    batch {i}-{i+len(batch)} done ({len(report)}/{len(ordered)} total)")
 
-    flagged = [
-        cid
-        for cid, r in report.items()
-        if r.get("forward_references")
-        or r.get("missing_or_generic_explanation")
-        or r.get("robotic_phrasing")
-        or r.get("repetitive_practice")
-    ]
+    flagged = [cid for cid, r in report.items() if any(r.get(k) for k in REVIEW_FLAGS)]
     print(f"  DONE: {os.path.basename(course_dir)} — {len(flagged)}/{len(report)} cards flagged, report at {report_path}")
-
-
-def find_all_course_dirs(root):
-    dirs = []
-    for entry in sorted(os.listdir(root)):
-        p = os.path.join(root, entry)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, "meta.json")):
-            dirs.append(p)
-    return dirs
 
 
 def main():
@@ -234,12 +180,14 @@ def main():
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--batch-size", type=int, default=BATCH_SIZE_DEFAULT)
     ap.add_argument("--model", default=DEFAULT_MODEL)
-    ap.add_argument("--resume", action="store_true", default=True)
-    ap.add_argument("--no-resume", dest="resume", action="store_false")
+    ap.add_argument("--no-resume", dest="resume", action="store_false",
+                    help="ignore an existing report and review every card again")
     args = ap.parse_args()
 
     if args.all:
-        course_dirs = find_all_course_dirs(os.getcwd())
+        course_dirs = find_all_course_dirs()
+        if not course_dirs:
+            ap.error(f"no course folders (with a meta.json) found under {llm_common.REPO_ROOT}")
     elif args.course:
         course_dirs = [args.course]
     else:
@@ -247,8 +195,11 @@ def main():
         return
 
     print(f"Reviewing {len(course_dirs)} course(s) with model={args.model}, batch_size={args.batch_size}")
+    failures = LlmFailures()
     for course_dir in course_dirs:
-        review_course(course_dir, args.model, args.batch_size, args.resume)
+        review_course(course_dir, args.model, args.batch_size, args.resume, failures)
+        if failures.tripped:
+            sys.exit(1)
 
 
 if __name__ == "__main__":

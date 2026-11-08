@@ -60,7 +60,7 @@ LTR_SCRIPT_PATTERN = re.compile("[A-Za-z]")
 def read_csv(path):
     if not os.path.isfile(path):
         return []
-    with open(path, encoding="utf-8") as f:
+    with open(path, encoding="utf-8-sig") as f:
         return list(csv.DictReader(f))
 
 
@@ -187,8 +187,10 @@ def main():
     args = ap.parse_args()
 
     if args.all:
-        root = os.getcwd()
+        root = Path(__file__).resolve().parent.parent  # this repo, whatever the current directory
         course_dirs = find_all_course_dirs(root)
+        if not course_dirs:
+            ap.error(f"no course folders found under {root}")
     elif args.course:
         course_dirs = [args.course]
     else:

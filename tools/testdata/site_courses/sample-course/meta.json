@@ -1,0 +1,22 @@
+{
+  "id": "sample0000001",
+  "title": "Sample course",
+  "description": "A tiny fixture course used by the site-build tests and the CI smoke build.",
+  "image": "cover.png",
+  "file": "sample-course.zip",
+  "version": "1.0.0",
+  "language": "en",
+  "tags": [
+    "fixture"
+  ],
+  "toc": [
+    "Basics"
+  ],
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2026-11-01",
+      "notes": "Fixture."
+    }
+  ]
+}

@@ -78,8 +78,10 @@ def extract_target_word(card: dict) -> str | None:
             return letter.group(1)
         m = MEANING_QUESTION_RE.match(prompt)
         return m.group(1).strip() if m else None
-    if ctype == "speech_recognition":
-        return prompt or None
+    if ctype == "type_answer":
+        # generate_language_course.py's fallback main (no earlier item to build a
+        # choice from): "type the word for <gloss>", the accepted answer is the word.
+        return (card.get("options") or "").strip() or None
     return None
 
 
@@ -126,7 +128,7 @@ def classify_chip_references(
 
     Scoped to these three types deliberately: their options are already
     discrete, atomic chips (not free prose), so comparing them to the ledger is
-    reliable — unlike a full sentence (speech_recognition/reading_passage),
+    reliable — unlike a full sentence (reading_passage/cloze_passage),
     which would need real tokenization against multi-word taught phrases to
     check safely.
 
@@ -173,9 +175,6 @@ def classify_chip_references(
                     continue
 
         card_unit_rank = unit_order.get(c["unit_id"], 10**9)
-        taught_before = {
-            normalize(w) for _cid, unit_id, w in ledger if unit_order.get(unit_id, 10**9) <= card_unit_rank
-        }
         options_raw = c.get("options") or ""
         if ctype == "match_pairs":
             chips = [pair.split("↔", 1)[0] for pair in options_raw.split("|") if "↔" in pair]
@@ -186,9 +185,11 @@ def classify_chip_references(
             if not chip or chip == "___":
                 continue
             key = normalize(chip)
-            if key in taught_before:
-                continue
             where = first_taught.get(key)
+            # first_taught holds each word's lowest unit rank, so this is "taught in this
+            # unit or an earlier one" without rescanning the ledger per card.
+            if where and where[0] <= card_unit_rank:
+                continue
             findings.append(
                 {
                     "card_id": str(c["id"]),

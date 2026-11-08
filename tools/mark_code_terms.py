@@ -32,7 +32,7 @@ import os
 import re
 import sys
 
-from check_code_markup_coverage import csv_quote
+from check_code_markup_coverage import replace_cells
 
 STRUCTURAL_KEYWORDS = (
     "for|while|if|elif|else|try|except|finally|with|def|class|import|from|lambda|return|"
@@ -116,7 +116,9 @@ def mark_code_terms(text: str) -> tuple[str, int]:
 def process_course(course_dir: str, fix: bool) -> list[tuple[str, str, str]]:
     path = os.path.join(course_dir, "source", "cards.csv")
     with open(path, "rb") as handle:
-        raw = handle.read().decode("utf-8")
+        data = handle.read()
+    bom = data.startswith(b"\xef\xbb\xbf")  # kept on write; the header must not read as "﻿id"
+    raw = data.decode("utf-8-sig")
     rows = list(csv.DictReader(io.StringIO(raw, newline="")))
     changes = []
     for row in rows:
@@ -125,10 +127,12 @@ def process_course(course_dir: str, fix: bool) -> list[tuple[str, str, str]]:
             if count:
                 changes.append((row["id"], row[field], new))
     if fix and changes:
-        for _id, old, new in changes:
-            raw = raw.replace(csv_quote(old), csv_quote(new))
+        raw, skipped = replace_cells(raw, [(old, new) for _id, old, new in changes])
+        for old in skipped:
+            print(f"  warning: not fixed, the same text is in another cell too: {old[:70]!r}")
+        changes = [c for c in changes if c[1] not in skipped]
         with open(path, "wb") as handle:
-            handle.write(raw.encode("utf-8"))
+            handle.write(raw.encode("utf-8-sig" if bom else "utf-8"))
     return changes
 
 
@@ -140,19 +144,26 @@ def main() -> int:
     args = parser.parse_args()
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if args.all:
-        courses = [
-            d for d in sorted(os.listdir(root))
-            if os.path.isfile(os.path.join(root, d, "source", "cards.csv"))
+        course_dirs = [
+            os.path.join(root, d) for d in sorted(os.listdir(root))
+            if os.path.isfile(os.path.join(root, d, "source", "cards.csv")) and is_python_course(d)
         ]
     elif args.course:
-        courses = [os.path.basename(os.path.normpath(args.course))]
+        # The folder exactly as given (it may live outside this repo).
+        course_dir = os.path.normpath(os.path.abspath(args.course))
+        if not is_python_course(os.path.basename(course_dir)):
+            print(f"{args.course}: not a Python course (its folder name has no 'python'/'pytest'), nothing marked")
+            return 2
+        if not os.path.isfile(os.path.join(course_dir, "source", "cards.csv")):
+            print(f"{args.course}: no source/cards.csv")
+            return 2
+        course_dirs = [course_dir]
     else:
         parser.error("give a course folder or --all")
     total = 0
-    for name in courses:
-        if not is_python_course(name):
-            continue
-        changes = process_course(os.path.join(root, name), args.fix)
+    for course_dir in course_dirs:
+        name = os.path.basename(course_dir)
+        changes = process_course(course_dir, args.fix)
         total += len(changes)
         print(f"{name}: {len(changes)} field(s) {'fixed' if args.fix else 'to mark'}")
         for card_id, old, new in changes[:200]:

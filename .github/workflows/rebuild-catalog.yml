@@ -27,21 +27,21 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
 
-      # GITHUB_TOKEN here is a fine-grained PAT stored as a repo secret,
-      # NOT the automatic per-job secrets.GITHUB_TOKEN — that one is
-      # scoped only to this one repo and can't list/search other repos in
-      # the org. See tools/build_catalog.py's own module doc comment and
-      # README.md's "catalog.json" section for the token's required scope
-      # (Contents: read + Metadata: read on every yaaddi-courses repo).
+      # Every course repo is public, so the automatic per-job token is enough to
+      # search the org (verified 2026-11-08). The old fine-grained PAT
+      # (secrets.ORG_CATALOG_PAT) expired and made this job fail with 401
+      # "Bad credentials" every run from 2026-11-01; do not reintroduce a PAT unless
+      # a course repo ever becomes private.
       - name: Rebuild catalog.json from the org
         env:
-          GITHUB_TOKEN: ${{ secrets.ORG_CATALOG_PAT }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: python tools/build_catalog.py
 
       - name: Commit catalog.json, if changed
-        uses: stefanzweifel/git-auto-commit-action@v5
+        # Third-party action with contents: write: pinned to a commit (v5.2.0), not a movable tag.
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5.2.0
         with:
           commit_message: "chore: rebuild catalog.json"
           file_pattern: "catalog.json"

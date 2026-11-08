@@ -81,3 +81,64 @@ def test_a_command_with_a_blank_subcommand_is_wrapped_whole():
 def test_prose_starting_with_a_tool_name_and_no_blank_is_unchanged():
     text = "git is a version control system."
     assert cm.fix_text(text) == (text, [])
+
+
+def _write_cards(path, text, bom=False):
+    (path / "source").mkdir(parents=True, exist_ok=True)
+    data = text.encode("utf-8")
+    (path / "source" / "cards.csv").write_bytes((b"\xef\xbb\xbf" if bom else b"") + data)
+    return path / "source" / "cards.csv"
+
+
+# Regression (H8): --fix replaced the old text everywhere in the file, so the same text in a
+# field the fixer never touched (here the options of a match_pairs card) was rewritten too.
+def test_fix_rewrites_only_the_fixed_cell(tmp_path):
+    cards = _write_cards(
+        tmp_path,
+        "id,type,prompt,options,explanation\n"
+        "1,type_answer,Call print(x) now,,\n"
+        "2,match_pairs,Pick one,Call print(x) now|b,\n",
+    )
+    fixes = cm.check_or_fix_course(str(tmp_path), True)
+    assert len(fixes) == 1
+    assert cards.read_text(encoding="utf-8") == (
+        "id,type,prompt,options,explanation\n"
+        "1,type_answer,Call `print(x)` now,,\n"
+        "2,match_pairs,Pick one,Call print(x) now|b,\n"
+    )
+
+
+def test_cell_replace_skips_an_ambiguous_match():
+    raw = "id,prompt\n1,abc\n2,abc\n"
+    new_raw, skipped = cm.replace_cells(raw, [("abc", "`abc`")])
+    assert new_raw == raw and skipped == ["abc"]
+    new_raw, skipped = cm.replace_cells(raw, [("abc", "`abc`"), ("abc", "`abc`")])
+    assert new_raw == "id,prompt\n1,`abc`\n2,`abc`\n" and skipped == []
+
+
+# Regression (H7): a BOM made header.index("id") raise, and a short row raised IndexError.
+def test_bom_and_short_rows_are_handled(tmp_path):
+    cards = _write_cards(
+        tmp_path,
+        "id,type,prompt,options,explanation\n"
+        "1,type_answer,Call print(x) now,,\n"
+        "2,type_answer\n",
+        bom=True,
+    )
+    fixes = cm.check_or_fix_course(str(tmp_path), True)
+    assert [f[0] for f in fixes] == ["1"]
+    raw = cards.read_bytes()
+    assert raw.startswith(b"\xef\xbb\xbf") and b"`print(x)`" in raw
+
+
+def test_all_uses_the_repo_root(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    assert Path(cm.REPO_ROOT) == Path(__file__).resolve().parent.parent
+    monkeypatch.setattr(cm, "REPO_ROOT", str(tmp_path))
+    monkeypatch.setattr(sys, "argv", ["check_code_markup_coverage.py", "--all"])
+    try:
+        cm.main()
+    except SystemExit as exit_:
+        assert exit_.code not in (0, None)  # no course found is an error
+    else:
+        raise AssertionError("expected a non-zero exit")

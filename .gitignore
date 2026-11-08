@@ -20,6 +20,12 @@ __pycache__/
 # .github/workflows/pages.yml on every push, never committed.
 _site/
 
+# Generated reports of the checker tools (check_self_standing.py,
+# filter_self_standing_report.py, check_english_grammar.py) — rewritten every run.
+self_standing_report.txt
+self_standing_report_cleaned.txt
+english_grammar_report.txt
+
 # Local dev-tooling config/instructions — project-specific settings for
 # whatever coding assistant/IDE is in use, not part of the shipped content.
 # Kept on disk (still fully functional locally), just never committed.

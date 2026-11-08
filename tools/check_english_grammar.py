@@ -9,7 +9,8 @@ fluent in Farsi and read the sentence as "fine".
 Two layers, same pattern as check_self_standing.py:
 
 1. Deterministic rules (RULES below) — free, 100% reliable, no LLM. Each
-   rule carries its own replacement, so these are auto-fixable.
+   rule carries its own replacement, so these are auto-fixable (except the
+   REVIEW_ONLY_RULES, whose nouns also have a countable sense).
 2. A local LLM pass (LM Studio, default google/gemma-4-e4b, must be
    loaded with --context-length 16384) for everything the rules can't
    express. The model must quote the wrong text EXACTLY as it appears
@@ -43,11 +44,13 @@ import io
 import json
 import os
 import re
-import time
-import urllib.request
+import sys
 
-LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
-DEFAULT_MODEL = "google/gemma-4-e4b"
+import llm_common
+
+# --all and the default report path are relative to this repo, not the current directory.
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_MODEL = llm_common.DEFAULT_MODEL
 BATCH_SIZE_DEFAULT = 8
 
 CHOICE_TYPES = {"multiple_choice", "multi_select", "select_blank", "image_choice"}
@@ -67,10 +70,20 @@ BLANK_RE = re.compile(r"\{\{\d+\}\}|___")
 # is ordinary countable use when ordering.)
 UNCOUNTABLE = (
     "water|rice|bread|milk|money|information|advice|furniture|luggage|"
-    "baggage|homework|food|sugar|salt|news|traffic|weather|music|help|"
-    "butter|cheese|meat|fruit|soup|oil|paper|work|time|luck|"
-    "equipment|traffic|progress|knowledge"
+    "baggage|homework|sugar|salt|news|traffic|weather|music|"
+    "butter|meat|luck|equipment|progress|knowledge"
 )
+# Nouns that also have an ordinary countable sense ("a work of art", "a good time",
+# "a paper" = an essay, "a fruit", "a soup" = a kind of soup): reported, never auto-fixed.
+UNCOUNTABLE_AMBIGUOUS = "food|help|cheese|fruit|soup|oil|paper|work|time"
+# A noun followed by another word is usually a modifier ("a work permit", "a water
+# bottle", "an oil painting") - correct English - unless that word is one of these.
+_AFTER_NOUN_OK = (
+    "and|or|please|for|with|to|in|on|at|from|but|because|now|today|here|there|too|again"
+)
+_NOT_A_MODIFIER = rf"(?!\s+(?!(?:{_AFTER_NOUN_OK})\b)[A-Za-z])"
+# Rules whose findings are always "needs review", never applied by --fix.
+REVIEW_ONLY_RULES = {"article-uncountable-ambiguous"}
 # a-before-vowel-sound exceptions ("a university") and an-before-
 # consonant-letter exceptions ("an hour").
 A_BEFORE_VOWEL_OK = re.compile(
@@ -106,9 +119,13 @@ def _article_fix(m):
 RULES = [
     # (name, compiled regex, replacement callable or string, explanation)
     ("article-uncountable",
-     re.compile(rf"\b(?:(want|wants|need|needs)\s+)?(a|an)\s+({UNCOUNTABLE})\b(?!\s+of\b)", re.I),
+     re.compile(rf"\b(?:(want|wants|need|needs)\s+)?(a|an)\s+({UNCOUNTABLE})\b{_NOT_A_MODIFIER}", re.I),
      _mass_noun_fix,
      "'a/an' can't go before an uncountable noun — use 'some' (or no article)."),
+    ("article-uncountable-ambiguous",
+     re.compile(rf"\b(?:(want|wants|need|needs)\s+)?(a|an)\s+({UNCOUNTABLE_AMBIGUOUS})\b{_NOT_A_MODIFIER}", re.I),
+     _mass_noun_fix,
+     "'a/an' before a usually uncountable noun — check whether the countable sense is meant."),
     ("article-a-an",
      re.compile(r"\b(a|an)\s+([a-z]+)\b", re.I),
      _article_fix,
@@ -147,6 +164,11 @@ def apply_rules(text):
             return out
         text = rx.sub(sub, text)
     return text, findings
+
+
+def finding_source(rule_name):
+    """"rule" (safe to auto-fix) or "review" (report only) for a deterministic rule."""
+    return "review" if rule_name in REVIEW_ONLY_RULES else "rule"
 
 
 # ----------------------------------------------------- text extraction
@@ -220,43 +242,11 @@ SYSTEM_PROMPT = (
 
 
 def call_llm(model, user_content, max_tokens=2500, retries=3):
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.0,
-        "max_tokens": max_tokens,
-    }).encode("utf-8")
-    req = urllib.request.Request(
-        LM_STUDIO_URL, data=payload, headers={"Content-Type": "application/json"})
-    last_err = None
-    for attempt in range(retries):
-        try:
-            with urllib.request.urlopen(req, timeout=180) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
-                data = json.loads(resp.read().decode("utf-8"))
-            return data["choices"][0]["message"]["content"]
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"LM Studio call failed after {retries} attempts: {last_err}")
+    return llm_common.call_llm(model, SYSTEM_PROMPT, user_content, temperature=0.0, max_tokens=max_tokens,
+                               retries=retries, timeout=180)
 
 
-def extract_json_array(text):
-    text = (text or "").strip()
-    if text.startswith("["):
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            pass
-    m = re.search(r"\[.*\]", text, re.DOTALL)
-    if m:
-        try:
-            return json.loads(m.group(0))
-        except json.JSONDecodeError:
-            return None
-    return None
+extract_json_array = llm_common.extract_json_array
 
 
 _CONTRACTIONS = [(r"\bi'm\b", "i am"), (r"\bit's\b", "it is"), (r"\bthat's\b", "that is"),
@@ -297,7 +287,8 @@ def plan_card_fixes(card, findings):
     """Split findings into (safe, review) for one card.
 
     findings: list of (source, original, fixed, why) where source is
-    "rule" or "llm". Returns two lists of (original, fixed, why, source).
+    "rule", "review" (a report-only rule) or "llm". Returns two lists of
+    (original, fixed, why, source).
     """
     ctype = card.get("type", "")
     correct = set()
@@ -313,9 +304,10 @@ def plan_card_fixes(card, findings):
             continue
         seen.add(key)
         item = (original, fixed, why, source)
-        if source == "llm":
-            # The small local model is right often enough to be worth
-            # reading, never often enough to edit content unsupervised.
+        if source != "rule":
+            # The small local model (and a report-only rule) is right often
+            # enough to be worth reading, never often enough to edit content
+            # unsupervised.
             review.append(item)
             continue
         if ctype in CHOICE_TYPES and original in options:
@@ -334,14 +326,20 @@ def plan_card_fixes(card, findings):
 
 
 def apply_fixes_to_row(row, fields, safe):
-    """Exact-substring replace inside the given fields. Returns count applied."""
-    applied = 0
-    for original, fixed, _why, _src in safe:
+    """Exact-substring replace inside the given fields. Returns the fixes that
+    were applied (a finding comes from normalized text, so its original may not
+    be in the raw cell, e.g. a double space or a backtick)."""
+    applied = []
+    for item in safe:
+        original, fixed = item[0], item[1]
+        hit = False
         for f in fields:
             val = row.get(f) or ""
             if original in val:
                 row[f] = val.replace(original, fixed)
-                applied += 1
+                hit = True
+        if hit:
+            applied.append(item)
     return applied
 
 
@@ -374,6 +372,7 @@ def report_line(course, kind, ident, original, fixed, why, status):
 
 def check_source(course_dir, csv_name, fields, kind, model, batch_size, use_llm,
                  fix, report_path, state):
+    """Returns (issues found, issues auto-fixed)."""
     name = os.path.basename(course_dir.rstrip("/\\"))
     path = os.path.join(course_dir, "source", csv_name)
     rows, meta, _raw = read_rows(path)
@@ -407,7 +406,7 @@ def check_source(course_dir, csv_name, fields, kind, model, batch_size, use_llm,
         for seg in segs:
             _fixed, hits = apply_rules(seg)
             for rule_name, before, after, why in hits:
-                findings_by_id.setdefault(ident, []).append(("rule", before, after, why))
+                findings_by_id.setdefault(ident, []).append((finding_source(rule_name), before, after, why))
 
     # Layer 2: LLM over cards the rules left clean OR dirty (the model can
     # still find a second error), batched.
@@ -452,9 +451,13 @@ def check_source(course_dir, csv_name, fields, kind, model, batch_size, use_llm,
         n_found += len(safe) + len(review)
         if fix and safe:
             applied = apply_fixes_to_row(row, fields, safe)
-            n_fixed += len(safe) if applied else 0
-            for original, fixed, why, _s in safe:
-                lines_out.append(report_line(name, kind, ident, original, fixed, why, "auto-fixed"))
+            n_fixed += len(applied)
+            for item in safe:
+                original, fixed, why, _s = item
+                if item in applied:
+                    lines_out.append(report_line(name, kind, ident, original, fixed, why, "auto-fixed"))
+                else:
+                    review.append(item)  # text differs in the CSV cell: a human must apply it
         else:
             for original, fixed, why, _s in safe:
                 lines_out.append(report_line(name, kind, ident, original, fixed, why, "fixable (run --fix)"))
@@ -484,12 +487,13 @@ def check_course(course_dir, args, report_path):
         with open(state_path, encoding="utf-8") as f:
             state = json.load(f)
     use_llm = not args.no_llm
-    check_source(course_dir, "cards.csv", CARD_FIELDS, "card", args.model,
-                 args.batch_size, use_llm, args.fix, report_path, state)
-    check_source(course_dir, "glossary.csv", GLOSSARY_FIELDS, "term", args.model,
-                 args.batch_size, use_llm, args.fix, report_path, state)
+    found_c, fixed_c = check_source(course_dir, "cards.csv", CARD_FIELDS, "card", args.model,
+                                    args.batch_size, use_llm, args.fix, report_path, state)
+    found_g, fixed_g = check_source(course_dir, "glossary.csv", GLOSSARY_FIELDS, "term", args.model,
+                                    args.batch_size, use_llm, args.fix, report_path, state)
     with open(state_path, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
+    return found_c + found_g, fixed_c + fixed_g
 
 
 def find_all_course_dirs(root):
@@ -509,14 +513,20 @@ def main():
     args = ap.parse_args()
     if not (args.all or args.course):
         ap.error("pass a course folder or --all")
-    course_dirs = find_all_course_dirs(os.getcwd()) if args.all else [args.course]
-    report_path = args.report or os.path.join(os.getcwd(), "english_grammar_report.txt")
+    course_dirs = find_all_course_dirs(REPO_ROOT) if args.all else [args.course]
+    if not course_dirs:
+        ap.error(f"no course folders (with a meta.json) found under {REPO_ROOT}")
+    report_path = args.report or os.path.join(REPO_ROOT, "english_grammar_report.txt")
     print(f"English grammar check, {len(course_dirs)} course(s), "
           f"{'rules only' if args.no_llm else 'model=' + args.model}, "
           f"{'FIX' if args.fix else 'check only'}")
     print(f"Report: {report_path}")
+    unresolved = 0
     for d in course_dirs:
-        check_course(d, args, report_path)
+        found, fixed_count = check_course(d, args, report_path)
+        unresolved += found - fixed_count
+    # Non-zero while anything is left for a human (or for --fix), like check_key_term_usage.py.
+    sys.exit(1 if unresolved else 0)
 
 
 if __name__ == "__main__":

@@ -8,12 +8,23 @@ from __future__ import annotations
 
 import json
 import struct
+from functools import lru_cache
 from html import escape as esc
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 IMG_DIR = HERE / "site_assets" / "img" / "guide"
-SHOT_ALT = {s["file"]: s["alt"] for s in json.loads((HERE / "guide" / "guide_shots.json").read_text(encoding="utf-8"))["shots"]}
+MANIFEST = HERE / "guide" / "guide_shots.json"
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+
+
+@lru_cache(maxsize=None)
+def shot_alt() -> dict[str, str]:
+    """file -> description, from guide_shots.json (read on first use, not at import)."""
+    try:
+        return {s["file"]: s["alt"] for s in json.loads(MANIFEST.read_text(encoding="utf-8"))["shots"]}
+    except (OSError, ValueError, KeyError, TypeError) as e:
+        raise ValueError(f"cannot read the screenshot list {MANIFEST}: {e}") from e
 
 
 def load_version() -> dict:
@@ -22,14 +33,25 @@ def load_version() -> dict:
 
 def png_size(path: Path) -> tuple[int, int]:
     """Width and height from the PNG header (stdlib only), so <img> can reserve its space."""
-    return struct.unpack(">II", path.read_bytes()[16:24])
+    try:
+        head = path.read_bytes()[:24]
+    except OSError as e:
+        raise ValueError(f"guide screenshot {path} cannot be read: {e}") from e
+    if len(head) < 24 or not head.startswith(PNG_SIGNATURE):
+        raise ValueError(f"guide screenshot {path} is not a PNG file")
+    return struct.unpack(">II", head[16:24])
 
 
 def shot(file: str) -> str:
+    alt = shot_alt().get(file)
+    if alt is None:
+        raise ValueError(f"guide screenshot {file!r} is not listed in {MANIFEST.name} (guide_shots.json)")
     width, height = png_size(IMG_DIR / file)
+    # The visible caption describes the screenshot, so the image has alt="": a screen reader
+    # would otherwise read the same sentence twice.
     return (
-        f'<figure class="guide-shot"><img src="../assets/img/guide/{esc(file)}" alt="{esc(SHOT_ALT[file])}" '
-        f'width="{width}" height="{height}" loading="lazy"><figcaption>{esc(SHOT_ALT[file])}</figcaption></figure>'
+        f'<figure class="guide-shot"><img src="../assets/img/guide/{esc(file)}" alt="" '
+        f'width="{width}" height="{height}" loading="lazy"><figcaption>{esc(alt)}</figcaption></figure>'
     )
 
 

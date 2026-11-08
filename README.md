@@ -79,10 +79,15 @@ the zip, bump the version and run `validate_course.py`. Full rules:
 │   ├── build_catalog.py            (org-wide scan → catalog.json)
 │   ├── list_course_repos.py        (shared discovery step, used by pages.yml too)
 │   ├── build_site.py               (the public catalog site generator)
-│   └── site_assets/                (static assets for the site)
+│   ├── site_assets/                (static assets for the site)
+│   └── testdata/site_courses/      (tiny fixture course for the site-build tests)
+├── requirements.txt                (pinned optional tooling deps + pytest)
+├── requirements-media.txt          (pinned deps of the local screenshot/cover tools)
 └── .github/workflows/
+    ├── ci.yml                      (tool tests + site-build smoke test on every PR/push)
     ├── rebuild-catalog.yml         (scheduled + manual catalog.json rebuild)
-    └── pages.yml                   (builds + deploys the public catalog site)
+    ├── pages.yml                   (builds + deploys the public catalog site)
+    └── security.yml                (CodeQL, bandit, pip-audit, gitleaks)
 ```
 
 Course content itself — `meta.json`, the built `.zip`, `cover.*`,
@@ -115,7 +120,10 @@ tagged repo into a scratch directory first (via `tools/list_course_repos.py`,
 no auth needed for cloning public repos), then runs `build_site.py
 --courses-dir <scratch dir>` against that. It's chained to run right after
 `rebuild-catalog.yml` completes, so the site always reflects the latest
-catalog.
+catalog; a rebuild that left `catalog.json` unchanged skips the build and
+deploy. A course repo that can't be cloned or built is left out with a
+warning; if most clones fail, or no course builds at all, nothing is deployed
+and the live site stays as it is.
 
 To preview locally against your own already-cloned course repos:
 

@@ -23,10 +23,12 @@ def test_page_covers_every_data_touching_feature():
     assert "speech recognition" not in html
 
 
-def test_page_explains_deletion_and_no_tracking():
+def test_page_explains_deletion_and_what_is_collected():
     html = render()
     assert "Uninstall the app" in html
-    assert "no third-party trackers" in html
+    assert "What information do you collect?" in html
+    # No blanket headline promises; the policy states exactly what is and is not collected.
+    assert "no ads" not in html.lower() and "no third-party trackers" not in html.lower()
     assert "support@yaaddi.com" in html
 
 
@@ -58,7 +60,7 @@ def test_terms_page_uses_the_same_design_as_privacy():
     assert len(build_site.TERMS_CARDS) == len(build_site.PRIVACY_CARDS)
     assert html.count('<details class="privacy-details">') == len(build_site.TERMS_SECTIONS)
     assert "<summary>1. Educational use only</summary>" in html
-    assert build_site.PRIVACY_UPDATED in html
+    assert build_site.TERMS_UPDATED in html
 
 
 def test_terms_page_keeps_consumer_rights_and_contact():
@@ -83,12 +85,12 @@ def test_app_bundled_documents_match_the_website():
 
     if not APP_LOCALES.is_dir():
         pytest.skip("app checkout not next to the catalog")
-    for name, cards, sections in (
-        ("privacy", build_site.PRIVACY_CARDS, build_site.PRIVACY_DETAILS),
-        ("terms", build_site.TERMS_CARDS, build_site.TERMS_SECTIONS),
+    for name, updated, cards, sections in (
+        ("privacy", build_site.PRIVACY_UPDATED, build_site.PRIVACY_CARDS, build_site.PRIVACY_DETAILS),
+        ("terms", build_site.TERMS_UPDATED, build_site.TERMS_CARDS, build_site.TERMS_SECTIONS),
     ):
         app = json.loads((APP_LOCALES / f"{name}.json").read_text(encoding="utf-8"))
-        assert app["updated"] == f"Last updated: {build_site.PRIVACY_UPDATED}", name
+        assert app["updated"] == f"Last updated: {updated}", name
         assert [(c["title"], c["text"]) for c in app["cards"]] == [(_plain(t), _plain(x)) for _, t, x in cards], name
         assert [(s["title"], s["body"]) for s in app["sections"]] == [(_plain(t), _plain(b)) for t, b in sections], name
     features = json.loads((APP_LOCALES / "privacy.json").read_text(encoding="utf-8"))["features"]

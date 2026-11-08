@@ -64,7 +64,7 @@ def load_tags(course_dir):
     if not meta_path.is_file():
         return set()
     try:
-        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        meta = json.loads(meta_path.read_text(encoding="utf-8-sig"))
     except json.JSONDecodeError:
         return set()
     return {t.strip().lower() for t in meta.get("tags", []) if t.strip()}
@@ -104,9 +104,9 @@ def check_duplicate_prompts(course_dirs):
                 continue
             ctype = c.get("type") or "multiple_choice"
             # Same exemptions validate_course.py's own in-course check
-            # applies — speech_recognition/listening_card legitimately
-            # repeat a production/listening prompt on purpose.
-            if ctype in ("speech_recognition", "listening_card"):
+            # applies — listening_card legitimately repeats a listening
+            # prompt on purpose.
+            if ctype == "listening_card":
                 continue
             key = prompt.lower() + "||" + (c.get("options") or "").strip().lower()
             by_key.setdefault(key, []).append((course_dir.name, c.get("id"), prompt))

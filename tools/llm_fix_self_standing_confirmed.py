@@ -8,33 +8,28 @@ Deliberately does NOT read check_self_standing.py's raw report directly
 — that report's LLM layer has a meaningful false-positive rate (see the
 triage that produced the input list this script actually reads), so
 this only touches cards a human confirmed are real. For each card, the
-model sees its own text plus its related main card (and, for a
-metaphor-dependent case, the pack's preview/main text) so it has real
+model sees its own text plus its related main card (and the preview card
+of that same pack, for a metaphor-dependent case) so it has real
 material to substitute the vague reference with instead of guessing.
 
-Same safety net as llm_fix_forward_refs.py: word-limit pre-check,
-validate_course.py re-check afterward, per-card revert on failure.
+Same safety net as llm_fix_forward_refs.py: rewrite pre-check
+(llm_common.rewrite_problem: word limits, correct option kept, answer-bearing
+options never touched), trusted validate_course.py re-check afterward,
+per-card revert on failure (every touched card if the validator cannot run).
 
-Input: a text file, one "course|card_id" pair per line.
+Input: a text file, one "course|card_id" pair per line ("#" starts a comment
+line; any other malformed line is reported and skipped).
 
 Usage:
     python tools/llm_fix_self_standing_confirmed.py <list.txt> [--batch-size 3] [--model NAME]
 """
 import argparse
-import csv
-import json
 import os
-import re
-import subprocess
-import sys
-import time
-import urllib.request
 
-LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
-DEFAULT_MODEL = "google/gemma-4-e4b"
+import llm_common
+from llm_common import DEFAULT_MODEL, LlmFailures, coerce_str, extract_json_array, rewrite_problem, write_dict_csv
+
 BATCH_SIZE_DEFAULT = 3
-MAX_PROMPT_WORDS = 10
-MAX_OPTION_WORDS = 3
 
 SYSTEM_PROMPT = (
     "You fix flashcard prompts that rely on unstated context — a bare "
@@ -58,95 +53,21 @@ SYSTEM_PROMPT = (
 
 
 def read_csv(path):
-    if not os.path.isfile(path):
-        return [], []
-    with open(path, encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f, restkey="_extra")
-        fieldnames = reader.fieldnames
-        rows = list(reader)
-    bad = [r.get("id") for r in rows if r.get("_extra")]
-    if bad:
-        raise ValueError(f"{path}: malformed row(s) with extra columns (id={bad})")
-    return fieldnames, rows
+    return llm_common.read_csv(path)
 
 
-def call_llm(model, user_content, max_tokens=2000, retries=3):
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.2,
-        "max_tokens": max_tokens,
-    }).encode("utf-8")
-    req = urllib.request.Request(
-        LM_STUDIO_URL, data=payload, headers={"Content-Type": "application/json"}
-    )
-    last_err = None
-    for attempt in range(retries):
-        try:
-            with urllib.request.urlopen(req, timeout=180) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
-                data = json.loads(resp.read().decode("utf-8"))
-            return data["choices"][0]["message"]["content"]
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"LM Studio call failed after {retries} attempts: {last_err}")
+def call_llm(model, user_content):
+    return llm_common.call_llm(model, SYSTEM_PROMPT, user_content, temperature=0.2, max_tokens=2000)
 
 
-def extract_json_array(text):
-    text = text.strip()
-    # Strip a markdown code fence if the model added one despite being
-    # told not to (```json ... ``` or bare ``` ... ```).
-    fence = re.match(r"^```(?:json)?\s*(.*?)\s*```$", text, re.DOTALL)
-    if fence:
-        text = fence.group(1).strip()
-    if text.startswith("["):
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            pass
-    # A single-item batch sometimes comes back as a bare object instead
-    # of a 1-element array, despite the instruction — wrap it.
-    if text.startswith("{"):
-        try:
-            return [json.loads(text)]
-        except json.JSONDecodeError:
-            pass
-    match = re.search(r"\[.*\]", text, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except json.JSONDecodeError:
-            return None
-    match = re.search(r"\{.*\}", text, re.DOTALL)
-    if match:
-        try:
-            return [json.loads(match.group(0))]
-        except json.JSONDecodeError:
-            return None
-    return None
+def run_validate(course_dir):
+    return llm_common.run_validate(course_dir)
 
 
-def coerce_str(v, sep=" "):
-    if isinstance(v, list):
-        return sep.join(str(x) for x in v)
-    return v
-
-
-def valid_rewrite(new_prompt, new_options, orig_options):
-    if new_prompt is not None and len(new_prompt.split()) > MAX_PROMPT_WORDS:
-        return False
-    if new_options is not None:
-        orig_n = len(orig_options.split("|")) if orig_options else 0
-        new_opts = new_options.split("|")
-        if orig_n and len(new_opts) != orig_n:
-            return False
-        for o in new_opts:
-            if len(o.split(":", 1)[-1].split()) > MAX_OPTION_WORDS:
-                return False
-    return True
+def pack_preview(cards, main_card):
+    """The preview card of main_card's own pack (its related_main_id), not just any preview in
+    the same unit: a unit holds several packs."""
+    return next((c for c in cards if c.get("role") == "preview" and c.get("related_main_id") == main_card["id"]), None)
 
 
 def format_group(card, main_card, preview_card):
@@ -162,25 +83,8 @@ def format_group(card, main_card, preview_card):
     return "\n".join(lines)
 
 
-def run_validate(course_dir):
-    abs_course_dir = os.path.abspath(course_dir)
-    script = os.path.join(abs_course_dir, "validate_course.py")
-    if not os.path.isfile(script):
-        print(f"    WARNING: validate_course.py not found at {script}")
-        return set()
-    result = subprocess.run(
-        [sys.executable, script, ".", "--source"],
-        cwd=abs_course_dir, capture_output=True, text=True, encoding="utf-8", errors="replace",
-    )
-    bad_ids = set()
-    for line in result.stdout.splitlines():
-        m = re.search(r"card (\d+)", line)
-        if "[ERROR]" in line and m:
-            bad_ids.add(m.group(1))
-    return bad_ids
-
-
-def fix_course(course_dir, card_ids, model, batch_size):
+def fix_course(course_dir, card_ids, model, batch_size, failures=None):
+    failures = failures or LlmFailures()
     card_fields, cards = read_csv(os.path.join(course_dir, "source", "cards.csv"))
     if not cards:
         return
@@ -206,21 +110,18 @@ def fix_course(course_dir, card_ids, model, batch_size):
         for cid in batch_ids:
             card = cards_by_id[cid]
             main_card = cards_by_id.get(card.get("related_main_id", ""))
-            preview_card = None
-            if main_card is not None:
-                # find a preview card in the same unit as the main card
-                for c in cards:
-                    if c.get("role") == "preview" and c["unit_id"] == main_card["unit_id"]:
-                        preview_card = c
-                        break
+            preview_card = pack_preview(cards, main_card) if main_card is not None else None
             blocks.append(format_group(card, main_card, preview_card))
         block = "\n---\n".join(blocks)
         try:
             raw = call_llm(model, block)
-            parsed = extract_json_array(raw)
         except Exception as e:  # noqa: BLE001
             print(f"    batch {i}-{i+len(batch_ids)} FAILED: {e}")
+            if failures.failed():
+                break
             continue
+        failures.ok()
+        parsed = extract_json_array(raw)
         if not parsed:
             print(f"    batch {i}-{i+len(batch_ids)}: could not parse model output, skipping")
             continue
@@ -233,11 +134,11 @@ def fix_course(course_dir, card_ids, model, batch_size):
                 continue
             card = cards_by_id[cid]
             new_prompt = coerce_str(result.get("prompt"))
-            new_options = coerce_str(result.get("options"))
-            if not valid_rewrite(new_prompt, new_options, card.get("options", "")):
+            new_options = coerce_str(result.get("options"), "|")
+            if rewrite_problem(card, new_prompt, new_options):
                 skipped.append(cid)
                 continue
-            original[cid] = dict(card)
+            original.setdefault(cid, dict(card))
             if new_prompt:
                 card["prompt"] = new_prompt
             if new_options:
@@ -250,28 +151,36 @@ def fix_course(course_dir, card_ids, model, batch_size):
         print(f"  DONE: {name} — no changes applied, {len(skipped)} skipped")
         return
 
-    tmp = cards_path + ".tmp"
-    with open(tmp, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=card_fields)
-        w.writeheader()
-        w.writerows(cards)
-    os.replace(tmp, cards_path)
+    write_dict_csv(cards_path, card_fields, cards)
 
-    bad_ids = run_validate(course_dir) & touched
+    bad = run_validate(course_dir)
+    bad_ids = set(touched) if bad is None else bad & touched
     if bad_ids:
         for cid in bad_ids:
             cards_by_id[cid].clear()
             cards_by_id[cid].update(original[cid])
-        tmp = cards_path + ".tmp"
-        with open(tmp, "w", encoding="utf-8", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=card_fields)
-            w.writeheader()
-            w.writerows(cards)
-        os.replace(tmp, cards_path)
+        write_dict_csv(cards_path, card_fields, cards)
         print(f"  {name}: reverted {len(bad_ids)} card(s) that failed validation: {sorted(bad_ids)}")
 
     fixed = touched - bad_ids
     print(f"  DONE: {name} — fixed {len(fixed)} card(s), skipped {len(skipped)}, reverted {len(bad_ids)}")
+
+
+def read_card_list(path):
+    """{course: [card_id, ...]} from a "course|card_id" list; blank and "#" lines are ignored and
+    any other line that is not exactly two non-empty fields is reported and skipped."""
+    by_course = {}
+    with open(path, encoding="utf-8-sig") as f:
+        for n, line in enumerate(f, start=1):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = [p.strip() for p in line.split("|")]
+            if len(parts) != 2 or not all(parts):
+                print(f"  WARNING: skipping line {n} (expected course|card_id): {line[:80]!r}")
+                continue
+            by_course.setdefault(parts[0], []).append(parts[1])
+    return by_course
 
 
 def main():
@@ -281,18 +190,14 @@ def main():
     ap.add_argument("--model", default=DEFAULT_MODEL)
     args = ap.parse_args()
 
-    by_course = {}
-    with open(args.list_file, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            course, cid = line.split("|")
-            by_course.setdefault(course, []).append(cid)
+    by_course = read_card_list(args.list_file)
 
     print(f"Fixing {sum(len(v) for v in by_course.values())} confirmed card(s) across {len(by_course)} course(s) with model={args.model}")
+    failures = LlmFailures()
     for course, ids in by_course.items():
-        fix_course(course, ids, args.model, args.batch_size)
+        fix_course(course, ids, args.model, args.batch_size, failures)
+        if failures.tripped:
+            raise SystemExit(1)
 
 
 if __name__ == "__main__":

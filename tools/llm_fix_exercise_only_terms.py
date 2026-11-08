@@ -26,15 +26,15 @@ Usage:
     python tools/llm_fix_exercise_only_terms.py --all [--batch-size 6]
 """
 import argparse
-import csv
-import json
 import os
-import re
-import time
-import urllib.request
+import sys
 
-LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
-DEFAULT_MODEL = "google/gemma-4-e4b"
+import llm_common
+from llm_common import (
+    DEFAULT_MODEL, LlmFailures, coerce_str, extract_json_array, find_all_course_dirs, read_dict_csv, write_dict_csv,
+)
+from term_match import build_word_pattern
+
 BATCH_SIZE_DEFAULT = 6
 
 SYSTEM_PROMPT = (
@@ -55,55 +55,11 @@ SYSTEM_PROMPT = (
 
 
 def read_csv(path):
-    if not os.path.isfile(path):
-        return []
-    with open(path, encoding="utf-8-sig") as f:
-        return list(csv.DictReader(f))
+    return read_dict_csv(path, strict=False)[1]
 
 
-def build_word_pattern(term):
-    return re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE | re.UNICODE)
-
-
-def call_llm(model, user_content, max_tokens=1600, retries=3):
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.1,
-        "max_tokens": max_tokens,
-    }).encode("utf-8")
-    req = urllib.request.Request(
-        LM_STUDIO_URL, data=payload, headers={"Content-Type": "application/json"}
-    )
-    last_err = None
-    for attempt in range(retries):
-        try:
-            with urllib.request.urlopen(req, timeout=180) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
-                data = json.loads(resp.read().decode("utf-8"))
-            return data["choices"][0]["message"]["content"]
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"LM Studio call failed after {retries} attempts: {last_err}")
-
-
-def extract_json_array(text):
-    text = text.strip()
-    if text.startswith("["):
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            pass
-    match = re.search(r"\[.*\]", text, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except json.JSONDecodeError:
-            return None
-    return None
+def call_llm(model, user_content):
+    return llm_common.call_llm(model, SYSTEM_PROMPT, user_content, temperature=0.1, max_tokens=1600)
 
 
 def find_exercise_only_terms(course_dir):
@@ -124,18 +80,18 @@ def find_exercise_only_terms(course_dir):
 
     ordered_cards = sorted(cards, key=sort_key)
     by_id = {c["id"]: c for c in cards}
+    # Card text joined once, not once per term x card.
+    exercise_texts = [
+        (c, " ".join([c.get("prompt", ""), c.get("options", ""), c.get("explanation", "")]))
+        for c in ordered_cards if c.get("role") == "exercise"
+    ]
 
     missing = [g for g in glossary if not (g.get("introduced_by_card_id") or "").strip()]
     results = []
     for g in sorted(missing, key=lambda g: -len(g["term"])):
         term = g["term"]
         pattern = build_word_pattern(term)
-        first_exercise = None
-        for c in ordered_cards:
-            haystack = " ".join([c.get("prompt", ""), c.get("options", ""), c.get("explanation", "")])
-            if pattern.search(haystack) and c.get("role") == "exercise":
-                first_exercise = c
-                break
+        first_exercise = next((c for c, text in exercise_texts if pattern.search(text)), None)
         if first_exercise is None:
             continue  # dead term or something apply_clean_ledger should have caught
         main_id = first_exercise.get("related_main_id") or ""
@@ -163,7 +119,8 @@ def format_term(term_row, exercise_card, main_card):
     )
 
 
-def fix_course(course_dir, model, batch_size):
+def fix_course(course_dir, model, batch_size, failures=None):
+    failures = failures or LlmFailures()
     todo, glossary, cards = find_exercise_only_terms(course_dir)
     if not todo:
         return False
@@ -185,10 +142,13 @@ def fix_course(course_dir, model, batch_size):
         block = "\n---\n".join(format_term(*t) for t in batch)
         try:
             raw = call_llm(model, block)
-            parsed = extract_json_array(raw)
         except Exception as e:  # noqa: BLE001
             print(f"    batch {i}-{i+len(batch)} FAILED: {e}")
+            if failures.failed():
+                break
             continue
+        failures.ok()
+        parsed = extract_json_array(raw)
         if not parsed:
             print(f"    batch {i}-{i+len(batch)}: could not parse model output, skipping")
             continue
@@ -204,7 +164,7 @@ def fix_course(course_dir, model, batch_size):
             glossary_by_term[term_row["term"]]["introduced_by_card_id"] = main_card["id"]
             changed_glossary = True
             if decision == "NEEDS_EXPLANATION":
-                sentence = (result.get("add_sentence") or "").strip()
+                sentence = coerce_str(result.get("add_sentence")) or ""
                 if sentence:
                     existing = cards_by_id[main_card["id"]].get("explanation", "") or ""
                     cards_by_id[main_card["id"]]["explanation"] = (
@@ -215,31 +175,12 @@ def fix_course(course_dir, model, batch_size):
         print(f"    batch {i}-{i+len(batch)} done")
 
     if changed_glossary:
-        tmp = glossary_path + ".tmp"
-        with open(tmp, "w", encoding="utf-8", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=glossary_fieldnames)
-            w.writeheader()
-            w.writerows(glossary)
-        os.replace(tmp, glossary_path)
+        write_dict_csv(glossary_path, glossary_fieldnames, glossary)
     if changed_cards:
-        tmp = cards_path + ".tmp"
-        with open(tmp, "w", encoding="utf-8", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=card_fieldnames)
-            w.writeheader()
-            w.writerows(cards)
-        os.replace(tmp, cards_path)
+        write_dict_csv(cards_path, card_fieldnames, cards)
 
     print(f"  DONE: {os.path.basename(course_dir)} — glossary_changed={changed_glossary} cards_changed={changed_cards}")
     return changed_glossary or changed_cards
-
-
-def find_all_course_dirs(root):
-    dirs = []
-    for entry in sorted(os.listdir(root)):
-        p = os.path.join(root, entry)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, "meta.json")):
-            dirs.append(p)
-    return dirs
 
 
 def main():
@@ -251,7 +192,9 @@ def main():
     args = ap.parse_args()
 
     if args.all:
-        course_dirs = find_all_course_dirs(os.getcwd())
+        course_dirs = find_all_course_dirs()
+        if not course_dirs:
+            ap.error(f"no course folders (with a meta.json) found under {llm_common.REPO_ROOT}")
     elif args.course:
         course_dirs = [args.course]
     else:
@@ -259,8 +202,11 @@ def main():
         return
 
     print(f"Resolving exercise-only terms for {len(course_dirs)} course(s) with model={args.model}")
+    failures = LlmFailures()
     for course_dir in course_dirs:
-        fix_course(course_dir, args.model, args.batch_size)
+        fix_course(course_dir, args.model, args.batch_size, failures)
+        if failures.tripped:
+            sys.exit(1)
 
 
 if __name__ == "__main__":

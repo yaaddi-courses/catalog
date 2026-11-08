@@ -21,6 +21,7 @@ from generate_language_course import (
     build_units_csv,
     deck_cover_prompt,
     generate_deck_cover,
+    cover_filename,
     generate_deck_covers,
     meaning_question,
 )
@@ -52,7 +53,9 @@ class GenerateLanguageCourseTest(unittest.TestCase):
         # image column stays blank, same as before this feature existed.
         self.assertEqual([u["image"] for u in units], ["", ""])
 
-    def test_every_pack_has_a_preview_a_main_and_at_least_three_practice_cards(self):
+    def test_every_pack_has_a_preview_a_main_and_at_least_two_practice_cards(self):
+        # validate_course.py's hard rule is 2 (the first row, with no earlier item to
+        # build choices from, has exactly 2 since speech cards were removed).
         mains = [c for c in self.cards if c["role"] == "main"]
         self.assertEqual(len(mains), len(self.rows))
         for main in mains:
@@ -64,11 +67,17 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             ]
             self.assertEqual(len(previews), 1, f"main {main['id']} should have exactly one preview")
             self.assertGreaterEqual(
-                len(exercises), 3, f"main {main['id']} should have at least 3 practice cards"
+                len(exercises), 2, f"main {main['id']} should have at least 2 practice cards"
             )
 
-    def test_true_false_only_ever_used_for_preview(self):
-        offenders = [c for c in self.cards if c["type"] == "true_false" and c["role"] != "preview"]
+    def test_true_false_only_ever_used_for_preview_or_the_first_pack(self):
+        # The very first row has no earlier item to draw a distractor from, so a true
+        # reverse-direction statement is its one content-safe extra practice card.
+        first_main = next(c for c in self.cards if c["role"] == "main")
+        offenders = [
+            c for c in self.cards
+            if c["type"] == "true_false" and c["role"] != "preview" and c["related_main_id"] != first_main["id"]
+        ]
         self.assertEqual(offenders, [], f"true_false used outside preview: {offenders}")
 
     def test_bilingual_prompts_and_explanations_split_target_and_gloss_onto_separate_lines(self):
@@ -117,7 +126,8 @@ class GenerateLanguageCourseTest(unittest.TestCase):
                 continue
             current_index = next(i for i, r in enumerate(self.rows) if r.target_word == target_word)
             options = [o for o in card["options"].split("|") if o]
-            for opt in options[1:]:  # options[0] is the correct gloss itself
+            correct = options[int(card["correct_index"])]
+            for opt in (o for o in options if o != correct):  # every option but the correct gloss
                 self.assertIn(opt, row_index_by_gloss, f"distractor {opt!r} isn't a real gloss")
                 self.assertLess(
                     row_index_by_gloss[opt],
@@ -153,10 +163,9 @@ class GenerateLanguageCourseTest(unittest.TestCase):
 
     def test_every_listening_card_has_audio_and_a_matching_tts_manifest_entry(self):
         listening_cards = [c for c in self.cards if c["type"] == "listening_card"]
-        # Rows with at least one prior item get a listening_card rep (row 0,
-        # "Hello", has no prior item to build either variant from and is the
-        # only one skipped) — 4 of this fixture's 5 rows qualify.
-        self.assertEqual(len(listening_cards), 4)
+        # Every row gets a listening_card rep (row 0, "Hello", has no prior item
+        # for a choice, so it is the "type what you heard" variant).
+        self.assertEqual(len(listening_cards), 5)
         manifest_by_audio = {m["audio"]: m["text"] for m in self.tts_manifest}
         for card in listening_cards:
             self.assertTrue(card["audio"], f"listening_card {card['id']} has no audio filename")
@@ -179,6 +188,11 @@ class GenerateLanguageCourseTest(unittest.TestCase):
             self.assertIn(row_by_word[accepted_word].base_gloss, card["prompt"])
 
     def test_type_answer_typing_budget_stays_under_ten_percent(self):
+        # A course-level ratio: measured on a 15-word vocabulary, since in a 5-word fixture the
+        # first row (whose main and listening card both have to be typed) dominates it.
+        words = ["Hello", "Please", "Thank you", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+                 "Eight", "Nine", "Ten", "Yes", "No"]
+        cards, _ = build_cards_csv([VocabRow("Deck", w, "word", f"g{i}") for i, w in enumerate(words)], random.Random(0))
         TYPING_TYPES = {"type_answer", "numeric_answer", "code_fill", "command_output", "short_answer"}
 
         def requires_typing(c):
@@ -188,8 +202,8 @@ class GenerateLanguageCourseTest(unittest.TestCase):
                 return c["options"].split("|", 1)[0] == "type"
             return False
 
-        typing_count = sum(requires_typing(c) for c in self.cards)
-        self.assertLessEqual(typing_count / len(self.cards), 0.10)
+        typing_count = sum(requires_typing(c) for c in cards)
+        self.assertLessEqual(typing_count / len(cards), 0.10)
 
     def test_example_sentence_produces_an_order_practice_card(self):
         rows = sample_rows()
@@ -260,7 +274,7 @@ class GenerateLanguageCourseTest(unittest.TestCase):
         translate_cards = [c for c in pack if c["type"] == "type_answer"]
         self.assertEqual(translate_cards, [])
 
-    def test_example_sentence_also_gets_a_full_sentence_speech_card_and_fill_in_blank(self):
+    def test_example_sentence_also_gets_a_fill_in_blank_and_no_speech_card(self):
         rows = sample_rows()
         rows[2] = VocabRow(
             "Greetings", "Thank you", "phrase", "متشکرم",
@@ -271,8 +285,8 @@ class GenerateLanguageCourseTest(unittest.TestCase):
         main = next(c for c in cards if c["role"] == "main" and c["prompt"] == meaning_question("Thank you"))
         pack = [c for c in cards if c["related_main_id"] == main["id"]]
 
-        speech_cards = [c for c in pack if c["type"] == "speech_recognition" and c["prompt"] == "Hello, Thank you"]
-        self.assertEqual(len(speech_cards), 1, "the full sentence must be said aloud, not just the isolated word")
+        # speech_recognition cards were removed from the app (2026-10-08).
+        self.assertEqual([c for c in pack if c["type"] == "speech_recognition"], [])
 
         # "Thank you" fits as an option (2 words) and prior rows (Hello,
         # Please) supply real distractors, so a fill-in-the-blank rep should
@@ -295,14 +309,85 @@ class GenerateLanguageCourseTest(unittest.TestCase):
         exercises = [c for c in cards if c["role"] == "exercise" and c["related_main_id"] == main["id"]]
         # The reverse-direction multiple_choice quiz (step 4) is the first
         # card that is unambiguously NOT part of the sentence-practice
-        # block — everything before it must be order/select_blank/the
-        # full-sentence speech_recognition rep.
+        # block — everything before it must be order/select_blank/translate.
         first_old_style = next(i for i, c in enumerate(exercises) if c["type"] == "multiple_choice")
         leading = exercises[:first_old_style]
-        self.assertEqual(
-            {c["type"] for c in leading}, {"order", "select_blank", "speech_recognition", "type_answer"}
-        )
+        self.assertEqual({c["type"] for c in leading}, {"order", "select_blank", "type_answer"})
         self.assertIn("order", [c["type"] for c in leading])
+
+
+class GeneratorSafetyTest(unittest.TestCase):
+    """H13 (no removed card types), H15 (shuffled, duplicate-free options), N203 (no silent
+    overwrite) and N212 (delimiter characters in the vocabulary)."""
+
+    ALLOWED_TYPES = {"multiple_choice", "true_false", "order", "select_blank", "match_pairs", "type_answer", "listening_card"}
+
+    def rows(self, n=12):
+        glosses = ["سلام", "لطفاً", "متشکرم", "یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "نه"]
+        words = ["Hello", "Please", "Thank you", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"]
+        return [VocabRow("Deck", w, "word", g, example_sentence=f"{w}|now" if i % 2 else "") for i, (w, g) in enumerate(zip(words[:n], glosses[:n]))]
+
+    def test_only_card_types_the_app_still_has_and_every_pack_is_complete(self):
+        cards, _ = build_cards_csv(self.rows(), random.Random(0))
+        self.assertLessEqual({c["type"] for c in cards}, self.ALLOWED_TYPES)
+        for main in (c for c in cards if c["role"] == "main"):
+            self.assertNotEqual(main["type"], "true_false")
+            practice = [c for c in cards if c["role"] == "exercise" and c["related_main_id"] == main["id"]]
+            self.assertGreaterEqual(len(practice), 2, f"main {main['id']} needs at least 2 practice cards")
+
+    def test_main_options_are_shuffled_and_no_choice_card_repeats_an_option(self):
+        rows = self.rows()
+        rows.append(VocabRow("Deck", "Hi", "word", "سلام"))  # same gloss as an earlier row
+        cards, _ = build_cards_csv(rows, random.Random(0))
+        mains = [c for c in cards if c["role"] == "main" and c["type"] == "multiple_choice"]
+        self.assertGreater(len({c["correct_index"] for c in mains}), 1, "the correct answer is always in one slot")
+        gloss_by_prompt = {meaning_question(r.target_word): r.base_gloss for r in rows}
+        for c in mains:
+            self.assertEqual(c["options"].split("|")[int(c["correct_index"])], gloss_by_prompt[c["prompt"]])
+        for c in cards:
+            if c["type"] in ("multiple_choice", "select_blank", "match_pairs") or c["options"].startswith("select|"):
+                opts = c["options"].split("|")
+                lefts = [o.split("↔")[0] for o in opts]
+                rights = [o.split("↔")[-1] for o in opts]
+                self.assertEqual(len(set(lefts)), len(lefts), f"card {c['id']} repeats an option: {opts}")
+                self.assertEqual(len(set(rights)), len(rights), f"card {c['id']} repeats an option: {opts}")
+
+    def write_vocab(self, folder, rows):
+        path = Path(folder) / "vocab.csv"
+        lines = ["deck,target_word,target_type,base_gloss"] + [",".join(r) for r in rows]
+        path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return path
+
+    def test_existing_output_is_never_overwritten_without_force(self):
+        from generate_language_course import generate
+        with tempfile.TemporaryDirectory() as tmp:
+            vocab = self.write_vocab(tmp, [("Deck", "Hello", "word", "سلام"), ("Deck", "Bye", "word", "خداحافظ")])
+            course = Path(tmp) / "course"
+            generate(vocab, course)
+            units = course / "source" / "units.csv"
+            units.write_text(units.read_text(encoding="utf-8").replace("Deck,,", "Deck,,deck.png"), encoding="utf-8")
+            before = units.read_bytes()
+            with self.assertRaises(ValueError):
+                generate(vocab, course)
+            self.assertEqual(units.read_bytes(), before)
+            generate(vocab, course, force=True)
+            self.assertEqual((course / "source" / "units.csv.bak").read_bytes(), before)
+            self.assertIn("deck.png", units.read_text(encoding="utf-8"))  # the unit's cover is kept
+
+    def test_delimiter_characters_in_the_vocabulary_are_rejected(self):
+        from generate_language_course import read_vocab
+        for bad in ("Hello|Hi", "a↔b", "x~y"):
+            with tempfile.TemporaryDirectory() as tmp:
+                vocab = self.write_vocab(tmp, [("Deck", bad, "word", "سلام")])
+                with self.assertRaises(ValueError):
+                    read_vocab(vocab)
+
+    def test_server_down_message_has_no_machine_specific_path(self):
+        with patch("generate_language_course.urllib.request.urlopen", side_effect=urllib.error.URLError("refused")):
+            with tempfile.TemporaryDirectory() as tmp:
+                with self.assertRaises(RuntimeError) as ctx:
+                    generate_deck_cover("Greetings", Path(tmp) / "deck1.png")
+        self.assertNotIn("D:\\", str(ctx.exception))
 
 
 class FakeResponse:
@@ -364,7 +449,7 @@ class DeckCoverImageGenerationTest(unittest.TestCase):
     def test_generate_deck_covers_skips_decks_whose_image_already_exists(self):
         with tempfile.TemporaryDirectory() as tmp:
             images_dir = Path(tmp)
-            (images_dir / "deck1.png").write_bytes(b"already-there")
+            (images_dir / "greetings.png").write_bytes(b"already-there")
             generated_for: list[str] = []
 
             def fake_urlopen(req, timeout=None):
@@ -379,12 +464,25 @@ class DeckCoverImageGenerationTest(unittest.TestCase):
             with patch("generate_language_course.urllib.request.urlopen", side_effect=fake_urlopen):
                 result = generate_deck_covers(["Greetings", "Numbers"], images_dir)
 
-            self.assertEqual(result, {"Greetings": "deck1.png", "Numbers": "deck2.png"})
+            self.assertEqual(result, {"Greetings": "greetings.png", "Numbers": "numbers.png"})
             # Only "Numbers" actually triggered a generate call — "Greetings"
             # already had a file on disk.
             self.assertEqual(len(generated_for), 1)
             self.assertIn("numbers", generated_for[0].lower())
-            self.assertTrue((images_dir / "deck2.png").exists())
+            self.assertTrue((images_dir / "numbers.png").exists())
+
+    def test_a_cover_stays_with_its_deck_when_decks_are_inserted_or_reordered(self):
+        taken: set[str] = set()
+        before = {d: cover_filename(d, taken) for d in ["Food", "Travel"]}
+        taken = set()
+        after = {d: cover_filename(d, taken) for d in ["Greetings", "Food", "Travel"]}
+        self.assertEqual(before["Food"], after["Food"])
+        self.assertEqual(before["Travel"], after["Travel"])
+
+    def test_cover_names_are_unique_and_never_empty(self):
+        taken: set[str] = set()
+        names = [cover_filename(d, taken) for d in ["Food!", "food", "???"]]
+        self.assertEqual(names, ["food.png", "food-2.png", "deck.png"])
 
 
 if __name__ == "__main__":

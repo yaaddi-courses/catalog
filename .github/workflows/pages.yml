@@ -4,6 +4,9 @@ name: Build and deploy course site
 # catalog.json changes (chained after rebuild-catalog.yml, since a push to
 # an individual course repo can't directly trigger a workflow living in
 # this repo) or this repo's own site tooling changes, plus manual dispatch.
+# A Rebuild catalog run that left catalog.json unchanged builds nothing (see
+# the "catalog changed?" step). A course's content change always reaches the
+# catalog: its version is bumped at push time, and the version is in catalog.json.
 # No generated HTML is ever committed — the build output is a throwaway CI
 # artifact. One-time manual step required: repo Settings -> Pages ->
 # Source = "GitHub Actions" (can't be set from a workflow file).
@@ -22,10 +25,10 @@ on:
       - ".github/workflows/pages.yml"
   workflow_dispatch: {}
 
+# Only the deploy job gets the Pages/OIDC write permissions; the build job
+# (which clones external course repos and holds ORG_CATALOG_PAT) can only read.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -37,11 +40,35 @@ jobs:
     # catalog.json isn't something to build a fresh site from.
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      build: ${{ steps.gate.outputs.build }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          fetch-depth: 0 # the "catalog changed?" step compares two commits
+
+      # The rebuild commits catalog.json only when it changed, so after a
+      # workflow_run the commit that run started from and the current main
+      # differ in catalog.json only if there is something new to publish.
+      - name: Catalog changed?
+        id: gate
+        env:
+          EVENT: ${{ github.event_name }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          if [ "$EVENT" = "workflow_run" ] && git diff --quiet "$RUN_SHA" HEAD -- catalog.json; then
+            echo "catalog.json unchanged by the rebuild: nothing to deploy"
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.build == 'true'
+        with:
+          python-version: "3.12"
 
       # build_site.py needs each course's full source/units.csv +
       # source/cards.csv (not just meta.json, which is all catalog.json
@@ -50,37 +77,53 @@ jobs:
       # around per-file API fetches. See tools/list_course_repos.py's own
       # doc comment; cloning public repos over plain https needs no token.
       - name: Shallow-clone every course repo into a scratch directory
+        if: steps.gate.outputs.build == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.ORG_CATALOG_PAT }}
         run: |
           mkdir -p /tmp/courses
           python tools/list_course_repos.py > /tmp/repos.json
           python - <<'PY'
-          import json, subprocess
+          import json, subprocess, sys
           repos = json.load(open("/tmp/repos.json"))
+          failed = []
           for repo in repos:
               full_name = repo["full_name"]
               branch = repo["default_branch"]
               name = full_name.split("/", 1)[1]
-              subprocess.run(
+              # One unclonable repo (empty, renamed, branch gone) must not block the whole
+              # site: warn and build the others.
+              result = subprocess.run(
                   [
                       "git", "clone", "--depth=1", "--branch", branch,
                       f"https://github.com/{full_name}.git", f"/tmp/courses/{name}",
                   ],
-                  check=True,
               )
+              if result.returncode != 0:
+                  failed.append(full_name)
+                  print(f"::warning::could not clone {full_name}; it is left out of the site")
+          # Most clones failing means a GitHub/network problem, not bad repos: keep the
+          # site that is live now instead of deploying a mostly empty one.
+          if len(failed) * 2 > len(repos):
+              sys.exit(f"{len(failed)} of {len(repos)} course repos could not be cloned; not deploying")
           PY
 
       - name: Build site
+        if: steps.gate.outputs.build == 'true'
         run: python tools/build_site.py --out _site --courses-dir /tmp/courses
 
       - uses: actions/upload-pages-artifact@v3
+        if: steps.gate.outputs.build == 'true'
         with:
           path: _site
 
   deploy:
     needs: build
+    if: needs.build.outputs.build == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

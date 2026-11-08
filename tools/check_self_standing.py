@@ -36,10 +36,12 @@ import csv
 import json
 import os
 import re
-import time
-import urllib.request
+import sys
 
-LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
+import llm_common
+
+# --all and the default report path are relative to this repo, not the current directory.
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # qwen2.5-coder-7b-instruct was tried first for speed, but on this
 # judgment task it flagged ~38% of cards with a high false-positive
 # rate (systematically confused by select_blank's "___" and by
@@ -48,7 +50,7 @@ LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
 # responses — its internal reasoning eats the token budget before the
 # JSON answer), flagged ~6% with every sampled flag being a real issue.
 # Slower, but the accuracy difference was large enough to be worth it.
-DEFAULT_MODEL = "google/gemma-4-e4b"
+DEFAULT_MODEL = llm_common.DEFAULT_MODEL
 BATCH_SIZE_DEFAULT = 6
 
 SYSTEM_PROMPT = (
@@ -107,44 +109,11 @@ def read_csv(path):
 
 
 def call_llm(model, user_content, max_tokens=2000, retries=3):
-    payload = json.dumps({
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.0,
-        "max_tokens": max_tokens,
-    }).encode("utf-8")
-    req = urllib.request.Request(
-        LM_STUDIO_URL, data=payload, headers={"Content-Type": "application/json"}
-    )
-    last_err = None
-    for attempt in range(retries):
-        try:
-            with urllib.request.urlopen(req, timeout=120) as resp:  # nosec B310  # URL is a fixed constant / operator config, not user input
-                data = json.loads(resp.read().decode("utf-8"))
-            return data["choices"][0]["message"]["content"]
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-            time.sleep(2 * (attempt + 1))
-    raise RuntimeError(f"LM Studio call failed after {retries} attempts: {last_err}")
+    return llm_common.call_llm(model, SYSTEM_PROMPT, user_content, temperature=0.0, max_tokens=max_tokens,
+                               retries=retries, timeout=120)
 
 
-def extract_json_array(text):
-    text = text.strip()
-    if text.startswith("["):
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            pass
-    match = re.search(r"\[.*\]", text, re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group(0))
-        except json.JSONDecodeError:
-            return None
-    return None
+extract_json_array = llm_common.extract_json_array
 
 
 def format_question(card):
@@ -154,13 +123,35 @@ def format_question(card):
     # sampling: this was a real, sizeable false-positive source).
     has_image = bool((card.get("image") or "").strip())
     image_note = " [this card has an attached image the learner sees]" if has_image else ""
-    return f'id={card["id"]}{image_note}\nquestion : "{card.get("prompt","")} {card.get("options","")}".strip()'
+    text = f'{card.get("prompt", "")} {card.get("options", "")}'.strip()
+    return f'id={card["id"]}{image_note}\nquestion : "{text}"'
+
+
+def parse_verdict(value):
+    """The model's self_standing value as True/False, or None when it is neither
+    (bool("false") is True, so a string answer must not be passed to bool())."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str) and value.strip().lower() in ("true", "false"):
+        return value.strip().lower() == "true"
+    return None
+
+
+def flagged_count(state):
+    return sum(1 for v in state.values() if v is False)
+
+
+def save_state(state_path, state):
+    os.makedirs(os.path.dirname(state_path), exist_ok=True)
+    with open(state_path, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=2)
 
 
 def check_course(course_dir, model, batch_size, report_path):
+    """Returns how many of the course's checked cards are flagged (not self standing)."""
     cards = read_csv(os.path.join(course_dir, "source", "cards.csv"))
     if not cards:
-        return
+        return 0
 
     name = os.path.basename(course_dir.rstrip("/\\"))
     state_path = os.path.join(course_dir, ".internal", "self_standing_state.json")
@@ -172,7 +163,7 @@ def check_course(course_dir, model, batch_size, report_path):
     candidates = [c for c in cards if c["id"] not in state and c.get("type") not in EXCLUDED_TYPES]
     if not candidates:
         print(f"  {name}: already fully checked ({len(cards)} cards)")
-        return
+        return flagged_count(state)
 
     # Blatant cases never go to the model at all — free, and 100% reliable.
     todo = []
@@ -187,8 +178,7 @@ def check_course(course_dir, model, batch_size, report_path):
     if auto_flagged:
         for c in auto_flagged:
             state[c["id"]] = False
-        with open(state_path, "w", encoding="utf-8") as f:
-            json.dump(state, f, ensure_ascii=False, indent=2)
+        save_state(state_path, state)
         with open(report_path, "a", encoding="utf-8") as f:
             for c in auto_flagged:
                 prompt = (c.get("prompt") or "").replace("\n", " ")
@@ -197,7 +187,7 @@ def check_course(course_dir, model, batch_size, report_path):
 
     if not todo:
         print(f"  {name}: fully checked ({len(cards)} cards)")
-        return
+        return flagged_count(state)
     print(f"  {name}: {len(todo)}/{len(cards)} card(s) to check")
 
     for i in range(0, len(todo), batch_size):
@@ -219,13 +209,14 @@ def check_course(course_dir, model, batch_size, report_path):
             result = result_by_id.get(c["id"])
             if result is None:
                 continue
-            verdict = bool(result.get("self_standing"))
+            verdict = parse_verdict(result.get("self_standing"))
+            if verdict is None:
+                continue  # unreadable answer: leave the card for the next run
             state[c["id"]] = verdict
             if not verdict:
                 newly_flagged.append(c)
 
-        with open(state_path, "w", encoding="utf-8") as f:
-            json.dump(state, f, ensure_ascii=False, indent=2)
+        save_state(state_path, state)
 
         if newly_flagged:
             with open(report_path, "a", encoding="utf-8") as f:
@@ -233,16 +224,11 @@ def check_course(course_dir, model, batch_size, report_path):
                     prompt = (c.get("prompt") or "").replace("\n", " ")
                     f.write(f'{name} | card {c["id"]} | "{prompt}"\n')
 
-        print(f"    batch {i}-{i+len(batch)} done ({sum(1 for v in state.values() if v is False)} flagged so far)")
+        print(f"    batch {i}-{i+len(batch)} done ({flagged_count(state)} flagged so far)")
+    return flagged_count(state)
 
 
-def find_all_course_dirs(root):
-    dirs = []
-    for entry in sorted(os.listdir(root)):
-        p = os.path.join(root, entry)
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, "meta.json")):
-            dirs.append(p)
-    return dirs
+find_all_course_dirs = llm_common.find_all_course_dirs
 
 
 def main():
@@ -255,19 +241,23 @@ def main():
     args = ap.parse_args()
 
     if args.all:
-        course_dirs = find_all_course_dirs(os.getcwd())
-        report_path = args.report or os.path.join(os.getcwd(), "self_standing_report.txt")
+        course_dirs = find_all_course_dirs(REPO_ROOT)
+        if not course_dirs:
+            ap.error(f"no course folders (with a meta.json) found under {REPO_ROOT}")
     elif args.course:
         course_dirs = [args.course]
-        report_path = args.report or os.path.join(os.getcwd(), "self_standing_report.txt")
     else:
         ap.error("pass a course folder or --all")
         return
+    report_path = args.report or os.path.join(REPO_ROOT, "self_standing_report.txt")
 
     print(f"Checking self-standing clarity for {len(course_dirs)} course(s) with model={args.model}")
     print(f"Report: {report_path}")
+    flagged = 0
     for course_dir in course_dirs:
-        check_course(course_dir, args.model, args.batch_size, report_path)
+        flagged += check_course(course_dir, args.model, args.batch_size, report_path)
+    # Non-zero while any checked card is flagged, like check_key_term_usage.py.
+    sys.exit(1 if flagged else 0)
 
 
 if __name__ == "__main__":

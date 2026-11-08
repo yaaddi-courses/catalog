@@ -26,21 +26,14 @@ Usage:
     python tools/propose_term_ledger.py <course-folder>
 """
 import argparse
-import csv
 import os
-import re
-import sys
+
+from csv_io import read_dict_csv
+from term_match import build_word_pattern
 
 
 def read_csv(path):
-    if not os.path.isfile(path):
-        return []
-    with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
-
-
-def build_word_pattern(term):
-    return re.compile(r"\b" + re.escape(term) + r"\b", re.IGNORECASE | re.UNICODE)
+    return read_dict_csv(path, strict=False)[1]  # BOM-safe (utf-8-sig)
 
 
 def main():
@@ -76,14 +69,17 @@ def main():
     proposals = []
     dead_terms = []
     exercise_only_terms = []
+    # Card text joined once, not once per term x card.
+    card_texts = [
+        (c, " ".join([c.get("prompt", ""), c.get("options", ""), c.get("explanation", "")])) for c in ordered_cards
+    ]
 
     for g in missing_sorted:
         term = g["term"]
         pattern = build_word_pattern(term)
         first_teach = None
         first_any = None
-        for c in ordered_cards:
-            haystack = " ".join([c.get("prompt", ""), c.get("options", ""), c.get("explanation", "")])
+        for c, haystack in card_texts:
             if pattern.search(haystack):
                 if first_any is None:
                     first_any = c

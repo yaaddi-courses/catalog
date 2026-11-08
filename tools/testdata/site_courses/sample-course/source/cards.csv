@@ -1,0 +1,4 @@
+id,unit_id,role,type,prompt,options,image
+1,u1,preview,multiple_choice,Intro,,
+2,u1,main,multiple_choice,What is 2+2?,4|5,
+3,u1,exercise,true_false,2+2 is 4,True|False,

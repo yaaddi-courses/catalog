@@ -56,9 +56,7 @@ def database():
     img, d = canvas()
     d.ellipse([40, 190, 216, 236], fill=(214, 232, 247))
     for top in (150, 108, 66):
-        d.rectangle([68, top, 188, top + 40], fill=BLUE)
-        d.ellipse([68, top - 18, 188, top + 18], fill=(80, 160, 232))
-        d.ellipse([68, top + 22, 188, top + 58], fill=BLUE)
+        d.ellipse([68, top + 22, 188, top + 58], fill=BLUE)  # bottom curve of the disc
         d.rectangle([68, top, 188, top + 40], fill=BLUE)
         d.ellipse([68, top - 18, 188, top + 18], fill=(110, 178, 238), outline=DARK_BLUE, width=3)
     d.ellipse([154, 168, 166, 180], fill=WHITE)
@@ -114,10 +112,23 @@ COVERS = {
 }
 
 
-if __name__ == "__main__":
-    only = sys.argv[1:]
-    for rel, draw in COVERS.items():
-        if only and not any(o in rel for o in only):
-            continue
-        draw().save(os.path.join(ROOT, rel))
+def main(only):
+    """Draw every cover in COVERS, or only those whose path contains one of `only`."""
+    selected = {rel: draw for rel, draw in COVERS.items() if not only or any(o in rel for o in only)}
+    if not selected:
+        raise SystemExit(f"no cover matches {' '.join(only)}; known: {', '.join(COVERS)}")
+    for rel, draw in selected.items():
+        try:
+            image = draw()
+        except OSError as e:  # ImageFont.truetype on a missing/unreadable font file
+            raise SystemExit(f"cannot draw {rel}: font {FONT!r}: {e} (set YAADDI_FONT to a .ttf file)") from None
+        target = os.path.join(ROOT, rel)
+        try:
+            image.save(target)
+        except OSError as e:
+            raise SystemExit(f"cannot write {target}: {e}") from None
         print("wrote", rel)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

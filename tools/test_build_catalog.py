@@ -77,6 +77,64 @@ def test_discovery_returns_the_push_time(monkeypatch):
     ]
 
 
+class _Resp:
+    def __init__(self, body: bytes):
+        self.body = body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return self.body
+
+
+def _http_error(code):
+    return urllib.error.HTTPError("u", code, "x", {}, None)
+
+
+def test_fetch_meta_retries_a_temporary_failure_then_succeeds(monkeypatch):
+    replies = [_http_error(503), TimeoutError(), _Resp(b'{"title": "T"}')]
+
+    def fake_urlopen(url, timeout):
+        reply = replies.pop(0)
+        if isinstance(reply, Exception):
+            raise reply
+        return reply
+
+    monkeypatch.setattr(bc.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(bc.time, "sleep", lambda s: None)
+    assert bc.fetch_meta("o/r", "main") == {"title": "T"}
+
+
+def test_fetch_meta_fails_instead_of_dropping_a_course_on_a_persistent_error(monkeypatch):
+    def fake_urlopen(url, timeout):
+        raise _http_error(503)
+
+    monkeypatch.setattr(bc.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(bc.time, "sleep", lambda s: None)
+    try:
+        bc.fetch_meta("o/r", "main")
+    except SystemExit as exit_:
+        assert "o/r" in str(exit_)
+    else:
+        raise AssertionError("expected SystemExit")
+
+
+def test_fetch_meta_returns_none_for_a_missing_or_broken_file(monkeypatch):
+    for reply in (_http_error(404), _Resp(b"\xff\xfe")):
+
+        def fake_urlopen(url, timeout, reply=reply):
+            if isinstance(reply, Exception):
+                raise reply
+            return reply
+
+        monkeypatch.setattr(bc.urllib.request, "urlopen", fake_urlopen)
+        assert bc.fetch_meta("o/r", "main") is None
+
+
 def test_build_catalog_uses_the_changelog_and_only_asks_github_when_it_has_none(monkeypatch):
     monkeypatch.setattr(
         bc,
@@ -102,3 +160,44 @@ def test_build_catalog_uses_the_changelog_and_only_asks_github_when_it_has_none(
     assert catalog[0]["updated"] == "2026-10-02"  # from its changelog
     assert catalog[1]["updated"] == "2026-09-20"  # from the newest commit to its zip
     assert calls == ["o/b"]
+
+
+# Regression (H10): a meta.json saved with a UTF-8 BOM was "unreadable" and the course dropped.
+def test_fetch_meta_reads_a_bom_meta_json(monkeypatch):
+    monkeypatch.setattr(bc.urllib.request, "urlopen", lambda url, timeout: _Resp(b'\xef\xbb\xbf{"title": "T"}'))
+    assert bc.fetch_meta("o/r", "main") == {"title": "T"}
+
+
+# Regression (H10): a search result GitHub marks incomplete silently dropped repos.
+def test_discovery_fails_on_an_incomplete_search_result(monkeypatch):
+    page = {"incomplete_results": True, "items": []}
+    monkeypatch.setattr(bc, "_github_api_get", lambda url, token: page)
+    try:
+        bc.discover_course_repos("o", "t", None)
+    except SystemExit as exit_:
+        assert "incomplete" in str(exit_)
+    else:
+        raise AssertionError("expected SystemExit")
+
+
+# Regression (H11): a zip path with a space made an invalid URL (http.client.InvalidURL), and
+# connection resets were not caught, so the whole catalog job crashed.
+def test_last_commit_date_quotes_the_path_and_survives_any_network_error(monkeypatch):
+    seen = {}
+
+    def fake(url, token):
+        seen["url"] = url
+        return []
+
+    monkeypatch.setattr(bc, "_github_api_get", fake)
+    bc.fetch_last_commit_date("o/r", "my course.zip", None)
+    assert "path=my%20course.zip" in seen["url"]
+    import http.client
+
+    for err in (ConnectionResetError(), http.client.IncompleteRead(b""), http.client.InvalidURL("x")):
+
+        def boom(url, token, err=err):
+            raise err
+
+        monkeypatch.setattr(bc, "_github_api_get", boom)
+        assert bc.fetch_last_commit_date("o/r", "t.zip", None) == ""

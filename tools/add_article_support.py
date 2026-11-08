@@ -1,8 +1,12 @@
 """Adds "Learn more" article support to a course's build_course_zip.py and validate_course.py (idempotent).
 
-usage: python patch_course_tools.py <course dir> [<course dir> ...]
+One-shot migration helper for course repos made from an older course-template. Both files are
+patched in memory first and written only when both patches succeed, so a failure never leaves a
+half-patched pair.
+
+usage: python tools/add_article_support.py <course dir> [<course dir> ...]
 """
-import re
+import os
 import sys
 
 
@@ -79,21 +83,35 @@ def validate_article_ref(row_no, term, reference, anchors, report):
 '''
 
 
-def patch_build(path):
-    text = open(path, encoding="utf-8").read()
-    if "articles_dir" in text:
-        return False
+# Exact lines this script inserts: their presence (not any mention of "articles_dir") means
+# the file is already patched.
+BUILD_MARKER = 'zf.writestr("articles/" + name, text)'
+VALIDATE_MARKER = "def validate_article_ref("
+
+
+def read_text(path):
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
+def write_text(path, text):
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+
+
+def patch_build(text):
+    """The patched build_course_zip.py text, or None when it is already patched."""
+    if BUILD_MARKER in text:
+        return None
     text = sub(text, BUILD_READ, BUILD_READ_NEW)
     text = sub(text, BUILD_WRITE, BUILD_WRITE_NEW)
-    text = sub(text, BUILD_NOTE, BUILD_NOTE_NEW)
-    open(path, "w", encoding="utf-8", newline="\n").write(text)
-    return True
+    return sub(text, BUILD_NOTE, BUILD_NOTE_NEW)
 
 
-def patch_validate(path):
-    text = open(path, encoding="utf-8").read()
-    if "validate_article_ref" in text:
-        return False
+def patch_validate(text):
+    """The patched validate_course.py text, or None when it is already patched."""
+    if VALIDATE_MARKER in text:
+        return None
     text = sub(text, "\ndef validate_glossary_rows(rows, report, card_ids=None):", VALIDATE_ARTICLE_FN + "\ndef validate_glossary_rows(rows, report, card_ids=None, article_anchors=None):")
     text = sub(
         text,
@@ -118,12 +136,24 @@ def patch_validate(path):
                 validate_glossary_rows(read_csv_text(glossary_text), report, card_ids, zip_anchors)
 ''',
     )
-    open(path, "w", encoding="utf-8", newline="\n").write(text)
-    return True
+    return text
+
+
+def patch_course(course):
+    """Patch both files of one course; returns (build patched, validate patched). Raises
+    SystemExit, writing nothing, when either file lacks the expected text."""
+    build_path = os.path.join(course, "build_course_zip.py")
+    validate_path = os.path.join(course, "validate_course.py")
+    new_build = patch_build(read_text(build_path))
+    new_validate = patch_validate(read_text(validate_path))
+    if new_build is not None:
+        write_text(build_path, new_build)
+    if new_validate is not None:
+        write_text(validate_path, new_validate)
+    return new_build is not None, new_validate is not None
 
 
 if __name__ == "__main__":
     for course in sys.argv[1:]:
-        b = patch_build(f"{course}/build_course_zip.py")
-        v = patch_validate(f"{course}/validate_course.py")
+        b, v = patch_course(course)
         print(course, "build" if b else "build(already)", "validate" if v else "validate(already)")

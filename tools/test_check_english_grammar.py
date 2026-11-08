@@ -124,5 +124,62 @@ class RoundTripTests(unittest.TestCase):
         self.assertFalse(any("I want a water" in s for s in segs))
 
 
+class NounAdjunctTests(unittest.TestCase):
+    # Regression (H3): "a/an" before a noun used as a modifier, or before a noun with a
+    # countable sense, is correct English and must never be rewritten.
+    def test_noun_used_as_a_modifier_is_left_alone(self):
+        for ok in ("I need a work permit", "an oil painting", "a paper bag", "a time machine",
+                   "a water bottle", "a traffic light", "a news report", "a cheese sandwich"):
+            self.assertEqual(fixed(ok), ok)
+
+    def test_ambiguous_nouns_are_reported_but_never_auto_fixed(self):
+        _text, hits = g.apply_rules("I want a fruit")
+        self.assertEqual([h[0] for h in hits], ["article-uncountable-ambiguous"])
+        c = {"type": "type_answer", "options": "x"}
+        source = g.finding_source(hits[0][0])
+        safe, review = g.plan_card_fixes(c, [(source, hits[0][1], hits[0][2], hits[0][3])])
+        self.assertEqual((safe, len(review)), ([], 1))
+
+    def test_clear_cases_still_fixed(self):
+        self.assertEqual(fixed("I want a water and a bread"), "I want water and some bread")
+        self.assertEqual(g.finding_source("article-uncountable"), "rule")
+
+
+class ApplyReportTests(unittest.TestCase):
+    # Regression (H4): findings come from normalized segments; a fix whose text is not in
+    # the raw cell must not be reported as "auto-fixed" nor mark the card done.
+    def run_check(self, prompt):
+        with tempfile.TemporaryDirectory() as d:
+            os.makedirs(os.path.join(d, "c", "source"))
+            path = os.path.join(d, "c", "source", "cards.csv")
+            with open(path, "w", encoding="utf-8", newline="") as f:
+                w = csv.writer(f, lineterminator="\n")
+                w.writerow(["id", "type", "prompt", "options", "explanation"])
+                w.writerow(["1", "type_answer", prompt, "", ""])
+            report = os.path.join(d, "report.txt")
+            state = {}
+            g.check_source(os.path.join(d, "c"), "cards.csv", g.CARD_FIELDS, "card", "m", 8,
+                           False, True, report, state)
+            with open(report, encoding="utf-8") as f:
+                lines = f.read()
+            with open(path, encoding="utf-8") as f:
+                body = f.read()
+            return lines, body, state
+
+    def test_unapplied_fix_is_not_reported_as_fixed(self):
+        # Two spaces in the raw cell: the normalized segment has one, so the replace misses.
+        lines, body, state = self.run_check("I want a  water")
+        self.assertNotIn("auto-fixed", lines)
+        self.assertIn("NEEDS REVIEW", lines)
+        self.assertIn("I want a  water", body)
+        self.assertEqual(state, {})
+
+    def test_applied_fix_is_reported_and_marked_done(self):
+        lines, body, state = self.run_check("I want a water")
+        self.assertIn("auto-fixed", lines)
+        self.assertIn("I want water", body)
+        self.assertEqual(len(state), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

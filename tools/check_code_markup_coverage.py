@@ -37,6 +37,9 @@ import os
 import re
 import sys
 
+# --all is relative to this repo, not the current directory.
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 CHECKED_FIELDS = ("prompt", "options", "explanation")
 
 # "options" holds plain, index-graded DISPLAY choices only for these types
@@ -306,11 +309,32 @@ def csv_quote(value):
     return value
 
 
+def replace_cells(raw, changes):
+    """Apply (old, new) cell changes to the raw CSV text, keeping every other byte as is.
+
+    Only a WHOLE cell matches (the quoted text bounded by a comma, a line break or the file
+    edge), never a substring of a longer cell. When a value occurs as a whole cell more often
+    than it is being changed (the same text in a field that was not fixed), the change is
+    ambiguous and skipped. Returns (new_raw, [old values skipped])."""
+    wanted = {}
+    for old, new in changes:
+        wanted.setdefault((old, new), 0)
+        wanted[(old, new)] += 1
+    skipped = []
+    for (old, new), count in wanted.items():
+        cell = re.compile(r"(?<![^,\n﻿])" + re.escape(csv_quote(old)) + r"(?![^,\r\n])")
+        if len(cell.findall(raw)) != count:
+            skipped.append(old)
+            continue
+        raw = cell.sub(lambda _m, new=new: csv_quote(new), raw)
+    return raw, skipped
+
+
 def check_or_fix_course(course_dir, do_fix):
     cards_path = os.path.join(course_dir, "source", "cards.csv")
     if not os.path.exists(cards_path):
         return None
-    with open(cards_path, encoding="utf-8", newline="") as f:
+    with open(cards_path, encoding="utf-8-sig", newline="") as f:
         rows = list(csv.reader(f))
     header = rows[0]
     field_idx = {name: header.index(name) for name in CHECKED_FIELDS if name in header}
@@ -319,7 +343,11 @@ def check_or_fix_course(course_dir, do_fix):
     prompt_idx = header.index("prompt")
 
     all_fixes = []
-    for row in rows[1:]:
+    for line_no, row in enumerate(rows[1:], start=2):
+        if len(row) < len(header):
+            if any(cell.strip() for cell in row):
+                print(f"  warning: {cards_path} row {line_no} has {len(row)} of {len(header)} columns, skipped")
+            continue
         cid = row[id_idx]
         ctype = row[type_idx]
         for field, idx in field_idx.items():
@@ -340,8 +368,10 @@ def check_or_fix_course(course_dir, do_fix):
     if do_fix and all_fixes:
         with open(cards_path, "rb") as f:
             raw = f.read().decode("utf-8")
-        for _cid, _field, _fixes, old, new in all_fixes:
-            raw = raw.replace(csv_quote(old), csv_quote(new))
+        raw, skipped = replace_cells(raw, [(old, new) for _cid, _field, _fixes, old, new in all_fixes])
+        for old in skipped:
+            print(f"  warning: not fixed, the same text is in another cell too: {old[:70]!r}")
+        all_fixes = [f for f in all_fixes if f[3] not in skipped]
         with open(cards_path, "wb") as f:
             f.write(raw.encode("utf-8"))
 
@@ -356,12 +386,14 @@ def main():
     args = parser.parse_args()
 
     if args.all:
-        root = "."
+        root = REPO_ROOT
         course_dirs = sorted(
-            d for d in os.listdir(root)
+            os.path.join(root, d) for d in os.listdir(root)
             if os.path.isdir(os.path.join(root, d))
             and os.path.exists(os.path.join(root, d, "source", "cards.csv"))
         )
+        if not course_dirs:
+            parser.error(f"no course folders (with a source/cards.csv) found under {root}")
     elif args.course:
         course_dirs = [args.course]
     else:
@@ -387,6 +419,8 @@ def main():
 
     verb = "fixed" if args.fix else "candidates"
     print(f"\nTOTAL {verb} across {len(course_dirs)} course(s): {total}")
+    # Same convention as mark_code_terms.py: candidates left unfixed fail the run.
+    sys.exit(0 if args.fix or total == 0 else 1)
 
 
 if __name__ == "__main__":

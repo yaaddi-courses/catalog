@@ -1,0 +1,44 @@
+name: CI
+
+# The tooling's own tests and a site-build smoke test, on every pull request
+# and push to main, so a change that breaks build_site.py, build_catalog.py or
+# a checker cannot merge green. (pages.yml only builds after the merge.)
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tool tests and site build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      # Some tests load the shared validate_course.py from a course repo (each course
+      # repo carries its own copy; the catalog repo has none). Public repos, no token.
+      - name: Clone the course repos the tests read
+        run: |
+          git clone --depth=1 https://github.com/yaaddi-courses/python-basics.git python-basics
+          git clone --depth=1 https://github.com/yaaddi-courses/canadian-citizenship.git canadian-citizenship
+
+      - name: Tests
+        run: python -m pytest tools -q
+
+      # Builds the site from the small fixture course into a throwaway folder; never deploys.
+      - name: Site build smoke test
+        run: python tools/build_site.py --out /tmp/site --courses-dir tools/testdata/site_courses

@@ -23,7 +23,7 @@ flashcard-course-creator skill's base-language-framing rules):
     it does not call a TTS engine itself (this repo's own audio policy,
     see the app's contributor notes, requires a real TTS pass, never a placeholder).
   - A row that supplies `example_sentence` gets sentence-practice cards —
-    arrange it (`order`), say the whole thing aloud (`speech_recognition`),
+    arrange it (`order`),
     fill the new word back in from a blank (`select_blank`, only when it's
     short enough to be a legal option), and — every other sentence, when
     `example_gloss` is also given — PRODUCE the whole sentence unprompted
@@ -48,15 +48,20 @@ flashcard-course-creator skill's base-language-framing rules):
     spelling practice without turning review into a keyboard exercise.
   - No new card types — every pack uses `true_false`, `multiple_choice`,
     `match_pairs`, `listening_card`, `order`/`select_blank` (only when
-    `example_sentence` is given), `type_answer`, and `speech_recognition`,
-    all of which already exist in the Yaaddi app.
+    `example_sentence` is given) and `type_answer`, all of which exist in
+    the Yaaddi app. (`speech_recognition` was removed from the app on
+    2026-10-08 and validate_course.py rejects it, so it is never emitted.)
+  - The correct option of every choice card is shuffled into a random slot,
+    and no choice card lists the same option twice.
 
 Input CSV columns: deck, target_word, target_type, base_gloss,
                     example_sentence (optional), example_gloss (optional)
   - deck              the deck/unit this item belongs to — rows are
                       grouped into one unit per distinct value, in
                       first-seen order
-  - target_word       the word/phrase being taught (e.g. "Hello")
+  - target_word       the word/phrase being taught (e.g. "Hello"); like
+                      base_gloss it may not contain "|", "↔" or "~", the
+                      card options' own delimiters
   - target_type       "word" or "phrase" — currently just documentation;
                       both are handled identically today
   - base_gloss        the short base-language meaning (e.g. "سلام") — kept
@@ -97,7 +102,7 @@ Input CSV columns: deck, target_word, target_type, base_gloss,
 
 Usage:
     python tools/generate_language_course.py <vocab.csv> <course-folder> \\
-        [--seed 0] [--generate-images]
+        [--seed 0] [--generate-images] [--force]
 
 --generate-images additionally generates one 256x256 deck-cover image per
 unit via this machine's local FLUX.1-schnell server (see the generate-image
@@ -108,7 +113,12 @@ roughly 1-2 minutes, one at a time (never concurrently). Safe to re-run: a
 deck whose image file already exists on disk is skipped, not regenerated.
 
 Writes <course-folder>/source/units.csv, source/cards.csv, and
-source/tts_manifest.csv (overwriting any existing files there) — run
+source/tts_manifest.csv. If any of them already exists the script stops
+unless --force is given: a re-run regenerates every card id from 1 (which
+resets learners' progress keyed to the old ids) and replaces hand edits.
+With --force each existing file is first copied to <name>.bak, and the
+image/audio/video columns of the old files are carried over (a unit's cover
+by deck title, a card's media by its type/role/prompt/options). Then run
 build_course_zip.py and validate_course.py --source afterwards, same as any
 hand-authored course. Before that, record/synthesize every row in
 tts_manifest.csv into source/media/<audio filename> — this repo's own TTS
@@ -124,12 +134,17 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import random
+import re
+import shutil
 import sys
 import time
 import urllib.error
 import urllib.request
 from pathlib import Path
+
+from csv_io import detect_eol
 
 # Local FLUX.1-schnell image server (see the `generate-image` skill / the
 # "Image generator and tts" project's API_USAGE.md) — used only when
@@ -151,7 +166,7 @@ REINFORCE_COUNT = 2
 # fewer words than this. A multi-word target_word/base_gloss (e.g. "Call an
 # ambulance") is perfectly fine as a PROMPT, but must never be used as an
 # option in a multiple_choice card — checked before every such use so a
-# genuinely wordy phrase falls back to speech_recognition instead of
+# genuinely wordy phrase falls back to a type_answer main instead of
 # producing a hard-error at validate time.
 MAX_OPTION_WORDS = 3
 # Mirrors validate_course.py's MAX_TOTAL_WORDS (10) — prompt + options
@@ -160,6 +175,15 @@ MAX_OPTION_WORDS = 3
 # card off when a row's own example_gloss + generated prompt template are
 # long enough (e.g. a two-sentence combo) to blow the budget outright.
 MAX_TOTAL_WORDS = 10
+# Characters that delimit card options (choices, match pairs, cloze sub-lists): a
+# target_word/base_gloss containing one would silently split into extra options.
+OPTION_DELIMITERS = ("|", "↔", "~")
+# How to start the local image server, shown when it is not reachable. Set
+# YAADDI_FLUX_START to the exact command on your machine.
+FLUX_START_HINT = os.environ.get(
+    "YAADDI_FLUX_START",
+    "the image generator's scripts/start_servers.ps1 -Servers flux (see the generate-image skill)",
+)
 
 
 def _fits_as_option(text: str) -> bool:
@@ -168,6 +192,11 @@ def _fits_as_option(text: str) -> bool:
 
 def _fits_as_card(prompt: str, options: str = "") -> bool:
     return len(prompt.split()) + len(options.split()) <= MAX_TOTAL_WORDS
+
+
+def _unique(values) -> list:
+    """The values in first-seen order without repeats (a sampling pool must not hold one text twice)."""
+    return list(dict.fromkeys(values))
 
 
 class VocabRow:
@@ -203,6 +232,13 @@ def read_vocab(path: Path) -> list[VocabRow]:
                 raise ValueError(
                     f"row {i}: deck, target_word, and base_gloss are all required"
                 )
+            for name, value in (("target_word", target_word), ("base_gloss", base_gloss)):
+                bad = [ch for ch in OPTION_DELIMITERS if ch in value]
+                if bad:
+                    raise ValueError(
+                        f"row {i}: {name} {value!r} contains {' '.join(bad)} - those characters separate "
+                        "card options and would corrupt the generated cards"
+                    )
             rows.append(
                 VocabRow(deck, target_word, target_type, base_gloss, example_sentence, example_gloss)
             )
@@ -270,7 +306,7 @@ def generate_deck_cover(deck_title: str, output_path: Path) -> None:
         raise RuntimeError(
             "Image server not reachable at "
             f"{FLUX_HEALTH_URL} (or not finished loading its model). Start it with:\n"
-            r'  & "D:\MRM\01 Mine\Mine R1\Plan\Apps\Image generator and tts\scripts\start_servers.ps1" -Servers flux'
+            f"  {FLUX_START_HINT}"
             "\nthen retry with --generate-images."
         )
     payload = json.dumps(
@@ -291,6 +327,17 @@ def generate_deck_cover(deck_title: str, output_path: Path) -> None:
         raise RuntimeError(f"Image server reported success but wrote no file for deck '{deck_title}'")
 
 
+def cover_filename(deck: str, taken: set[str]) -> str:
+    """A file name for a deck's cover built from its title, so a cover follows its deck when decks
+    are added or reordered (position-based names handed one deck another deck's picture)."""
+    base = re.sub(r"[^\w]+", "-", deck.lower()).strip("-") or "deck"
+    name, n = base, 2
+    while name in taken:
+        name, n = f"{base}-{n}", n + 1
+    taken.add(name)
+    return f"{name}.png"
+
+
 def generate_deck_covers(decks: list[str], images_dir: Path) -> dict[str, str]:
     """Generates one deck-cover image per deck, one at a time (never
     concurrently — see this module's FLUX_* constants), skipping any deck
@@ -298,8 +345,9 @@ def generate_deck_covers(decks: list[str], images_dir: Path) -> dict[str, str]:
     generation doesn't burn 1-2 minutes per deck redoing finished work."""
     images_dir.mkdir(parents=True, exist_ok=True)
     filenames: dict[str, str] = {}
+    taken: set[str] = set()
     for i, deck in enumerate(decks):
-        filename = f"deck{i + 1}.png"
+        filename = cover_filename(deck, taken)
         filenames[deck] = filename
         path = images_dir / filename
         if path.exists():
@@ -378,38 +426,43 @@ def build_cards_csv(
         prior = rows[:i]
 
         # 1. Main. A "X یعنی چی؟" multiple_choice needs at least one real
-        # distractor gloss to be a genuine question — for the first row or
-        # two, before any prior item exists to safely draw one from, fall
-        # back to speech_recognition (pure production, no options at all)
-        # instead of padding a 1-option "choice" that Yaaddi's own schema
-        # wouldn't even accept. Distractors are always base-language
-        # glosses drawn only from already-emitted rows, never a raw
-        # target-language word — this is what makes script-mixing in the
-        # options list structurally impossible here.
-        distractor_pool = [
+        # distractor gloss to be a genuine question — for the first row,
+        # before any prior item exists to safely draw one from (or when the
+        # gloss is too long to be an option), fall back to a type_answer
+        # main (type the word from its meaning, no options at all) instead
+        # of padding a 1-option "choice" that Yaaddi's own schema wouldn't
+        # even accept. Distractors are always base-language glosses drawn
+        # only from already-emitted rows, never a raw target-language word —
+        # this is what makes script-mixing in the options list structurally
+        # impossible here. Each distinct gloss is in the pool once, so two
+        # earlier rows sharing a gloss never yield the same option twice.
+        distractor_pool = _unique(
             r.base_gloss for r in prior if r.base_gloss != row.base_gloss and _fits_as_option(r.base_gloss)
-        ]
+        )
         has_real_choice = len(distractor_pool) >= 1 and _fits_as_option(row.base_gloss)
+        spelling_prompt = f"«{row.base_gloss}» به انگلیسی چیست؟ آن را تایپ کنید."
         if has_real_choice:
             distractors = rng.sample(distractor_pool, k=min(DISTRACTOR_COUNT, len(distractor_pool)))
             options = [row.base_gloss] + distractors
+            rng.shuffle(options)  # the correct gloss must not always be the first option
             main_id = emit(
                 unit_id=unit_id,
                 type="multiple_choice",
                 role="main",
                 prompt=meaning_question(row.target_word),
                 options="|".join(options),
-                correct_index="0",
+                correct_index=str(options.index(row.base_gloss)),
                 explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
         else:
             distractors = []
             main_id = emit(
                 unit_id=unit_id,
-                type="speech_recognition",
+                type="type_answer",
                 role="main",
-                prompt=row.target_word,
-                explanation=f"آن را بگویید:\n{row.target_word}",
+                prompt=spelling_prompt,
+                options=row.target_word,
+                explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
 
         # 2. Preview — an obvious true/false statement, the only place
@@ -436,8 +489,7 @@ def build_cards_csv(
         # what actually earns the "for a real conversation" claim. Emitted
         # whenever the row supplies one (author-provided — see this
         # module's doc comment on why sentences aren't auto-composed):
-        # arrange it, say the whole thing aloud (not just the isolated
-        # word), and — when the new word itself is short enough to be a
+        # arrange it and — when the new word itself is short enough to be a
         # legal option — fill it back into the sentence from a blank.
         if row.example_sentence:
             # ";;"-separated list, not just one — a substitution-drill row
@@ -481,30 +533,23 @@ def build_cards_csv(
                     explanation=explanation,
                 )
                 # Every substitution beyond the first only gets the arrange-
-                # it rep — giving all four treatments (order/speech/fill-in/
+                # it rep — giving all three treatments (order/fill-in/
                 # translate) to every single substitution would blow up
                 # pack size the moment a row lists several (a "You are"
-                # row substituting through 3 prior adjectives would emit 12
+                # row substituting through 3 prior adjectives would emit 9
                 # cards on its own otherwise).
                 if sentence_index > 0:
                     continue
-                emit(
-                    unit_id=unit_id,
-                    type="speech_recognition",
-                    role="exercise",
-                    related_main_id=main_id,
-                    prompt=" ".join(sentence_words),
-                    explanation=f"این جمله را با صدای بلند بخوانید:\n{' '.join(sentence_words)}",
-                )
                 if row.target_word in sentence_words and _fits_as_option(row.target_word):
                     blank_index = sentence_words.index(row.target_word)
                     blanked = list(sentence_words)
                     blanked[blank_index] = "___"
-                    blank_distractor_pool = [
+                    blank_distractor_pool = _unique(
                         r.target_word
                         for r in prior
-                        if r.target_word != row.target_word and _fits_as_option(r.target_word)
-                    ]
+                        if r.target_word != row.target_word and r.base_gloss != row.base_gloss
+                        and _fits_as_option(r.target_word)
+                    )
                     if len(blank_distractor_pool) >= 1:
                         blank_distractors = rng.sample(
                             blank_distractor_pool, k=min(DISTRACTOR_COUNT, len(blank_distractor_pool))
@@ -562,11 +607,12 @@ def build_cards_csv(
         # exist, ask the *reverse* direction instead: "which word means
         # <gloss>?" with same-script (all target-language) options — a
         # genuinely different question, not a cosmetic variant. Below that
-        # threshold, fall back to a second speech_recognition rep, same as
-        # the zero-prior-item case.
-        reverse_pool = [
-            r.target_word for r in prior if r.target_word != row.target_word and _fits_as_option(r.target_word)
-        ]
+        # threshold the pack relies on its match_pairs/listening cards.
+        # A prior word with this row's own gloss would be a second correct answer.
+        reverse_pool = _unique(
+            r.target_word for r in prior
+            if r.target_word != row.target_word and r.base_gloss != row.base_gloss and _fits_as_option(r.target_word)
+        )
         row_word_fits_as_option = _fits_as_option(row.target_word)
         if len(reverse_pool) >= 2 and row_word_fits_as_option:
             reverse_distractors = rng.sample(reverse_pool, k=min(DISTRACTOR_COUNT, len(reverse_pool)))
@@ -587,41 +633,35 @@ def build_cards_csv(
                 correct_index=str(reverse_options.index(row.target_word)),
                 explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
-        elif has_real_choice:
-            emit(
-                unit_id=unit_id,
-                type="speech_recognition",
-                role="exercise",
-                related_main_id=main_id,
-                prompt=row.target_word,
-                explanation=f"دوباره تمرین کنید:\n{row.target_word}",
-            )
-        else:
+        elif not prior:
             # No prior item exists yet to build a real multiple_choice or
             # match_pairs from (this only ever happens for the very first
-            # row of the whole course) — one more speech_recognition rep is
-            # the only content-safe option, at the cost of a soft
-            # "near-duplicate" warning from validate_course.py that a human
-            # author would normally avoid; a course this small at the very
-            # start has no better alternative without inventing content.
-            # Deliberately just ONE extra rep, not two: this row is always
-            # index 0, which always also gets the type_answer card below (a
-            # genuinely different angle) — piling on a second identical
-            # speech_recognition rep on top of that just makes the pack
-            # repeat the same tap-and-speak action for no added value.
+            # row of the whole course): a true statement in the reverse
+            # direction (gloss first) is the only content-safe second
+            # practice card — the only place true_false is used outside a
+            # preview, since inventing a false gloss would mean inventing
+            # content. Its other practice card is the listening card below.
             emit(
                 unit_id=unit_id,
-                type="speech_recognition",
+                type="true_false",
                 role="exercise",
                 related_main_id=main_id,
-                prompt=row.target_word,
-                explanation=f"دوباره تمرین کنید:\n{row.target_word}",
+                prompt=f"{row.base_gloss}\nبه انگلیسی می‌شود:\n{row.target_word}\nدرست یا غلط؟",
+                correct_index="true",
+                explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
 
         # 5. Practice — match_pairs reinforcing this item alongside 1-2
         # prior ones (skipped for the very first row, nothing to reinforce
-        # yet).
-        reinforce_pool = prior
+        # yet). Only prior rows whose word and gloss both differ from this
+        # row's and from each other, so no pair side appears twice.
+        reinforce_pool = []
+        seen_words, seen_glosses = {row.target_word}, {row.base_gloss}
+        for r in prior:
+            if r.target_word not in seen_words and r.base_gloss not in seen_glosses:
+                reinforce_pool.append(r)
+                seen_words.add(r.target_word)
+                seen_glosses.add(r.base_gloss)
         reinforce_sample = rng.sample(reinforce_pool, k=min(REINFORCE_COUNT, len(reinforce_pool)))
         pair_rows = [row] + reinforce_sample
         if len(pair_rows) >= 2:
@@ -635,16 +675,6 @@ def build_cards_csv(
                 options=pairs,
                 explanation="هر عبارت را با معنای فارسی آن جفت کنید.",
             )
-
-        # 6. Practice — production via speech_recognition.
-        emit(
-            unit_id=unit_id,
-            type="speech_recognition",
-            role="exercise",
-            related_main_id=main_id,
-            prompt=row.target_word,
-            explanation=f"آن را بگویید:\n{row.target_word}",
-        )
 
         # 7. Practice — spelling recall: given the base-language meaning,
         # type the target word. Distinct from listening_card's "type what
@@ -661,26 +691,26 @@ def build_cards_csv(
         # not every pack — validate_course.py warns once typing cards pass
         # 10% of a course, and one per pack alone would already blow past
         # that; every 3rd row keeps real spelling practice without turning
-        # every single review into a keyboard exercise.
-        if i % 3 == 0:
+        # every single review into a keyboard exercise. Skipped when the
+        # main card already is this exact question (the type_answer fallback).
+        if i % 3 == 0 and has_real_choice:
             emit(
                 unit_id=unit_id,
                 type="type_answer",
                 role="exercise",
                 related_main_id=main_id,
-                prompt=f"«{row.base_gloss}» به انگلیسی چیست؟ آن را تایپ کنید.",
+                prompt=spelling_prompt,
                 options=row.target_word,
                 explanation=f"{row.target_word}\nیعنی {row.base_gloss}.",
             )
 
         # 8. Practice — listening comprehension. Reuses the exact same
-        # reverse_pool distractors as step 3 when there are enough (a
-        # genuine "which word did you hear" choice); falls back to typing
-        # the word heard once at least one real item exists to distinguish
-        # it from silence. Skipped only for the very first row, where
-        # neither is meaningful yet.
+        # reverse_pool distractors as step 4 when there is at least one (a
+        # genuine "which word did you hear" choice); otherwise typing the
+        # word heard (dictation) — also for the very first row, whose pack
+        # needs it as its second practice card.
         audio_file = f"{course_slug}_{main_id}.mp3"
-        if len(reverse_pool) >= 2:
+        if reverse_pool and row_word_fits_as_option:
             listen_options = [row.target_word] + rng.sample(
                 reverse_pool, k=min(DISTRACTOR_COUNT, len(reverse_pool))
             )
@@ -696,7 +726,7 @@ def build_cards_csv(
                 explanation=f"عبارتی که شنیدید:\n{row.target_word}\n({row.base_gloss})",
             )
             tts_manifest.append({"audio": audio_file, "text": row.target_word})
-        elif has_real_choice:
+        else:
             emit(
                 unit_id=unit_id,
                 type="listening_card",
@@ -712,20 +742,60 @@ def build_cards_csv(
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict]) -> None:
+    eol = detect_eol(path)  # keep an existing file's line endings (csv's default is CRLF)
     with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator=eol)
         writer.writeheader()
         writer.writerows(rows)
 
 
+OUTPUT_FILES = ("units.csv", "cards.csv", "tts_manifest.csv")
+MEDIA_COLUMNS = ("image", "audio", "video")
+
+
+def _read_rows(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8-sig", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def carry_over_media(source_dir: Path, units: list[dict], cards: list[dict]) -> None:
+    """Keep media an author added to the previous output: a unit's cover by deck title, a card's
+    image/audio/video by its type/role/prompt/options (ids are regenerated, so they can't key it)."""
+    old_units = {u.get("title"): u for u in _read_rows(source_dir / "units.csv")}
+    for unit in units:
+        if not unit.get("image"):
+            unit["image"] = (old_units.get(unit["title"]) or {}).get("image") or ""
+
+    def key(c):
+        return (c.get("type"), c.get("role"), c.get("prompt"), c.get("options"))
+
+    old_cards = {key(c): c for c in _read_rows(source_dir / "cards.csv")}
+    for card in cards:
+        old = old_cards.get(key(card))
+        if old:
+            for col in MEDIA_COLUMNS:
+                if not card.get(col) and old.get(col):
+                    card[col] = old[col]
+
+
 def generate(
-    vocab_path: Path, course_dir: Path, seed: int = 0, generate_images: bool = False
+    vocab_path: Path, course_dir: Path, seed: int = 0, generate_images: bool = False, force: bool = False
 ) -> None:
     rows = read_vocab(vocab_path)
     rng = random.Random(seed)
 
-    units = build_units_csv(rows)
     source_dir = course_dir / "source"
+    existing = [source_dir / name for name in OUTPUT_FILES if (source_dir / name).exists()]
+    if existing and not force:
+        raise ValueError(
+            f"{', '.join(str(p) for p in existing)} already exist. Re-running regenerates every card id "
+            "from 1 (learners' progress is keyed to the old ids) and replaces hand edits; pass --force to "
+            "overwrite (each file is backed up to <name>.bak first)."
+        )
+
+    units = build_units_csv(rows)
     if generate_images:
         deck_titles = [unit["title"] for unit in units]
         print(f"Generating {len(deck_titles)} deck cover image(s) via the local FLUX server...")
@@ -735,6 +805,11 @@ def generate(
     cards, tts_manifest = build_cards_csv(rows, rng, course_slug=course_dir.name)
 
     source_dir.mkdir(parents=True, exist_ok=True)
+    if existing:
+        carry_over_media(source_dir, units, cards)
+        for path in existing:
+            shutil.copy2(path, path.with_name(path.name + ".bak"))
+            print(f"Backed up {path.name} to {path.name}.bak")
     write_csv(source_dir / "units.csv", ["id", "title", "description", "image"], units)
     write_csv(
         source_dir / "cards.csv",
@@ -767,6 +842,14 @@ def main() -> None:
             "image file already exists."
         ),
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help=(
+            "Overwrite existing source/units.csv, cards.csv and tts_manifest.csv (backed up to "
+            "<name>.bak first; image/audio/video columns are carried over). Card ids restart at 1."
+        ),
+    )
     args = parser.parse_args()
 
     try:
@@ -775,6 +858,7 @@ def main() -> None:
             Path(args.course_folder),
             seed=args.seed,
             generate_images=args.generate_images,
+            force=args.force,
         )
     except (ValueError, RuntimeError) as e:
         print(f"Error: {e}", file=sys.stderr)

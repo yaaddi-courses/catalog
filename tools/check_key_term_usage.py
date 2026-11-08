@@ -15,10 +15,9 @@ validate_course.py's job, not this script's.
 
 Matching mirrors the app's own app/src/domain/glossaryMatch.ts: whole-word,
 case-insensitive, longest-term-first (so "Governor General" matches whole
-rather than "Governor" swallowing half the phrase). Python's `\b` is
-Unicode-aware by default for `str` patterns, unlike JS's ASCII-only `\b`
-(which glossaryMatch.ts has to work around) — no equivalent workaround
-needed here.
+rather than "Governor" swallowing half the phrase). Word edges use
+lookarounds, not `\b`, so terms starting or ending with a non-word character
+("C++", ".dockerignore") still match — see term_match.py.
 
 Deliberately unit-granularity, not raw card-id order — the same tradeoff
 check_word_coverage.py's find_undefined_references already documents and
@@ -34,9 +33,10 @@ Usage:
 import argparse
 import csv
 import os
-import re
 import sys
 from pathlib import Path
+
+import term_match
 
 
 def load_rows(path):
@@ -57,15 +57,11 @@ def card_text(card):
     )
 
 
-def build_matcher(terms):
-    """One compiled regex for every term, longest first — mirrors
-    glossaryMatch.ts's buildGlossaryMatcher exactly (see its own doc
-    comment in app/src/domain/glossaryMatch.ts for why longest-first and
-    why whole-word matching, restated in this file's own module doc
-    comment above)."""
-    ordered = sorted(set(terms), key=len, reverse=True)
-    pattern = "|".join(re.escape(t) for t in ordered)
-    return re.compile(rf"\b(?:{pattern})\b", re.IGNORECASE) if ordered else None
+# One compiled regex for every term, longest first — mirrors glossaryMatch.ts's
+# buildGlossaryMatcher (see its own doc comment in app/src/domain/glossaryMatch.ts
+# for why longest-first and why whole-word matching). Shared with the other
+# glossary tools; see term_match.py for why it uses lookarounds, not \b.
+build_matcher = term_match.build_matcher
 
 
 def check_course(course_dir):
@@ -79,6 +75,7 @@ def check_course(course_dir):
     cards = load_rows(os.path.join(source_dir, "cards.csv"))
     cards_by_id = {c["id"]: c for c in cards}
     unit_order = load_unit_order(course_dir)
+    ranked_cards = [(c, unit_order.get(c["unit_id"], 10**9), card_text(c)) for c in cards]
 
     findings = []
     for row in glossary_rows:
@@ -92,13 +89,12 @@ def check_course(course_dir):
         intro_rank = unit_order.get(intro_card["unit_id"], 10**9)
 
         matcher = build_matcher([term])
-        for c in cards:
+        for c, card_rank, text in ranked_cards:
             if c["id"] == intro_id:
                 continue
-            card_rank = unit_order.get(c["unit_id"], 10**9)
             if card_rank >= intro_rank:
                 continue  # same unit or later — not "before", see module doc comment
-            if matcher.search(card_text(c)):
+            if matcher.search(text):
                 findings.append(
                     f'card {c["id"]} (unit={c["unit_id"]}): uses "{term}" before its '
                     f'introducing card {intro_id} (unit={intro_card["unit_id"]})'

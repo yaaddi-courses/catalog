@@ -5,6 +5,8 @@ import re
 import tempfile
 from pathlib import Path
 
+import pytest
+
 import build_site
 import guide_pages
 
@@ -26,15 +28,30 @@ def test_pages_render_with_version_stamp():
         assert f"Checked against Yaaddi {version['app_version']} on {version['verified']}" in html, slug
 
 
-def test_every_image_exists_has_alt_and_size():
+def test_every_image_exists_has_a_described_figure_and_size():
     out = build()
     for slug in PAGES:
         html = (out / slug / "index.html").read_text(encoding="utf-8")
-        for tag in re.findall(r"<img [^>]*>", html):
+        for figure in re.findall(r'<figure class="guide-shot">.*?</figure>', html):
+            tag = re.search(r"<img [^>]*>", figure).group(0)
             src = re.search(r'src="\.\./([^"]+)"', tag).group(1)
             assert (TOOLS / "site_assets" / src.removeprefix("assets/")).is_file(), src
-            assert re.search(r'alt="[^"]{10,}"', tag), tag
+            # The visible caption describes the screenshot; the image itself has alt="" so a
+            # screen reader does not read the same text twice (N209).
+            assert 'alt=""' in tag, tag
+            assert re.search(r"<figcaption>[^<]{10,}</figcaption>", figure), figure
             assert re.search(r'width="\d+" height="\d+"', tag), tag
+
+
+def test_a_bad_screenshot_or_manifest_entry_gives_a_readable_error(tmp_path):
+    fake = tmp_path / "x.png"
+    fake.write_bytes(b"not a png at all, just text bytes")
+    with pytest.raises(ValueError, match="not a PNG"):
+        guide_pages.png_size(fake)
+    with pytest.raises(ValueError, match="missing.png"):
+        guide_pages.png_size(tmp_path / "missing.png")
+    with pytest.raises(ValueError, match="guide_shots.json"):
+        guide_pages.shot("no-such-shot.png")
 
 
 def test_manifest_matches_files_on_disk():
@@ -46,7 +63,7 @@ def test_manifest_matches_files_on_disk():
 
 def test_every_guide_screenshot_is_used():
     used = {f for _, _, _, f in guide_pages.GUIDE_SECTIONS if f}
-    assert used == set(guide_pages.SHOT_ALT)
+    assert used == set(guide_pages.shot_alt())
 
 
 def test_no_external_resources_and_nav_links():

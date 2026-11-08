@@ -76,3 +76,50 @@ def test_try_finally_block_marks_both_words():
 
 def test_true_false_as_a_subject_at_the_start_of_a_sentence_are_the_constants():
     assert marked("True and False are the two values") == "`True` and `False` are the two values"
+
+
+def make_course(base, name, text, bom=False):
+    course = base / name
+    (course / "source").mkdir(parents=True)
+    path = course / "source" / "cards.csv"
+    path.write_bytes((b"\xef\xbb\xbf" if bom else b"") + text.encode("utf-8"))
+    return course, path
+
+
+# Regression (N204): an explicit course path is used as given, not re-rooted at the repo root,
+# and a non-Python course named explicitly is an error, not a silent exit 0.
+def test_an_explicit_course_path_outside_the_repo_is_used(tmp_path, monkeypatch, capsys):
+    course, path = make_course(tmp_path, "my-python-course", "id,prompt,options,explanation\n1,use None here,,\n")
+    monkeypatch.setattr(sys, "argv", ["mark_code_terms.py", str(course), "--fix"])
+    assert mc.main() == 0
+    assert "`None`" in path.read_text(encoding="utf-8")
+
+
+def test_an_explicit_non_python_course_is_reported(tmp_path, monkeypatch, capsys):
+    course, _ = make_course(tmp_path, "canadian-citizenship", "id,prompt,options,explanation\n1,x,,\n")
+    monkeypatch.setattr(sys, "argv", ["mark_code_terms.py", str(course)])
+    assert mc.main() == 2
+    assert "not a Python course" in capsys.readouterr().out
+
+
+# Regression (H18): a BOM cards.csv is read and keeps its BOM.
+def test_a_bom_cards_csv_is_fixed_and_keeps_its_bom(tmp_path):
+    course, path = make_course(tmp_path, "python-x", "id,prompt,options,explanation\n1,use None here,,\n", bom=True)
+    mc.process_course(str(course), True)
+    assert path.read_bytes() == b"\xef\xbb\xbfid,prompt,options,explanation\n1,use `None` here,,\n"
+
+
+# Regression (H8): the fix must change only the cell it was computed for, not a longer cell
+# that merely contains the same text.
+def test_fix_rewrites_only_the_fixed_cell(tmp_path):
+    course = tmp_path / "python-basics"
+    (course / "source").mkdir(parents=True)
+    path = course / "source" / "cards.csv"
+    text = (
+        "id,prompt,options,explanation\n"
+        "1,use None here,,\n"
+        '2,x,"Note, use None here",\n'  # options are never marked by this tool
+    )
+    path.write_text(text, encoding="utf-8", newline="")
+    mc.process_course(str(course), True)
+    assert path.read_bytes().decode("utf-8") == text.replace("1,use None here", "1,use `None` here")
