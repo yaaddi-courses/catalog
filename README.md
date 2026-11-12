@@ -98,14 +98,7 @@ for that layout.
 
 ## Rebuild-catalog auth (for maintainers)
 
-`rebuild-catalog.yml` and `pages.yml` both need a token that can list/read
-every repo in the org — the automatic per-job `GITHUB_TOKEN` is scoped only
-to this one repo and can't do that. Stored as the `ORG_CATALOG_PAT` repo
-secret: a fine-grained personal access token scoped to every repo in
-`yaaddi-courses`, with `Contents: read` + `Metadata: read` permissions.
-Fine-grained PATs expire — renew it (Settings → Developer settings →
-Personal access tokens) before it does, or the scheduled rebuild starts
-failing with a 403.
+`rebuild-catalog.yml` and `pages.yml` both search the org and read every course repo with the automatic per-job `GITHUB_TOKEN`: every course repo is public, so no personal access token is needed (verified 2026-11-08; an expired PAT used to make both fail with 401). Only add a PAT again if a course repo ever becomes private.
 
 ## Course catalog site
 

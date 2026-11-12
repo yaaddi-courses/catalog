@@ -26,7 +26,7 @@ on:
   workflow_dispatch: {}
 
 # Only the deploy job gets the Pages/OIDC write permissions; the build job
-# (which clones external course repos and holds ORG_CATALOG_PAT) can only read.
+# (which clones external course repos) can only read.
 permissions:
   contents: read
 
@@ -79,7 +79,9 @@ jobs:
       - name: Shallow-clone every course repo into a scratch directory
         if: steps.gate.outputs.build == 'true'
         env:
-          GITHUB_TOKEN: ${{ secrets.ORG_CATALOG_PAT }}
+          # Every course repo is public: the per-job token can search the org and clone them
+          # (the old ORG_CATALOG_PAT expired and made this step fail with 401 from 2026-11-08).
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           mkdir -p /tmp/courses
           python tools/list_course_repos.py > /tmp/repos.json
