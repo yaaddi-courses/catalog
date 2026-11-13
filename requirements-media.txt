@@ -2,6 +2,6 @@
 #   tools/guide/capture_guide_shots.py — numpy, Pillow, rapidocr_onnxruntime (OCR of emulator screens)
 #   tools/make_covers.py               — Pillow
 # Install with `pip install -r requirements-media.txt`. Audited by security.yml like requirements.txt.
-numpy==1.26.4
+numpy==2.5.4
 Pillow==13.0.0           # 11.3.0 has known CVEs (pip-audit, 2026-11-01)
 rapidocr_onnxruntime==1.4.4
