@@ -70,7 +70,7 @@ def test_no_external_resources_and_nav_links():
     out = build()
     for slug in PAGES:
         html = (out / slug / "index.html").read_text(encoding="utf-8")
-        assert not re.search(r'(src|href)="https?://(?!github\.com|docs\.github\.com)', html), slug
+        assert not re.search(r'(src|href)="https?://(?!github\.com|docs\.github\.com|courses\.yaaddi\.com/|play\.google\.com/store/apps/)', html), slug
         assert "../guide/index.html" in html and "../faq/index.html" in html
 
 

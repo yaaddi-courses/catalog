@@ -87,13 +87,37 @@ img { max-width: 100%; display: block; }
   text-decoration: none;
   letter-spacing: -0.01em;
 }
-.header-nav { display: flex; align-items: center; gap: 22px; }
+.header-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; }
 .header-link {
   color: var(--text-muted);
   text-decoration: none;
   font-size: 0.9rem;
 }
 .header-link:hover { color: var(--accent); }
+.header-cta {
+  color: var(--accent);
+  font-weight: 600;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 5px 14px;
+}
+.header-cta:hover { background: var(--accent-soft); }
+
+/* Link to the app on Google Play (home page hero, course pages). */
+.app-cta { margin: 0 0 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.hero .app-cta { justify-content: center; }
+.app-cta span { color: var(--text-muted); font-size: 0.88rem; }
+.play-button {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+}
+.play-button:hover { filter: brightness(1.1); }
 
 .hero {
   max-width: 900px;

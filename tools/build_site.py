@@ -23,6 +23,9 @@ source/ is always the freshest, human-edited copy) and renders:
                                     site fast and dependency-free)
   _site/assets/site.js           — index page's filter/search behavior
   _site/images/<slug>/...        — cover + unit images, copied verbatim
+  _site/robots.txt, sitemap.xml  — for search engines (every page gets a
+                                    canonical URL, share tags and
+                                    schema.org data in its <head> too)
 
 Pure Python stdlib — no dependencies, matches validate_course.py's own
 "stdlib-only" convention so this needs nothing beyond `python3` in CI.
@@ -42,12 +45,25 @@ import shutil
 import sys
 from collections import Counter
 from pathlib import Path
+from urllib.parse import quote
 
 import guide_pages
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SITE_TITLE = "Yaaddi Courses"
 SITE_TAGLINE = "Free, open-source spaced-repetition courses — browse what's inside before you install."
+# Public address of the site (GitHub Pages custom domain). Canonical links, the sitemap,
+# robots.txt and social-share tags need absolute URLs, so they are built from this.
+SITE_URL = "https://courses.yaaddi.com"
+INDEX_TITLE = f"{SITE_TITLE} — Free Spaced-Repetition Flashcard Courses"
+INDEX_DESCRIPTION = (
+    "Free, open-source flashcard courses for Yaaddi, the spaced-repetition learning app on "
+    "Google Play. Browse what's inside each course, then install it in the app."
+)
+# Same id as the app's own store link (app repo: src/config/settings.ts).
+PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.yaaddi.app"
+# Picture shown when a page without its own cover is shared (site_assets/img).
+SHARE_IMAGE = "assets/img/icon-512.png"
 GITHUB_REPO = "mohammad-reza-mahdiani/yaaddi"
 # The org every individual course's own dedicated repo lives under (see
 # README.md's "one repo per course" architecture) — used to link each
@@ -222,35 +238,80 @@ PAGE_HEAD = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{description}">
-<link rel="icon" href="data:,">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{site_title}">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{description}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{image}">
+<meta name="twitter:card" content="{card}">
+<link rel="icon" type="image/png" href="{asset_prefix}assets/img/favicon.png">
+<link rel="apple-touch-icon" href="{asset_prefix}assets/img/icon-512.png">
 <link rel="stylesheet" href="{asset_prefix}assets/style.css">
-</head>
+{json_ld}</head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 """
 
-PAGE_TAIL = """
+
+def page_url(path: str = "") -> str:
+    """Absolute, canonical URL of a page or file; `path` is relative to the site root
+    ("" for the home page, "courses/<slug>/" for a course)."""
+    return f"{SITE_URL}/{quote(path)}"
+
+
+def page_head(*, title: str, description: str, path: str, asset_prefix: str,
+              image: str = "", json_ld: list[dict] | None = None) -> str:
+    """The <head> of every page: title, description, canonical URL, social-share tags and
+    optional schema.org data. `title` and `description` are plain text (escaped here);
+    `image` is a site-relative path of the page's own cover, if it has one."""
+    blocks = "".join(
+        f'<script type="application/ld+json">{script_json(item)}</script>\n' for item in json_ld or []
+    )
+    return PAGE_HEAD.format(
+        title=esc(title),
+        description=esc(" ".join(description.split())),
+        url=esc(page_url(path)),
+        site_title=esc(SITE_TITLE),
+        image=esc(page_url(image or SHARE_IMAGE)),
+        # A course cover is a wide picture; the fallback is the square app icon.
+        card="summary_large_image" if image else "summary",
+        asset_prefix=asset_prefix,
+        json_ld=blocks,
+    )
+
+
+PLAY_LINK = f'<a class="play-button" href="{PLAY_STORE_URL}" target="_blank" rel="noopener">Get Yaaddi on Google Play</a>'
+
+PAGE_TAIL = f"""
 <footer class="site-footer">
   <p>Open-source course content for <strong>Yaaddi</strong> — a free spaced-repetition
-  learning app. <a href="https://github.com/{repo}">View on GitHub</a></p>
+  learning app. <a href="{PLAY_STORE_URL}" target="_blank" rel="noopener">Get it on Google Play</a>
+  &middot; <a href="https://github.com/{{repo}}">View on GitHub</a></p>
 </footer>
 </body>
 </html>
 """
 
-NAV = """<header class="site-header">
-  <a class="brand" href="{root_prefix}index.html">Yaaddi Courses</a>
+NAV = f"""<header class="site-header">
+  <a class="brand" href="{{root_prefix}}index.html">Yaaddi Courses</a>
   <nav class="header-nav">
-    <a class="header-link" href="{root_prefix}guide/index.html">Guide</a>
-    <a class="header-link" href="{root_prefix}faq/index.html">FAQ</a>
-    <a class="header-link" href="{root_prefix}help/index.html">Help</a>
-    <a class="header-link" href="{root_prefix}contribute/index.html">Contribute</a>
-    <a class="header-link" href="{root_prefix}privacy/index.html">Privacy</a>
-    <a class="header-link" href="{root_prefix}terms/index.html">Terms</a>
-    <a class="header-link" href="https://github.com/{repo}">GitHub</a>
+    <a class="header-link" href="{{root_prefix}}guide/index.html">Guide</a>
+    <a class="header-link" href="{{root_prefix}}faq/index.html">FAQ</a>
+    <a class="header-link" href="{{root_prefix}}help/index.html">Help</a>
+    <a class="header-link" href="{{root_prefix}}contribute/index.html">Contribute</a>
+    <a class="header-link" href="{{root_prefix}}privacy/index.html">Privacy</a>
+    <a class="header-link" href="{{root_prefix}}terms/index.html">Terms</a>
+    <a class="header-link" href="https://github.com/{{repo}}">GitHub</a>
+    <a class="header-link header-cta" href="{PLAY_STORE_URL}" target="_blank" rel="noopener">Get the app</a>
   </nav>
 </header>
 """
+
+# No schema.org block for the app itself: Google's software-app markup needs a rating or
+# review, and the site has none to state.
+PUBLISHER = {"@type": "Organization", "name": "Yaaddi", "url": SITE_URL + "/", "sameAs": [PLAY_STORE_URL]}
 
 
 def plural(n: int, word: str) -> str:
@@ -322,6 +383,7 @@ def render_index(courses: list[dict], out_dir: Path) -> None:
   <section class="hero">
     <h1>{esc(SITE_TITLE)}</h1>
     <p class="tagline">{esc(SITE_TAGLINE)}</p>
+    <p class="app-cta">{PLAY_LINK}</p>
     <div class="search-row">
       <input id="search" type="search" placeholder="Search courses..." aria-label="Search courses">
     </div>
@@ -342,22 +404,64 @@ def render_index(courses: list[dict], out_dir: Path) -> None:
 <script src="assets/site.js"></script>
 {PAGE_TAIL.format(repo=GITHUB_REPO)}'''
 
+    json_ld = [
+        {"@context": "https://schema.org", "@type": "WebSite", "name": SITE_TITLE, "url": page_url(), "publisher": PUBLISHER},
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Yaaddi courses",
+            "itemListElement": [
+                {"@type": "ListItem", "position": i, "name": c["title"], "url": page_url(course_path(c))}
+                for i, c in enumerate(courses, 1)
+            ],
+        },
+    ]
     out_dir.joinpath("index.html").write_text(
-        PAGE_HEAD.format(
-            title=esc(SITE_TITLE),
-            description=esc(SITE_TAGLINE),
-            asset_prefix="",
-        ) + body,
+        page_head(title=INDEX_TITLE, description=INDEX_DESCRIPTION, path="", asset_prefix="", json_ld=json_ld) + body,
         encoding="utf-8",
     )
+
+
+def course_path(course: dict) -> str:
+    return f'courses/{course["slug"]}/'
+
+
+def course_json_ld(course: dict, image: str) -> list[dict]:
+    """schema.org Course + breadcrumb for one course page."""
+    data = {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": course["title"],
+        "description": course["description"] or course["title"],
+        "url": page_url(course_path(course)),
+        "provider": PUBLISHER,
+        "isAccessibleForFree": True,
+        "offers": {"@type": "Offer", "category": "Free", "price": "0", "priceCurrency": "USD"},
+    }
+    if image:
+        data["image"] = page_url(image)
+    if course["language"]:
+        data["inLanguage"] = course["language"]
+    breadcrumb = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": SITE_TITLE, "item": page_url()},
+            {"@type": "ListItem", "position": 2, "name": course["title"], "item": page_url(course_path(course))},
+        ],
+    }
+    return [data, breadcrumb]
 
 
 def render_course_page(course: dict, out_dir: Path) -> None:
     page_dir = out_dir / "courses" / course["slug"]
     page_dir.mkdir(parents=True, exist_ok=True)
 
-    cover = f'../../images/{course["slug"]}/{Path(course["image"]).name}' if course["image"] else ""
-    cover_html = f'<img class="cover-large" src="{esc(cover)}" alt="">' if cover else ""
+    # Only a cover that copy_images really published (it refuses unsafe paths) is shown or shared.
+    image = f'images/{course["slug"]}/{Path(course["image"]).name}' if course["image"] else ""
+    if image and not (out_dir / image).is_file():
+        image = ""
+    cover_html = f'<img class="cover-large" src="../../{esc(image)}" alt="">' if image else ""
 
     lang = course["language"]
     toc_items = "".join(f"<li{text_attrs(t, lang)}>{esc(t)}</li>" for t in course["toc"])
@@ -379,6 +483,8 @@ def render_course_page(course: dict, out_dir: Path) -> None:
       <h1{text_attrs(course["title"], lang)}>{esc(course["title"])}</h1>
       <p class="course-desc-large"{text_attrs(course["description"], lang)}>{esc(course["description"])}</p>
       <div class="tag-row">{render_tag_chips(course["tags"])}</div>
+      <p class="app-cta">{PLAY_LINK}
+        <span>Free. Install the app, then add this course from its Course Library.</span></p>
       <p class="course-repo-link"><a href="{esc(course["repo_url"])}" target="_blank" rel="noopener">
         View this course's repo on GitHub &rarr;</a> — star it, open an issue, or suggest a fix.</p>
       <div class="course-stats-row">
@@ -411,10 +517,13 @@ def render_course_page(course: dict, out_dir: Path) -> None:
 {PAGE_TAIL.format(repo=GITHUB_REPO)}'''
 
     page_dir.joinpath("index.html").write_text(
-        PAGE_HEAD.format(
-            title=esc(f'{course["title"]} — Yaaddi Courses'),
-            description=esc(course["description"]),
+        page_head(
+            title=f'{course["title"]} — Free Flashcard Course | Yaaddi',
+            description=course["description"] or f'{course["title"]}: a free flashcard course for the Yaaddi app.',
+            path=course_path(course),
             asset_prefix="../../",
+            image=image,
+            json_ld=course_json_ld(course, image),
         ) + body,
         encoding="utf-8",
     )
@@ -437,7 +546,7 @@ def render_static_page(*, slug: str, nav_title: str, page_title: str, intro: str
 {PAGE_TAIL.format(repo=GITHUB_REPO)}'''
 
     page_dir.joinpath("index.html").write_text(
-        PAGE_HEAD.format(title=esc(page_title), description=esc(intro), asset_prefix="../") + body,
+        page_head(title=page_title, description=intro, path=f"{slug}/", asset_prefix="../") + body,
         encoding="utf-8",
     )
 
@@ -548,7 +657,7 @@ def render_privacy_page(out_dir: Path) -> None:
     page_dir.mkdir(parents=True, exist_ok=True)
     intro = "Your learning data stays on your device. Here is exactly what the app does with your information."
     page_dir.joinpath("index.html").write_text(
-        PAGE_HEAD.format(title="Privacy Policy — Yaaddi", description=esc(intro), asset_prefix="../") + body,
+        page_head(title="Privacy Policy — Yaaddi", description=intro, path="privacy/", asset_prefix="../") + body,
         encoding="utf-8",
     )
 
@@ -589,7 +698,7 @@ def render_terms_page(out_dir: Path) -> None:
     page_dir = out_dir / "terms"
     page_dir.mkdir(parents=True, exist_ok=True)
     page_dir.joinpath("index.html").write_text(
-        PAGE_HEAD.format(title="Terms of Use — Yaaddi", description=esc("Yaaddi courses are study aids, not professional advice."), asset_prefix="../") + body,
+        page_head(title="Terms of Use — Yaaddi", description="Yaaddi courses are study aids, not professional advice.", path="terms/", asset_prefix="../") + body,
         encoding="utf-8",
     )
 
@@ -598,7 +707,8 @@ def render_help_page(out_dir: Path) -> None:
     sections = f'''
   <section class="section">
     <h2>What is Yaaddi?</h2>
-    <p>Yaaddi is a free spaced-repetition learning app. You install courses
+    <p>Yaaddi is a free spaced-repetition learning app —
+    <a href="{PLAY_STORE_URL}" target="_blank" rel="noopener">get it on Google Play</a>. You install courses
     from this catalog inside the app's own <strong>Course Library</strong>
     screen — this website is just a preview, so you can see what's inside a
     course before you commit to it. Installing itself always happens
@@ -718,6 +828,25 @@ def render_contribute_page(out_dir: Path) -> None:
     )
 
 
+# Every page other than the home page and the course pages.
+STATIC_PAGES = ("guide/", "faq/", "whats-new/", "help/", "contribute/", "privacy/", "terms/")
+
+
+def write_crawler_files(courses: list[dict], out_dir: Path) -> None:
+    """robots.txt and sitemap.xml, so search engines find every page (course pages past the
+    first INITIAL_RENDERED_COURSES are only linked from script-rendered cards)."""
+    paths = ["", *(course_path(c) for c in courses), *STATIC_PAGES]
+    urls = "".join(f"  <url><loc>{esc(page_url(p))}</loc></url>\n" for p in paths)
+    out_dir.joinpath("sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n',
+        encoding="utf-8",
+    )
+    out_dir.joinpath("robots.txt").write_text(
+        f"User-agent: *\nAllow: /\n\nSitemap: {page_url('sitemap.xml')}\n", encoding="utf-8"
+    )
+
+
 def copy_assets(root: Path, out_dir: Path) -> None:
     assets_src = root / "tools" / "site_assets"
     assets_dst = out_dir / "assets"
@@ -795,6 +924,7 @@ def main() -> None:
     render_contribute_page(out_dir)
     render_privacy_page(out_dir)
     render_terms_page(out_dir)
+    write_crawler_files(courses, out_dir)
 
     print(f"Built {len(courses)} course page(s) into {out_dir}")
 
