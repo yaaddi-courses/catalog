@@ -25,7 +25,7 @@
     "file": "ai-model-optimization.zip",
     "id": "e87e69818348",
     "image": "cover.png",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "tags": [
       "ai",
       "machine-learning",
@@ -35,7 +35,7 @@
       "intermediate"
     ],
     "deckCount": 32,
-    "updated": "2026-11-08"
+    "updated": "2026-11-15"
   },
   {
     "repo": "yaaddi-courses/canadian-citizenship",
@@ -64,7 +64,7 @@
     "file": "concurrency-in-python.zip",
     "id": "bc6e15fab0b0",
     "image": "cover.png",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "tags": [
       "python",
       "concurrency",
@@ -73,7 +73,7 @@
       "intermediate"
     ],
     "deckCount": 85,
-    "updated": "2026-11-08"
+    "updated": "2026-11-15"
   },
   {
     "repo": "yaaddi-courses/day-trading-plan",
