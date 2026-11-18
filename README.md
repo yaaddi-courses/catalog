@@ -6,7 +6,7 @@ app and the course catalog — the app's Course Library fetches this repo's
 its **own repo** under the [yaaddi-courses](https://github.com/yaaddi-courses)
 GitHub organization (one repo per course), not here — this repo only holds
 the generated index, the shared tooling that builds it, and the docs. The
-course content is open source; the app itself is separate, closed-source
+course content is public under a noncommercial licence; the app itself is separate, closed-source
 software.
 
 **Browse online:** https://yaaddi-courses.github.io/catalog/ — a

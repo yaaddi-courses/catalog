@@ -51,13 +51,13 @@ import guide_pages
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SITE_TITLE = "Yaaddi Courses"
-SITE_TAGLINE = "Free, open-source spaced-repetition courses — browse what's inside before you install."
+SITE_TAGLINE = "Free spaced-repetition courses — browse what's inside before you install."
 # Public address of the site (GitHub Pages custom domain). Canonical links, the sitemap,
 # robots.txt and social-share tags need absolute URLs, so they are built from this.
 SITE_URL = "https://courses.yaaddi.com"
 INDEX_TITLE = f"{SITE_TITLE} — Free Spaced-Repetition Flashcard Courses"
 INDEX_DESCRIPTION = (
-    "Free, open-source flashcard courses for Yaaddi, the spaced-repetition learning app on "
+    "Free flashcard courses for Yaaddi, the spaced-repetition learning app on "
     "Google Play. Browse what's inside each course, then install it in the app."
 )
 # Same id as the app's own store link (app repo: src/config/settings.ts).
@@ -249,6 +249,7 @@ PAGE_HEAD = """<!doctype html>
 <link rel="icon" type="image/png" href="{asset_prefix}assets/img/favicon.png">
 <link rel="apple-touch-icon" href="{asset_prefix}assets/img/icon-512.png">
 <link rel="stylesheet" href="{asset_prefix}assets/style.css">
+<script src="{asset_prefix}assets/analytics.js" data-privacy="{asset_prefix}privacy/index.html#website" defer></script>
 {json_ld}</head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -286,7 +287,7 @@ PLAY_LINK = f'<a class="play-button" href="{PLAY_STORE_URL}" target="_blank" rel
 
 PAGE_TAIL = f"""
 <footer class="site-footer">
-  <p>Open-source course content for <strong>Yaaddi</strong> — a free spaced-repetition
+  <p>Course content for <strong>Yaaddi</strong> — a free spaced-repetition
   learning app. <a href="{PLAY_STORE_URL}" target="_blank" rel="noopener">Get it on Google Play</a>
   &middot; <a href="https://github.com/{{repo}}">View on GitHub</a></p>
 </footer>
@@ -551,7 +552,7 @@ def render_static_page(*, slug: str, nav_title: str, page_title: str, intro: str
     )
 
 
-PRIVACY_UPDATED = "October 30, 2026"
+PRIVACY_UPDATED = "November 18, 2026"
 TERMS_UPDATED = "October 8, 2026"  # the terms text did not change with the privacy rewrite
 
 # Layout "B — at a glance" (owner-approved 2026-10-01): hero, four summary
@@ -594,7 +595,7 @@ PRIVACY_DETAILS = [
     ("Is it safe for children?",
      "Yaaddi is not directed at children under 13 and does not knowingly collect personal information from anyone, of any age."),
     ("Who owns the course content?",
-     "Courses in the Course Library are community-authored and openly licensed &mdash; see this catalog&rsquo;s GitHub repository for the content and its license. This policy covers how the app handles your data, not course licensing."),
+     "Courses in the Course Library are community-authored &mdash; see this catalog&rsquo;s GitHub repository for the content and its license. This policy covers how the app handles your data, not course licensing."),
     ("Will this policy change?",
      "If it does, the date at the top of this page changes. Yaaddi is made by Mohammad Reza Mahdiani. Questions: <a href=\"mailto:support@yaaddi.com\">support@yaaddi.com</a>."),
 ]
@@ -651,6 +652,9 @@ def render_privacy_page(out_dir: Path) -> None:
   </div>
   <h2>The details</h2>
 {details}
+  <h2 id="website">This website</h2>
+  <p>This section covers courses.yaaddi.com, not the app. The site can use Google Analytics, but only if you click Accept on the small banner. Your choice is saved in your browser, and a Do Not Track or Global Privacy Control signal counts as Decline. Your current choice: <strong data-consent-status>declined</strong>. <button type="button" class="privacy-choice" data-consent-settings hidden>Change my choice</button></p>
+  <p>If you accept, Google Analytics 4 records the pages you view, how you arrived, your approximate location (country and city), your browser and device type, and clicks on our links to Google Play and support email, and sets cookies named <code>_ga</code> and <code>_ga_</code> followed by an ID. Advertising features, Google signals and ad personalization are off, and we do not sell the data. It is kept for no longer than 14 months. If you decline, nothing is sent to Google and no Google script is loaded. The site is hosted by GitHub Pages, which may process your IP address to serve pages, under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub&rsquo;s privacy statement</a>. The same choice applies on <a href="https://yaaddi.com/privacy/">yaaddi.com</a>.</p>
 </main>
 {PAGE_TAIL.format(repo=GITHUB_REPO)}'''
     page_dir = out_dir / "privacy"
@@ -738,7 +742,7 @@ def render_help_page(out_dir: Path) -> None:
 
   <section class="section">
     <h2>Found a mistake in a course?</h2>
-    <p>Every course lives in its own open-source repo under the
+    <p>Every course lives in its own public repo under the
     <a href="https://github.com/{COURSES_ORG}">{COURSES_ORG}</a> GitHub
     organization — each course's page here links to it. See
     <a href="../contribute/index.html">how to participate</a> for how to

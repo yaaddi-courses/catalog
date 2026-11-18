@@ -38,25 +38,6 @@
     "updated": "2026-11-15"
   },
   {
-    "repo": "yaaddi-courses/canadian-citizenship",
-    "branch": "main",
-    "title": "Canadian Citizenship",
-    "description": "Everything in the official IRCC study guide, Discover Canada, turned into a complete course — history, government, rights and responsibilities, symbols, and every region. Built from the actual government guide (including its own real…",
-    "file": "canadian-citizenship.zip",
-    "id": "7f3a91c04e2b",
-    "image": "cover.png",
-    "version": "1.0.2",
-    "tags": [
-      "canada",
-      "citizenship",
-      "civics",
-      "history",
-      "government"
-    ],
-    "deckCount": 22,
-    "updated": "2026-11-08"
-  },
-  {
     "repo": "yaaddi-courses/concurrency-in-python",
     "branch": "main",
     "title": "Concurrency in Python",
