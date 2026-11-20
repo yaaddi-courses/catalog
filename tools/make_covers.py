@@ -13,7 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONT = os.environ.get(
     "YAADDI_FONT",
-    r"D:\ai\Artifcats\Software\Yaaddi\app\node_modules\@expo-google-fonts\jetbrains-mono\800ExtraBold\JetBrainsMono_800ExtraBold.ttf",
+    r"D:\MRM\ai\Artifcats\Software\Yaaddi\app\node_modules\@expo-google-fonts\jetbrains-mono\800ExtraBold\JetBrainsMono_800ExtraBold.ttf",
 )
 SIZE = 256
 BG, BLUE, DARK_BLUE, WHITE, GREEN = (232, 244, 253), (33, 130, 214), (20, 84, 150), (255, 255, 255), (38, 160, 96)
