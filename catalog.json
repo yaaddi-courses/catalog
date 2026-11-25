@@ -291,7 +291,7 @@
     "file": "ontario-g1-drivers-licence.zip",
     "id": "e1c07b93a5f2",
     "image": "cover.png",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "tags": [
       "canada",
       "ontario",
@@ -302,7 +302,7 @@
       "beginner"
     ],
     "deckCount": 20,
-    "updated": "2026-11-16"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/opentelemetry",
