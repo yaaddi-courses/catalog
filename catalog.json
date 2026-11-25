@@ -82,7 +82,7 @@
     "file": "docker-and-containers.zip",
     "id": "90b010fdf19a",
     "image": "cover.png",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "tags": [
       "docker",
       "devops",
@@ -90,7 +90,7 @@
       "beginner"
     ],
     "deckCount": 45,
-    "updated": "2026-11-14"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/effective-vibecoding",
@@ -161,7 +161,7 @@
     "file": "fix-common-english-mistakes.zip",
     "id": "c7a2e9d41b58",
     "image": "cover.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "tags": [
       "english",
       "grammar",
@@ -169,7 +169,7 @@
       "everyday"
     ],
     "deckCount": 20,
-    "updated": "2026-10-01"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/git",
@@ -216,7 +216,7 @@
     "file": "job-interview-skills.zip",
     "id": "6c1d9f3a2e84",
     "image": "cover.png",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "tags": [
       "interview",
       "career",
@@ -226,7 +226,7 @@
       "beginner"
     ],
     "deckCount": 16,
-    "updated": "2026-10-29"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/kubernetes-fundamentals",
@@ -272,7 +272,7 @@
     "file": "mlops.zip",
     "id": "e401857dccd9",
     "image": "cover.png",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "tags": [
       "mlops",
       "machine-learning",
@@ -281,7 +281,7 @@
       "intermediate"
     ],
     "deckCount": 25,
-    "updated": "2026-11-14"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/ontario-g1-drivers-licence",
@@ -367,7 +367,7 @@
     "file": "scam-tashkhis-farsi.zip",
     "id": "bda3b4eb02ab",
     "image": "cover.png",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "tags": [
       "scam-awareness",
       "fraud-prevention",
@@ -383,7 +383,7 @@
       "en": "Native Farsi content covering Iran-specific fraud patterns: fake Sana/subsidy SMS, card-to-card fraud, messenger account takeover, Telegram investment scams, and AI voice cloning."
     },
     "deckCount": 23,
-    "updated": "2026-10-29"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/sdlc",
@@ -411,7 +411,7 @@
     "file": "soft-skills-at-work.zip",
     "id": "3f8a6d2e9b17",
     "image": "cover.png",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "tags": [
       "soft-skills",
       "workplace",
@@ -421,7 +421,7 @@
       "career"
     ],
     "deckCount": 20,
-    "updated": "2026-10-29"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/software-architecture",
@@ -486,7 +486,7 @@
     "file": "us-citizenship-civics-test.zip",
     "id": "5d2b8e7a1c43",
     "image": "cover.png",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "tags": [
       "usa",
       "citizenship",
@@ -496,7 +496,7 @@
       "government"
     ],
     "deckCount": 16,
-    "updated": "2026-10-29"
+    "updated": "2026-11-24"
   },
   {
     "repo": "yaaddi-courses/world-geography",
@@ -506,7 +506,7 @@
     "file": "world-geography.zip",
     "id": "8b6c1f4d0a95",
     "image": "cover.png",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "tags": [
       "geography",
       "countries",
@@ -516,6 +516,6 @@
       "general-knowledge"
     ],
     "deckCount": 23,
-    "updated": "2026-10-29"
+    "updated": "2026-11-24"
   }
 ]
